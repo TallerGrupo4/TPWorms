@@ -1,8 +1,13 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.12)
 
-project(cmake-demo)
+project(Worms)
 
-add_executable(demo main.cpp)
+add_subdirectory(client_src)
 add_subdirectory(common_src)
+add_subdirectory(server_src)
 
-target_link_libraries(demo myclasses)
+add_executable(client client_main.cpp)
+add_executable(server server_main.cpp)
+
+target_link_libraries(client common_lib client_lib)
+target_link_libraries(server common_lib server_lib)

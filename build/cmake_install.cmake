@@ -44,7 +44,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
+  include("/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/client_src/cmake_install.cmake")
   include("/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/common_src/cmake_install.cmake")
+  include("/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/server_src/cmake_install.cmake")
 
 endif()
 
