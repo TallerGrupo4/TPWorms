@@ -2,6 +2,12 @@
 Final project for the subject Taller de Programacion I
 
 ## Authors
+| Nombre | Apellido | Padrón | Mail                |
+| ------ | -------- | ------ | ------------------- |
+| Facundo  | Huttin | 107854 | *** |
+| Theo | Lijs | 109472 | *** |
+| Ivan | Erlich | 105989 | ierlich@fi.uba.ar |
+
 
 ### Cmake
 To run the cmake script, you need to install cmake first. You can do it by running:
