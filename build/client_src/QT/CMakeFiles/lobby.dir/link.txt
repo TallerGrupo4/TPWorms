@@ -1,0 +1,2 @@
+/usr/bin/ar qc liblobby.a CMakeFiles/lobby.dir/lobby_autogen/mocs_compilation.cpp.o CMakeFiles/lobby.dir/mainwindow.cpp.o
+/usr/bin/ranlib liblobby.a

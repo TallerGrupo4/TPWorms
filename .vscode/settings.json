@@ -1,0 +1,10 @@
+{
+    "cmake.configureOnOpen": true,
+    "files.associations": {
+        "qmainwindow": "cpp",
+        "qvariant": "cpp",
+        "qlabel": "cpp",
+        "qmenubar": "cpp",
+        "qapplication": "cpp"
+    }
+}

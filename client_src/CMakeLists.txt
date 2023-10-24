@@ -1,0 +1,15 @@
+project(Worms)
+FILE(GLOB client_src_files "*.cpp")
+add_library(client_lib STATIC ${client_src_files})
+target_link_libraries(client_lib common_lib)
+#Agrego parte de SDL2PP
+include(FindPkgConfig)
+pkg_search_module(SDL2 sdl2)
+set(SDL2PP_WITH_IMAGE OFF)
+add_subdirectory(libSDL2pp)
+target_link_libraries(client_lib SDL2pp::SDL2pp)
+#Agrego parte de QT
+add_subdirectory(QT)
+target_compile_options(client_lib PRIVATE -fPIC)
+set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++11")
+target_include_directories(client_lib PRIVATE QT)

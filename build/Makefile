@@ -57,10 +57,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ivan/Desktop/FIUBA/taller1/TPWorms
+CMAKE_SOURCE_DIR = /home/facu/Desktop/TPWorms
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ivan/Desktop/FIUBA/taller1/TPWorms/build
+CMAKE_BINARY_DIR = /home/facu/Desktop/TPWorms/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +87,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles /home/ivan/Desktop/FIUBA/taller1/TPWorms/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles /home/facu/Desktop/TPWorms/build//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -117,54 +117,169 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named demo
+# Target rules for targets named client
 
 # Build rule for target.
-demo: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 demo
-.PHONY : demo
+client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client
+.PHONY : client
 
 # fast build rule for target.
-demo/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/build
-.PHONY : demo/fast
+client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
+.PHONY : client/fast
 
 #=============================================================================
-# Target rules for targets named myclasses
+# Target rules for targets named server
 
 # Build rule for target.
-myclasses: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 myclasses
-.PHONY : myclasses
+server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server
+.PHONY : server
 
 # fast build rule for target.
-myclasses/fast:
-	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/myclasses.dir/build.make common_src/CMakeFiles/myclasses.dir/build
-.PHONY : myclasses/fast
+server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+.PHONY : server/fast
 
-main.o: main.cpp.o
-.PHONY : main.o
+#=============================================================================
+# Target rules for targets named client_lib
+
+# Build rule for target.
+client_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_lib
+.PHONY : client_lib
+
+# fast build rule for target.
+client_lib/fast:
+	$(MAKE) $(MAKESILENT) -f client_src/CMakeFiles/client_lib.dir/build.make client_src/CMakeFiles/client_lib.dir/build
+.PHONY : client_lib/fast
+
+#=============================================================================
+# Target rules for targets named SDL2pp
+
+# Build rule for target.
+SDL2pp: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 SDL2pp
+.PHONY : SDL2pp
+
+# fast build rule for target.
+SDL2pp/fast:
+	$(MAKE) $(MAKESILENT) -f client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build.make client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build
+.PHONY : SDL2pp/fast
+
+#=============================================================================
+# Target rules for targets named lobby
+
+# Build rule for target.
+lobby: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lobby
+.PHONY : lobby
+
+# fast build rule for target.
+lobby/fast:
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby.dir/build.make client_src/QT/CMakeFiles/lobby.dir/build
+.PHONY : lobby/fast
+
+#=============================================================================
+# Target rules for targets named lobby_autogen
+
+# Build rule for target.
+lobby_autogen: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 lobby_autogen
+.PHONY : lobby_autogen
+
+# fast build rule for target.
+lobby_autogen/fast:
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby_autogen.dir/build.make client_src/QT/CMakeFiles/lobby_autogen.dir/build
+.PHONY : lobby_autogen/fast
+
+#=============================================================================
+# Target rules for targets named common_lib
+
+# Build rule for target.
+common_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 common_lib
+.PHONY : common_lib
+
+# fast build rule for target.
+common_lib/fast:
+	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/common_lib.dir/build.make common_src/CMakeFiles/common_lib.dir/build
+.PHONY : common_lib/fast
+
+#=============================================================================
+# Target rules for targets named mysocket
+
+# Build rule for target.
+mysocket: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mysocket
+.PHONY : mysocket
+
+# fast build rule for target.
+mysocket/fast:
+	$(MAKE) $(MAKESILENT) -f common_src/socket/CMakeFiles/mysocket.dir/build.make common_src/socket/CMakeFiles/mysocket.dir/build
+.PHONY : mysocket/fast
+
+#=============================================================================
+# Target rules for targets named server_lib
+
+# Build rule for target.
+server_lib: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server_lib
+.PHONY : server_lib
+
+# fast build rule for target.
+server_lib/fast:
+	$(MAKE) $(MAKESILENT) -f server_src/CMakeFiles/server_lib.dir/build.make server_src/CMakeFiles/server_lib.dir/build
+.PHONY : server_lib/fast
+
+client_main.o: client_main.cpp.o
+.PHONY : client_main.o
 
 # target to build an object file
-main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/main.cpp.o
-.PHONY : main.cpp.o
+client_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client_main.cpp.o
+.PHONY : client_main.cpp.o
 
-main.i: main.cpp.i
-.PHONY : main.i
+client_main.i: client_main.cpp.i
+.PHONY : client_main.i
 
 # target to preprocess a source file
-main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/main.cpp.i
-.PHONY : main.cpp.i
+client_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client_main.cpp.i
+.PHONY : client_main.cpp.i
 
-main.s: main.cpp.s
-.PHONY : main.s
+client_main.s: client_main.cpp.s
+.PHONY : client_main.s
 
 # target to generate assembly for a file
-main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/main.cpp.s
-.PHONY : main.cpp.s
+client_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/client_main.cpp.s
+.PHONY : client_main.cpp.s
+
+server_main.o: server_main.cpp.o
+.PHONY : server_main.o
+
+# target to build an object file
+server_main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server_main.cpp.o
+.PHONY : server_main.cpp.o
+
+server_main.i: server_main.cpp.i
+.PHONY : server_main.i
+
+# target to preprocess a source file
+server_main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server_main.cpp.i
+.PHONY : server_main.cpp.i
+
+server_main.s: server_main.cpp.s
+.PHONY : server_main.s
+
+# target to generate assembly for a file
+server_main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/server_main.cpp.s
+.PHONY : server_main.cpp.s
 
 # Help Target
 help:
@@ -174,11 +289,21 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... demo"
-	@echo "... myclasses"
-	@echo "... main.o"
-	@echo "... main.i"
-	@echo "... main.s"
+	@echo "... lobby_autogen"
+	@echo "... SDL2pp"
+	@echo "... client"
+	@echo "... client_lib"
+	@echo "... common_lib"
+	@echo "... lobby"
+	@echo "... mysocket"
+	@echo "... server"
+	@echo "... server_lib"
+	@echo "... client_main.o"
+	@echo "... client_main.i"
+	@echo "... client_main.s"
+	@echo "... server_main.o"
+	@echo "... server_main.i"
+	@echo "... server_main.s"
 .PHONY : help
 
 

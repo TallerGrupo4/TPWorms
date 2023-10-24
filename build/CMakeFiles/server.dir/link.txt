@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -fPIC -std=c++11 CMakeFiles/server.dir/server_main.cpp.o -o server  common_src/libcommon_lib.a server_src/libserver_lib.a common_src/libcommon_lib.a 

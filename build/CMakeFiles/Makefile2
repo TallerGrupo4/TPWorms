@@ -54,94 +54,371 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/ivan/Desktop/FIUBA/taller1/TPWorms
+CMAKE_SOURCE_DIR = /home/facu/Desktop/TPWorms
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/ivan/Desktop/FIUBA/taller1/TPWorms/build
+CMAKE_BINARY_DIR = /home/facu/Desktop/TPWorms/build
 
 #=============================================================================
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/demo.dir/all
+all: CMakeFiles/client.dir/all
+all: CMakeFiles/server.dir/all
+all: client_src/all
 all: common_src/all
+all: server_src/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
+preinstall: client_src/preinstall
 preinstall: common_src/preinstall
+preinstall: server_src/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/demo.dir/clean
+clean: CMakeFiles/client.dir/clean
+clean: CMakeFiles/server.dir/clean
+clean: client_src/clean
 clean: common_src/clean
+clean: server_src/clean
 .PHONY : clean
+
+#=============================================================================
+# Directory level rules for directory client_src
+
+# Recursive "all" directory target.
+client_src/all: client_src/CMakeFiles/client_lib.dir/all
+client_src/all: client_src/libSDL2pp/all
+client_src/all: client_src/QT/all
+.PHONY : client_src/all
+
+# Recursive "preinstall" directory target.
+client_src/preinstall: client_src/libSDL2pp/preinstall
+client_src/preinstall: client_src/QT/preinstall
+.PHONY : client_src/preinstall
+
+# Recursive "clean" directory target.
+client_src/clean: client_src/CMakeFiles/client_lib.dir/clean
+client_src/clean: client_src/libSDL2pp/clean
+client_src/clean: client_src/QT/clean
+.PHONY : client_src/clean
+
+#=============================================================================
+# Directory level rules for directory client_src/QT
+
+# Recursive "all" directory target.
+client_src/QT/all: client_src/QT/CMakeFiles/lobby.dir/all
+.PHONY : client_src/QT/all
+
+# Recursive "preinstall" directory target.
+client_src/QT/preinstall:
+.PHONY : client_src/QT/preinstall
+
+# Recursive "clean" directory target.
+client_src/QT/clean: client_src/QT/CMakeFiles/lobby.dir/clean
+client_src/QT/clean: client_src/QT/CMakeFiles/lobby_autogen.dir/clean
+.PHONY : client_src/QT/clean
+
+#=============================================================================
+# Directory level rules for directory client_src/libSDL2pp
+
+# Recursive "all" directory target.
+client_src/libSDL2pp/all: client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all
+.PHONY : client_src/libSDL2pp/all
+
+# Recursive "preinstall" directory target.
+client_src/libSDL2pp/preinstall:
+.PHONY : client_src/libSDL2pp/preinstall
+
+# Recursive "clean" directory target.
+client_src/libSDL2pp/clean: client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/clean
+.PHONY : client_src/libSDL2pp/clean
 
 #=============================================================================
 # Directory level rules for directory common_src
 
 # Recursive "all" directory target.
-common_src/all: common_src/CMakeFiles/myclasses.dir/all
+common_src/all: common_src/CMakeFiles/common_lib.dir/all
+common_src/all: common_src/socket/all
 .PHONY : common_src/all
 
 # Recursive "preinstall" directory target.
-common_src/preinstall:
+common_src/preinstall: common_src/socket/preinstall
 .PHONY : common_src/preinstall
 
 # Recursive "clean" directory target.
-common_src/clean: common_src/CMakeFiles/myclasses.dir/clean
+common_src/clean: common_src/CMakeFiles/common_lib.dir/clean
+common_src/clean: common_src/socket/clean
 .PHONY : common_src/clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/demo.dir
+# Directory level rules for directory common_src/socket
 
-# All Build rule for target.
-CMakeFiles/demo.dir/all: common_src/CMakeFiles/myclasses.dir/all
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles --progress-num=1,2 "Built target demo"
-.PHONY : CMakeFiles/demo.dir/all
+# Recursive "all" directory target.
+common_src/socket/all: common_src/socket/CMakeFiles/mysocket.dir/all
+.PHONY : common_src/socket/all
 
-# Build rule for subdir invocation for target.
-CMakeFiles/demo.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles 4
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/demo.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles 0
-.PHONY : CMakeFiles/demo.dir/rule
+# Recursive "preinstall" directory target.
+common_src/socket/preinstall:
+.PHONY : common_src/socket/preinstall
 
-# Convenience name for target.
-demo: CMakeFiles/demo.dir/rule
-.PHONY : demo
-
-# clean rule for target.
-CMakeFiles/demo.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/demo.dir/build.make CMakeFiles/demo.dir/clean
-.PHONY : CMakeFiles/demo.dir/clean
+# Recursive "clean" directory target.
+common_src/socket/clean: common_src/socket/CMakeFiles/mysocket.dir/clean
+.PHONY : common_src/socket/clean
 
 #=============================================================================
-# Target rules for target common_src/CMakeFiles/myclasses.dir
+# Directory level rules for directory server_src
+
+# Recursive "all" directory target.
+server_src/all: server_src/CMakeFiles/server_lib.dir/all
+.PHONY : server_src/all
+
+# Recursive "preinstall" directory target.
+server_src/preinstall:
+.PHONY : server_src/preinstall
+
+# Recursive "clean" directory target.
+server_src/clean: server_src/CMakeFiles/server_lib.dir/clean
+.PHONY : server_src/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/client.dir
 
 # All Build rule for target.
-common_src/CMakeFiles/myclasses.dir/all:
-	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/myclasses.dir/build.make common_src/CMakeFiles/myclasses.dir/depend
-	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/myclasses.dir/build.make common_src/CMakeFiles/myclasses.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles --progress-num=3,4 "Built target myclasses"
-.PHONY : common_src/CMakeFiles/myclasses.dir/all
+CMakeFiles/client.dir/all: client_src/CMakeFiles/client_lib.dir/all
+CMakeFiles/client.dir/all: client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all
+CMakeFiles/client.dir/all: common_src/CMakeFiles/common_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=18,19 "Built target client"
+.PHONY : CMakeFiles/client.dir/all
 
 # Build rule for subdir invocation for target.
-common_src/CMakeFiles/myclasses.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 common_src/CMakeFiles/myclasses.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/ivan/Desktop/FIUBA/taller1/TPWorms/build/CMakeFiles 0
-.PHONY : common_src/CMakeFiles/myclasses.dir/rule
+CMakeFiles/client.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 23
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/client.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : CMakeFiles/client.dir/rule
 
 # Convenience name for target.
-myclasses: common_src/CMakeFiles/myclasses.dir/rule
-.PHONY : myclasses
+client: CMakeFiles/client.dir/rule
+.PHONY : client
 
 # clean rule for target.
-common_src/CMakeFiles/myclasses.dir/clean:
-	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/myclasses.dir/build.make common_src/CMakeFiles/myclasses.dir/clean
-.PHONY : common_src/CMakeFiles/myclasses.dir/clean
+CMakeFiles/client.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/client.dir/build.make CMakeFiles/client.dir/clean
+.PHONY : CMakeFiles/client.dir/clean
+
+#=============================================================================
+# Target rules for target CMakeFiles/server.dir
+
+# All Build rule for target.
+CMakeFiles/server.dir/all: common_src/CMakeFiles/common_lib.dir/all
+CMakeFiles/server.dir/all: server_src/CMakeFiles/server_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=34,35 "Built target server"
+.PHONY : CMakeFiles/server.dir/all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/server.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 6
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/server.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : CMakeFiles/server.dir/rule
+
+# Convenience name for target.
+server: CMakeFiles/server.dir/rule
+.PHONY : server
+
+# clean rule for target.
+CMakeFiles/server.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/clean
+.PHONY : CMakeFiles/server.dir/clean
+
+#=============================================================================
+# Target rules for target client_src/CMakeFiles/client_lib.dir
+
+# All Build rule for target.
+client_src/CMakeFiles/client_lib.dir/all: client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all
+client_src/CMakeFiles/client_lib.dir/all: common_src/CMakeFiles/common_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f client_src/CMakeFiles/client_lib.dir/build.make client_src/CMakeFiles/client_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f client_src/CMakeFiles/client_lib.dir/build.make client_src/CMakeFiles/client_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=20,21 "Built target client_lib"
+.PHONY : client_src/CMakeFiles/client_lib.dir/all
+
+# Build rule for subdir invocation for target.
+client_src/CMakeFiles/client_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 21
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_src/CMakeFiles/client_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : client_src/CMakeFiles/client_lib.dir/rule
+
+# Convenience name for target.
+client_lib: client_src/CMakeFiles/client_lib.dir/rule
+.PHONY : client_lib
+
+# clean rule for target.
+client_src/CMakeFiles/client_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f client_src/CMakeFiles/client_lib.dir/build.make client_src/CMakeFiles/client_lib.dir/clean
+.PHONY : client_src/CMakeFiles/client_lib.dir/clean
+
+#=============================================================================
+# Target rules for target client_src/libSDL2pp/CMakeFiles/SDL2pp.dir
+
+# All Build rule for target.
+client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all:
+	$(MAKE) $(MAKESILENT) -f client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build.make client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/depend
+	$(MAKE) $(MAKESILENT) -f client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build.make client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17 "Built target SDL2pp"
+.PHONY : client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all
+
+# Build rule for subdir invocation for target.
+client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 17
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/rule
+
+# Convenience name for target.
+SDL2pp: client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/rule
+.PHONY : SDL2pp
+
+# clean rule for target.
+client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/clean:
+	$(MAKE) $(MAKESILENT) -f client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/build.make client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/clean
+.PHONY : client_src/libSDL2pp/CMakeFiles/SDL2pp.dir/clean
+
+#=============================================================================
+# Target rules for target client_src/QT/CMakeFiles/lobby.dir
+
+# All Build rule for target.
+client_src/QT/CMakeFiles/lobby.dir/all: client_src/QT/CMakeFiles/lobby_autogen.dir/all
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby.dir/build.make client_src/QT/CMakeFiles/lobby.dir/depend
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby.dir/build.make client_src/QT/CMakeFiles/lobby.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=24,25,26,27 "Built target lobby"
+.PHONY : client_src/QT/CMakeFiles/lobby.dir/all
+
+# Build rule for subdir invocation for target.
+client_src/QT/CMakeFiles/lobby.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_src/QT/CMakeFiles/lobby.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : client_src/QT/CMakeFiles/lobby.dir/rule
+
+# Convenience name for target.
+lobby: client_src/QT/CMakeFiles/lobby.dir/rule
+.PHONY : lobby
+
+# clean rule for target.
+client_src/QT/CMakeFiles/lobby.dir/clean:
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby.dir/build.make client_src/QT/CMakeFiles/lobby.dir/clean
+.PHONY : client_src/QT/CMakeFiles/lobby.dir/clean
+
+#=============================================================================
+# Target rules for target client_src/QT/CMakeFiles/lobby_autogen.dir
+
+# All Build rule for target.
+client_src/QT/CMakeFiles/lobby_autogen.dir/all:
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby_autogen.dir/build.make client_src/QT/CMakeFiles/lobby_autogen.dir/depend
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby_autogen.dir/build.make client_src/QT/CMakeFiles/lobby_autogen.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=28 "Built target lobby_autogen"
+.PHONY : client_src/QT/CMakeFiles/lobby_autogen.dir/all
+
+# Build rule for subdir invocation for target.
+client_src/QT/CMakeFiles/lobby_autogen.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 client_src/QT/CMakeFiles/lobby_autogen.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : client_src/QT/CMakeFiles/lobby_autogen.dir/rule
+
+# Convenience name for target.
+lobby_autogen: client_src/QT/CMakeFiles/lobby_autogen.dir/rule
+.PHONY : lobby_autogen
+
+# clean rule for target.
+client_src/QT/CMakeFiles/lobby_autogen.dir/clean:
+	$(MAKE) $(MAKESILENT) -f client_src/QT/CMakeFiles/lobby_autogen.dir/build.make client_src/QT/CMakeFiles/lobby_autogen.dir/clean
+.PHONY : client_src/QT/CMakeFiles/lobby_autogen.dir/clean
+
+#=============================================================================
+# Target rules for target common_src/CMakeFiles/common_lib.dir
+
+# All Build rule for target.
+common_src/CMakeFiles/common_lib.dir/all:
+	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/common_lib.dir/build.make common_src/CMakeFiles/common_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/common_lib.dir/build.make common_src/CMakeFiles/common_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=22,23 "Built target common_lib"
+.PHONY : common_src/CMakeFiles/common_lib.dir/all
+
+# Build rule for subdir invocation for target.
+common_src/CMakeFiles/common_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 common_src/CMakeFiles/common_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : common_src/CMakeFiles/common_lib.dir/rule
+
+# Convenience name for target.
+common_lib: common_src/CMakeFiles/common_lib.dir/rule
+.PHONY : common_lib
+
+# clean rule for target.
+common_src/CMakeFiles/common_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f common_src/CMakeFiles/common_lib.dir/build.make common_src/CMakeFiles/common_lib.dir/clean
+.PHONY : common_src/CMakeFiles/common_lib.dir/clean
+
+#=============================================================================
+# Target rules for target common_src/socket/CMakeFiles/mysocket.dir
+
+# All Build rule for target.
+common_src/socket/CMakeFiles/mysocket.dir/all:
+	$(MAKE) $(MAKESILENT) -f common_src/socket/CMakeFiles/mysocket.dir/build.make common_src/socket/CMakeFiles/mysocket.dir/depend
+	$(MAKE) $(MAKESILENT) -f common_src/socket/CMakeFiles/mysocket.dir/build.make common_src/socket/CMakeFiles/mysocket.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=29,30,31,32,33 "Built target mysocket"
+.PHONY : common_src/socket/CMakeFiles/mysocket.dir/all
+
+# Build rule for subdir invocation for target.
+common_src/socket/CMakeFiles/mysocket.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 5
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 common_src/socket/CMakeFiles/mysocket.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : common_src/socket/CMakeFiles/mysocket.dir/rule
+
+# Convenience name for target.
+mysocket: common_src/socket/CMakeFiles/mysocket.dir/rule
+.PHONY : mysocket
+
+# clean rule for target.
+common_src/socket/CMakeFiles/mysocket.dir/clean:
+	$(MAKE) $(MAKESILENT) -f common_src/socket/CMakeFiles/mysocket.dir/build.make common_src/socket/CMakeFiles/mysocket.dir/clean
+.PHONY : common_src/socket/CMakeFiles/mysocket.dir/clean
+
+#=============================================================================
+# Target rules for target server_src/CMakeFiles/server_lib.dir
+
+# All Build rule for target.
+server_src/CMakeFiles/server_lib.dir/all: common_src/CMakeFiles/common_lib.dir/all
+	$(MAKE) $(MAKESILENT) -f server_src/CMakeFiles/server_lib.dir/build.make server_src/CMakeFiles/server_lib.dir/depend
+	$(MAKE) $(MAKESILENT) -f server_src/CMakeFiles/server_lib.dir/build.make server_src/CMakeFiles/server_lib.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/facu/Desktop/TPWorms/build/CMakeFiles --progress-num=36,37 "Built target server_lib"
+.PHONY : server_src/CMakeFiles/server_lib.dir/all
+
+# Build rule for subdir invocation for target.
+server_src/CMakeFiles/server_lib.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 4
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server_src/CMakeFiles/server_lib.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/facu/Desktop/TPWorms/build/CMakeFiles 0
+.PHONY : server_src/CMakeFiles/server_lib.dir/rule
+
+# Convenience name for target.
+server_lib: server_src/CMakeFiles/server_lib.dir/rule
+.PHONY : server_lib
+
+# clean rule for target.
+server_src/CMakeFiles/server_lib.dir/clean:
+	$(MAKE) $(MAKESILENT) -f server_src/CMakeFiles/server_lib.dir/build.make server_src/CMakeFiles/server_lib.dir/clean
+.PHONY : server_src/CMakeFiles/server_lib.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

@@ -1,4 +1,4 @@
-# Install script for directory: /home/ivan/Desktop/FIUBA/taller1/TPWorms
+# Install script for directory: /home/facu/Desktop/TPWorms
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -44,7 +44,9 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/common_src/cmake_install.cmake")
+  include("/home/facu/Desktop/TPWorms/build/client_src/cmake_install.cmake")
+  include("/home/facu/Desktop/TPWorms/build/common_src/cmake_install.cmake")
+  include("/home/facu/Desktop/TPWorms/build/server_src/cmake_install.cmake")
 
 endif()
 
@@ -56,5 +58,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/ivan/Desktop/FIUBA/taller1/TPWorms/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/facu/Desktop/TPWorms/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -1,4 +1,4 @@
-# Install script for directory: /home/ivan/Desktop/FIUBA/taller1/TPWorms/common_src
+# Install script for directory: /home/facu/Desktop/TPWorms/common_src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,11 @@ endif()
 # Set default install directory permissions.
 if(NOT DEFINED CMAKE_OBJDUMP)
   set(CMAKE_OBJDUMP "/usr/bin/objdump")
+endif()
+
+if(NOT CMAKE_INSTALL_LOCAL_ONLY)
+  # Include the install script for each subdirectory.
+  include("/home/facu/Desktop/TPWorms/build/common_src/socket/cmake_install.cmake")
+
 endif()
 
