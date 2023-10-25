@@ -38,4 +38,4 @@ add_library(lobby
 
 # Use the Widgets module from Qt 5.
 target_link_libraries(lobby Qt5::Widgets Qt5::Core)
-set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++11")
+set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")

@@ -12,6 +12,6 @@ target_link_libraries(client_lib SDL2pp::SDL2pp)
 #Agrego parte de QT
 add_subdirectory(QT)
 target_compile_options(client_lib PRIVATE -fPIC)
-set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++11")
+set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")
 target_include_directories(client_lib PRIVATE QT)
 target_link_libraries(client_lib lobby)

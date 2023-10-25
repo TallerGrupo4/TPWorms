@@ -1,3 +1,4 @@
+#include "server_src/box2d-main/include/box2d.h"
 #include "server_src/server_server.h"
 
 int main(int argc, char* argv[]) {

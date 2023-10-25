@@ -1,13 +1,14 @@
-#include <iostream>
-#include "mainwindow.h"
 #include <QApplication>
+#include <iostream>
+
 #include "client_src/client_client.h"
 #include "common_src/common_liberror.h"
 #include "common_src/common_socket.h"
 #include "common_src/constants.h"
 
-int main(int argc, char *argv[])
-{
+#include "mainwindow.h"
+
+int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

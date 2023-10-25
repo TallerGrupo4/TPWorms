@@ -51,11 +51,11 @@ and
 ```
 If you want to add more libraries or flags to the makefile, you can do it by adding them to the CMakeLists.txt file. For example, if you want to add the flag -Wall, you need to add it to the line:
 ```
-set(CMAKE_CXX_FLAGS "-g -std=c++11")
+set(CMAKE_CXX_FLAGS "-g -std=c++17")
 ```
 so it looks like:
 ```
-set(CMAKE_CXX_FLAGS "-g -std=c++11 -Wall")
+set(CMAKE_CXX_FLAGS "-g -std=c++17 -Wall")
 ```
 and then run the cmake script again.
 
