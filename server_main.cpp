@@ -1,7 +1,10 @@
-#include "server_src/box2d-main/include/box2d.h"
+#include <box2d/box2d.h>
 #include "server_src/server_server.h"
 
 int main(int argc, char* argv[]) {
+    b2Vec2 gravity(0.0f, 0.0f);
+    b2World world(gravity);
+
     int ret = 1;
     try {
         if (argc != 2) {
@@ -9,7 +12,7 @@ int main(int argc, char* argv[]) {
                       << "E.g.: ./server 8080 \n";
             return ret;
         }
-        Server server = Server(argv[1]);
+        Server server(argv[1]);
         server.start();
         std::string line;
         for (line = ""; line != "q"; std::cin >> line) {}
