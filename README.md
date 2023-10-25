@@ -13,7 +13,7 @@ In order to properly run the game, you need to install the SDL2 library. To do s
 ```
 sudo apt-get install libsdl2-dev
 ```
-Also you will need to incorporate the SDL2 submodule. To do so, run the following commands:
+Also you will need to incorporate the SDL2 and BOX2dsubmodule. To do so, run the following commands:
 ```
 git submodule update --init --recursive
 ```
@@ -26,6 +26,7 @@ sudo apt-get install cmake
 ```
 Then, you need to enter the build folder and run the cmake script. To do so, run:
 ```
+mkdir build
 cd build
 cmake ..
 ```
