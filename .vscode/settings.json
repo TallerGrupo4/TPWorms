@@ -5,6 +5,9 @@
         "qvariant": "cpp",
         "qlabel": "cpp",
         "qmenubar": "cpp",
-        "qapplication": "cpp"
-    }
+        "qapplication": "cpp",
+        "cstdio": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "/usr/bin/g++",
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
 }
