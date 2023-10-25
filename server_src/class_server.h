@@ -4,6 +4,7 @@
 class ClassServer {
 public:
 	ClassServer();
+	void run();
 };
 
 #endif // CLASS_SERVER_H
