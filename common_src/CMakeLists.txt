@@ -1,6 +1,7 @@
 project(Worms) 
 
-add_subdirectory(socket)
+FILE(GLOB common_src_files "*.cpp")
+message (STATUS "Common's source files loaded: ${common_src_files}")
 
 FILE(GLOB common_src_files "*.cpp" )
 message (STATUS "Cargué ${common_src}")

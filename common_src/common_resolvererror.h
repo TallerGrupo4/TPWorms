@@ -1,3 +1,5 @@
+// Copyright 2022 <GPL v2>
+
 #ifndef RESOLVER_ERROR_H
 #define RESOLVER_ERROR_H
 

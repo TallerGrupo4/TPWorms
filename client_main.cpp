@@ -1,14 +1,31 @@
 #include <iostream>
-#include "common_src/class0.h"
 #include "mainwindow.h"
 #include <QApplication>
+#include "client_src/client_client.h"
+#include "common_src/common_liberror.h"
+#include "common_src/common_socket.h"
+#include "common_src/constants.h"
 
 int main(int argc, char *argv[])
 {
-    std::cout << "Hola mundo" << std::endl;
-    Class0 c0;
     QApplication a(argc, argv);
     MainWindow w;
     w.show();
-    return a.exec();
+    a.exec();
+    int ret = 1;
+    try {
+        if (argc != 3) {
+            std::cerr << "Bad program call. Expected " << argv[0] << " with 2 arguments.\n";
+            return ret;
+        }
+        Client client(argv[1], argv[2]);
+        client.start();
+        ret = 0;
+        return ret;
+    } catch (const std::exception& err) {
+        std::cout << "Exception caught in main_client: " << err.what() << std::endl;
+    } catch (...) {
+        std::cerr << "Unknown exception caught in main_client." << std::endl;
+    }
+    return ret;
 }

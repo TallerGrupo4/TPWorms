@@ -1,4 +1,4 @@
-#include "socket.h"
+// Copyright 2022 <GPL v2>
 
 #include <stdexcept>
 
@@ -12,8 +12,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "liberror.h"
-#include "resolver.h"
+#include "common_liberror.h"
+#include "common_resolver.h"
+#include "common_socket.h"
 
 Socket::Socket(const char* hostname, const char* servname) {
     Resolver resolver(hostname, servname, false);

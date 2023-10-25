@@ -1,3 +1,5 @@
+// Copyright 2022 <GPL v2>
+
 #ifndef SOCKET_H
 #define SOCKET_H
 

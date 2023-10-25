@@ -1,3 +1,5 @@
+// Copyright 2022 <GPL v2>
+
 /*
  * Este es un hack alrededor de un bug de G++ que, a pesar de decirle
  * que use un estándar (véase el Makefile), igualmente usa código
@@ -17,9 +19,8 @@
 #undef _GNU_SOURCE
 #undef GNU_SOURCE
 
-#include "liberror.h"
+#include "common_liberror.h"
 
-#include <cerrno>
 #include <cstdarg>
 #include <cstdio>
 #include <cstring>

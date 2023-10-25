@@ -1,3 +1,5 @@
+// Copyright 2022 <GPL v2>
+
 #ifndef LIB_ERROR_H
 #define LIB_ERROR_H
 

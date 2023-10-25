@@ -1,4 +1,6 @@
-#include "resolvererror.h"
+// Copyright 2022 <GPL v2>
+
+#include "common_resolvererror.h"
 
 #include <arpa/inet.h>
 #include <netdb.h>
