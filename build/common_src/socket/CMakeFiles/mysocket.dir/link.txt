@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmysocket.a CMakeFiles/mysocket.dir/liberror.cpp.o CMakeFiles/mysocket.dir/resolver.cpp.o CMakeFiles/mysocket.dir/resolvererror.cpp.o CMakeFiles/mysocket.dir/socket.cpp.o
-/usr/bin/ranlib libmysocket.a
