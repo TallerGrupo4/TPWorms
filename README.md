@@ -26,6 +26,7 @@ sudo apt-get install cmake
 ```
 Then, you need to enter the build folder and run the cmake script. To do so, run:
 ```
+mkdir build
 cd build
 cmake ..
 ```
