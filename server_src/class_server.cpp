@@ -1,7 +1,7 @@
-#include "class_client.h"
+#include "class_server.h"
 #include <cstdio>
 
 
 ClassServer::ClassServer() {
-	printf("Soy class_client\n");
+	printf("Soy class_server\n");
 }

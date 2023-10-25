@@ -1,6 +1,7 @@
 project(Worms)
 FILE(GLOB client_src_files "*.cpp")
-add_library(client_lib STATIC ${client_src_files})
+add_library(client_lib STATIC 
+${client_src_files})
 target_link_libraries(client_lib common_lib)
 #Agrego parte de SDL2PP
 include(FindPkgConfig)
@@ -13,3 +14,4 @@ add_subdirectory(QT)
 target_compile_options(client_lib PRIVATE -fPIC)
 set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++11")
 target_include_directories(client_lib PRIVATE QT)
+target_link_libraries(client_lib lobby)

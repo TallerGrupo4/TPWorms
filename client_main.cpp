@@ -1,7 +1,7 @@
 #include <iostream>
 #include "common_src/class0.h"
 #include "mainwindow.h"
-#include <qt5/QtWidgets/QApplication>
+#include <QApplication>
 
 int main(int argc, char *argv[])
 {

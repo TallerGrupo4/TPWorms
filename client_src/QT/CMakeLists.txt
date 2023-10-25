@@ -1,9 +1,8 @@
-project(qt5-lobby)
+project(Worms)
 cmake_minimum_required(VERSION 3.8)
 # Find the QtWidgets library
 find_package(Qt5 COMPONENTS Widgets REQUIRED)
-find_package(Qt5Widgets)
-
+include_directories(${Qt5Widgets_INCLUDE_DIRS})
 message("[INFO] La raiz del proyecto es ${PROJECT_SOURCE_DIR}")
 
 #include_directories(${PROJECT_SOURCE_DIR})
