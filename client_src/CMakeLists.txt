@@ -8,6 +8,8 @@ include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
 pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
 set(SDL2PP_WITH_IMAGE ON)
+set(SDL2PP_WITH_MIXER ON)
+set(SDL2PP_WITH_TTF ON)
 add_subdirectory(libSDL2pp-0.16.2)
 target_link_libraries(client_lib SDL2pp)
 #Agrego parte de QT
