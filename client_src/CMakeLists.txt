@@ -1,14 +1,15 @@
 project(Worms)
 FILE(GLOB client_src_files "*.cpp")
-add_library(client_lib STATIC 
+add_library(client_lib STATIC
 ${client_src_files})
 target_link_libraries(client_lib common_lib)
 #Agrego parte de SDL2PP
 include(FindPkgConfig)
-pkg_search_module(SDL2 sdl2)
-set(SDL2PP_WITH_IMAGE OFF)
-add_subdirectory(libSDL2pp)
-target_link_libraries(client_lib SDL2pp::SDL2pp)
+pkg_search_module(SDL2 REQUIRED sdl2)
+pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+set(SDL2PP_WITH_IMAGE ON)
+add_subdirectory(libSDL2pp-0.16.2)
+target_link_libraries(client_lib SDL2pp)
 #Agrego parte de QT
 add_subdirectory(QT)
 target_compile_options(client_lib PRIVATE -fPIC)
