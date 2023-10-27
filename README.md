@@ -30,6 +30,12 @@ mkdir build
 cd build
 cmake ..
 ```
+TIP: If you already have a build folder with the cmake script already ran, you can run the 
+following command to re-build the project using the cache and compile it at the same time without
+needing to be at the build folder (you need to be at the root folder of the project):
+```
+cmake --build build/ -j 12
+```
 Now, you can run the makefile by running (inside the build folder):
 ```
 make
@@ -77,4 +83,10 @@ Also, if you want to run them before doing a commit, you can run them manually b
 pre-commit run --all-files
 ```
 
+
+### Testing
+In order to run the tests, you will need to run the following commands in /build (with the build and make already done):
+```
+GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
+```
 

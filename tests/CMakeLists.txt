@@ -1,0 +1,15 @@
+# if(BUILD_TESTING)
+#     add_executable(my_tests my_tests.cpp)
+#     target_link_libraries(my_tests PRIVATE GTest::gtest_main)
+#     # target_link_libraries(my_tests ${GTEST_LIBRARIES} pthread)
+#     include(GoogleTest)
+#     gtest_discover_tests(my_tests)
+# endif()
+
+if(BUILD_TESTING)
+    add_executable(my_tests my_tests.cpp)
+    target_link_libraries(my_tests PRIVATE GTest::gtest GTest::gtest_main)
+    include(GoogleTest)
+    gtest_discover_tests(my_tests)
+endif()
+

@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(Worms)
+project(Worms
+    VERSION 0.0.1
+    DESCRIPTION "Worms game")
 
+include(CTest)
+
+add_subdirectory(external)
+add_subdirectory(tests)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
 add_subdirectory(server_src)

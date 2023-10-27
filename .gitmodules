@@ -4,3 +4,6 @@
 [submodule "server_src/box2d"]
 	path = server_src/box2d
 	url = https://github.com/erincatto/box2d
+[submodule "external/googletests"]
+	path = external/googletests
+	url = git@github.com:google/googletest.git
