@@ -20,4 +20,4 @@ repos:
       - id: cppcheck
         files: ^(.*[.]cpp|.*[.]h)$
         args: ["--inline-suppr", "--enable=all", "--suppress=missingIncludeSystem", "--suppress=missingInclude", "--suppress=unusedFunction", "--suppress=unmatchedSuppression", "--language=c++", "--std=c++17", "--error-exitcode=1"]
-        exclude: '^(server_src/box2d-main/|build/|external/)'
+        exclude: '^(server_src/box2d-main/|build/|external/|client_src/libSDL2pp-0.16.2)'
