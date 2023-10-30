@@ -4,7 +4,7 @@ Final project for the subject Taller de Programacion I
 ## Authors
 | Nombre | Apellido | Padrón | Mail                |
 | ------ | -------- | ------ | ------------------- |
-| Facundo  | Huttin | 107854 | *** |
+| Facundo  | Huttin | 107854 | fhuttin@fi.uba.ar |
 | Theo | Lijs | 109472 | *** |
 | Ivan | Erlich | 105989 | ierlich@fi.uba.ar |
 

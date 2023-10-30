@@ -33,6 +33,7 @@ include_directories(${PROJECT_BINARY_DIR})
 message("Headers generados: ${UIS_HEADERS}")
 
 add_library(lobby
+  assets/resources.qrc
   mainwindow.cpp
   ${UIS_HEADERS})
 
