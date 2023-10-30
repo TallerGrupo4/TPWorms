@@ -6,6 +6,8 @@ project(Worms
 
 include(CTest)
 
+include(cmake/UpdateGitSubmodules.cmake)
+
 add_subdirectory(external)
 add_subdirectory(tests)
 add_subdirectory(client_src)
