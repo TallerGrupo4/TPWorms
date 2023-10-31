@@ -1,9 +1,9 @@
-#include "client_client_sender.h"
+#include "sender.h"
 
 #include <iostream>
 
-#include "../common_src/common_custom_errors.h"
-#include "../common_src/common_liberror.h"
+#include "../common_src/custom_errors.h"
+#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
 
 

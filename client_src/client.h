@@ -1,12 +1,12 @@
 #include <memory>
 
-#include "../common_src/common_socket.h"
+#include "../common_src/socket.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 
-#include "client_client_receiver.h"
-#include "client_client_sender.h"
-#include "client_parser_client.h"
+#include "receiver.h"
+#include "sender.h"
+#include "parser_client.h"
 
 class Client {
 private:

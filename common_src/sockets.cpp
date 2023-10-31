@@ -12,9 +12,9 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "common_liberror.h"
-#include "common_resolver.h"
-#include "common_socket.h"
+#include "liberror.h"
+#include "resolver.h"
+#include "socket.h"
 
 Socket::Socket(const char* hostname, const char* servname) {
     Resolver resolver(hostname, servname, false);

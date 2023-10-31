@@ -1,11 +1,11 @@
-#include "server_server_client.h"
+#include "server_client.h"
 
 #include <utility>
 
 #include <sys/socket.h>
 
-#include "../common_src/common_custom_errors.h"
-#include "../common_src/common_liberror.h"
+#include "../common_src/custom_errors.h"
+#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
 
 ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):

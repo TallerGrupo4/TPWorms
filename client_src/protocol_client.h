@@ -1,11 +1,11 @@
-#include "../common_src/common_protocol.h"
-#include "../common_src/common_socket.h"
+#include "../common_src/protocol.h"
+#include "../common_src/socket.h"
 #include "../common_src/constants.h"
 
-#include "client_parser_client.h"
+#include "parser_client.h"
 
-#ifndef PROTOCOL_CLIENT_H
-#define PROTOCOL_CLIENT_H
+#ifndef PROTOCOLO_H
+#define PROTOCOLO_H
 
 class ProtocolClient: public Protocol {
 
@@ -22,4 +22,4 @@ public:
     int send_create_join(Command& command);
 };
 
-#endif  // PROTOCOL_CLIENT_H
+#endif  // PROTOCOLO_H

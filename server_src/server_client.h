@@ -1,15 +1,15 @@
 #include <atomic>
 #include <memory>
 
-#include "../common_src/common_monitor_match.h"
-#include "../common_src/common_monitor_matches.h"
-#include "../common_src/common_socket.h"
+#include "../common_src/monitor_match.h"
+#include "../common_src/monitor_matches.h"
+#include "../common_src/socket.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
 
-#include "server_parser_server.h"
-#include "server_protocol_server.h"
-#include "server_server_client_sender.h"
+#include "parser_server.h"
+#include "protocol_server.h"
+#include "server_client_sender.h"
 
 #ifndef SERVER_CLIENT_H
 #define SERVER_CLIENT_H

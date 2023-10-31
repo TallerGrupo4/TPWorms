@@ -1,5 +1,5 @@
-#include "common_parser.h"
-#include "common_socket.h"
+#include "parser.h"
+#include "socket.h"
 
 #ifndef PROTOCOL_H
 #define PROTOCOL_H

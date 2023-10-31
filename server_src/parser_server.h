@@ -1,6 +1,6 @@
 #include <vector>
 
-#include "../common_src/common_parser.h"
+#include "../common_src/parser.h"
 #include "../common_src/constants.h"
 
 #ifndef PARSER_SERVER_H
