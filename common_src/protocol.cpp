@@ -1,4 +1,4 @@
-#include "common_protocol.h"
+#include "protocol.h"
 
 Protocol::Protocol(Socket& socket, Parser& parser): socket(socket), parser(parser) {}
 

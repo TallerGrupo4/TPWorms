@@ -1,4 +1,4 @@
-#include "server_server.h"
+#include "server.h"
 
 #include <algorithm>
 #include <iostream>
@@ -6,7 +6,7 @@
 
 #include <sys/socket.h>
 
-#include "../common_src/common_liberror.h"
+#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
 
 

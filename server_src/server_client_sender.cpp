@@ -1,4 +1,4 @@
-#include "server_server_client_sender.h"
+#include "server_client_sender.h"
 
 ServerClientSender::ServerClientSender(Socket& skt, std::shared_ptr<Queue<Command>> queue,
                                        ProtocolServer& protocol):

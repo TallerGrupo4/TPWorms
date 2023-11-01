@@ -1,13 +1,13 @@
 #include <memory>
 
-#include "../common_src/common_liberror.h"
-#include "../common_src/common_socket.h"
+#include "../common_src/liberror.h"
+#include "../common_src/socket.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
 
-#include "server_parser_server.h"
-#include "server_protocol_server.h"
+#include "parser_server.h"
+#include "protocol_server.h"
 
 #ifndef SERVER_CLIENT_SENDER_H
 #define SERVER_CLIENT_SENDER_H

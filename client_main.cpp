@@ -1,9 +1,9 @@
 #include <QApplication>
 #include <iostream>
 
-#include "client_src/client_client.h"
-#include "common_src/common_liberror.h"
-#include "common_src/common_socket.h"
+#include "client_src/client.h"
+#include "common_src/liberror.h"
+#include "common_src/socket.h"
 #include "common_src/constants.h"
 
 #include "mainwindow.h"

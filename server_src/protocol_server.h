@@ -1,8 +1,8 @@
-#include "../common_src/common_protocol.h"
-#include "../common_src/common_socket.h"
+#include "../common_src/protocol.h"
+#include "../common_src/socket.h"
 #include "../common_src/constants.h"
 
-#include "server_parser_server.h"
+#include "parser_server.h"
 
 #ifndef PROTOCOL_SERVER_H
 #define PROTOCOL_SERVER_H

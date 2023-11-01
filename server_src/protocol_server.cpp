@@ -1,11 +1,11 @@
-#include "server_protocol_server.h"
+#include "protocol_server.h"
 
 #include <iostream>
 #include <vector>
 
 #include <arpa/inet.h>
 
-#include "../common_src/common_liberror.h"
+#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
 
 ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): Protocol(socket, parser) {}
