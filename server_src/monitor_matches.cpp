@@ -2,12 +2,13 @@
 
 #include <iostream>
 
-#include "custom_errors.h"
-#include "liberror.h"
-#include "constants.h"
+#include "../common_src/custom_errors.h"
+#include "../common_src/liberror.h"
+#include "../common_src/constants.h"
 
 MonitorMatches::MonitorMatches() {
     matches[1] = std::make_shared<MonitorMatch>();
+    
 }
 
 std::shared_ptr<MonitorMatch> MonitorMatches::create(const std::shared_ptr<Queue<Command>> queue,

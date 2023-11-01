@@ -3,8 +3,8 @@
 #include <vector>
 
 #include "monitor_match.h"
-#include "constants.h"
-#include "queue.h"
+#include "../common_src/constants.h"
+#include "../common_src/queue.h"
 
 
 #ifndef MONITOR_MATCHES_H
