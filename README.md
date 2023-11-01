@@ -5,7 +5,7 @@ Final project for the subject Taller de Programacion I
 | Nombre | Apellido | Padrón | Mail                |
 | ------ | -------- | ------ | ------------------- |
 | Facundo  | Huttin | 107854 | fhuttin@fi.uba.ar |
-| Theo | Lijs | 109472 | *** |
+| Theo | Lijs | 109472 | tlijs@fi.uba.ar |
 | Ivan | Erlich | 105989 | ierlich@fi.uba.ar |
 
 ## SDL2
