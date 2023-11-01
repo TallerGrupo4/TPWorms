@@ -1,13 +1,20 @@
 #include <gtest/gtest.h>
 
+#include "../client_src/client_parser_client.h"
+#include "../client_src/client_protocol_client.h"
+#include "../common_src/constants.h"
+#include "./dummy_socket.h"
+
 namespace {
 int getNumber() { return 1; }
 }  // namespace
 
 TEST(TestTopic, GetNumber) { EXPECT_EQ(getNumber(), 1); }
 
-TEST(TestTopic, GetNumber2Error) {
-    ASSERT_EQ(getNumber(), 2) << "getNumber() should return 2";
-    // No other code will be executed if the assertion fails
-    // On the other hand, it it was an EXPECT_ assertion, the test would continue
+TEST(Protocol, BasiscTestSendData) {
+    DummySocket socket("localhost", "8080");
+    ParserClient parser;
+    ProtocolClient protocol(socket, parser);
+    Command command = INITIALIZE_COMMAND;
+    EXPECT_EQ(protocol.send(command), 1);
 }

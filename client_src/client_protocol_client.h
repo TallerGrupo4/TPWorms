@@ -13,8 +13,14 @@ private:
     int recv_match_id(uint* match_id);
 
 public:
+#ifdef TESTING
+    explicit ProtocolClient(DummySocket& socket, ParserClient& parser) {
+        this->socket = socket;
+        this->parser = parser;
+    };
+#else
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
-
+#endif
     int recv(Command& command) override;
 
     int send(const Command& command) override;
