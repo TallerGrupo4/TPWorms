@@ -5,9 +5,9 @@
 
 #include <arpa/inet.h>
 
-#ifndef TESTING
+// #ifndef TESTING
 ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): Protocol(socket, parser) {}
-#endif
+// #endif
 int ProtocolClient::recv(Command& command) {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);

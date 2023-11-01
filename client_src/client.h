@@ -27,7 +27,7 @@ private:
 public:
     explicit Client(const char* hostname, const char* servername);
 
-    void start();
+    int start();
 
     ~Client();
 };

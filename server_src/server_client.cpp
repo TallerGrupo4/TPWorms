@@ -23,13 +23,11 @@ void ServerClient::run() {
         while (protocol.is_connected()) {
             Command command = INITIALIZE_COMMAND;
             if (protocol.recv(command) == SOCKET_FAILED) {
-                // We have to actually catch a custom error here called SOCKET_FAILED
                 throw LibError(errno, "Socket failed");
             }
             interpretate_command(command);
         }
     } catch (const LibError& err) {
-        // if (!protocol.is_connected()) {
         _is_dead = true;
         Command command = INITIALIZE_COMMAND;
         command.code = CASE_EXIT_SERVER;

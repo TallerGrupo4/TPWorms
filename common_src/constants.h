@@ -4,7 +4,7 @@
 #define _CONSTANTS_H_
 
 // Testing constants
-#define TESTING true;
+#define TESTING false;
 
 #define MAX_PLAYERS 100
 

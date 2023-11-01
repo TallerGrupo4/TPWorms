@@ -6,7 +6,9 @@
 #include "liberror.h"
 #include "constants.h"
 
-MonitorMatches::MonitorMatches() {}
+MonitorMatches::MonitorMatches() {
+    matches[1] = std::make_shared<MonitorMatch>();
+}
 
 std::shared_ptr<MonitorMatch> MonitorMatches::create(const std::shared_ptr<Queue<Command>> queue,
                                                      uint match_id) {

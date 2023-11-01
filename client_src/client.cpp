@@ -17,10 +17,17 @@ Client::Client(const char* hostname, const char* servername):
         client_receiver(std::make_unique<ClientReceiver>(socket, queue_receiver, in_match)),
         parser() {}
 
-void Client::start() {
+int Client::start() {
     try {
+        Command command_join = INITIALIZE_COMMAND;
+        command_join.code = CASE_JOIN;
+        command_join.match_id = 1;
+        queue_sender->try_push(command_join);
         client_sender->start();
         client_receiver->start();
+
+        // Here starts the client's main loop with QT (first while, like in a main menu)
+        // and then SDL2 (when it is already in a match)
         Command command = INITIALIZE_COMMAND;
         while (client_sender->is_connected() && client_receiver->is_connected() && !is_dead) {
             get_command(command);
@@ -45,15 +52,21 @@ void Client::start() {
             if (queue_receiver->try_pop(command))
                 print_command(command);
         }
+        // ----------
+        
         if (!is_dead) {
             std::cout << "Client has finished because the server has closed the connection"
                       << std::endl;
             stop();
+            return 1;
         }
+        return 0;
     } catch (const LibError& e) {
         std::cout << "Client has finished because: " << e.what() << std::endl;
+        return 1;
     } catch (...) {
         std::cerr << "Client has finished because of an unknown error" << std::endl;
+        return 1;
     }
 }
 
