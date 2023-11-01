@@ -11,6 +11,7 @@ set(SDL2PP_WITH_IMAGE ON)
 set(SDL2PP_WITH_MIXER ON)
 set(SDL2PP_WITH_TTF ON)
 add_subdirectory(libSDL2pp-0.16.2)
+include_directories(${SDL2PP_INCLUDE_DIRS})
 target_link_libraries(client_lib SDL2pp)
 #Agrego parte de QT
 add_subdirectory(QT)
