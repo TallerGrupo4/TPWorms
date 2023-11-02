@@ -5,6 +5,7 @@
 
 void ParserServer::parse_sending_command(Command& command) {
     switch (command.code) {
+        // This does not make any sense. It is for future parsing...?
         case CASE_CHAT: {
             command.code = CASE_CHAT;
             break;

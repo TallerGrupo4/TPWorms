@@ -92,7 +92,7 @@ rm CMakeCache.txt && cmake .. -DTESTING=ON
 ```
 Then you will need to run the makefile:
 ```
-make
+make -j4
 ```
 And finally you will need to run the tests:
 ```

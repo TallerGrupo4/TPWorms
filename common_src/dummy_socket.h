@@ -1,15 +1,17 @@
 #include <deque>
+#include <iostream>
+#include <iomanip>
+#include <cstring>
 
 #ifdef TESTING
 #ifndef DUMMY_SOCKET_H
 #define DUMMY_SOCKET_H
 
+
 class Socket {
-private:
+public:
     std::deque<void*> my_queue;
     int skt;
-
-public:
     Socket(const char* hostname, const char* servname) {
         this->skt = 0;
     };
@@ -17,16 +19,39 @@ public:
     explicit Socket(const char* servname) {
         this->skt = 1;
     };
-
     int sendall(const void* data, unsigned int sz, bool* was_closed) {
-        my_queue.push_back((void*)data);
-        return sizeof(data);
-    };
+        // Create a copy of the data and store it in my_queue
+        char* copy = new char[sz];
+        memcpy(copy, data, sz);
+        my_queue.push_back(copy);
+
+        // Rest of your code remains the same
+
+        return sz;
+    }
+
     int recvall(void* data, unsigned int sz, bool* was_closed) {
-        data = my_queue.front();
+        if (my_queue.empty()) {
+            // Handle the case when the queue is empty
+            // Set was_closed or any other appropriate error handling
+            return -1;
+        }
+
+        // Retrieve the stored data and its size
+        char* copy = static_cast<char*>(my_queue.front());
+
+        // Copy the data back to the provided buffer
+        memcpy(data, copy, sz);
+
+        // Clean up the copied data
+        delete[] copy;
+
+        // Remove the data from the queue
         my_queue.pop_front();
-        return sizeof(data);
-    };
+
+        return sz;
+    }
+
     void shutdown(int how){};
     int close() { return 0; };
     Socket accept() { return *this; };
