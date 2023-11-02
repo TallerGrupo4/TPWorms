@@ -1,3 +1,6 @@
+#ifndef MATCH_RENDERER_H
+#define MATCH_RENDERER_H
+
 #include <iostream>
 #include <exception>
 #include <unistd.h>
@@ -18,3 +21,4 @@ private:
 public:
     int start();
 };
+#endif //MATCH_RENDERER_H

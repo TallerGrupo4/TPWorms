@@ -1,6 +1,7 @@
-#ifndef __WORM_H__
-#define __WORM_H__
+#ifndef WORM_H
+#define WORM_H
 
+//#include "SDL2pp.hh"
 #include <SDL2pp/SDL2pp.hh>
 #include "Animation.h"
 class Player {
@@ -22,4 +23,4 @@ private:
     int y;
 };
 
-#endif // __WORM_H__
+#endif // WORM_H

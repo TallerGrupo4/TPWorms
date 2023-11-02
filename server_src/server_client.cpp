@@ -16,7 +16,7 @@ ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
         protocol(socket, parser),
         sender(std::make_unique<ServerClientSender>(socket, queue, protocol)),
         monitor_matches(_monitor_matches) {}
-        Match& match;
+        //Match& match;
 
 void ServerClient::run() {
     try {
