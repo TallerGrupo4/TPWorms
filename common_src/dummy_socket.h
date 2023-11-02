@@ -7,11 +7,16 @@
 class Socket {
 private:
     std::deque<void*> my_queue;
+    int skt;
 
 public:
-    Socket(const char* hostname, const char* servname){};
+    Socket(const char* hostname, const char* servname) {
+        this->skt = 0;
+    };
 
-    explicit Socket(const char* servname){};
+    explicit Socket(const char* servname) {
+        this->skt = 1;
+    };
 
     int sendall(const void* data, unsigned int sz, bool* was_closed) {
         my_queue.push_back((void*)data);

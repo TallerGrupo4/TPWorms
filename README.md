@@ -30,7 +30,7 @@ mkdir build
 cd build
 cmake ..
 ```
-TIP: If you already have a build folder with the cmake script already ran, you can run the 
+TIP: If you already have a build folder with the cmake script already ran (if not, skip this command), you can run the 
 following command to re-build the project using the cache and compile it at the same time without
 needing to be at the build folder (you need to be at the root folder of the project):
 ```
@@ -85,8 +85,21 @@ pre-commit run --all-files
 
 
 ### Testing
-In order to run the tests, you will need to run the following commands in /build (with the build and make already done):
+In order to run the tests, you will need to run the following commands in /build:
+First you will need to run the cmake script for removing the cache and re-generate it with the testing flag:
+```
+rm CMakeCache.txt && cmake .. -DTESTING=ON
+```
+Then you will need to run the makefile:
+```
+make
+```
+And finally you will need to run the tests:
 ```
 GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
 ```
-
+For running the project normally once again you will need to run the cmake script for removing the cache and re-generate it without the testing flag:
+```
+rm CMakeCache.txt && cmake ..
+```
+And then run the makefile as explained before.

@@ -28,6 +28,9 @@ public:
 
     virtual bool is_connected();
 
+    bool operator==(const Protocol& other) const { return this->socket == other.socket; };
+    bool operator!=(const Protocol& other) const { return !(*this == other); };
+
     ~Protocol();
 };
 
