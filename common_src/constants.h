@@ -3,9 +3,6 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-// Testing constants
-#define TESTING false;
-
 #define MAX_PLAYERS 100
 
 // This INVALID macro is only used to initialize the Command struct

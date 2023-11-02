@@ -9,7 +9,6 @@ include(CTest)
 include(cmake/UpdateGitSubmodules.cmake)
 
 add_subdirectory(external)
-add_subdirectory(tests)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
 add_subdirectory(server_src)
@@ -29,3 +28,7 @@ target_include_directories(server PRIVATE common_src)
 
 set_target_properties(client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")
+
+if(TESTING)
+    add_subdirectory(tests)
+endif()

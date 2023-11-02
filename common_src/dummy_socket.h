@@ -1,16 +1,17 @@
 #include <deque>
 
+#ifdef TESTING
 #ifndef DUMMY_SOCKET_H
 #define DUMMY_SOCKET_H
 
-class DummySocket {
+class Socket {
 private:
     std::deque<void*> my_queue;
 
 public:
-    DummySocket(const char* hostname, const char* servname){};
+    Socket(const char* hostname, const char* servname){};
 
-    explicit DummySocket(const char* servname){};
+    explicit Socket(const char* servname){};
 
     int sendall(const void* data, unsigned int sz, bool* was_closed) {
         my_queue.push_back((void*)data);
@@ -23,7 +24,11 @@ public:
     };
     void shutdown(int how){};
     int close() { return 0; };
-    DummySocket accept() { return *this; };
+    Socket accept() { return *this; };
+    bool operator==(const Socket& other) const { return this->skt == other.skt; };
+    bool operator!=(const Socket& other) const { return !(*this == other); };
+    ~Socket(){};
 };
 
 #endif  // DUMMY_SOCKET_H
+#endif  // TESTING
