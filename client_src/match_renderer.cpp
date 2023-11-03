@@ -70,7 +70,7 @@ int MatchRenderer::start(){
         Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         // Load sprites image as a new texture
-        Texture worm_sprite(renderer, Surface("sprites/Worms/wwalk.png").SetColorKey(true,0));
+        Texture worm_sprite(renderer, Surface(WORM_WALK_SPRITES).SetColorKey(true,0));
         Player player(worm_sprite, true, false);
         bool running = true;
         // Game state

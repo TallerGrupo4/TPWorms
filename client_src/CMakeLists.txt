@@ -1,11 +1,11 @@
 project(Worms)
-set(SDL2PP_WITH_IMAGE ON)
-set(SDL2PP_WITH_MIXER ON)
-set(SDL2PP_WITH_TTF ON)
-add_subdirectory(libSDL2pp-0.16.2)
 FILE(GLOB client_src_files "*.cpp")
-include_directories(${SDL2PP_INCLUDE_DIRS})
-include_directories("libSDL2pp-0.16.2/SDL2pp")
+add_definitions(-DEFFECTS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Effects"
+-DMISC_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Misc"
+-DWEAPONSICONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/'Weapon Icons'"
+-DWEAPONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Weapons"
+-DWORMS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Worms"
+)
 add_subdirectory(QT)
 add_library(client_lib STATIC
 ${client_src_files})

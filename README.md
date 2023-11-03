@@ -13,6 +13,19 @@ In order to properly run the game, you need to install the SDL2 library. To do s
 ```
 sudo apt-get install libsdl2-dev
 ```
+
+## QT5
+In order to properly run the game, you need to install the qt5 library. To do so, run the following commands:
+```
+sudo apt-get install qtbase5-dev
+```
+
+## YAML
+In order to properly run the game, you need to install the yaml library. To do so, run the following commands:
+```
+sudo apt-get install -y libyaml-cpp-dev
+```
+
 Also you will need to incorporate the SDL2 and BOX2dsubmodule. To do so, run the following commands:
 ```
 git submodule update --init --recursive

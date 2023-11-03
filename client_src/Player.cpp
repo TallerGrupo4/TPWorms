@@ -1,4 +1,5 @@
 #include "Player.h"
+#include <iostream>
 
 Player::Player(SDL2pp::Texture &texture, bool lookingleft, bool orientation_horizontal): an(texture, orientation_horizontal), sprites_lookingleft(lookingleft), facingLeft(lookingleft), moving(false), x(300), y(300) {}
 
@@ -12,14 +13,15 @@ void Player::update(float dt) {
     if (moving) {
         an.update(dt);
         if (facingLeft)
-            x -= 3;
+            x -= 10;
         else
-            x += 3;
+            x += 10;
     }
 }
 
 void Player::render(SDL2pp::Renderer &renderer) {
     SDL_RendererFlip flip = facingLeft ? (sprites_lookingleft ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL) : (sprites_lookingleft ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE);
+    std::cout << "x: " << x << " y: " << y << std::endl;
     an.render(renderer, SDL2pp::Rect(x, y, 200, 200), flip);
 }
 

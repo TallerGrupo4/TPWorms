@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
         std::cerr << "Bad program call. Expected " << argv[0] << " with 2 arguments.\n";
         return ret;
     }
-    MatchRenderer match();
+    MatchRenderer match;
     match.start();
     Client client(argv[1], argv[2]);
     ret = client.start();

@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 #include "Player.h"
-
+#include "constantes_cliente.h"
 #include <SDL2pp/SDL2pp.hh>
 
 using namespace SDL2pp;
