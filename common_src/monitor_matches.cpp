@@ -22,7 +22,6 @@ std::shared_ptr<MonitorMatch> MonitorMatches::create(const std::shared_ptr<Queue
 void MonitorMatches::stop() {
     std::unique_lock<std::mutex> lock(m);
     for (auto& match: matches) {
-        std::cout << "Stopping match: " << match.first << std::endl;
         match.second->stop();
         match.second->join();
     }
@@ -35,6 +34,7 @@ std::shared_ptr<MonitorMatch> MonitorMatches::join(const std::shared_ptr<Queue<C
         throw MatchNotFound();
     if (matches[match_id]->is_full())
         throw MatchFull();
+    // matches[match_id]->push_join();
     matches[match_id]->add(queue);
     return matches[match_id];
 }

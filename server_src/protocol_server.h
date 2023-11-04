@@ -15,19 +15,19 @@ class ProtocolServer: public Protocol {
 
 private:
     int send_match_id(const Command& command);
+    int recv_create(Command& command, const char* code);
+    int recv_join(Command& command, const char* code);
+    int recv_chat(Command& command, const char* code);
 
 public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);
 
-    int recv(Command& command) override;
+    int recv_lobby(Command& command) override;
+
+    int recv_match(Command& command) override;
 
     int send(const Command& command) override;
 
-    int recv_create(Command& command, const char* code);
-
-    int recv_join(Command& command, const char* code);
-
-    int recv_chat(Command& command, const char* code);
 };
 
 #endif  // PROTOCOL_SERVER_H

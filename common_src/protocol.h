@@ -22,7 +22,9 @@ protected:
 public:
     explicit Protocol(Socket& socket, Parser& parser);
 
-    virtual int recv(Command& command);
+    virtual int recv_lobby(Command& command);
+    
+    virtual int recv_match(Command& command);
 
     virtual int send(const Command& command);
 

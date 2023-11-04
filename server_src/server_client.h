@@ -28,6 +28,7 @@ private:
     bool interpretate_command_in_lobby(Command& command);
     void interpretate_command_in_match(Command& command);
     void handle_lobby();
+    void handle_match();
 
 public:
     explicit ServerClient(Socket&& skt, MonitorMatches& _monitor_matches);

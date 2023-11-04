@@ -21,13 +21,8 @@ void ServerClient::run() {
         handle_lobby();
         
         sender->start();
-        while (protocol.is_connected()) {
-            Command command = INITIALIZE_COMMAND;
-            if (protocol.recv(command) == SOCKET_FAILED) {
-                throw LibError(errno, "Socket failed");
-            }
-            interpretate_command_in_match(command);
-        }
+        
+        handle_match();
     } catch (const LibError& err) {
         _is_dead = true;
         Command command = INITIALIZE_COMMAND;
@@ -40,7 +35,7 @@ void ServerClient::run() {
             } catch (const PlayerNotFound& e) {
                 // It is an expected error but it should never reach this point
             }
-            // monitor_match->push(command);
+            queue_match->push(command);
         }
         // } else {
         // We must do something about the client eitherway if we catch an error
@@ -52,10 +47,20 @@ void ServerClient::run() {
     }
 }
 
+void ServerClient::handle_match() {
+    while (protocol.is_connected()) {
+        Command command = INITIALIZE_COMMAND;
+        if (protocol.recv_match(command) == SOCKET_FAILED) {
+            throw LibError(errno, "Socket failed");
+        }
+        interpretate_command_in_match(command);
+    }
+}
+
 void ServerClient::handle_lobby() {
     while (protocol.is_connected()) {
         Command command = INITIALIZE_COMMAND;
-        if (protocol.recv(command) == SOCKET_FAILED) {
+        if (protocol.recv_lobby(command) == SOCKET_FAILED) {
             throw LibError(errno, "Socket failed");
         }
         if(interpretate_command_in_lobby(command)) {
@@ -149,7 +154,6 @@ void ServerClient::interpretate_command_in_match(Command& command) {
     switch (command.code) {
         case CASE_CHAT: {
             queue_match->push(command);
-            // monitor_match->push(command);
             break;
         }
         default:

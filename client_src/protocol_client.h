@@ -21,7 +21,9 @@ public:
 
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
 
-    int recv(Command& command) override;
+    int recv_lobby(Command& command) override;
+
+    int recv_match(Command& command) override;
 
     int send(const Command& command) override;
 

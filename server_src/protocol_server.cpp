@@ -10,6 +10,7 @@
 
 ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): Protocol(socket, parser) {}
 
+// ------------------------------ PUBLIC METHODS ------------------------------
 
 int ProtocolServer::send(const Command& command) {
     if (was_closed) {
@@ -81,7 +82,7 @@ int ProtocolServer::send(const Command& command) {
     return 1;
 }
 
-int ProtocolServer::recv(Command& command) {
+int ProtocolServer::recv_lobby(Command& command) {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);
     if (ret < 0) {
@@ -97,6 +98,23 @@ int ProtocolServer::recv(Command& command) {
         case CASE_JOIN: {
             return recv_join(command, code);
         }
+        default:
+            // Handle error
+            break;
+    }
+    return -1;
+}
+
+int ProtocolServer::recv_match(Command& command) {
+    char code[1];
+    int ret = socket.recvall(code, 1, &was_closed);
+    if (ret < 0) {
+        return SOCKET_FAILED;
+    }
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    switch (code[0]) {
         case CASE_CHAT: {
             return recv_chat(command, code);
         }
@@ -106,6 +124,10 @@ int ProtocolServer::recv(Command& command) {
     }
     return -1;
 }
+
+
+// ------------------------------ PRIVATE METHODS ------------------------------
+
 
 int ProtocolServer::recv_create(Command& command, const char* code) {
     uint match_id[1];

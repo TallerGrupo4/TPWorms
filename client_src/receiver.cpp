@@ -15,7 +15,7 @@ void ClientReceiver::run() {
     try {
         while (protocol.is_connected() && !_is_dead) {
             Command command = INITIALIZE_COMMAND;
-            protocol.recv(command);
+            protocol.recv_lobby(command);
             if (!in_match && (command.code == CASE_JOIN || command.code == CASE_CREATE))
                 in_match = true;
             queue->push(command);

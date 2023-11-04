@@ -23,10 +23,23 @@ void MonitorMatch::run() {
     }
 }
 
+// void MonitorMatch::push_join() {
+//     std::unique_lock<std::mutex> lock(m);
+//     Command command = INITIALIZE_COMMAND;
+//     command.code = CASE_JOIN_MATCH;
+//     command.number_of_players = get_players() + 1;
+//     try {
+//         queue_match->try_push(command);
+//     } catch (const ClosedQueue& err) {
+//         // It is an expected error
+//     } catch (...) {
+//         std::cerr << "Error in MonitorMatch::push_join: Unknown exception" << std::endl;
+//     }
+// }
+
 void MonitorMatch::stop() {
     std::unique_lock<std::mutex> lock(m);
     try {
-        std::cout << "Closing match's queue" << std::endl;
         queue_match->close();
     } catch (const ClosedQueue& err) {
         // It is an expected error
