@@ -18,14 +18,15 @@ ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
 
 void ServerClient::run() {
     try {
+        handle_lobby();
+        
         sender->start();
-
         while (protocol.is_connected()) {
             Command command = INITIALIZE_COMMAND;
             if (protocol.recv(command) == SOCKET_FAILED) {
                 throw LibError(errno, "Socket failed");
             }
-            interpretate_command(command);
+            interpretate_command_in_match(command);
         }
     } catch (const LibError& err) {
         _is_dead = true;
@@ -39,7 +40,7 @@ void ServerClient::run() {
             } catch (const PlayerNotFound& e) {
                 // It is an expected error but it should never reach this point
             }
-            monitor_match->push(command);
+            // monitor_match->push(command);
         }
         // } else {
         // We must do something about the client eitherway if we catch an error
@@ -50,6 +51,58 @@ void ServerClient::run() {
                   << std::endl;
     }
 }
+
+void ServerClient::handle_lobby() {
+    while (protocol.is_connected()) {
+        Command command = INITIALIZE_COMMAND;
+        if (protocol.recv(command) == SOCKET_FAILED) {
+            throw LibError(errno, "Socket failed");
+        }
+        if(interpretate_command_in_lobby(command)) {
+            break;
+        }
+    }
+}
+
+bool ServerClient::interpretate_command_in_lobby(Command& command) {
+    bool in_match = false;
+    switch (command.code) {
+        case CASE_CREATE: {
+            try {
+                monitor_match = monitor_matches.create(queue, command.match_id);
+                queue_match = monitor_match->get_queue();
+                in_match = true;
+                std::cout << "Match created with id: " << command.match_id << std::endl;
+            } catch (const MatchAlreadyExists& err) {
+                command.code = CASE_MATCH_ALREADY_EXISTS;
+                std::cout << "Match already exists with id: " << command.match_id << std::endl;
+            }
+            protocol.send(command);
+            break;
+        }
+        case CASE_JOIN: {
+            try {
+                monitor_match = monitor_matches.join(queue, command.match_id);
+                queue_match = monitor_match->get_queue();
+                command.number_of_players = monitor_match->get_players();
+                in_match = true;
+                std::cout << "Match joined with id: " << command.match_id << std::endl;
+            } catch (const MatchFull& err) {
+                command.code = CASE_MATCH_FULL;
+                std::cout << "Match is full with id: " << command.match_id << std::endl;
+            } catch (const MatchNotFound& err) {
+                command.code = CASE_MATCH_NOT_FOUND;
+                std::cout << "Match not found with id: " << command.match_id << std::endl;
+            }
+            protocol.send(command);
+            break;
+        }
+        default:
+            break;
+    }
+    return in_match;
+}
+
 
 void ServerClient::stop() {
     try {
@@ -92,37 +145,11 @@ bool ServerClient::is_dead() {
     }
 }
 
-void ServerClient::interpretate_command(Command& command) {
+void ServerClient::interpretate_command_in_match(Command& command) {
     switch (command.code) {
-        case CASE_CREATE: {
-            try {
-                monitor_match = monitor_matches.create(queue, command.match_id);
-            } catch (const MatchAlreadyExists& err) {
-                command.code = CASE_MATCH_ALREADY_EXISTS;
-                queue->push(command);
-                break;
-            }
-            monitor_match->push(command);
-            break;
-        }
-        case CASE_JOIN: {
-            try {
-                monitor_match = monitor_matches.join(queue, command.match_id);
-            } catch (const MatchFull& err) {
-                command.code = CASE_MATCH_FULL;
-                queue->push(command);
-                break;
-            } catch (const MatchNotFound& err) {
-                command.code = CASE_MATCH_NOT_FOUND;
-                queue->push(command);
-                break;
-            }
-            command.number_of_players = monitor_match->get_players();
-            monitor_match->push(command);
-            break;
-        }
         case CASE_CHAT: {
-            monitor_match->push(command);
+            queue_match->push(command);
+            // monitor_match->push(command);
             break;
         }
         default:

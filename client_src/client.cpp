@@ -19,10 +19,6 @@ Client::Client(const char* hostname, const char* servername):
 
 int Client::start() {
     try {
-        Command command_join = INITIALIZE_COMMAND;
-        command_join.code = CASE_JOIN;
-        command_join.match_id = 1;
-        queue_sender->try_push(command_join);
         client_sender->start();
         client_receiver->start();
 

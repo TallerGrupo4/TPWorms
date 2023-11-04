@@ -23,6 +23,8 @@ public:
 
     std::shared_ptr<MonitorMatch> join(const std::shared_ptr<Queue<Command>> queue, uint match_id);
 
+    void stop();
+
     ~MonitorMatches();
 };
 

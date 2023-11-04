@@ -54,6 +54,7 @@ void Server::kill_clients() {
         }
         (*clients_it)->join();
     }
+    monitor_matches.stop();
 }
 
 void Server::stop() {

@@ -7,7 +7,38 @@
 #include "constants.h"
 
 
-MonitorMatch::MonitorMatch() {}
+MonitorMatch::MonitorMatch(): queue_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)) {}
+
+void MonitorMatch::run() {
+    uint8_t FPS = 1;
+    try {
+        while (true) {
+            push();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000 / FPS));
+        }
+    } catch (const ClosedQueue& err) {
+        // It is an expected error
+    } catch (...) {
+        std::cerr << "Error in MonitorMatch::run: Unknown exception" << std::endl;
+    }
+}
+
+void MonitorMatch::stop() {
+    std::unique_lock<std::mutex> lock(m);
+    try {
+        std::cout << "Closing match's queue" << std::endl;
+        queue_match->close();
+    } catch (const ClosedQueue& err) {
+        // It is an expected error
+    } catch (...) {
+        std::cerr << "Error in MonitorMatch::stop: Unknown exception" << std::endl;
+    }
+}
+
+std::shared_ptr<Queue<Command>> MonitorMatch::get_queue() {
+    std::unique_lock<std::mutex> lock(m);
+    return queue_match;
+}
 
 void MonitorMatch::add(const std::shared_ptr<Queue<Command>> queue) {
     std::unique_lock<std::mutex> lock(m);
@@ -24,17 +55,20 @@ void MonitorMatch::remove(const std::shared_ptr<Queue<Command>> queue) {
     }
 }
 
-// cppcheck-suppress passedByValue
-void MonitorMatch::push(const Command command) {
+void MonitorMatch::push() {
     std::unique_lock<std::mutex> lock(m);
-    try {
-        for (auto& queue: queues) {
-            queue->push(command);
+    Command command = INITIALIZE_COMMAND;
+    if (queue_match->try_pop(command)) {
+        try {
+            for (auto& queue: queues) {
+                std::cout << "pushing command: " << +command.code << std::endl;
+                queue->try_push(command);
+            }
+        } catch (const ClosedQueue& err) {
+            // It is an expected error
+        } catch (...) {
+            std::cerr << "Error in MonitorMatch::push: Unknown exception" << std::endl;
         }
-    } catch (const ClosedQueue& err) {
-        // It is an expected error
-    } catch (...) {
-        std::cerr << "Error in MonitorMatch::push: Unknown exception" << std::endl;
     }
 }
 

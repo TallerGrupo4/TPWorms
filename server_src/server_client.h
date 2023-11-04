@@ -18,13 +18,16 @@ class ServerClient: public Thread {
 private:
     Socket socket;
     std::shared_ptr<Queue<Command>> queue;
+    std::shared_ptr<Queue<Command>> queue_match = NULL;
     ParserServer parser;
     ProtocolServer protocol;
     std::unique_ptr<ServerClientSender> sender;
     MonitorMatches& monitor_matches;
     std::shared_ptr<MonitorMatch> monitor_match = NULL;
     bool _is_dead = false;
-    void interpretate_command(Command& command);
+    bool interpretate_command_in_lobby(Command& command);
+    void interpretate_command_in_match(Command& command);
+    void handle_lobby();
 
 public:
     explicit ServerClient(Socket&& skt, MonitorMatches& _monitor_matches);
