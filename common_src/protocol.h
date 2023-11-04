@@ -26,7 +26,9 @@ public:
     
     virtual int recv_match(Command& command);
 
-    virtual int send(const Command& command);
+    virtual int send_lobby(const Command& command);
+    
+    virtual int send_match(const Command& command);
 
     virtual bool is_connected();
 

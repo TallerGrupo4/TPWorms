@@ -12,7 +12,7 @@ ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): Protocol(s
 
 // ------------------------------ PUBLIC METHODS ------------------------------
 
-int ProtocolServer::send(const Command& command) {
+int ProtocolServer::send_lobby(const Command& command) {
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
@@ -28,16 +28,6 @@ int ProtocolServer::send(const Command& command) {
             }
             uint8_t player_index[1] = {command.player_index};
             if (socket.sendall(player_index, 1, &was_closed) < 0) {
-                return SOCKET_FAILED;
-            }
-            break;
-        }
-        case CASE_CHAT: {
-            uint16_t len[1] = {htons(command.msg.size())};
-            if (socket.sendall(len, 2, &was_closed) < 0) {
-                return SOCKET_FAILED;
-            }
-            if (socket.sendall(command.msg.c_str(), command.msg.length(), &was_closed) < 0) {
                 return SOCKET_FAILED;
             }
             break;
@@ -72,6 +62,42 @@ int ProtocolServer::send(const Command& command) {
         }
         case CASE_MATCH_FULL: {
             if (send_match_id(command) < 0) {
+                return SOCKET_FAILED;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+    return 1;
+}
+
+int ProtocolServer::send_match(const Command& command) {
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    char code[1] = {command.code};
+    if (socket.sendall(code, 1, &was_closed) < 0) {
+        return SOCKET_FAILED;
+    }
+    switch (command.code) {
+        case CASE_EXIT_SERVER: {
+            uint8_t number_of_players[1] = {command.number_of_players};
+            if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
+                return SOCKET_FAILED;
+            }
+            uint8_t player_index[1] = {command.player_index};
+            if (socket.sendall(player_index, 1, &was_closed) < 0) {
+                return SOCKET_FAILED;
+            }
+            break;
+        }
+        case CASE_CHAT: {
+            uint16_t len[1] = {htons(command.msg.size())};
+            if (socket.sendall(len, 2, &was_closed) < 0) {
+                return SOCKET_FAILED;
+            }
+            if (socket.sendall(command.msg.c_str(), command.msg.length(), &was_closed) < 0) {
                 return SOCKET_FAILED;
             }
             break;

@@ -11,7 +11,7 @@ void ServerClientSender::run() {
             command.msg = command.msg.substr(0, command.msg.find('\0'));
             parser.parse_sending_command(command);
             std::cout << "sending command: " << +command.code << std::endl;
-            if (protocol.send(command) == SOCKET_FAILED) {
+            if (protocol.send_match(command) == SOCKET_FAILED) {
                 // Catch error SOCKET_FAILED
                 throw LibError(errno, "Socket was failed");
             }

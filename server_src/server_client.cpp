@@ -82,7 +82,7 @@ bool ServerClient::interpretate_command_in_lobby(Command& command) {
                 command.code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.match_id << std::endl;
             }
-            protocol.send(command);
+            protocol.send_lobby(command);
             break;
         }
         case CASE_JOIN: {
@@ -99,7 +99,7 @@ bool ServerClient::interpretate_command_in_lobby(Command& command) {
                 command.code = CASE_MATCH_NOT_FOUND;
                 std::cout << "Match not found with id: " << command.match_id << std::endl;
             }
-            protocol.send(command);
+            protocol.send_lobby(command);
             break;
         }
         default:

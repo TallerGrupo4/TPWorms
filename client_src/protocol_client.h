@@ -25,9 +25,11 @@ public:
 
     int recv_match(Command& command) override;
 
-    int send(const Command& command) override;
+    int send_lobby(const Command& command) override;
 
-    int send_create_join(Command& command);
+    int send_match(const Command& command) override;
+
+    // int send_create_join(Command& command);
 };
 
 #endif  // PROTOCOLO_H

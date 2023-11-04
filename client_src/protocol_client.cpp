@@ -197,7 +197,7 @@ int ProtocolClient::recv_match(Command& command) {
     return 1;
 }
 
-int ProtocolClient::send(const Command& command) {
+int ProtocolClient::send_match(const Command& command) {
     char code[1] = {command.code};
     if (socket.sendall(code, 1, &was_closed) < 0) {
         return SOCKET_FAILED;
@@ -212,7 +212,7 @@ int ProtocolClient::send(const Command& command) {
     return 1;
 }
 
-int ProtocolClient::send_create_join(Command& command) {
+int ProtocolClient::send_lobby(const Command& command) {
     char code[1] = {command.code};
     if (socket.sendall(code, 1, &was_closed) < 0) {
         return SOCKET_FAILED;

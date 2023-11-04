@@ -32,14 +32,14 @@ void ClientSender::run() {
 }
 
 void ClientSender::handle_command_not_in_match(Command& command) {
-    protocol.send_create_join(command);
+    protocol.send_lobby(command);
 }
 
 void ClientSender::handle_command_in_match(const Command& command) {
     switch (command.code) {
         case CASE_CHAT: {
             // TODO: CATCH ERROR SOCKET_FAILED
-            protocol.send(command);
+            protocol.send_match(command);
             break;
         }
         default:

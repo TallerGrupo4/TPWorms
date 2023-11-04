@@ -6,7 +6,9 @@ int Protocol::Protocol::recv_lobby(Command& command) { return 0; }
 
 int Protocol::Protocol::recv_match(Command& command) { return 0; }
 
-int Protocol::Protocol::send(const Command& command) { return 0; }
+int Protocol::Protocol::send_lobby(const Command& command) { return 0; }
+
+int Protocol::Protocol::send_match(const Command& command) { return 0; }
 
 bool Protocol::is_connected() { return !was_closed; }
 

@@ -26,7 +26,9 @@ public:
 
     int recv_match(Command& command) override;
 
-    int send(const Command& command) override;
+    int send_lobby(const Command& command) override;
+    
+    int send_match(const Command& command) override;
 
 };
 
