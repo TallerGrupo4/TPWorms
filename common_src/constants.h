@@ -19,13 +19,11 @@
 #define CASE_JOIN 0x03
 
 // Client codes
-#define CASE_READ 0x04
-#define CASE_EXIT 0x05
-#define CASE_INVALID 0x06
+#define CASE_EXIT 0x04
+#define CASE_INVALID 0x05
 #define CREATE "Create"
 #define JOIN "Join"
 #define CHAT "Chat"
-#define READ "Read"
 #define EXIT "Exit"
 
 // Server codes

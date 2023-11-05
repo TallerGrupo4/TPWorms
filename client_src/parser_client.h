@@ -12,7 +12,9 @@ class ParserClient: public Parser {
 public:
     ParserClient() = default;
 
-    void parse_sending_command(Command& command) override;
+    void parse_sending_command_lobby(Command& command) override;
+    
+    void parse_sending_command_match(Command& command) override;
 };
 
 #endif  // PARSER_CLIENT_H

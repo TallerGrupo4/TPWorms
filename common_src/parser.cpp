@@ -22,7 +22,9 @@ void Parser::parse_receiving_command_create(Command& command, const char* code,
     command.match_id = match_id[0];
 }
 
-void Parser::parse_sending_command(Command& command) { return; }
+void Parser::parse_sending_command_lobby(Command& command) { return; }
+
+void Parser::parse_sending_command_match(Command& command) { return; }
 
 void Parser::parse_receiving_command_full(Command& command, const char* code,
                                           const uint* match_id) {

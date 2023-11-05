@@ -10,7 +10,9 @@ class Parser {
 public:
     Parser() = default;
 
-    virtual void parse_sending_command(Command& command);
+    virtual void parse_sending_command_lobby(Command& command);
+    
+    virtual void parse_sending_command_match(Command& command);
 
     virtual void parse_receiving_command_join(Command& command, const char* code,
                                               const uint* match_id,

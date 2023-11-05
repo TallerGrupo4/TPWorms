@@ -9,7 +9,7 @@ void ServerClientSender::run() {
         while (protocol.is_connected()) {
             Command command = queue->pop();
             command.msg = command.msg.substr(0, command.msg.find('\0'));
-            parser.parse_sending_command(command);
+            parser.parse_sending_command_match(command);
             std::cout << "sending command: " << +command.code << std::endl;
             if (protocol.send_match(command) == SOCKET_FAILED) {
                 // Catch error SOCKET_FAILED

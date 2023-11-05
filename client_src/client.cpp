@@ -103,10 +103,10 @@ void Client::stop() {
 void Client::get_command(Command& command) {
     std::getline(std::cin, command.msg);
     if (in_match) {
-        parser.parse_sending_command(command);
+        parser.parse_sending_command_match(command);
         // parser.parse_match_command(command);
     } else {
-        parser.parse_sending_command(command);
+        parser.parse_sending_command_lobby(command);
         // parser.parse_lobby_command(command);
     }
 }
