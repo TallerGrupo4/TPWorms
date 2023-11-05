@@ -1,8 +1,8 @@
 #include <atomic>
 #include <memory>
 
-#include "../common_src/monitor_match.h"
-#include "../common_src/monitor_matches.h"
+#include "monitor_match.h"
+#include "monitor_matches.h"
 #include "../common_src/socket.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"

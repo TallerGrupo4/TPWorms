@@ -7,6 +7,7 @@
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 #include "../common_src/constants.h"
+#include "match.h"
 
 ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
         socket(std::move(skt)),
@@ -15,6 +16,7 @@ ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
         protocol(socket, parser),
         sender(std::make_unique<ServerClientSender>(socket, queue, protocol)),
         monitor_matches(_monitor_matches) {}
+        //Match& match;
 
 void ServerClient::run() {
     try {
@@ -158,6 +160,10 @@ void ServerClient::interpretate_command_in_match(Command& command) {
             queue_match->push(command);
             break;
         }
+        // case MOV: {
+            // GameCommand game_command = protocolo nose //
+            // match.push_command(game_command);
+        // }
         default:
             break;
     }

@@ -2,9 +2,9 @@
 
 #include <iostream>
 
-#include "custom_errors.h"
-#include "liberror.h"
-#include "constants.h"
+#include "../common_src/custom_errors.h"
+#include "../common_src/liberror.h"
+#include "../common_src/constants.h"
 
 
 MonitorMatch::MonitorMatch(): queue_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)) {}

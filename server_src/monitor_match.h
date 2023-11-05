@@ -1,9 +1,9 @@
 #include <memory>
 #include <vector>
 
-#include "constants.h"
-#include "queue.h"
-#include "thread.h"
+#include "../common_src/constants.h"
+#include "../common_src/queue.h"
+#include "../common_src/thread.h"
 
 
 #ifndef MONITOR_MATCH_H

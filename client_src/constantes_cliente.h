@@ -1,0 +1,8 @@
+#include <string>
+#ifndef  CLIENTE_CONSTANTES_H
+#define  CLIENTE_CONSTANTES_H
+
+#define WORM_WALK_SPRITES WORMS_SPRITES_PATH "/wwalk.png"
+
+
+#endif // CLIENTE_CONSTANTES_H

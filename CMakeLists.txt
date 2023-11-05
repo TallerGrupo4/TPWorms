@@ -19,6 +19,11 @@ if(TESTING)
 endif()
 
 include(cmake/UpdateGitSubmodules.cmake)
+set(SDL2PP_WITH_IMAGE ON)
+set(SDL2PP_WITH_MIXER ON)
+set(SDL2PP_WITH_TTF ON)
+add_subdirectory(client_src/libSDL2pp-0.16.2)
+include_directories(${SDL2PP_INCLUDE_DIRS})
 
 add_subdirectory(external)
 add_subdirectory(client_src)
@@ -28,8 +33,8 @@ add_subdirectory(server_src)
 add_executable(client client_main.cpp)
 add_executable(server server_main.cpp)
 
-# find_package(Qt5 COMPONENTS Widgets REQUIRED)
-target_link_libraries(client common_lib client_lib)
+#find_package(Qt5 COMPONENTS Widgets REQUIRED)
+target_link_libraries(client common_lib client_lib SDL2pp)
 target_link_libraries(server common_lib server_lib)
 
 target_include_directories(client PRIVATE client_src/QT)
