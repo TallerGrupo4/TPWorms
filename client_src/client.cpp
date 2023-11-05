@@ -89,13 +89,13 @@ int Client::start() {
 }
 
 void Client::stop() {
-    socket.shutdown(SHUT_RDWR);
     if (!in_match) {
         queue_sender_lobby->close();
     }
     queue_sender_match->close();
     queue_receiver_lobby->close();
     queue_receiver_match->close();
+    socket.shutdown(SHUT_RDWR);
     client_sender->join();
     client_receiver->join();
 }
@@ -104,10 +104,8 @@ void Client::get_command(Command& command) {
     std::getline(std::cin, command.msg);
     if (in_match) {
         parser.parse_sending_command_match(command);
-        // parser.parse_match_command(command);
     } else {
         parser.parse_sending_command_lobby(command);
-        // parser.parse_lobby_command(command);
     }
 }
 
