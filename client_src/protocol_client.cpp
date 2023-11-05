@@ -15,27 +15,6 @@ int ProtocolClient::recv_lobby(Command& command) {
     }
     command.code = code[0];
     switch (code[0]) {
-        case CASE_CHAT: {
-            uint16_t len[1];
-            ret = socket.recvall(len, 2, &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            len[0] = ntohs(len[0]);
-            std::vector<char> msg(len[0]);
-            ret = socket.recvall(msg.data(), len[0], &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            parser.parse_receiving_command_chat(command, code, msg);
-            break;
-        }
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
@@ -130,34 +109,7 @@ int ProtocolClient::recv_match(Command& command) {
             }
             parser.parse_receiving_command_chat(command, code, msg);
             break;
-        }
-        case CASE_JOIN: {
-            uint match_id[1];
-            recv_match_id(match_id);
-            uint8_t number_of_players[1];
-            ret = socket.recvall(number_of_players, 1, &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            parser.parse_receiving_command_join(command, code, match_id, number_of_players);
-            break;
-        }
-        case CASE_CREATE: {
-            uint match_id[1];
-            recv_match_id(match_id);
-            parser.parse_receiving_command_create(command, code, match_id);
-            break;
-        }
-        case CASE_MATCH_FULL: {
-            uint match_id[1];
-            recv_match_id(match_id);
-            parser.parse_receiving_command_full(command, code, match_id);
-            break;
-        }
-        case CASE_EXIT_SERVER: {
+        } case CASE_EXIT_SERVER: {
             uint8_t number_of_players[1];
             ret = socket.recvall(number_of_players, 1, &was_closed);
             if (ret < 0) {
@@ -175,18 +127,6 @@ int ProtocolClient::recv_match(Command& command) {
                 return WAS_CLOSED;
             }
             parser.parse_receiving_command_exit(command, code, number_of_players, player_index);
-        }
-        case CASE_MATCH_NOT_FOUND: {
-            uint match_id[1];
-            recv_match_id(match_id);
-            parser.parse_receiving_command_not_found(command, code, match_id);
-            break;
-        }
-        case CASE_MATCH_ALREADY_EXISTS: {
-            uint match_id[1];
-            recv_match_id(match_id);
-            parser.parse_receiving_command_already_exists(command, code, match_id);
-            break;
         }
         default:
             break;
