@@ -29,7 +29,6 @@ public:
 
     int send_match(const Command& command) override;
 
-    // int send_create_join(Command& command);
 };
 
 #endif  // PROTOCOLO_H

@@ -43,16 +43,6 @@ void ClientSender::handle_lobby() {
 void ClientSender::handle_match() {
     Command command = queue_match->pop();
     protocol.send_match(command);
-    // switch (command.code) {
-    //     case CASE_CHAT: {
-    //         // TODO: CATCH ERROR SOCKET_FAILED
-    //         protocol.send_match(command);
-    //         break;
-    //     }
-    //     default:
-    //         // TODO: throw a custom error, it should never reach this point.
-    //         break;
-    // }
 }
 
 ClientSender::~ClientSender() {}

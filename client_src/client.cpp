@@ -23,6 +23,8 @@ int Client::start() {
     try {
         client_sender->start();
         client_receiver->start();
+        // THIS LAST COMMAND IS FOR THE BRIDGE BETWEEN QT AND SDL2
+        // IT IS USED TO PUSHED THE "SUCCESFULLY JOIN/CREATED MATCH" MESSAGE (OR WHATEVER)
         bool last_command = true;
         // Here starts the client's main loop with QT (first while, like in a main menu)
         // and then SDL2 (when it is already in a match)

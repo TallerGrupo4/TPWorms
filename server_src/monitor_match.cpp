@@ -23,6 +23,7 @@ void MonitorMatch::run() {
     }
 }
 
+// This method is supposed to push to all players that a new player has joined
 // void MonitorMatch::push_join() {
 //     std::unique_lock<std::mutex> lock(m);
 //     Command command = INITIALIZE_COMMAND;
