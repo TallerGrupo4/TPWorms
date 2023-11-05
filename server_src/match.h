@@ -3,7 +3,7 @@
 #include "../common_src/queue.h"
 #include <vector>
 #include <string>
-#include "gamebuilder.h"
+#include "game_src/game.h"
 
 class GameCommand;
 
@@ -11,17 +11,16 @@ class GameCommand;
 #define MATCH_H
 
 
+
+
 class Match: public Thread {
     private:
+        Game game;
         std::string name;
-        b2World world;
-        GameBuilder builder;
         bool keep_running;
         bool match_started;
-        std::vector<b2Body*> players;
         Queue<GameCommand*> queue;
         // Broadcaster& broadcaster;
-        int turn;
         int id_counter;
 
         
@@ -32,6 +31,8 @@ class Match: public Thread {
         void stop();
         void run() override;
         void start();
+        void send_map();
+        
         void move_player(int direction, int id);
         void push_command(GameCommand* command);
 }; 
