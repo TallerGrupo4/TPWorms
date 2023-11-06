@@ -1,10 +1,10 @@
-#include "yaml-cpp/node/node.h"
 #include "yaml-cpp/emitter.h"
 #include "yaml-cpp/node/convert.h"
 #include "yaml-cpp/node/detail/impl.h"
 #include "yaml-cpp/node/emit.h"
 #include "yaml-cpp/node/impl.h"
 #include "yaml-cpp/node/iterator.h"
+#include "yaml-cpp/node/node.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -13,34 +13,47 @@
 
 namespace {
 
-// malloc/free based allocator just for testing custom allocators on stl containers
+// malloc/free based allocator just for testing custom allocators on stl
+// containers
 template <class T>
 class CustomAllocator : public std::allocator<T> {
-  public:
-    typedef std::size_t     size_type;
-    typedef std::ptrdiff_t  difference_type;
-    typedef T*              pointer;
-    typedef const T*        const_pointer;
-    typedef T&              reference;
-    typedef const T&        const_reference;
-    typedef T               value_type;
-    template<class U> struct rebind { typedef CustomAllocator<U> other; };
-    CustomAllocator() : std::allocator<T>() {}
-    CustomAllocator(const CustomAllocator& other) : std::allocator<T>(other) {}
-    template<class U> CustomAllocator(const CustomAllocator<U>& other) : std::allocator<T>(other) {}
-    ~CustomAllocator() {}
-    size_type max_size() const { return (std::numeric_limits<std::ptrdiff_t>::max)()/sizeof(T); }
-    pointer allocate(size_type num, const void* /*hint*/ = 0) {
-      if (num > std::size_t(-1) / sizeof(T)) throw std::bad_alloc();
-      return static_cast<pointer>(malloc(num * sizeof(T)));
-    }
-    void deallocate(pointer p, size_type /*num*/) { free(p); }
+ public:
+  typedef std::size_t size_type;
+  typedef std::ptrdiff_t difference_type;
+  typedef T* pointer;
+  typedef const T* const_pointer;
+  typedef T& reference;
+  typedef const T& const_reference;
+  typedef T value_type;
+  template <class U>
+  struct rebind {
+    typedef CustomAllocator<U> other;
+  };
+  CustomAllocator() : std::allocator<T>() {}
+  CustomAllocator(const CustomAllocator& other) : std::allocator<T>(other) {}
+  template <class U>
+  CustomAllocator(const CustomAllocator<U>& other) : std::allocator<T>(other) {}
+  ~CustomAllocator() {}
+  size_type max_size() const {
+    return (std::numeric_limits<std::ptrdiff_t>::max)() / sizeof(T);
+  }
+  pointer allocate(size_type num, const void* /*hint*/ = 0) {
+    if (num > std::size_t(-1) / sizeof(T))
+      throw std::bad_alloc();
+    return static_cast<pointer>(malloc(num * sizeof(T)));
+  }
+  void deallocate(pointer p, size_type /*num*/) { free(p); }
 };
 
-template <class T> using CustomVector = std::vector<T,CustomAllocator<T>>;
-template <class T> using CustomList = std::list<T,CustomAllocator<T>>;
-template <class K, class V, class C=std::less<K>> using CustomMap = std::map<K,V,C,CustomAllocator<std::pair<const K,V>>>;
-template <class K, class V, class H=std::hash<K>, class P=std::equal_to<K>> using CustomUnorderedMap = std::unordered_map<K,V,H,P,CustomAllocator<std::pair<const K,V>>>;
+template <class T>
+using CustomVector = std::vector<T, CustomAllocator<T>>;
+template <class T>
+using CustomList = std::list<T, CustomAllocator<T>>;
+template <class K, class V, class C = std::less<K>>
+using CustomMap = std::map<K, V, C, CustomAllocator<std::pair<const K, V>>>;
+template <class K, class V, class H = std::hash<K>, class P = std::equal_to<K>>
+using CustomUnorderedMap =
+    std::unordered_map<K, V, H, P, CustomAllocator<std::pair<const K, V>>>;
 
 }  // anonymous namespace
 
@@ -323,33 +336,31 @@ TEST(NodeTest, IteratorOnConstUndefinedNode) {
   }
   EXPECT_EQ(0, count);
 }
-  
+
 TEST(NodeTest, InteratorOnSequence) {
   Node node;
   node[0] = "a";
   node[1] = "b";
   node[2] = "c";
   EXPECT_TRUE(node.IsSequence());
-  
+
   std::size_t count = 0;
-  for (iterator it = node.begin(); it != node.end(); ++it)
-  {
+  for (iterator it = node.begin(); it != node.end(); ++it) {
     EXPECT_FALSE(it->IsNull());
     count++;
   }
   EXPECT_EQ(3, count);
 }
-  
+
 TEST(NodeTest, ConstInteratorOnSequence) {
   Node node;
   node[0] = "a";
   node[1] = "b";
   node[2] = "c";
   EXPECT_TRUE(node.IsSequence());
-  
+
   std::size_t count = 0;
-  for (const_iterator it = node.begin(); it != node.end(); ++it)
-  {
+  for (const_iterator it = node.begin(); it != node.end(); ++it) {
     EXPECT_FALSE(it->IsNull());
     count++;
   }
@@ -474,7 +485,7 @@ TEST(NodeTest, StdMap) {
 }
 
 TEST(NodeTest, StdMapWithCustomAllocator) {
-  CustomMap<int,int> squares;
+  CustomMap<int, int> squares;
   squares[0] = 0;
   squares[1] = 1;
   squares[2] = 4;
@@ -483,7 +494,7 @@ TEST(NodeTest, StdMapWithCustomAllocator) {
 
   Node node;
   node["squares"] = squares;
-  CustomMap<int,int> actualSquares = node["squares"].as<CustomMap<int,int>>();
+  CustomMap<int, int> actualSquares = node["squares"].as<CustomMap<int, int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
@@ -497,12 +508,13 @@ TEST(NodeTest, StdUnorderedMap) {
 
   Node node;
   node["squares"] = squares;
-  std::unordered_map<int, int> actualSquares = node["squares"].as<std::unordered_map<int, int>>();
+  std::unordered_map<int, int> actualSquares =
+      node["squares"].as<std::unordered_map<int, int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
 TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
-  CustomUnorderedMap<int,int> squares;
+  CustomUnorderedMap<int, int> squares;
   squares[0] = 0;
   squares[1] = 1;
   squares[2] = 4;
@@ -511,7 +523,8 @@ TEST(NodeTest, StdUnorderedMapWithCustomAllocator) {
 
   Node node;
   node["squares"] = squares;
-  CustomUnorderedMap<int,int> actualSquares = node["squares"].as<CustomUnorderedMap<int,int>>();
+  CustomUnorderedMap<int, int> actualSquares =
+      node["squares"].as<CustomUnorderedMap<int, int>>();
   EXPECT_EQ(squares, actualSquares);
 }
 
@@ -849,5 +862,5 @@ TEST_F(NodeEmitterTest, NestFlowMapListNode) {
 
   ExpectOutput("{position: [1.5, 2.25, 3.125]}", mapNode);
 }
-}
-}
+}  // namespace
+}  // namespace YAML

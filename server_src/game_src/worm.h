@@ -1,5 +1,7 @@
-#include <box2d/box2d.h>
 #include <vector>
+
+#include <box2d/box2d.h>
+
 #include "../../common_src/constants.h"
 
 #define START_LIFE 100
@@ -13,21 +15,20 @@ class Worm {
     b2Body* body;
     int id;
     int life;
-    int weapon; //TODO implement actual weapons
-    int state; 
+    int weapon;  // TODO implement actual weapons
+    int state;
 
-    public:
-    Worm(int id, b2Body* body): id(id) , body(body) , life(START_LIFE) , weapon(NO_WEAPON) , state(NULL_STATE) {
+public:
+    Worm(int id, b2Body* body):
+            id(id), body(body), life(START_LIFE), weapon(NO_WEAPON), state(NULL_STATE) {}
 
-    }
-
-    void move(int direction){
+    void move(int direction) {
         body->SetLinearVelocity(b2Vec2(0, 0));
         float impulse = body->GetMass() * direction * WORM_SPEED;
         body->ApplyLinearImpulseToCenter(b2Vec2(impulse, 0), true);
     }
 
-    WormSnapshot get_snapshot(){
+    WormSnapshot get_snapshot() {
         float pos_x = body->GetPosition().x;
         float pos_y = body->GetPosition().y;
         float angle = body->GetAngle();
@@ -37,4 +38,4 @@ class Worm {
     }
 };
 
-#endif //WORM_H
+#endif  // WORM_H

@@ -1,10 +1,10 @@
-#include <vector>
 #include <string>
+#include <vector>
 
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
-class WormSnapshot{
+class WormSnapshot {
     int id;
     float pos_x;
     float pos_y;
@@ -14,100 +14,80 @@ class WormSnapshot{
     int weapon;
     int state;
 
-    public:
-    WormSnapshot(int id, float pos_x, float pos_y, float angle, int life, int direction, int weapon, int state): id(id), pos_x(pos_x), pos_y(pos_y), angle(angle), life(life), direction(direction), weapon(weapon), state(state){};
+public:
+    WormSnapshot(int id, float pos_x, float pos_y, float angle, int life, int direction, int weapon,
+                 int state):
+            id(id),
+            pos_x(pos_x),
+            pos_y(pos_y),
+            angle(angle),
+            life(life),
+            direction(direction),
+            weapon(weapon),
+            state(state){};
     ~WormSnapshot(){};
 
-    int get_id(){
-        return id;
-    }
+    int get_id() { return id; }
 
-    float get_pos_x(){
-        return pos_x;
-    }
+    float get_pos_x() { return pos_x; }
 
-    float get_pos_y(){
-        return pos_y;
-    }
+    float get_pos_y() { return pos_y; }
 
-    float get_angle(){
-        return angle;
-    }
+    float get_angle() { return angle; }
 
-    int get_life(){
-        return life;
-    }
+    int get_life() { return life; }
 
-    int get_direction(){
-        return direction;
-    }
+    int get_direction() { return direction; }
 
-    int get_weapon(){
-        return weapon;
-    }
+    int get_weapon() { return weapon; }
 
-    int get_state(){
-        return state;
-    }
+    int get_state() { return state; }
 };
 
-class GameSnapshot{
+class GameSnapshot {
     std::vector<WormSnapshot> worms;
     // std::vector<ProjectileSnapshot> projectiles;
 
-    public: 
+public:
     GameSnapshot(std::vector<WormSnapshot> worms): worms(worms){};
     ~GameSnapshot(){};
 
-    std::vector<WormSnapshot> get_worms(){
-        return worms;
-    }
+    std::vector<WormSnapshot> get_worms() { return worms; }
 
     // std::vector<ProjectileSnapshot> get_projectiles(){
     //     return projectiles;
     // }
 };
 
-class PlatformSnapshot{
+class PlatformSnapshot {
     float pos_x;
     float pos_y;
     float angle;
     int width;
     int height;
 
-    public:
-    PlatformSnapshot(float pos_x, float pos_y, float angle , int width, int height): pos_x(pos_x), pos_y(pos_y), angle(angle) , width(width), height(height){};
+public:
+    PlatformSnapshot(float pos_x, float pos_y, float angle, int width, int height):
+            pos_x(pos_x), pos_y(pos_y), angle(angle), width(width), height(height){};
     ~PlatformSnapshot(){};
 
-    float get_pos_x(){
-        return pos_x;
-    }
+    float get_pos_x() { return pos_x; }
 
-    float get_pos_y(){
-        return pos_y;
-    }
+    float get_pos_y() { return pos_y; }
 
-    int get_width(){
-        return width;
-    }
+    int get_width() { return width; }
 
-    int get_height(){
-        return height;
-    }
+    int get_height() { return height; }
 };
 
 class MapSnapshot {
     std::vector<PlatformSnapshot> platforms;
 
-    public:
-
+public:
     MapSnapshot(std::vector<PlatformSnapshot> platforms): platforms(platforms){};
     ~MapSnapshot(){};
 
-    std::vector<PlatformSnapshot> get_platforms(){
-        return platforms;
-    }
-
+    std::vector<PlatformSnapshot> get_platforms() { return platforms; }
 };
 
-#endif //SNAPSHOT_H
+#endif  // SNAPSHOT_H

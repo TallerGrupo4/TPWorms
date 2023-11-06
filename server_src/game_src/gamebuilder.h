@@ -1,5 +1,6 @@
 #include <box2d/box2d.h>
 #include <yaml-cpp/yaml.h>
+
 #include "snapshot.h"
 
 #define PLAT_SMALL 6
@@ -34,7 +35,7 @@ public:
     GameBuilder(b2World& world): world(world) {}
 
 
-    MapSnapshot create_map(std::string map_name){
+    MapSnapshot create_map(std::string map_name) {
         std::vector<PlatformSnapshot> platforms_snap;
         std::string route = "../../external/";
         route += map_name;
@@ -46,13 +47,13 @@ public:
             YAML::Node platform = *it;
             float x = platform["x"].as<float>();
             float y = platform["y"].as<float>();
-            float angle = platform["angle"].as<float>();    
-            if (platform["type"].as<std::string>() == "small"){
+            float angle = platform["angle"].as<float>();
+            if (platform["type"].as<std::string>() == "small") {
                 create_small_platform(x, y, angle);
                 PlatformSnapshot snap(x, y, angle, PLAT_SMALL, PLAT_HEIGHT);
                 platforms_snap.push_back(snap);
             } else {
-                create_big_platform(x, y,angle);
+                create_big_platform(x, y, angle);
                 PlatformSnapshot snap(x, y, angle, PLAT_BIG, PLAT_HEIGHT);
                 platforms_snap.push_back(snap);
             }
@@ -61,11 +62,11 @@ public:
         return map_snap;
     }
 
-    void create_small_platform(float x, float y, float angle){
+    void create_small_platform(float x, float y, float angle) {
         create_platform(x, y, PLAT_SMALL, PLAT_HEIGHT);
     }
 
-    void create_big_platform(float x, float y, float angle){
+    void create_big_platform(float x, float y, float angle) {
         create_platform(x, y, PLAT_BIG, PLAT_HEIGHT);
     }
 
