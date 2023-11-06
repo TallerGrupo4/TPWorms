@@ -1,3 +1,6 @@
+#ifndef CLIENT_H
+#define CLIENT_H
+
 #include <atomic>
 #include <memory>
 
@@ -34,3 +37,4 @@ public:
 
     ~Client();
 };
+#endif  // CLIENT_H

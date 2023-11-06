@@ -8,11 +8,15 @@
 #include <unistd.h>
 
 #include "Player.h"
+#include "client.h"
+#include "surfaces.h"
 #include "constantes_cliente.h"
 
-using namespace SDL2pp;
 class MatchRenderer {
 private:
+    Client& client;
+    MatchSurfaces surfaces;
+
     bool handleEvents(Player& player);
 
     void render(SDL2pp::Renderer& renderer, Player& player);
@@ -20,6 +24,8 @@ private:
     void update(Player& player, float dt);
 
 public:
+    explicit MatchRenderer(Client& client);
+
     int start();
 };
 #endif  // MATCH_RENDERER_H

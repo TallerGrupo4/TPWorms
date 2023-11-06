@@ -2,13 +2,14 @@
 
 using namespace SDL2pp;
 
+MatchRenderer::MatchRenderer(Client& client) : client(client) {}
+
 bool MatchRenderer::handleEvents(Player& player) {
     SDL_Event event;
-    // Para el alumno: Buscar diferencia entre waitEvent y pollEvent
+
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN: {
-                // ¿Qué pasa si mantengo presionada la tecla?
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE:
@@ -68,7 +69,7 @@ int MatchRenderer::start() {
         Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         // Load sprites image as a new texture
-        Texture worm_sprite(renderer, Surface(WORM_WALK_SPRITES).SetColorKey(true, 0));
+        Texture worm_sprite(renderer, surfaces.walking_worm);
         Player player(worm_sprite, true, false);
         bool running = true;
         // Game state

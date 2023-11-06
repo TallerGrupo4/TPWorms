@@ -7,8 +7,6 @@
 #define PARSER_CLIENT_H
 
 class ParserClient: public Parser {
-
-
 public:
     ParserClient() = default;
 

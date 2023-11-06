@@ -1,3 +1,6 @@
+#ifndef CLIENT_SENDER_H
+#define CLIENT_SENDER_H
+
 #include <atomic>
 #include <memory>
 
@@ -32,3 +35,4 @@ public:
 
     ~ClientSender();
 };
+#endif // CLIENT_SENDER_H

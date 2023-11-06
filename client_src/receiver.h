@@ -1,3 +1,6 @@
+#ifndef CLIENT_RECEIVER_H
+#define CLIENT_RECEIVER_H
+
 #include <atomic>
 #include <memory>
 
@@ -32,3 +35,4 @@ public:
 
     ~ClientReceiver();
 };
+#endif  // CLIENT_RECEIVER_H
