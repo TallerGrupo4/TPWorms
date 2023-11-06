@@ -1,7 +1,7 @@
 #include <vector>
 
-#include "../common_src/parser.h"
 #include "../common_src/constants.h"
+#include "../common_src/parser.h"
 
 #ifndef PARSER_SERVER_H
 #define PARSER_SERVER_H
@@ -13,7 +13,7 @@ public:
     ParserServer() = default;
 
     void parse_sending_command_lobby(Command& command) override;
-    
+
     void parse_sending_command_match(Command& command) override;
 };
 

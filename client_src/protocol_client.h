@@ -18,7 +18,6 @@ private:
     int recv_match_id(uint* match_id);
 
 public:
-
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
 
     int recv_lobby(Command& command) override;
@@ -28,7 +27,6 @@ public:
     int send_lobby(const Command& command) override;
 
     int send_match(const Command& command) override;
-
 };
 
 #endif  // PROTOCOLO_H

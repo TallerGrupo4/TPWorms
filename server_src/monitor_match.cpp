@@ -2,16 +2,16 @@
 
 #include <iostream>
 
+#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
 MonitorMatch::MonitorMatch(): queue_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)) {}
 
 void MonitorMatch::run() {
-    uint8_t FPS = 1;
     try {
+        uint8_t FPS = 1;
         while (true) {
             push();
             std::this_thread::sleep_for(std::chrono::milliseconds(1000 / FPS));

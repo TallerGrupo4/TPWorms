@@ -2,10 +2,10 @@
 #include <memory>
 #include <vector>
 
-#include "monitor_matches.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
+#include "monitor_matches.h"
 #include "server_client.h"
 
 #ifndef SERVER_H

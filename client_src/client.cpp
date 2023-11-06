@@ -4,9 +4,9 @@
 
 #include <sys/socket.h>
 
+#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
 Client::Client(const char* hostname, const char* servername):
@@ -15,8 +15,10 @@ Client::Client(const char* hostname, const char* servername):
         queue_sender_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
         queue_receiver_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
         queue_receiver_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match, in_match, is_dead)),
-        client_receiver(std::make_unique<ClientReceiver>(socket, queue_receiver_lobby, queue_receiver_match, in_match, is_dead)),
+        client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
+                                                     in_match, is_dead)),
+        client_receiver(std::make_unique<ClientReceiver>(socket, queue_receiver_lobby,
+                                                         queue_receiver_match, in_match, is_dead)),
         parser() {}
 
 int Client::start() {
@@ -56,7 +58,8 @@ int Client::start() {
                     }
                     break;
             }
-            if (is_dead) break;
+            if (is_dead)
+                break;
             if (!in_match || last_command) {
                 if (queue_receiver_lobby->try_pop(command))
                     print_command(command);
@@ -68,7 +71,7 @@ int Client::start() {
             }
         }
         // ----------
-        
+
         if (!is_dead) {
             std::cout << "Client has finished because the server has closed the connection"
                       << std::endl;
@@ -83,8 +86,7 @@ int Client::start() {
         // It is an expected error, it means that the queue has been closed.
         std::cout << "Client has finished because: " << e.what() << std::endl;
         return 1;
-    }
-    catch (...) {
+    } catch (...) {
         std::cerr << "Client has finished because of an unknown error" << std::endl;
         return 1;
     }

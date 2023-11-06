@@ -50,9 +50,8 @@ struct Command {
 // defines for physics of game
 #define WORM_SPEED 0.4
 
-//Codes for game actions
+// Codes for game actions
 #define MOV 0x01
 
 
 #endif  // _CONSTANTS_H_
-

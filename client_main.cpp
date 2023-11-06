@@ -3,9 +3,9 @@
 
 #include "client_src/client.h"
 #include "client_src/match_renderer.h"
+#include "common_src/constants.h"
 #include "common_src/liberror.h"
 #include "common_src/socket.h"
-#include "common_src/constants.h"
 
 #include "mainwindow.h"
 

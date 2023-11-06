@@ -1,7 +1,6 @@
-#include "parser.h"
-#include "socket.h"
 #include "constants.h"
 #include "parser.h"
+#include "socket.h"
 
 #ifdef TESTING
 #include "dummy_socket.h"
@@ -23,17 +22,17 @@ public:
     explicit Protocol(Socket& socket, Parser& parser);
 
     virtual int recv_lobby(Command& command);
-    
+
     virtual int recv_match(Command& command);
 
     virtual int send_lobby(const Command& command);
-    
+
     virtual int send_match(const Command& command);
 
     virtual bool is_connected();
 
-    bool operator==(const Protocol& other) const { return this->socket == other.socket; };
-    bool operator!=(const Protocol& other) const { return !(*this == other); };
+    bool operator==(const Protocol& other) const { return this->socket == other.socket; }
+    bool operator!=(const Protocol& other) const { return !(*this == other); }
 
     ~Protocol();
 };

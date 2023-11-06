@@ -1,9 +1,9 @@
-#include <memory>
 #include <atomic>
+#include <memory>
 
-#include "../common_src/socket.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
+#include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
 #include "parser_client.h"
@@ -22,7 +22,9 @@ private:
     void handle_match();
 
 public:
-    explicit ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby, std::shared_ptr<Queue<Command>> _queue_match, std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead);
+    explicit ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
+                            std::shared_ptr<Queue<Command>> _queue_match,
+                            std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead);
 
     void run() override;
 

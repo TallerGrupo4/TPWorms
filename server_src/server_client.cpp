@@ -4,9 +4,10 @@
 
 #include <sys/socket.h>
 
+#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
+
 #include "match.h"
 
 ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
@@ -16,14 +17,14 @@ ServerClient::ServerClient(Socket&& skt, MonitorMatches& _monitor_matches):
         protocol(socket, parser),
         sender(std::make_unique<ServerClientSender>(socket, queue, protocol)),
         monitor_matches(_monitor_matches) {}
-        //Match& match;
+// Match& match;
 
 void ServerClient::run() {
     try {
         handle_lobby();
-        
+
         sender->start();
-        
+
         handle_match();
     } catch (const LibError& err) {
         _is_dead = true;
@@ -65,7 +66,7 @@ void ServerClient::handle_lobby() {
         if (protocol.recv_lobby(command) == SOCKET_FAILED) {
             throw LibError(errno, "Socket failed");
         }
-        if(interpretate_command_in_lobby(command)) {
+        if (interpretate_command_in_lobby(command)) {
             break;
         }
     }
@@ -154,15 +155,15 @@ bool ServerClient::is_dead() {
     }
 }
 
-void ServerClient::interpretate_command_in_match(Command& command) {
+void ServerClient::interpretate_command_in_match(const Command& command) {
     switch (command.code) {
         case CASE_CHAT: {
             queue_match->push(command);
             break;
         }
         // case MOV: {
-            // GameCommand game_command = protocolo nose //
-            // match.push_command(game_command);
+        // GameCommand game_command = protocolo nose //
+        // match.push_command(game_command);
         // }
         default:
             break;

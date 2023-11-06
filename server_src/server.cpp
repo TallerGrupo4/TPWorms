@@ -6,8 +6,8 @@
 
 #include <sys/socket.h>
 
-#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
+#include "../common_src/liberror.h"
 
 
 Server::Server(const char* port): socket(port), monitor_matches() {}

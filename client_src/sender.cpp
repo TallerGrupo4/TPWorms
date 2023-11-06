@@ -2,13 +2,21 @@
 
 #include <iostream>
 
+#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
-ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby, std::shared_ptr<Queue<Command>> _queue_match, std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
-        socket(skt), queue_lobby(_queue_lobby), queue_match(_queue_match), in_match(_in_match), parser(), protocol(socket, parser), is_dead(_is_dead) {}
+ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
+                           std::shared_ptr<Queue<Command>> _queue_match,
+                           std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
+        socket(skt),
+        queue_lobby(_queue_lobby),
+        queue_match(_queue_match),
+        in_match(_in_match),
+        parser(),
+        protocol(socket, parser),
+        is_dead(_is_dead) {}
 
 
 void ClientSender::run() {

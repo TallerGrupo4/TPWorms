@@ -1,9 +1,9 @@
 #include <memory>
 
-#include "../common_src/liberror.h"
-#include "../common_src/socket.h"
 #include "../common_src/constants.h"
+#include "../common_src/liberror.h"
 #include "../common_src/queue.h"
+#include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
 #include "parser_server.h"

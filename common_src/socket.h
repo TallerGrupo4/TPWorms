@@ -1,6 +1,6 @@
 // Copyright 2022 <GPL v2>
 
-// 
+//
 #ifndef TESTING
 #ifndef SOCKET_H
 #define SOCKET_H
@@ -102,8 +102,8 @@ public:
     Socket(Socket&&);
     Socket& operator=(Socket&&);
 
-    bool operator==(const Socket& other) const { return this->skt == other.skt; };
-    bool operator!=(const Socket& other) const { return !(*this == other); };
+    bool operator==(const Socket& other) const { return this->skt == other.skt; }
+    bool operator!=(const Socket& other) const { return !(*this == other); }
 
     /* `Socket::sendsome` lee hasta `sz` bytes del buffer y los envía. La función
      * puede enviar menos bytes sin embargo.
@@ -173,5 +173,5 @@ public:
      * */
     ~Socket();
 };
-#endif // SOCKET_H
-#endif // TESTING
+#endif  // SOCKET_H
+#endif  // TESTING

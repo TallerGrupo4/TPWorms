@@ -5,8 +5,8 @@
 
 #include <arpa/inet.h>
 
-#include "../common_src/liberror.h"
 #include "../common_src/constants.h"
+#include "../common_src/liberror.h"
 
 ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): Protocol(socket, parser) {}
 
@@ -21,17 +21,17 @@ int ProtocolServer::send_lobby(const Command& command) {
         return SOCKET_FAILED;
     }
     switch (command.code) {
-        case CASE_EXIT_SERVER: {
-            uint8_t number_of_players[1] = {command.number_of_players};
-            if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
-                return SOCKET_FAILED;
-            }
-            uint8_t player_index[1] = {command.player_index};
-            if (socket.sendall(player_index, 1, &was_closed) < 0) {
-                return SOCKET_FAILED;
-            }
-            break;
-        }
+        // case CASE_EXIT_SERVER: {
+        //     uint8_t number_of_players[1] = {command.number_of_players};
+        //     if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
+        //         return SOCKET_FAILED;
+        //     }
+        //     uint8_t player_index[1] = {command.player_index};
+        //     if (socket.sendall(player_index, 1, &was_closed) < 0) {
+        //         return SOCKET_FAILED;
+        //     }
+        //     break;
+        // }
         case CASE_JOIN: {
             if (send_match_id(command) < 0) {
                 return SOCKET_FAILED;

@@ -109,7 +109,8 @@ int ProtocolClient::recv_match(Command& command) {
             }
             parser.parse_receiving_command_chat(command, code, msg);
             break;
-        } case CASE_EXIT_SERVER: {
+        }
+        case CASE_EXIT_SERVER: {
             uint8_t number_of_players[1];
             ret = socket.recvall(number_of_players, 1, &was_closed);
             if (ret < 0) {

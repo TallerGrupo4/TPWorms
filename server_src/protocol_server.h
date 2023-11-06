@@ -1,5 +1,6 @@
-#include "../common_src/protocol.h"
 #include "../common_src/constants.h"
+#include "../common_src/protocol.h"
+
 #include "parser_server.h"
 
 #ifdef TESTING
@@ -27,9 +28,8 @@ public:
     int recv_match(Command& command) override;
 
     int send_lobby(const Command& command) override;
-    
-    int send_match(const Command& command) override;
 
+    int send_match(const Command& command) override;
 };
 
 #endif  // PROTOCOL_SERVER_H

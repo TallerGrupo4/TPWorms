@@ -2,9 +2,10 @@
 #include <memory>
 #include <vector>
 
-#include "monitor_match.h"
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
+
+#include "monitor_match.h"
 
 
 #ifndef MONITOR_MATCHES_H
