@@ -25,6 +25,8 @@ public:
 
     virtual void run() override;
 
+    void stop();
+
     std::shared_ptr<Queue<Snapshot>> get_queue();
 
     ~UserSender();

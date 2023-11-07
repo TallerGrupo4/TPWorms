@@ -2,13 +2,12 @@
 
 #include <iostream>
 
-#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
 
 ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
-                           std::shared_ptr<Queue<Command>> _queue_match,
+                           std::shared_ptr<Queue<GameCommand>> _queue_match,
                            std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
         queue_lobby(_queue_lobby),
@@ -41,16 +40,18 @@ void ClientSender::run() {
 void ClientSender::handle_lobby() {
     try {
         Command command = queue_lobby->pop();
-        protocol.send_lobby(command);
+        protocol.send_command(command);
     } catch (const ClosedQueue& e) {
         // It is an expected error, it means that the lobby queue has been closed.
-        // std::cout << "The queue_lobby has been closed: " << e.what() << std::endl;
+        std::cout << "The queue_lobby has been closed: " << e.what() << std::endl;
     }
 }
 
 void ClientSender::handle_match() {
-    Command command = queue_match->pop();
-    protocol.send_match(command);
+    std::cout << "ClientSender is handling match" << std::endl;
+    GameCommand game_command = queue_match->pop();
+    std::cout << "sending game command: " << +game_command.code << std::endl;
+    protocol.send_game_command(game_command);
 }
 
 ClientSender::~ClientSender() {}

@@ -16,13 +16,13 @@ private:
     Socket socket;
     MonitorMatches monitor_matches;
     bool is_dead = false;
-    std::vector<std::unique_ptr<User>> clients;
+    std::vector<std::unique_ptr<User>> users;
     /*
-     * We store the clients in a Vector using shared pointers to avoid memory leaks ("RAII").
+     * We store the users in a Vector using shared pointers to avoid memory leaks ("RAII").
      * (Perhaps it is a little bit overkill, but it is a good practice)
      */
-    void free_dead_clients();
-    void kill_clients();
+    void free_dead_users();
+    void kill_users();
 
 public:
     explicit Server(const char* port);

@@ -7,6 +7,10 @@
 
 class Snapshot {
 public:
+    char code = -1;
+    std::string msg = "";
+    uint8_t number_of_players = 0;
+    uint match_id = 0;
     Snapshot(){};
     ~Snapshot(){};
 };

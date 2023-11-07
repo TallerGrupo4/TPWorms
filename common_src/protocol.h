@@ -1,6 +1,9 @@
 #include "constants.h"
 #include "parser.h"
 #include "socket.h"
+#include "snapshot.h"
+#include "game_command.h"
+// #include "../server_src/game_src/gameCommand.h"
 
 #ifdef TESTING
 #include "dummy_socket.h"
@@ -21,13 +24,15 @@ protected:
 public:
     explicit Protocol(Socket& socket, Parser& parser);
 
-    virtual int recv_lobby(Command& command);
+    // Lobby
+    virtual int recv_command(Command& command);
+    virtual int send_command(Command& command);
 
-    virtual int recv_match(Command& command);
-
-    virtual int send_lobby(const Command& command);
-
-    virtual int send_match(const Command& command);
+    // Match
+    virtual int recv_snapshot(Snapshot& snapshot);
+    virtual int send_snapshot(Snapshot& snapshot);
+    virtual int recv_game_command(GameCommand& game_command);
+    virtual int send_game_command(GameCommand& game_command);
 
     virtual bool is_connected();
 

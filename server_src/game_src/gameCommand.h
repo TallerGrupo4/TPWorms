@@ -8,31 +8,38 @@
 // #define DER 1
 // #define IZQ -1
 
+// MOVE THIS TO COMMON_SRC
 
-class GameCommand {
+class __GameCommand {
 protected:
+    char code = -1;
+    std::string msg = "";
+    uint8_t number_of_players = 0;
+    uint match_id = 0;
     int id;
 
 public:
-    GameCommand(int id): id(id){};
-    ~GameCommand();
+    __GameCommand();
+    __GameCommand(int id): id(id){};
+    ~__GameCommand();
     void virtual execute(Game& game);
-    static GameCommand* createCommand(int id, int direction, int type);
+    static __GameCommand* createCommand(int id, int direction, int type);
 };
 
-class MovCommand: public GameCommand {
+class __MovCommand: public __GameCommand {
     int direction;
 
 public:
-    MovCommand(int id, int direction): GameCommand(id), direction(direction) {}
-    ~MovCommand() {}
+    __MovCommand(int id, int direction): __GameCommand(id), direction(direction) {}
+    ~__MovCommand() {}
     void execute(Game& game) override { game.move_player(direction, id); }
 };
 
-GameCommand* GameCommand::createCommand(int id, int direction, int type) {
+__GameCommand* __GameCommand::createCommand(int id, int direction, int type) {
     switch (type) {
         case MOV:
-            return new MovCommand(id, direction);
+            return new __MovCommand(id, direction);
     }
     return nullptr;
 }
+

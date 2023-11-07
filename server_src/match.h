@@ -22,7 +22,8 @@ private:
     bool keep_running;
     bool match_started;
     // Queue<GameCommand*> queue;
-    std::shared_ptr<Queue<GameCommand*>> queue;
+    // std::shared_ptr<Queue<GameCommand*>> queue;
+    std::shared_ptr<Queue<GameCommand>> queue;
     std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
     int id_counter;
 
@@ -34,9 +35,14 @@ private:
 public:
     Match(std::string map_route);
     ~Match();
+
     int add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
+
     void stop();
-    std::shared_ptr<Queue<GameCommand*>> get_queue();
+    
+    // std::shared_ptr<Queue<GameCommand*>> get_queue();
+    std::shared_ptr<Queue<GameCommand>> get_queue();
+    
     void run() override;
     void start();
 };

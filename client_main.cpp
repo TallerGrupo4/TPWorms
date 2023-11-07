@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
         return ret;
     }
     Client client(argv[1], argv[2]);
-    //ret = client.start();
-    MatchRenderer match(client);
-    match.start();
+    ret = client.start();
+    // MatchRenderer match(client);
+    // match.start();
     return ret;
 }

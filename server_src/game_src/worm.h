@@ -20,7 +20,7 @@ class Worm {
 
 public:
     Worm(int id, b2Body* body):
-            id(id), body(body), life(START_LIFE), weapon(NO_WEAPON), state(NULL_STATE) {}
+            body(body), id(id), life(START_LIFE), weapon(NO_WEAPON), state(NULL_STATE) {}
 
     void move(int direction) {
         body->SetLinearVelocity(b2Vec2(0, 0));

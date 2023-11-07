@@ -4,7 +4,6 @@
 
 #include <sys/socket.h>
 
-#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
@@ -12,14 +11,17 @@
 Client::Client(const char* hostname, const char* servername):
         socket(hostname, servername),
         queue_sender_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        queue_sender_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
+        queue_sender_match(std::make_shared<Queue<GameCommand>>(QUEUE_MAX_SIZE)),
         queue_receiver_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        queue_receiver_match(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
+        queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
         client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
                                                      in_match, is_dead)),
         client_receiver(std::make_unique<ClientReceiver>(socket, queue_receiver_lobby,
                                                          queue_receiver_match, in_match, is_dead)),
-        parser() {}
+        parser() {
+    // client_sender->start();
+    // client_receiver->start();
+    }
 
 int Client::start() {
     try {
@@ -31,13 +33,16 @@ int Client::start() {
         // Here starts the client's main loop with QT (first while, like in a main menu)
         // and then SDL2 (when it is already in a match)
         Command command = INITIALIZE_COMMAND;
+        GameCommand game_command;
+        char code;
         while (client_sender->is_connected() && client_receiver->is_connected() && !is_dead) {
-            get_command(command);
-            if (!in_match && command.code != CASE_JOIN && command.code != CASE_CREATE &&
-                command.code != CASE_EXIT) {
-                command.code = CASE_INVALID;
+            get_action(command, game_command);
+            if (!in_match || last_command) {
+                code = command.code;
+            } else {
+                code = game_command.code;
             }
-            switch (command.code) {
+            switch (code) {
                 case CASE_EXIT: {
                     is_dead = true;
                     stop();
@@ -52,7 +57,7 @@ int Client::start() {
                         if (last_command) {
                             queue_sender_lobby->close();
                         }
-                        queue_sender_match->try_push(command);
+                        queue_sender_match->try_push(game_command);
                     } else {
                         queue_sender_lobby->try_push(command);
                     }
@@ -66,8 +71,9 @@ int Client::start() {
                 if (in_match)
                     last_command = false;
             } else {
-                if (queue_receiver_match->try_pop(command))
-                    print_command(command);
+                Snapshot snapshot;
+                if (queue_receiver_match->try_pop(snapshot))
+                    print_snapshot(snapshot);
             }
         }
         // ----------
@@ -104,21 +110,26 @@ void Client::stop() {
     client_receiver->join();
 }
 
-void Client::get_command(Command& command) {
-    std::getline(std::cin, command.msg);
+void Client::get_action(Command& command, GameCommand& game_command) {
     if (in_match) {
-        parser.parse_sending_command_match(command);
+        std::getline(std::cin, game_command.msg);
+        parser.parse_sending_game_command(game_command);
     } else {
-        parser.parse_sending_command_lobby(command);
+        std::getline(std::cin, command.msg);
+        parser.parse_sending_command(command);
     }
+}
+
+void Client::print_snapshot(const Snapshot& snapshot) {
+    std::cout << snapshot.msg << std::endl;
 }
 
 void Client::print_command(const Command& command) {
     switch (command.code) {
-        case CASE_CHAT: {
-            std::cout << command.msg << std::endl;
-            break;
-        }
+        // case CASE_CHAT: {
+        //     std::cout << command.msg << std::endl;
+        //     break;
+        // }
         case CASE_JOIN: {
             std::cout << "There are " << +command.number_of_players
                       << " player/s in the match: " << +command.match_id << std::endl;
@@ -159,6 +170,48 @@ void Client::print_command(const Command& command) {
             // Throw custom error, it should never reach this point!
             break;
     }
+}
+
+Command Client::pop_command() {
+    if (!is_connected()) {
+        // throw LibError(errno, "Client is not connected");
+        // throw LostConnection("Client is not connected");
+    }
+    return queue_receiver_lobby->pop();
+}
+
+Snapshot Client::pop_snapshot() {
+    if (!is_connected()) {
+        // throw LibError(errno, "Client is not connected");
+        // throw LostConnection("Client is not connected");
+    }
+    return queue_receiver_match->pop();
+}
+
+void Client::push_command(Command command) {
+    if (!is_connected()) {
+        // throw LibError(errno, "Client is not connected");
+        // throw LostConnection("Client is not connected");
+    }
+    queue_sender_lobby->push(command);
+}
+
+void Client::push_game_command(GameCommand game_command) {
+    if (!is_connected()) {
+        // throw LibError(errno, "Client is not connected");
+        // throw LostConnection("Client is not connected");
+    }
+    queue_sender_match->push(game_command);
+}
+
+void Client::exit() {
+    is_dead = true;
+    stop();
+}
+
+
+bool Client::is_connected() {
+    return client_sender->is_connected() && client_receiver->is_connected() && !is_dead;
 }
 
 Client::~Client() {}

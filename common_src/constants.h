@@ -17,6 +17,7 @@
 #define CASE_CHAT 0x01
 #define CASE_CREATE 0x02
 #define CASE_JOIN 0x03
+#define CASE_START 0x04
 
 // Client codes
 #define CASE_EXIT 0x04
@@ -25,6 +26,7 @@
 #define JOIN "Join"
 #define CHAT "Chat"
 #define EXIT "Exit"
+#define START "Start"
 
 // Server codes
 #define CASE_MATCH_ALREADY_EXISTS 0x04
@@ -55,3 +57,4 @@ struct Command {
 
 
 #endif  // _CONSTANTS_H_
+

@@ -17,6 +17,7 @@ private:
     Client& client;
     MatchSurfaces surfaces;
 
+
     bool handleEvents(Player& player);
 
     void render(SDL2pp::Renderer& renderer, Player& player);

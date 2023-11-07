@@ -6,7 +6,7 @@ MatchRenderer::MatchRenderer(Client& client) : client(client) {}
 
 bool MatchRenderer::handleEvents(Player& player) {
     SDL_Event event;
-
+    // GameCommand game_command;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN: {
@@ -19,6 +19,7 @@ bool MatchRenderer::handleEvents(Player& player) {
                         player.moveLeft();
                         break;
                     case SDLK_RIGHT:
+                        // game_command.move = RIGHT;
                         player.moveRigth();
                         break;
                 }
@@ -44,6 +45,7 @@ bool MatchRenderer::handleEvents(Player& player) {
                 return false;
         }  // fin switch(event)
     }      // fin while(SDL_PollEvents)
+    // client.push_game_command(game_command);
     return true;
 }
 
@@ -75,6 +77,9 @@ int MatchRenderer::start() {
         // Game state
         while (running) {
             running = handleEvents(player);
+            // Snapshot snapshot = client.pop_snapshot();
+            // update(snapshot, FRAME_RATE);
+            // render(renderer);
             update(player, FRAME_RATE);
             render(renderer, player);
             // la cantidad de segundos que debo dormir se debe ajustar en función

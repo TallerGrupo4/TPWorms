@@ -10,12 +10,11 @@ UserSender::UserSender(Socket& skt, ProtocolServer& protocol):
 void UserSender::run() {
     try {
         while (protocol.is_connected()) {
-            Snapshot snap = queue->pop();
+            Snapshot snapshot = queue->pop();
             // command.msg = command.msg.substr(0, command.msg.find('\0'));
             // parser.parse_sending_command_match(command);
-            // std::cout << "sending command: " << +command.code << std::endl;
-
-            // protocol.send_snapshot(snap);
+            std::cout << "sending snapshot: " << +snapshot.code << std::endl;
+            protocol.send_snapshot(snapshot);
 
             // if (protocol.send_match(command) == SOCKET_FAILED) {
             //     // Catch error SOCKET_FAILED
@@ -34,6 +33,8 @@ void UserSender::run() {
                   << std::endl;
     }
 }
+
+void UserSender::stop() { queue->close(); }
 
 std::shared_ptr<Queue<Snapshot>> UserSender::get_queue() { return queue; }
 

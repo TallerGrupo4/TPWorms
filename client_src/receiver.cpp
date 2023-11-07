@@ -2,13 +2,12 @@
 
 #include <iostream>
 
-#include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
 
 ClientReceiver::ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
-                               std::shared_ptr<Queue<Command>> _queue_match,
+                               std::shared_ptr<Queue<Snapshot>> _queue_match,
                                std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
         queue_lobby(_queue_lobby),
@@ -41,16 +40,16 @@ void ClientReceiver::run() {
 
 void ClientReceiver::handle_lobby() {
     Command command = INITIALIZE_COMMAND;
-    protocol.recv_lobby(command);
+    protocol.recv_command(command);
     if (command.code == CASE_JOIN || command.code == CASE_CREATE)
         in_match = true;
     queue_lobby->push(command);
 }
 
 void ClientReceiver::handle_match() {
-    Command command = INITIALIZE_COMMAND;
-    protocol.recv_match(command);
-    queue_match->push(command);
+    Snapshot snapshot;
+    protocol.recv_snapshot(snapshot);
+    queue_match->push(snapshot);
 }
 
 

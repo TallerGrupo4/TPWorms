@@ -8,7 +8,8 @@
 
 MonitorMatches::MonitorMatches() {}
 
-std::shared_ptr<Queue<GameCommand*>> MonitorMatches::create_match(
+// std::shared_ptr<Queue<GameCommand*>> MonitorMatches::create_match(
+std::shared_ptr<Queue<GameCommand>> MonitorMatches::create_match(
         std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
@@ -30,10 +31,13 @@ void MonitorMatches::start_match(uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
+    // if (matches[match_id]->is_running())
+    //     throw MatchAlreadyStarted();
     matches[match_id]->start();
 }
 
-std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(
+// std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(
+std::shared_ptr<Queue<GameCommand>> MonitorMatches::join_match(
         std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())

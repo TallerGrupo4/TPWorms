@@ -2,13 +2,13 @@
 
 Protocol::Protocol(Socket& socket, Parser& parser): socket(socket), parser(parser) {}
 
-int Protocol::Protocol::recv_lobby(Command& command) { return 0; }
+int Protocol::Protocol::recv_command(Command& command) { return 0; }
+int Protocol::Protocol::send_command(Command& command) { return 0; }
 
-int Protocol::Protocol::recv_match(Command& command) { return 0; }
-
-int Protocol::Protocol::send_lobby(const Command& command) { return 0; }
-
-int Protocol::Protocol::send_match(const Command& command) { return 0; }
+int Protocol::Protocol::recv_snapshot(Snapshot& snapshot) { return 0; }
+int Protocol::Protocol::send_snapshot(Snapshot& snapshot) { return 0; }
+int Protocol::Protocol::recv_game_command(GameCommand& game_command) { return 0; }
+int Protocol::Protocol::send_game_command(GameCommand& game_command) { return 0; }
 
 bool Protocol::is_connected() { return !was_closed; }
 

@@ -5,14 +5,16 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
-#include "game_src/gameCommand.h"
+#include "../common_src/game_command.h"
+// #include "game_src/gameCommand.h"
 
 
 Match::Match::Match(std::string map_route):
         game(map_route),
         keep_running(true),
         match_started(false),
-        queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
+        // queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
+        queue(std::make_shared<Queue<GameCommand>>(QUEUE_MAX_SIZE)),
         id_counter(0) {}
 
 
@@ -38,7 +40,21 @@ void Match::start() {
 
 void Match::push_all_players(Snapshot snapshot) {
     for (auto& player_queue: players_queues) {
-        player_queue->push(snapshot);
+        try {
+            player_queue->push(snapshot);
+        } catch (const ClosedQueue& err) {
+            /*
+            * It is an expected error, this should occur
+            * when stopping the whole server or when a 
+            * client has disconnected, I think...
+            * If the client has disconnected, we should
+            * remove it from the match, unless we do that
+            * in other place, but I believe that here could
+            * be a good place to do it.
+            */
+            // players_queues.erase(std::remove(players_queues.begin(), players_queues.end(), player_queue), players_queues.end());
+            continue;
+        } 
     }
 }
 
@@ -49,18 +65,24 @@ void Match::send_map() {
 
 void Match::run() {
     while (keep_running) {
-        GameCommand* c;
+        // GameCommand* c;
+        GameCommand c;
         if (queue->try_pop(c)) {
-            c->execute(game);
-            delete c;
+            // c.execute(game);
+            // c->execute(game);
+            // delete c;
         }
-        game.step();
+        // game.step();
         GameSnapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);
     }
 }
 
+void Match::stop() {
+    keep_running = false;
+}
 
-std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
+// std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
+std::shared_ptr<Queue<GameCommand>> Match::get_queue() { return queue; }
 
 Match::~Match() {}

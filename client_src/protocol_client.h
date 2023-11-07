@@ -1,4 +1,3 @@
-#include "../common_src/constants.h"
 #include "../common_src/protocol.h"
 
 #ifdef TESTING
@@ -20,13 +19,13 @@ private:
 public:
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
 
-    int recv_lobby(Command& command) override;
+    // Lobby
+    int recv_command(Command& command) override;
+    int send_command(Command& command) override;
 
-    int recv_match(Command& command) override;
-
-    int send_lobby(const Command& command) override;
-
-    int send_match(const Command& command) override;
+    // Match
+    int recv_snapshot(Snapshot& snapshot) override;
+    int send_game_command(GameCommand& game_command) override;
 };
 
 #endif  // PROTOCOLO_H
