@@ -16,8 +16,7 @@ void Server::run() {
     while (true) {
         try {
             Socket client_skt = socket.accept();
-            clients.push_back(
-                    std::make_unique<ServerClient>(std::move(client_skt), monitor_matches));
+            clients.push_back(std::make_unique<User>(std::move(client_skt), monitor_matches));
             clients.back()->start();
             free_dead_clients();
         } catch (const LibError& err) {

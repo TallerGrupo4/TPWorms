@@ -1,7 +1,7 @@
 #include <box2d/box2d.h>
 #include <yaml-cpp/yaml.h>
 
-#include "snapshot.h"
+#include "../../common_src/snapshot.h"
 
 #define PLAT_SMALL 6
 #define PLAT_BIG 3
@@ -50,11 +50,11 @@ public:
             float angle = platform["angle"].as<float>();
             if (platform["type"].as<std::string>() == "small") {
                 create_small_platform(x, y, angle);
-                PlatformSnapshot snap(x, y, angle, PLAT_SMALL, PLAT_HEIGHT);
+                PlatformSnapshot snap(x, y, angle, 's');
                 platforms_snap.push_back(snap);
             } else {
                 create_big_platform(x, y, angle);
-                PlatformSnapshot snap(x, y, angle, PLAT_BIG, PLAT_HEIGHT);
+                PlatformSnapshot snap(x, y, angle, 'b');
                 platforms_snap.push_back(snap);
             }
         }

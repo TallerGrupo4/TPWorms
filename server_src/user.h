@@ -5,25 +5,23 @@
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
-#include "monitor_match.h"
+#include "match.h"
 #include "monitor_matches.h"
 #include "parser_server.h"
 #include "protocol_server.h"
-#include "server_client_sender.h"
+#include "user_sender.h"
 
 #ifndef SERVER_CLIENT_H
 #define SERVER_CLIENT_H
 
-class ServerClient: public Thread {
+class User: public Thread {
 private:
     Socket socket;
-    std::shared_ptr<Queue<Command>> queue;
-    std::shared_ptr<Queue<Command>> queue_match = NULL;
+    std::shared_ptr<Queue<GameCommand*>> queue_match;
     ParserServer parser;
     ProtocolServer protocol;
-    std::unique_ptr<ServerClientSender> sender;
+    std::unique_ptr<UserSender> sender;
     MonitorMatches& monitor_matches;
-    std::shared_ptr<MonitorMatch> monitor_match = NULL;
     bool _is_dead = false;
     bool interpretate_command_in_lobby(Command& command);
     void interpretate_command_in_match(const Command& command);
@@ -31,7 +29,7 @@ private:
     void handle_match();
 
 public:
-    explicit ServerClient(Socket&& skt, MonitorMatches& _monitor_matches);
+    explicit User(Socket&& skt, MonitorMatches& _monitor_matches);
 
     virtual void run() override;
 
@@ -39,7 +37,7 @@ public:
 
     void stop();
 
-    ~ServerClient();
+    ~User();
 };
 
 #endif  // SERVER_CLIENT_H

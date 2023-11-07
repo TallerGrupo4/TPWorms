@@ -4,8 +4,9 @@
 
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
+#include "../common_src/snapshot.h"
 
-#include "monitor_match.h"
+#include "match.h"
 
 
 #ifndef MONITOR_MATCHES_H
@@ -13,16 +14,20 @@
 
 class MonitorMatches {
 private:
-    std::map<uint, std::shared_ptr<MonitorMatch>> matches;
+    std::map<uint, std::unique_ptr<Match>> matches;
     std::mutex m;
 
 public:
     MonitorMatches();
 
-    std::shared_ptr<MonitorMatch> create(const std::shared_ptr<Queue<Command>> queue,
-                                         uint match_id);
+    // Could return only the Match's queue
+    std::shared_ptr<Queue<GameCommand*>> create_match(std::shared_ptr<Queue<Snapshot>> queue,
+                                                      uint match_id);
 
-    std::shared_ptr<MonitorMatch> join(const std::shared_ptr<Queue<Command>> queue, uint match_id);
+    std::shared_ptr<Queue<GameCommand*>> join_match(std::shared_ptr<Queue<Snapshot>> queue,
+                                                    uint match_id);
+
+    void start_match(uint match_id);
 
     void stop();
 

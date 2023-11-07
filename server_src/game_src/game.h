@@ -4,9 +4,9 @@
 #include <box2d/box2d.h>
 
 #include "../../common_src/constants.h"
+#include "../../common_src/snapshot.h"
 
 #include "gamebuilder.h"
-#include "snapshot.h"
 #include "worm.h"
 
 #ifndef GAME_H
@@ -25,8 +25,8 @@ public:
 
     MapSnapshot start_and_send() { return builder.create_map(map); }
 
-    void add_player(int current_id) {                // TODO: ADD ARMY INSTEAD OF PLAYERS
-        b2Body* player = builder.create_worm(0, 1);  // TODO: randomize position
+    void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
+        b2Body* player = nullptr;
         players.push_back(Worm(current_id, player));
     }
 

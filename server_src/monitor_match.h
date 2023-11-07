@@ -15,6 +15,8 @@ private:
     std::shared_ptr<Queue<Command>> queue_match;
     std::mutex m;
 
+    void push();
+
 public:
     MonitorMatch();
 
@@ -28,7 +30,6 @@ public:
 
     void remove(const std::shared_ptr<Queue<Command>> queue);
 
-    void push();
 
     bool is_full();
 

@@ -12,34 +12,55 @@ Match::Match::Match(std::string map_route):
         game(map_route),
         keep_running(true),
         match_started(false),
-        queue(QUEUE_MAX_SIZE),
+        queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
         id_counter(0) {}
 
 
-int Match::add_player() {  // TODO: Make army (group of worms instead of one)
+int Match::add_player(std::shared_ptr<Queue<Snapshot>>
+                              player_queue) {  // TODO: Make army (group of worms instead of one)
+    // if (match_started) throw MatchAlreadyStarted();
+    if (id_counter >= MAX_PLAYERS)
+        throw MatchFull();
     int current_id = id_counter;
-    game.add_player(current_id);
+    players_queues.push_back(player_queue);
     id_counter++;
-    return id_counter;
+    return current_id;
 }
 
 void Match::start() {
+    send_map();
+    for (int i = 0; i < id_counter; i++) {
+        game.add_player(id_counter);
+    }
     match_started = true;
-    // broadcaster.broadcast(game.start_and_send());
     run();
+}
+
+void Match::push_all_players(Snapshot snapshot) {
+    for (auto& player_queue: players_queues) {
+        player_queue->push(snapshot);
+    }
+}
+
+void Match::send_map() {
+    MapSnapshot map = game.start_and_send();
+    push_all_players(map);
 }
 
 void Match::run() {
     while (keep_running) {
         GameCommand* c;
-        if (queue.try_pop(c)) {
+        if (queue->try_pop(c)) {
             c->execute(game);
             delete c;
         }
         game.step();
-        // broadcaster.broadcast(game.get_game_snapshot());
+        GameSnapshot snapshot = game.get_game_snapshot();
+        push_all_players(snapshot);
     }
 }
 
+
+std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
 
 Match::~Match() {}

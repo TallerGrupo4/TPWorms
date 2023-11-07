@@ -8,15 +8,14 @@
 
 MonitorMatches::MonitorMatches() {}
 
-std::shared_ptr<MonitorMatch> MonitorMatches::create(const std::shared_ptr<Queue<Command>> queue,
-                                                     uint match_id) {
+std::shared_ptr<Queue<GameCommand*>> MonitorMatches::create_match(
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
-    matches[match_id] = std::make_shared<MonitorMatch>();
-    matches[match_id]->add(queue);
-    matches[match_id]->start();
-    return matches[match_id];
+    matches[match_id] = std::make_unique<Match>("map1");
+    matches[match_id]->add_player(queue);
+    return matches[match_id]->get_queue();
 }
 
 void MonitorMatches::stop() {
@@ -27,16 +26,20 @@ void MonitorMatches::stop() {
     }
 }
 
-std::shared_ptr<MonitorMatch> MonitorMatches::join(const std::shared_ptr<Queue<Command>> queue,
-                                                   uint match_id) {
+void MonitorMatches::start_match(uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
-    if (matches[match_id]->is_full())
-        throw MatchFull();
-    // matches[match_id]->push_join();
-    matches[match_id]->add(queue);
-    return matches[match_id];
+    matches[match_id]->start();
+}
+
+std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
+    std::unique_lock<std::mutex> lock(m);
+    if (matches.find(match_id) == matches.end())
+        throw MatchNotFound();
+    matches[match_id]->add_player(queue);
+    return matches[match_id]->get_queue();
 }
 
 MonitorMatches::~MonitorMatches() {}

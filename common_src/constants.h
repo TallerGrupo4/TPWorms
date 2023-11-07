@@ -3,7 +3,7 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-#define MAX_PLAYERS 100
+#define MAX_PLAYERS 4
 
 // This INVALID macro is only used to initialize the Command struct
 #define DEFAULT 0x00

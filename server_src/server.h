@@ -6,7 +6,7 @@
 #include "../common_src/thread.h"
 
 #include "monitor_matches.h"
-#include "server_client.h"
+#include "user.h"
 
 #ifndef SERVER_H
 #define SERVER_H
@@ -16,7 +16,7 @@ private:
     Socket socket;
     MonitorMatches monitor_matches;
     bool is_dead = false;
-    std::vector<std::unique_ptr<ServerClient>> clients;
+    std::vector<std::unique_ptr<User>> clients;
     /*
      * We store the clients in a Vector using shared pointers to avoid memory leaks ("RAII").
      * (Perhaps it is a little bit overkill, but it is a good practice)
