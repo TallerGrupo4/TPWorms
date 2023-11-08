@@ -59,19 +59,16 @@ void Match::push_all_players(Snapshot snapshot) {
 }
 
 void Match::send_map() {
-    MapSnapshot map = game.start_and_send();
+    Snapshot map = game.start_and_send();
     push_all_players(map);
 }
 
 void Match::run() {
     while (keep_running) {
-        // GameCommand* c;
-        GameCommand c;
+        std::unique_ptr<GameCommand> c;
         try {
             if (queue->try_pop(c)) {
-                // c.execute(game);
-                // c->execute(game);
-                // delete c;
+                c->execute(game);
             }
         } catch (const ClosedQueue& err) {
             std::cout << "Queue closed" << std::endl;
@@ -79,12 +76,13 @@ void Match::run() {
         }
         // game.step();
         // GameSnapshot snapshot = game.get_game_snapshot();
-        Snapshot snapshot;
-        snapshot.code = 1;
-        snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
+        // Snapshot snapshot;
+        // snapshot.code = 1;
+        // snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
+        game.step();
+        Snapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);
-        // wait two seconds
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        // std::this_thread::sleep_for(std::chrono::milliseconds(16));
     }
 }
 

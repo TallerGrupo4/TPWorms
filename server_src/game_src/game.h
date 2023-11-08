@@ -12,6 +12,9 @@
 #ifndef GAME_H
 #define GAME_H
 
+class GameCommand;
+
+
 class Game {
     std::string map;
     int water_level;
@@ -23,7 +26,7 @@ class Game {
 public:
     Game(std::string map_route): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
 
-    MapSnapshot start_and_send() { return builder.create_map(map); }
+    Snapshot start_and_send() { return builder.create_map(map); }
 
     void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
         b2Body* player = nullptr;
@@ -35,14 +38,17 @@ public:
         player.move(direction);
     }
 
+    //  
+
+
     void step() { world.Step(1.0f / 60.0f, 8, 3); }
 
-    GameSnapshot get_game_snapshot() {
+    Snapshot get_game_snapshot() {
         std::vector<WormSnapshot> worms;
         for (Worm& worm: players) {
             worms.push_back(worm.get_snapshot());
         }
-        GameSnapshot snapshot(worms);
+        Snapshot snapshot(worms, {});
         return snapshot;
     }
 };

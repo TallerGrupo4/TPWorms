@@ -5,32 +5,8 @@
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
-class Snapshot {
-public:
-    char code = -1;
-    std::string msg = "";
-    uint8_t number_of_players = 0;
-    uint match_id = 0;
 
-    // int worm_position_x = 0;
-    Snapshot(){};
-    ~Snapshot(){};
-};
-
-
-// // server
-// WormSnapshot worm();
-// parser.parse_snapshot(Snapshot worm)
-// protocol.send_worm(Snapshot worm)
-
-// // client
-// received;
-// if (created) protocol.recv_map(received)
-// else protocol.recv_worm(received)
-// parser.parse(received) // Snapshot received
-// sdl.render(receieved)
-
-class WormSnapshot: public Snapshot {
+class WormSnapshot {
 public:
     int id;
     float pos_x;
@@ -54,22 +30,7 @@ public:
     ~WormSnapshot(){};
 };
 
-class GameSnapshot: public Snapshot {
-    std::vector<WormSnapshot> worms;
-    // std::vector<ProjectileSnapshot> projectiles;
-
-public:
-    GameSnapshot(std::vector<WormSnapshot> worms): worms(worms){};
-    ~GameSnapshot(){};
-
-    std::vector<WormSnapshot> get_worms() { return worms; }
-
-    // std::vector<ProjectileSnapshot> get_projectiles(){
-    //     return projectiles;
-    // }
-};
-
-class PlatformSnapshot: public Snapshot {
+class PlatformSnapshot {
 public:
     float pos_x;
     float pos_y;
@@ -80,16 +41,69 @@ public:
             pos_x(pos_x), pos_y(pos_y), angle(angle), type(type){};
     ~PlatformSnapshot(){};
 };
+ 
 
-class MapSnapshot: public Snapshot {
+class Snapshot {
+public:
+    std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
 
-public:
-    MapSnapshot(std::vector<PlatformSnapshot> platforms): platforms(platforms){};
-    ~MapSnapshot(){};
-
-    std::vector<PlatformSnapshot> get_platforms() { return platforms; }
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
+            worms(worms), platforms(platforms){};
+    
+    ~Snapshot(){};
 };
+
+// Snapshot game_state(){
+    //return Snapshot(worms , {});
+// }
+
+// Snapshot map_state(){
+    //return Snapshot({}, platforms);
+
+
+
+// // server
+// WormSnapshot worm();
+// parser.parse_snapshot(Snapshot worm)
+// protocol.send_worm(Snapshot worm)
+
+// // client
+// received;
+// if (created) protocol.recv_map(received)
+// else protocol.recv_worm(received)
+// parser.parse(received) // Snapshot received
+// sdl.render(receieved)
+
+
+// TODO: IMPLEMENT POLYMORPHISM
+
+// class GameSnapshot: public Snapshot {
+//     std::vector<WormSnapshot> worms;
+//     // std::vector<ProjectileSnapshot> projectiles;
+
+// public:
+//     GameSnapshot(std::vector<WormSnapshot> worms): worms(worms){};
+//     ~GameSnapshot(){};
+
+//     std::vector<WormSnapshot> get_worms() { return worms; }
+
+//     // std::vector<ProjectileSnapshot> get_projectiles(){
+//     //     return projectiles;
+//     // }
+// };
+
+
+
+// class MapSnapshot: public Snapshot {
+//     std::vector<PlatformSnapshot> platforms;
+
+// public:
+//     MapSnapshot(std::vector<PlatformSnapshot> platforms): platforms(platforms){};
+//     ~MapSnapshot(){};
+
+//     std::vector<PlatformSnapshot> get_platforms() { return platforms; }
+// };
 
 
 #endif  // SNAPSHOT_H

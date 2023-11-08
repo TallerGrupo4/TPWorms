@@ -9,7 +9,6 @@
 #include "game_src/game.h"
 
 
-class GameCommand;
 
 #ifndef MATCH_H
 #define MATCH_H
@@ -21,9 +20,8 @@ private:
     std::string name;
     bool keep_running;
     bool match_started;
-    // Queue<GameCommand*> queue;
-    // std::shared_ptr<Queue<GameCommand*>> queue;
-    std::shared_ptr<Queue<GameCommand>> queue;
+    // This doesn't need to be a shared_ptr, we could pass a reference of it to the receiver
+    std::shared_ptr<Queue<std::unique_ptr<GameCommand>>> queue;
     std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
     int id_counter;
 
@@ -41,7 +39,7 @@ public:
     void stop();
     
     // std::shared_ptr<Queue<GameCommand*>> get_queue();
-    std::shared_ptr<Queue<GameCommand>> get_queue();
+    std::shared_ptr<Queue<std::unique_ptr<GameCommand>>> get_queue();
     
     void run() override;
     void start_match();
