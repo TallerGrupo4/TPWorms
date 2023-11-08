@@ -60,7 +60,7 @@ void print_command(const Command& command) {
 }
 
 void print_snapshot(const Snapshot& snapshot) {
-    std::cout << snapshot.msg << std::endl;
+    std::cout << "Snapshot msg is: " << snapshot.msg << std::endl;
 }
 
 void parse_sending_command(Command& command) {
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
         client.send_game_command(game_command);
         // GameSnapshot game_snapshot = client.recv_game_snapshot();
         Snapshot snapshot = client.recv_snapshot();
-        if (snapshot.code != DEFAULT) print_snapshot(snapshot);
+        print_snapshot(snapshot);
     }
     // Render_match();
     

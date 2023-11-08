@@ -30,8 +30,10 @@ int Match::add_player(std::shared_ptr<Queue<Snapshot>>
 }
 
 void Match::start() {
-    send_map();
+    std::cout << "Starting match" << std::endl;
+    // send_map();
     for (int i = 0; i < id_counter; i++) {
+        std::cout << "Adding player " << i << std::endl;
         game.add_player(id_counter);
     }
     match_started = true;
@@ -73,8 +75,13 @@ void Match::run() {
             // delete c;
         }
         // game.step();
-        GameSnapshot snapshot = game.get_game_snapshot();
+        // GameSnapshot snapshot = game.get_game_snapshot();
+        Snapshot snapshot;
+        snapshot.code = 1;
+        snapshot.msg = "Hola";
         push_all_players(snapshot);
+        // wait two seconds
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     }
 }
 

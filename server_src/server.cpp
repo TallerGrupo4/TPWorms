@@ -47,13 +47,13 @@ void Server::free_dead_users() {
 }
 
 void Server::kill_users() {
+    monitor_matches.stop();
     for (auto users_it = users.begin(); users_it != users.end(); ++users_it) {
         if (!(*users_it)->is_dead()) {
             (*users_it)->stop();
         }
         (*users_it)->join();
     }
-    monitor_matches.stop();
 }
 
 void Server::stop() {

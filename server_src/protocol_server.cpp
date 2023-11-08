@@ -95,10 +95,10 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
         return SOCKET_FAILED;
     }
 
-    uint8_t number_of_players[1] = {snapshot.number_of_players};
-    if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
-        return SOCKET_FAILED;
-    }
+    // uint8_t number_of_players[1] = {snapshot.number_of_players};
+    // if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
+    //     return SOCKET_FAILED;
+    // }
     
     // Why would we need to send the player_index?
     // Perhaps to know which player is the one that left the match?

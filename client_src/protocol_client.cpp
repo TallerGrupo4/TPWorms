@@ -131,15 +131,15 @@ int ProtocolClient::recv_snapshot(Snapshot& snapshot) {
     if (ret < 0) {
         return SOCKET_FAILED;
     }
-
-    uint8_t number_of_players[1];
-    ret = socket.recvall(number_of_players, 1, &was_closed);
-    if (ret < 0) {
-        return SOCKET_FAILED;
-    }
-    if (was_closed) {
-        return WAS_CLOSED;
-    }
+    snapshot.code = code[0];
+    // uint8_t number_of_players[1];
+    // ret = socket.recvall(number_of_players, 1, &was_closed);
+    // if (ret < 0) {
+    //     return SOCKET_FAILED;
+    // }
+    // if (was_closed) {
+    //     return WAS_CLOSED;
+    // }
 
     uint16_t len[1];
     ret = socket.recvall(len, 2, &was_closed);
