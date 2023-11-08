@@ -57,7 +57,3 @@ struct Command {
 
 
 #endif  // _CONSTANTS_H_
-
-
-Create a match with code: __1__ (4 digits (uint))    - Create -  (Command.code = CASE_CREATE; Commnad.match_id = 1)
-Join a match with code: __1__ (4 digits (uint))       - Join - (Command.code = CASE_JOIN; Command.match_id = 1)

@@ -39,13 +39,13 @@ public:
 
     int start();
 
-    Command pop_command();
+    Command recv_lobby_command();
 
-    Snapshot pop_snapshot();
+    Snapshot recv_snapshot();
 
-    void push_command(Command command);
+    void send_lobby_command(Command command);
 
-    void push_game_command(GameCommand game_command);
+    void send_game_command(GameCommand game_command);
 
     void exit();
 

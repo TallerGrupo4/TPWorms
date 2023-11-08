@@ -178,7 +178,7 @@ void Client::print_command(const Command& command) {
     }
 }
 
-Command Client::pop_command() {
+Command Client::recv_lobby_command() {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
@@ -188,7 +188,7 @@ Command Client::pop_command() {
     return command;
 }
 
-Snapshot Client::pop_snapshot() {
+Snapshot Client::recv_snapshot() {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
@@ -199,7 +199,7 @@ Snapshot Client::pop_snapshot() {
     return snapshot;
 }
 
-void Client::push_command(Command command) {
+void Client::send_lobby_command(Command command) {
     if (!protocol.is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
@@ -208,7 +208,7 @@ void Client::push_command(Command command) {
     protocol.send_command(command);
 }
 
-void Client::push_game_command(GameCommand game_command) {
+void Client::send_game_command(GameCommand game_command) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
