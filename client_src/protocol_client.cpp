@@ -121,6 +121,7 @@ int ProtocolClient::send_game_command(GameCommand& game_command) {
     if (socket.sendall(game_command.msg.c_str(), game_command.msg.length(), &was_closed) < 0) {
         return SOCKET_FAILED;
     }
+    std::cout << "Sent game command: " << +game_command.code << std::endl;
     return 1;
 }
 

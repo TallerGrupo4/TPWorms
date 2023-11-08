@@ -47,22 +47,14 @@ void User::handle_match() {
     while (protocol.is_connected()) {
         GameCommand game_command;
         protocol.recv_game_command(game_command);
-        // if (protocol.recv_match(game_command) == SOCKET_FAILED) {
-        //     throw LibError(errno, "Socket failed");
-        // }
-        // interpretate_game_command_in_match(game_command);
-        // try {
-            if (game_command.code == CASE_START) {
-                monitor_matches.start_match(match_id);
-                continue;
-            }
-        // } catch (const MatchNotFound& err) {
-        //     // It is an expected error but it should never reach this point
-        //     continue;
-        // } catch (const MatchAlreadyStarted& err) {
-        //     continue;
-        // }
+        std::cout << "User has received a game command with code: " << +game_command.code << std::endl;
+        if (game_command.code == CASE_START) {
+            monitor_matches.start_match(match_id);
+            std::cout << "Match started with id: " << match_id << std::endl;
+            continue;
+        }
         queue_match->push(game_command);
+        std::cout << "User has pushed a game command with code: " << +game_command.code << std::endl;
     }
 }
 
@@ -139,20 +131,5 @@ bool User::is_dead() {
     return _is_dead;
 
 }
-
-// void User::interpretate_game_command_in_match(GameCommand& game_command) {
-//     switch (game_command.code) {
-//         case CASE_CHAT: {
-//             queue_match->push(game_command);
-//             break;
-//         }
-//         // case MOV: {
-//         // GameCommand game_command = protocolo nose //
-//         // match.push_command(game_command);
-//         // }
-//         default:
-//             break;
-//     }
-// }
 
 User::~User() {}

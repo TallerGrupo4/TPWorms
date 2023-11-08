@@ -9,7 +9,10 @@ public:
     std::string msg = "";
     uint8_t number_of_players = 0;
     uint match_id = 0;
-    int id = -1;
+
+
+    int id_worm = -1;
+    int movement_x = 0;
 
     GameCommand() = default;
     // GameCommand(int id): id(id){};

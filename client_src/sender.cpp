@@ -21,11 +21,16 @@ ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_l
 void ClientSender::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
-            if (in_match) {
-                handle_match();
-            } else {
-                handle_lobby();
-            }
+            GameCommand game_command = queue_match->pop();
+            protocol.send_game_command(game_command);
+            std::cout << "ClientSender has sent a game command with code: " << +game_command.code << std::endl;
+            // if (in_match) {
+            //     std::cout << "ClientSender is in match" << std::endl;
+            //     handle_match();
+            // } else {
+            //     std::cout << "ClientSender is in lobby" << std::endl;
+            //     handle_lobby();
+            // }
         }
     } catch (const LibError& e) {
         std::cout << "ClientSender has finished because LibError: " << e.what() << std::endl;

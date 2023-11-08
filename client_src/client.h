@@ -10,6 +10,7 @@
 // #include "../server_src/game_src/gameCommand.h"
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
+#include "protocol_client.h"
 
 #include "parser_client.h"
 #include "receiver.h"
@@ -27,11 +28,11 @@ private:
     std::unique_ptr<ClientSender> client_sender;
     std::unique_ptr<ClientReceiver> client_receiver;
     ParserClient parser;
+    ProtocolClient protocol;
     void stop();
     void get_action(Command& command, GameCommand& game_command);
     void print_snapshot(const Snapshot& snapshot);
     void print_command(const Command& command);
-    bool is_connected();
 
 public:
     explicit Client(const char* hostname, const char* servername);
@@ -47,6 +48,8 @@ public:
     void push_game_command(GameCommand game_command);
 
     void exit();
+
+    bool is_connected();
 
     ~Client();
 };

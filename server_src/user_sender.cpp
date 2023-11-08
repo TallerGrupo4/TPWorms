@@ -10,10 +10,11 @@ UserSender::UserSender(Socket& skt, ProtocolServer& protocol):
 void UserSender::run() {
     try {
         while (protocol.is_connected()) {
+            std::cout << "UserSender is waiting for a snapshot" << std::endl;
             Snapshot snapshot = queue->pop();
             // command.msg = command.msg.substr(0, command.msg.find('\0'));
             // parser.parse_sending_command_match(command);
-            std::cout << "sending snapshot: " << +snapshot.code << std::endl;
+            std::cout << "UserSender is sending a snapshot with code: " << +snapshot.code << std::endl;
             protocol.send_snapshot(snapshot);
 
             // if (protocol.send_match(command) == SOCKET_FAILED) {

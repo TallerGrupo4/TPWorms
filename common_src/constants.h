@@ -5,7 +5,7 @@
 
 #define MAX_PLAYERS 4
 
-// This INVALID macro is only used to initialize the Command struct
+// This DEFAULT macro is only used to initialize the Command struct
 #define DEFAULT 0x00
 #define INITIALIZE_COMMAND \
     { DEFAULT, "", DEFAULT, DEFAULT, DEFAULT, DEFAULT }
@@ -20,8 +20,8 @@
 #define CASE_START 0x04
 
 // Client codes
-#define CASE_EXIT 0x04
-#define CASE_INVALID 0x05
+#define CASE_EXIT 0x05
+#define CASE_INVALID 0x06
 #define CREATE "Create"
 #define JOIN "Join"
 #define CHAT "Chat"
@@ -58,3 +58,6 @@ struct Command {
 
 #endif  // _CONSTANTS_H_
 
+
+Create a match with code: __1__ (4 digits (uint))    - Create -  (Command.code = CASE_CREATE; Commnad.match_id = 1)
+Join a match with code: __1__ (4 digits (uint))       - Join - (Command.code = CASE_JOIN; Command.match_id = 1)
