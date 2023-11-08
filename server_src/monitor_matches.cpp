@@ -33,7 +33,7 @@ void MonitorMatches::start_match(uint match_id) {
         throw MatchNotFound();
     // if (matches[match_id]->is_running())
     //     throw MatchAlreadyStarted();
-    matches[match_id]->start();
+    matches[match_id]->start_match();
 }
 
 // std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(

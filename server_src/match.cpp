@@ -29,15 +29,13 @@ int Match::add_player(std::shared_ptr<Queue<Snapshot>>
     return current_id;
 }
 
-void Match::start() {
-    std::cout << "Starting match" << std::endl;
+void Match::start_match() {
     // send_map();
     for (int i = 0; i < id_counter; i++) {
-        std::cout << "Adding player " << i << std::endl;
         game.add_player(id_counter);
     }
     match_started = true;
-    run();
+    this->start();
 }
 
 void Match::push_all_players(Snapshot snapshot) {
@@ -69,10 +67,15 @@ void Match::run() {
     while (keep_running) {
         // GameCommand* c;
         GameCommand c;
-        if (queue->try_pop(c)) {
-            // c.execute(game);
-            // c->execute(game);
-            // delete c;
+        try {
+            if (queue->try_pop(c)) {
+                // c.execute(game);
+                // c->execute(game);
+                // delete c;
+            }
+        } catch (const ClosedQueue& err) {
+            std::cout << "Queue closed" << std::endl;
+            break;
         }
         // game.step();
         // GameSnapshot snapshot = game.get_game_snapshot();

@@ -47,9 +47,9 @@ void User::handle_match() {
     while (protocol.is_connected()) {
         GameCommand game_command;
         protocol.recv_game_command(game_command);
-        std::cout << "User has received a game command with code: " << +game_command.code << std::endl;
         if (game_command.code == CASE_START) {
             monitor_matches.start_match(match_id);
+            // It gets stuck here!!!
             std::cout << "Match started with id: " << match_id << std::endl;
             continue;
         }

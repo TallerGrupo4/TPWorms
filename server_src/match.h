@@ -44,7 +44,7 @@ public:
     std::shared_ptr<Queue<GameCommand>> get_queue();
     
     void run() override;
-    void start();
+    void start_match();
 };
 
 #endif
