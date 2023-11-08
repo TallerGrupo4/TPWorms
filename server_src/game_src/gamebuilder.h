@@ -35,7 +35,7 @@ public:
     GameBuilder(b2World& world): world(world) {}
 
 
-    MapSnapshot create_map(std::string map_name) {
+    Snapshot create_map(std::string map_name) {
         std::vector<PlatformSnapshot> platforms_snap;
         std::string route = "../../external/";
         route += map_name;
@@ -58,7 +58,7 @@ public:
                 platforms_snap.push_back(snap);
             }
         }
-        MapSnapshot map_snap(platforms_snap);
+        Snapshot map_snap({},platforms_snap);
         return map_snap;
     }
 
