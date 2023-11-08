@@ -11,7 +11,7 @@ public:
 
     void parse_sending_command(Command& command) override;
 
-    void parse_sending_game_command(GameCommand& game_command) override;
+    void parse_sending_action(Action& action) override;
 };
 
 #endif  // PARSER_CLIENT_H

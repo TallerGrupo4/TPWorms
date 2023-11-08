@@ -21,10 +21,10 @@ void ParserClient::parse_sending_command(Command& command) {
     }
 }
 
-void ParserClient::parse_sending_game_command(GameCommand& game_command) {
-    std::istringstream str(game_command.msg);
-    std::getline(str >> std::ws, game_command.msg, '\0');
-    game_command.code = CASE_CHAT;
-    if (game_command.msg == EXIT) game_command.code = CASE_EXIT;
-    if (game_command.msg == START) game_command.code = CASE_START;
+void ParserClient::parse_sending_action(Action& action) {
+    std::istringstream str(action.msg);
+    std::getline(str >> std::ws, action.msg, '\0');
+    action.code = CASE_CHAT;
+    if (action.msg == EXIT) action.code = CASE_EXIT;
+    if (action.msg == START) action.code = CASE_START;
 }

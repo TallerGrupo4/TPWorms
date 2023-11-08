@@ -96,32 +96,22 @@ int ProtocolClient::recv_command(Command& command) {
 
 
 
-int ProtocolClient::send_game_command(GameCommand& game_command) {
+int ProtocolClient::send_action(Action& action) {
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
-    char code[1] = {game_command.code};
+    char code[1] = {action.code};
     if (socket.sendall(code, 1, &was_closed) < 0) {
         return SOCKET_FAILED;
     }
-
-    // There is no need to send number_of_players in the client
-    // uint8_t number_of_players[1] = {game_command.number_of_players};
-    // if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
-    //     return SOCKET_FAILED;
-    // }
-    // uint8_t player_index[1] = {game_command.player_index};
-    // if (socket.sendall(player_index, 1, &was_closed) < 0) {
-    //     return SOCKET_FAILED;
-    // }
-    uint16_t len[1] = {htons(game_command.msg.size())};
+    uint16_t len[1] = {htons(action.msg.size())};
     if (socket.sendall(len, 2, &was_closed) < 0) {
         return SOCKET_FAILED;
     }
-    if (socket.sendall(game_command.msg.c_str(), game_command.msg.length(), &was_closed) < 0) {
+    if (socket.sendall(action.msg.c_str(), action.msg.length(), &was_closed) < 0) {
         return SOCKET_FAILED;
     }
-    std::cout << "Sent game command: " << +game_command.code << std::endl;
+    std::cout << "Sent action: " << +action.code << std::endl;
     return 1;
 }
 
@@ -132,14 +122,6 @@ int ProtocolClient::recv_snapshot(Snapshot& snapshot) {
         return SOCKET_FAILED;
     }
     snapshot.code = code[0];
-    // uint8_t number_of_players[1];
-    // ret = socket.recvall(number_of_players, 1, &was_closed);
-    // if (ret < 0) {
-    //     return SOCKET_FAILED;
-    // }
-    // if (was_closed) {
-    //     return WAS_CLOSED;
-    // }
 
     uint16_t len[1];
     ret = socket.recvall(len, 2, &was_closed);

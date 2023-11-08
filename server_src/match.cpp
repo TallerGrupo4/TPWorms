@@ -81,7 +81,7 @@ void Match::run() {
         // GameSnapshot snapshot = game.get_game_snapshot();
         Snapshot snapshot;
         snapshot.code = 1;
-        snapshot.msg = "Hola";
+        snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
         push_all_players(snapshot);
         // wait two seconds
         std::this_thread::sleep_for(std::chrono::milliseconds(5000));

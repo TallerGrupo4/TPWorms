@@ -24,7 +24,7 @@ void UserSender::run() {
         }
     } catch (const ClosedQueue& err) {
         // It is an expected error
-        std::cout << "The UserSender's queue was closed" << std::endl;
+        // std::cout << "The UserSender's queue was closed" << std::endl;
     } catch (const LibError& err) {
         if (protocol.is_connected()) {
             std::cout << "An error was caught in the UserSender: " << err.what() << std::endl;

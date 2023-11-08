@@ -7,7 +7,7 @@
 
 
 ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
-                           std::shared_ptr<Queue<GameCommand>> _queue_match,
+                           std::shared_ptr<Queue<Action>> _queue_match,
                            std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
         queue_lobby(_queue_lobby),
@@ -21,9 +21,9 @@ ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_l
 void ClientSender::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
-            GameCommand game_command = queue_match->pop();
-            protocol.send_game_command(game_command);
-            std::cout << "ClientSender has sent a game command with code: " << +game_command.code << std::endl;
+            Action action = queue_match->pop();
+            protocol.send_action(action);
+            std::cout << "ClientSender has sent an action with code: " << +action.code << std::endl;
             // if (in_match) {
             //     std::cout << "ClientSender is in match" << std::endl;
             //     handle_match();
@@ -54,9 +54,9 @@ void ClientSender::handle_lobby() {
 
 void ClientSender::handle_match() {
     std::cout << "ClientSender is handling match" << std::endl;
-    GameCommand game_command = queue_match->pop();
-    std::cout << "sending game command: " << +game_command.code << std::endl;
-    protocol.send_game_command(game_command);
+    Action action = queue_match->pop();
+    std::cout << "sending action: " << +action.code << std::endl;
+    protocol.send_action(action);
 }
 
 ClientSender::~ClientSender() {}

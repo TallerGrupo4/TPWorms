@@ -11,7 +11,7 @@
 Client::Client(const char* hostname, const char* servername):
         socket(hostname, servername),
         queue_sender_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        queue_sender_match(std::make_shared<Queue<GameCommand>>(QUEUE_MAX_SIZE)),
+        queue_sender_match(std::make_shared<Queue<Action>>(QUEUE_MAX_SIZE)),
         queue_receiver_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
         queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
         client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
@@ -21,85 +21,9 @@ Client::Client(const char* hostname, const char* servername):
         parser(), protocol(socket, parser) {
     }
 
-int Client::start() {
-    // try {
-        
-        client_sender->start();
-        client_receiver->start();
-        return 1;
-    //     // THIS LAST COMMAND IS FOR THE BRIDGE BETWEEN QT AND SDL2
-    //     // IT IS USED TO PUSHED THE "SUCCESFULLY JOIN/CREATED MATCH" MESSAGE (OR WHATEVER)
-    //     bool last_command = false;
-    //     // Here starts the client's main loop with QT (first while, like in a main menu)
-    //     // and then SDL2 (when it is already in a match)
-    //     Command command = INITIALIZE_COMMAND;
-    //     GameCommand game_command;
-    //     char code;
-    //     while (client_sender->is_connected() && client_receiver->is_connected() && !is_dead) {
-    //         get_action(command, game_command);
-    //         if (!in_match) {
-    //             code = command.code;
-    //         } else {
-    //             code = game_command.code;
-    //         }
-    //         switch (code) {
-    //             case CASE_EXIT: {
-    //                 is_dead = true;
-    //                 stop();
-    //                 break;
-    //             }
-    //             case CASE_INVALID: {
-    //                 std::cout << "Invalid command" << std::endl;
-    //                 break;
-    //             }
-    //             default:
-    //                 if (in_match) {
-    //                     if (last_command) {
-    //                         queue_sender_lobby->close();
-    //                     }
-    //                     std::cout << "Pushing game command: " << game_command.code << std::endl;
-    //                     queue_sender_match->try_push(game_command);
-    //                 } else {
-    //                     std::cout << "Pushing lobby command: " << std::endl;
-    //                     queue_sender_lobby->try_push(command);
-    //                 }
-    //                 break;
-    //         }
-    //         if (is_dead)
-    //             break;
-    //         if (!in_match || !last_command) {
-    //             if (queue_receiver_lobby->try_pop(command))
-    //                 print_command(command);
-    //             if (in_match) {
-    //                 last_command = true;
-    //             }
-    //         } else {
-    //             Snapshot snapshot;
-    //             std::cout << "In match: " << +in_match << std::endl;
-    //             if (queue_receiver_match->try_pop(snapshot))
-    //                 print_snapshot(snapshot);
-    //         }
-    //     }
-    //     // ----------
-
-    //     if (!is_dead) {
-    //         std::cout << "Client has finished because the server has closed the connection"
-    //                   << std::endl;
-    //         stop();
-    //         return 1;
-    //     }
-    //     return 0;
-    // } catch (const LibError& e) {
-    //     std::cout << "Client has finished because: " << e.what() << std::endl;
-    //     return 1;
-    // } catch (const ClosedQueue& e) {
-    //     // It is an expected error, it means that the queue has been closed.
-    //     std::cout << "Client has finished because: " << e.what() << std::endl;
-    //     return 1;
-    // } catch (...) {
-    //     std::cerr << "Client has finished because of an unknown error" << std::endl;
-    //     return 1;
-    // }
+void Client::start() {
+    client_sender->start();
+    client_receiver->start();
 }
 
 void Client::stop() {
@@ -114,11 +38,11 @@ void Client::stop() {
     client_receiver->join();
 }
 
-void Client::get_action(Command& command, GameCommand& game_command) {
+void Client::get_action(Command& command, Action& action) {
     if (in_match) {
-        std::cout << "Wating for a game command: " << std::endl;
-        std::getline(std::cin, game_command.msg);
-        parser.parse_sending_game_command(game_command);
+        std::cout << "Wating for action: " << std::endl;
+        std::getline(std::cin, action.msg);
+        parser.parse_sending_action(action);
     } else {
         std::cout << "Wating for a lobby command: " << std::endl;
         std::getline(std::cin, command.msg);
@@ -208,12 +132,12 @@ void Client::send_lobby_command(Command command) {
     protocol.send_command(command);
 }
 
-void Client::send_game_command(GameCommand game_command) {
+void Client::send_action(Action action) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
     }
-    queue_sender_match->try_push(game_command);
+    queue_sender_match->try_push(action);
 }
 
 void Client::exit() {

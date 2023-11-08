@@ -3,6 +3,7 @@
 #include "socket.h"
 #include "snapshot.h"
 #include "game_command.h"
+#include "../client_src/action.h"
 // #include "../server_src/game_src/gameCommand.h"
 
 #ifdef TESTING
@@ -32,7 +33,7 @@ public:
     virtual int recv_snapshot(Snapshot& snapshot);
     virtual int send_snapshot(Snapshot& snapshot);
     virtual int recv_game_command(GameCommand& game_command);
-    virtual int send_game_command(GameCommand& game_command);
+    virtual int send_action(Action& action);
 
     virtual bool is_connected();
 

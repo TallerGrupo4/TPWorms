@@ -25,7 +25,7 @@ public:
 
     // Match
     int recv_snapshot(Snapshot& snapshot) override;
-    int send_game_command(GameCommand& game_command) override;
+    int send_action(Action& action) override;
 };
 
 #endif  // PROTOCOLO_H

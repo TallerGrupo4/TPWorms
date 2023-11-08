@@ -6,7 +6,7 @@ void Parser::parse_sending_command(Command& command) { return; }
 
 void Parser::parse_sending_snapshot(Snapshot& snapshot) { return; }
 
-void Parser::parse_sending_game_command(GameCommand& game_command) { return; }
+void Parser::parse_sending_action(Action& action) { return; }
 
 
 void Parser::parse_receiving_command_chat(Command& command, const char* code,

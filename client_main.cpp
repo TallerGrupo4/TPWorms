@@ -7,7 +7,8 @@
 #include "common_src/constants.h"
 #include "common_src/liberror.h"
 #include "common_src/socket.h"
-#include "common_src/game_command.h"
+// #include "common_src/game_command.h"
+#include "client_src/action.h"
 
 #include "mainwindow.h"
 
@@ -87,19 +88,19 @@ void get_action_in_lobby(Command &command) {
     parse_sending_command(command);
 }
 
-void parse_sending_game_command(GameCommand& game_command) {
-    std::istringstream str(game_command.msg);
-    std::getline(str >> std::ws, game_command.msg, '\0');
-    game_command.code = CASE_CHAT;
-    std::cout << "Game command: " << game_command.msg << std::endl;
-    if (game_command.msg == EXIT) game_command.code = CASE_EXIT;
-    if (game_command.msg == START) game_command.code = CASE_START;
+void parse_sending_action(Action& action) {
+    std::istringstream str(action.msg);
+    std::getline(str >> std::ws, action.msg, '\0');
+    action.code = CASE_CHAT;
+    std::cout << "action: " << action.msg << std::endl;
+    if (action.msg == EXIT) action.code = CASE_EXIT;
+    if (action.msg == START) action.code = CASE_START;
 }
 
-void get_action_in_match(GameCommand &game_command) {
-    // std::cout << "Waiting for a game command: " << std::endl;
-    std::getline(std::cin, game_command.msg);
-    parse_sending_game_command(game_command);
+void get_action_in_match(Action &action) {
+    // std::cout << "Waiting for a action: " << std::endl;
+    std::getline(std::cin, action.msg);
+    parse_sending_action(action);
 }
 
 int main(int argc, char* argv[]) {
@@ -131,13 +132,13 @@ int main(int argc, char* argv[]) {
     client.start();
     while (client.is_connected()) {
         // Render_match();
-        GameCommand game_command;
-        get_action_in_match(game_command);
-        if (game_command.code == CASE_EXIT) {
+        Action action;
+        get_action_in_match(action);
+        if (action.code == CASE_EXIT) {
             client.exit();
             return 0;
         }
-        client.send_game_command(game_command);
+        client.send_action(action);
         // GameSnapshot game_snapshot = client.recv_game_snapshot();
         Snapshot snapshot = client.recv_snapshot();
         print_snapshot(snapshot);
