@@ -1,4 +1,5 @@
 #include <cstring>
+// #include <queue>
 #include <deque>
 #include <iomanip>
 #include <iostream>
@@ -11,7 +12,8 @@
 
 class Socket {
 public:
-    std::deque<void*> my_queue;
+    // std::queue<char> my_queue;
+    std::deque<char> my_queue;
     int skt;
     Socket(const char* hostname, const char* servname) { this->skt = 0; }
 
@@ -19,36 +21,45 @@ public:
 
     int sendall(const void* data, unsigned int sz, bool* was_closed) {
         // Create a copy of the data and store it in my_queue
-        char* copy = new char[sz];
-        memcpy(copy, data, sz);
-        my_queue.push_back(copy);
+        // Try without the new
+        // char* copy = new char[sz];
+        for (unsigned int i = 0; i < sz; i++) {
+            my_queue.push_back(data[i]);
+        }
+        // memcpy(copy, data, sz);
+        // my_queue.push_back(copy);
         return sz;
     }
 
     int recvall(void* data, unsigned int sz, bool* was_closed) {
-        if (my_queue.empty()) {
-            // Handle the case when the queue is empty
+        if (my_queue.empty() && my_queue.size() < sz) {
+            // Handle the case when the queue is empty or the size is smaller than sz 
             // Set was_closed or any other appropriate error handling
             return -1;
         }
 
         // Retrieve the stored data
-        char* copy = static_cast<char*>(my_queue.front());
+        // char* copy = static_cast<char*>(my_queue.front());
+        for (unsigned int i = 0; i < sz; i++) {
+            data[i] = my_queue.front();
+            my_queue.pop_front();
+        }
+        // char copy = my_queue.front();
 
-        if (copy == nullptr) {
+        // if (copy == nullptr) {
             // Handle the case when the copy is null (if it's ever possible)
             // Set was_closed or any other appropriate error handling
-            return -1;
-        }
+            // return -1;
+        // }
 
         // Copy the data back to the provided buffer
-        memcpy(data, copy, sz);
+        // memcpy(data, copy, sz);
 
         // Clean up the copied data
-        delete[] copy;
+        // delete[] copy;
 
         // Remove the data from the queue
-        my_queue.pop_front();
+        // my_queue.pop_front();
 
         return sz;
     }

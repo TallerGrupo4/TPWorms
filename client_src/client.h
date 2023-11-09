@@ -30,7 +30,6 @@ private:
     ParserClient parser;
     ProtocolClient protocol;
     void stop();
-    void get_action(Command& command, Action& action);
     void print_snapshot(const Snapshot& snapshot);
     void print_command(const Command& command);
 

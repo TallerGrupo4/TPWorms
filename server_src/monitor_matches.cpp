@@ -1,6 +1,7 @@
 #include "monitor_matches.h"
 
 #include <iostream>
+#include <memory>
 
 #include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
@@ -9,7 +10,7 @@
 MonitorMatches::MonitorMatches() {}
 
 // std::shared_ptr<Queue<GameCommand*>> MonitorMatches::create_match(
-std::shared_ptr<Queue<GameCommand>> MonitorMatches::create_match(
+std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(
         std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
@@ -31,13 +32,13 @@ void MonitorMatches::start_match(uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
-    // if (matches[match_id]->is_running())
-    //     throw MatchAlreadyStarted();
+    if (matches[match_id]->has_started())
+        throw MatchAlreadyStarted();
     matches[match_id]->start_match();
 }
 
 // std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(
-std::shared_ptr<Queue<GameCommand>> MonitorMatches::join_match(
+std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
         std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())

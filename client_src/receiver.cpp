@@ -21,16 +21,9 @@ ClientReceiver::ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _que
 void ClientReceiver::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
-            Snapshot snapshot;
             std::cout << "ClientReceiver is waiting for a snapshot" << std::endl;
-            protocol.recv_snapshot(snapshot);
-            std::cout << "ClientReceiver has received a snapshot with code: " << +snapshot.code << std::endl;
+            Snapshot snapshot = protocol.recv_snapshot();
             queue_match->push(snapshot);
-            // if (in_match) {
-            //     handle_match();
-            // } else {
-            //     handle_lobby();
-            // }
         }
     } catch (const LibError& e) {
         std::cout << "ClientReceiver has finished because LibError: " << e.what() << std::endl;
@@ -41,21 +34,6 @@ void ClientReceiver::run() {
     } catch (...) {
         std::cerr << "ClientReceiver has finished because of an unknown error" << std::endl;
     }
-}
-
-void ClientReceiver::handle_lobby() {
-    Command command = INITIALIZE_COMMAND;
-    protocol.recv_command(command);
-    if (command.code == CASE_JOIN || command.code == CASE_CREATE)
-        in_match = true;
-    std::cout << "ClientReceiver is handling lobby, IN_MATCH: " << +in_match << std::endl;
-    queue_lobby->push(command);
-}
-
-void ClientReceiver::handle_match() {
-    Snapshot snapshot;
-    protocol.recv_snapshot(snapshot);
-    queue_match->push(snapshot);
 }
 
 

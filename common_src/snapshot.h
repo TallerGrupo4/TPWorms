@@ -8,7 +8,7 @@
 
 class WormSnapshot {
 public:
-    int id;
+    char id;
     float pos_x;
     float pos_y;
     float angle;
@@ -17,7 +17,7 @@ public:
     int weapon;
     int state;
 
-    WormSnapshot(int id, float pos_x, float pos_y, float angle, int life, int direction, int weapon,
+    WormSnapshot(char id, float pos_x, float pos_y, float angle, int life, int direction, int weapon,
                  int state):
             id(id),
             pos_x(pos_x),
@@ -32,13 +32,13 @@ public:
 
 class PlatformSnapshot {
 public:
+    char type;
     float pos_x;
     float pos_y;
     float angle;
-    char type;
 
-    PlatformSnapshot(float pos_x, float pos_y, float angle, char type):
-            pos_x(pos_x), pos_y(pos_y), angle(angle), type(type){};
+    PlatformSnapshot(char type, float pos_x, float pos_y, float angle):
+            type(type), pos_x(pos_x), pos_y(pos_y), angle(angle) {};
     ~PlatformSnapshot(){};
 };
  
@@ -48,6 +48,7 @@ public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
 
+    Snapshot(){};
     Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
             worms(worms), platforms(platforms){};
     

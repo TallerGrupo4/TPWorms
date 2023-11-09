@@ -1,3 +1,5 @@
+#include <exception>
+
 #ifndef CUSTOM_ERRORS_H
 #define CUSTOM_ERRORS_H
 
@@ -27,6 +29,13 @@ public:
     PlayerNotFound() {}
     ~PlayerNotFound() {}
     virtual const char* what() const noexcept { return "Player not found"; }
+};
+
+class MatchAlreadyStarted: public std::exception {
+public:
+    MatchAlreadyStarted() {}
+    ~MatchAlreadyStarted() {}
+    virtual const char* what() const noexcept { return "Match already started"; }
 };
 
 // class NonStopExecption: public std::exception{

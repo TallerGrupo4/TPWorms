@@ -38,70 +38,6 @@ void Client::stop() {
     client_receiver->join();
 }
 
-void Client::get_action(Command& command, Action& action) {
-    if (in_match) {
-        std::cout << "Wating for action: " << std::endl;
-        std::getline(std::cin, action.msg);
-        parser.parse_sending_action(action);
-    } else {
-        std::cout << "Wating for a lobby command: " << std::endl;
-        std::getline(std::cin, command.msg);
-        parser.parse_sending_command(command);
-    }
-}
-
-void Client::print_snapshot(const Snapshot& snapshot) {
-    std::cout << snapshot.msg << std::endl;
-}
-
-void Client::print_command(const Command& command) {
-    switch (command.code) {
-        // case CASE_CHAT: {
-        //     std::cout << command.msg << std::endl;
-        //     break;
-        // }
-        case CASE_JOIN: {
-            std::cout << "There are " << +command.number_of_players
-                      << " player/s in the match: " << +command.match_id << std::endl;
-            break;
-        }
-        case CASE_CREATE: {
-            std::cout << "Match succesfully created with the code: " << +command.match_id
-                      << std::endl;
-            break;
-        }
-        case CASE_MATCH_FULL: {
-            std::cout << "The match " << +command.match_id
-                      << " already has the maximum number of players."
-                      << " Try again later or join another match." << std::endl;
-            in_match = false;
-            break;
-        }
-        case CASE_EXIT_SERVER: {
-            std::cout << "The player " << +command.player_index
-                      << " has left the match. "
-                         "There are still "
-                      << +command.number_of_players << " players in the match." << std::endl;
-            break;
-        }
-        case CASE_MATCH_NOT_FOUND: {
-            std::cout << "The match " << +command.match_id << " wan't found. "
-                      << "Try another code or create a new one." << std::endl;
-            in_match = false;
-            break;
-        }
-        case CASE_MATCH_ALREADY_EXISTS: {
-            std::cout << "The match " << +command.match_id << " Already exists. "
-                      << "Try with another code." << std::endl;
-            in_match = false;
-            break;
-        }
-        default:
-            // Throw custom error, it should never reach this point!
-            break;
-    }
-}
-
 Command Client::recv_lobby_command() {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
@@ -118,8 +54,7 @@ Snapshot Client::recv_snapshot() {
         // throw LostConnection("Client is not connected");
     }
     Snapshot snapshot;
-    snapshot.code = DEFAULT;
-    if (queue_receiver_match->try_pop(snapshot)) snapshot.code = CASE_CHAT;
+    queue_receiver_match->try_pop(snapshot);
     return snapshot;
 }
 
@@ -147,6 +82,7 @@ void Client::exit() {
 
 
 bool Client::is_connected() {
+    // return protocol.is_connected() && !is_dead;
     return client_sender->is_connected() && client_receiver->is_connected() && !is_dead;
 }
 

@@ -1,5 +1,6 @@
 #include "user.h"
 
+#include <memory>
 #include <utility>
 
 #include <sys/socket.h>
@@ -26,9 +27,8 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
-                GameCommand game_command;
-                game_command.code = CASE_EXIT_SERVER;
-                queue_match->push(game_command);
+                std::shared_ptr<ExitCommand> exit_command;
+                queue_match->push(exit_command);
                 sender->stop();
                 sender->join();
             } catch (const PlayerNotFound& e) {
@@ -43,18 +43,24 @@ void User::run() {
     }
 }
 
+
 void User::handle_match() {
     while (protocol.is_connected()) {
-        GameCommand game_command;
-        protocol.recv_game_command(game_command);
-        if (game_command.code == CASE_START) {
-            monitor_matches.start_match(match_id);
-            // It gets stuck here!!!
-            std::cout << "Match started with id: " << match_id << std::endl;
-            continue;
+        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command();
+        if (game_command->is_start) {
+            try {
+                monitor_matches.start_match(match_id);
+                std::cout << "Match started with id: " << match_id << std::endl;
+                continue;
+            } catch (const MatchNotFound& err) {
+                std::cout << "Match not found with id: " << match_id << std::endl;
+                continue;
+            } catch (const MatchAlreadyStarted& err) {
+                std::cout << "Match already started with id: " << match_id << std::endl;
+                continue;
+            }
         }
         queue_match->push(game_command);
-        std::cout << "User has pushed a game command with code: " << +game_command.code << std::endl;
     }
 }
 

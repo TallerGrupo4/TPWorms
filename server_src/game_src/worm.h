@@ -13,13 +13,13 @@
 
 class Worm {
     b2Body* body;
-    int id;
+    char id;
     int life;
     int weapon;  // TODO implement actual weapons
     int state;
 
 public:
-    Worm(int id, b2Body* body):
+    Worm(char id, b2Body* body):
             body(body), id(id), life(START_LIFE), weapon(NO_WEAPON), state(NULL_STATE) {}
 
     void move(int direction) {

@@ -33,7 +33,7 @@ public:
         players.push_back(Worm(current_id, player));
     }
 
-    void move_player(int id, int direction) {
+    void move_player(char id, int direction) {
         Worm player = players[id];
         player.move(direction);
     }

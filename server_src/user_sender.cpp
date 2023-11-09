@@ -14,7 +14,6 @@ void UserSender::run() {
             Snapshot snapshot = queue->pop();
             // command.msg = command.msg.substr(0, command.msg.find('\0'));
             // parser.parse_sending_command_match(command);
-            std::cout << "UserSender is sending a snapshot with code: " << +snapshot.code << std::endl;
             protocol.send_snapshot(snapshot);
 
             // if (protocol.send_match(command) == SOCKET_FAILED) {

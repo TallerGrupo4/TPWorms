@@ -1,4 +1,8 @@
-#include "../common_src/protocol.h"
+#include <memory>
+// #include "../common_src/protocol.h"
+#include "game_src/game_command.h"
+#include "../common_src/snapshot.h"
+#include "../common_src/constants.h"
 
 #include "parser_server.h"
 
@@ -11,24 +15,34 @@
 #ifndef PROTOCOL_SERVER_H
 #define PROTOCOL_SERVER_H
 
-class ProtocolServer: public Protocol {
+class ProtocolServer/*: public Protocol*/ {
+
+private:
+    Socket& socket;
+    bool was_closed = false;
+    ParserServer& parser;
 
 private:
     int send_match_id(const Command& command);
     int recv_create(Command& command, const char* code);
     int recv_join(Command& command, const char* code);
-    // int recv_chat(Command& command, const char* code);
+    int send_platforms(std::vector<PlatformSnapshot>& platforms);
+    int send_worms(std::vector<WormSnapshot>& worms);
+    std::shared_ptr<GameCommand> recv_mov();
+    std::shared_ptr<GameCommand> recv_start();
 
 public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);
 
     // Lobby
-    int send_command(Command& command) override;
-    int recv_command(Command& command) override;
+    int send_command(Command& command) /*override*/;
+    int recv_command(Command& command) /*override*/;
 
     // Match
-    int send_snapshot(Snapshot& snapshot) override;
-    int recv_game_command(GameCommand& game_command) override;
+    int send_snapshot(Snapshot& snapshot) /*override*/;
+    // int recv_game_command(std::shared_ptr<GameCommand> game_command) /*override*/;
+    std::shared_ptr<GameCommand> recv_game_command();
+    bool is_connected() { return !was_closed;}
 };
 
 #endif  // PROTOCOL_SERVER_H

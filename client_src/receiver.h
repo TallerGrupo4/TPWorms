@@ -22,8 +22,6 @@ private:
     ParserClient parser;
     ProtocolClient protocol;
     std::atomic<bool>& is_dead;
-    void handle_lobby();
-    void handle_match();
 
 public:
     explicit ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,

@@ -5,8 +5,9 @@
 #include <vector>
 
 #include <arpa/inet.h>
+#include <sys/types.h>
 
-ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): Protocol(socket, parser) {}
+ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(socket), parser(parser) /*Protocol(socket, parser)*/ {}
 
 int ProtocolClient::send_command(Command& command) {
     char code[1] = {command.code};
@@ -97,52 +98,54 @@ int ProtocolClient::recv_command(Command& command) {
 
 
 int ProtocolClient::send_action(Action& action) {
-    if (was_closed) {
-        throw LibError(errno, "Socket was closed");
-    }
-    char code[1] = {action.code};
-    if (socket.sendall(code, 1, &was_closed) < 0) {
-        return SOCKET_FAILED;
-    }
-    uint16_t len[1] = {htons(action.msg.size())};
-    if (socket.sendall(len, 2, &was_closed) < 0) {
-        return SOCKET_FAILED;
-    }
-    if (socket.sendall(action.msg.c_str(), action.msg.length(), &was_closed) < 0) {
-        return SOCKET_FAILED;
-    }
-    std::cout << "Sent action: " << +action.code << std::endl;
-    return 1;
+    return action.send(socket, was_closed);
 }
 
-int ProtocolClient::recv_snapshot(Snapshot& snapshot) {
+// int ProtocolClient::recv_snapshot(Snapshot& snapshot) {
+Snapshot ProtocolClient::recv_snapshot() {
     char code[1];
-    int ret = socket.recvall(code, 1, &was_closed);
-    if (ret < 0) {
-        return SOCKET_FAILED;
-    }
-    snapshot.code = code[0];
+    socket.recvall(code, 1, &was_closed);
+    if (code[0] == MAP) return recv_platforms();
+    else if (code[0] == WORMS) return recv_worms();
+    return Snapshot();
+}
 
-    uint16_t len[1];
-    ret = socket.recvall(len, 2, &was_closed);
-    if (ret < 0) {
-        return SOCKET_FAILED;
-    }
-    if (was_closed) {
-        return WAS_CLOSED;
-    }
-    len[0] = ntohs(len[0]);
-    std::vector<char> msg(len[0]);
-    ret = socket.recvall(msg.data(), len[0], &was_closed);
-    if (ret < 0) {
-        return SOCKET_FAILED;
-    }
-    if (was_closed) {
-        return WAS_CLOSED;
-    }
-    snapshot.msg = std::string(msg.begin(), msg.end());;
 
-    return ret;
+// int ProtocolClient::recv_platforms(Snapshot& snapshot) {
+Snapshot ProtocolClient::recv_platforms() {
+    Snapshot snapshot;
+    uint16_t num_of_plats[1];
+    socket.recvall(num_of_plats, 2, &was_closed);
+    // if (was_closed) throw WasClosed;
+    num_of_plats[0] = ntohs(num_of_plats[0]);
+    for (int i = 0; i < num_of_plats[0]; i++) {
+        char type[1];
+        int pos_x[1];
+        int pos_y[1];
+        int angle[1];
+        socket.recvall(type, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(pos_x, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(pos_y, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(angle, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        pos_x[0] = ntohl(pos_x[0]);
+        pos_y[0] = ntohl(pos_y[0]);
+        angle[0] = ntohl(angle[0]);
+        // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
+        // The client must know that it probably has to divide by 1000
+        // (The platforms have integers instead of floats from now on in the client)
+        PlatformSnapshot platform(type[0], pos_x[0], pos_y[0], angle[0]);
+        snapshot.platforms.push_back(platform);
+    }
+    return snapshot;
+}
+
+// int ProtocolClient::recv_worms(Snapshot& snapshot) {
+Snapshot ProtocolClient::recv_worms() {
+    return Snapshot();
 }
 
 

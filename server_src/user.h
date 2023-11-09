@@ -4,8 +4,8 @@
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
-#include "../common_src/game_command.h"
-// #include "./game_src/game_command.h"
+// #include "../common_src/game_command.h"
+#include "game_src/game_command.h"
 
 #include "match.h"
 #include "monitor_matches.h"
@@ -20,7 +20,7 @@ class User: public Thread {
 private:
     Socket socket;
     // std::shared_ptr<Queue<GameCommand*>> queue_match = NULL;
-    std::shared_ptr<Queue<GameCommand>> queue_match = NULL;
+    std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue_match = NULL;
     ParserServer parser;
     ProtocolServer protocol;
     std::unique_ptr<UserSender> sender;

@@ -26,16 +26,16 @@ add_subdirectory(client_src/libSDL2pp-0.16.2)
 include_directories(${SDL2PP_INCLUDE_DIRS})
 
 add_subdirectory(external)
+add_subdirectory(server_src)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
-add_subdirectory(server_src)
 
-add_executable(client client_main.cpp)
 add_executable(server server_main.cpp)
+add_executable(client client_main.cpp)
 
 #find_package(Qt5 COMPONENTS Widgets REQUIRED)
-target_link_libraries(client common_lib client_lib SDL2pp)
 target_link_libraries(server common_lib server_lib)
+target_link_libraries(client common_lib client_lib SDL2pp)
 
 target_include_directories(client PRIVATE client_src/QT)
 target_include_directories(client PRIVATE client_src)

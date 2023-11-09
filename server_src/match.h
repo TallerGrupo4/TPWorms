@@ -21,12 +21,12 @@ private:
     bool keep_running;
     bool match_started;
     // This doesn't need to be a shared_ptr, we could pass a reference of it to the receiver
-    std::shared_ptr<Queue<std::unique_ptr<GameCommand>>> queue;
+    std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue;
     std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
-    int id_counter;
+    char id_counter;
 
     void send_map();
-    void move_player(int direction, int id);
+    void move_player(int direction, char id);
     void push_all_players(Snapshot snapshot);
 
 
@@ -37,9 +37,11 @@ public:
     int add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
 
     void stop();
+
+    bool has_started();
     
     // std::shared_ptr<Queue<GameCommand*>> get_queue();
-    std::shared_ptr<Queue<std::unique_ptr<GameCommand>>> get_queue();
+    std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> get_queue();
     
     void run() override;
     void start_match();

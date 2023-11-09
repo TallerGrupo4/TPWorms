@@ -61,7 +61,11 @@ void print_command(const Command& command) {
 }
 
 void print_snapshot(const Snapshot& snapshot) {
-    std::cout << "Snapshot msg is: " << snapshot.msg << std::endl;
+    if (!snapshot.platforms.empty()) {
+        for (const PlatformSnapshot& platform : snapshot.platforms) {
+            std::cout << "Platform: " << platform.type << std::endl;
+        }
+    }
 }
 
 void parse_sending_command(Command& command) {
@@ -81,26 +85,28 @@ void parse_sending_command(Command& command) {
     }
 }
 
-void get_action_in_lobby(Command &command) {
+void get_lobby_command(Command &command) {
     std::cout << "Enter a command: " << std::endl;
     std::string input;
     std::getline(std::cin, command.msg);
     parse_sending_command(command);
 }
 
-void parse_sending_action(Action& action) {
-    std::istringstream str(action.msg);
-    std::getline(str >> std::ws, action.msg, '\0');
-    action.code = CASE_CHAT;
-    std::cout << "action: " << action.msg << std::endl;
-    if (action.msg == EXIT) action.code = CASE_EXIT;
-    if (action.msg == START) action.code = CASE_START;
+Action parse_sending_action(std::string msg) {
+    std::istringstream str(msg);
+    std::getline(str >> std::ws, msg, '\0');
+    std::cout << "action (it will be a Start anyways): " << msg << std::endl;
+    if (msg == EXIT) {
+        // return ActionExit;
+        return Action(CASE_EXIT);
+    }// else if (msg == _START) ActionStart;
+    return Action();
 }
 
-void get_action_in_match(Action &action) {
-    // std::cout << "Waiting for a action: " << std::endl;
-    std::getline(std::cin, action.msg);
-    parse_sending_action(action);
+Action get_action_in_match() {
+    std::string msg;
+    std::getline(std::cin, msg);
+    return parse_sending_action(msg);
 }
 
 int main(int argc, char* argv[]) {
@@ -114,7 +120,7 @@ int main(int argc, char* argv[]) {
     while (in_lobby) {
         // Render_lobby();
         Command command = INITIALIZE_COMMAND;
-        get_action_in_lobby(command);
+        get_lobby_command(command);
         if (command.code == CASE_EXIT) {
             return 0;
         }
@@ -132,9 +138,8 @@ int main(int argc, char* argv[]) {
     client.start();
     while (client.is_connected()) {
         // Render_match();
-        Action action;
-        get_action_in_match(action);
-        if (action.code == CASE_EXIT) {
+        Action action = get_action_in_match();
+        if (action.type == CASE_EXIT) {
             client.exit();
             return 0;
         }

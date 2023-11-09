@@ -1,20 +1,21 @@
 #include "./match.h"
+#include <memory>
 
 #include <yaml-cpp/yaml.h>
 
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
-#include "../common_src/game_command.h"
+#include "game_src/game_command.h"
 // #include "game_src/gameCommand.h"
 
 
-Match::Match::Match(std::string map_route):
+Match::Match(std::string map_route):
         game(map_route),
         keep_running(true),
         match_started(false),
         // queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
-        queue(std::make_shared<Queue<GameCommand>>(QUEUE_MAX_SIZE)),
+        queue(std::make_shared<Queue<std::shared_ptr<GameCommand>>>(QUEUE_MAX_SIZE)),
         id_counter(0) {}
 
 
@@ -65,10 +66,11 @@ void Match::send_map() {
 
 void Match::run() {
     while (keep_running) {
-        std::unique_ptr<GameCommand> c;
+        std::shared_ptr<GameCommand> game_command;
         try {
-            if (queue->try_pop(c)) {
-                c->execute(game);
+            if (queue->try_pop(game_command)) {
+                std::cout << "GameCommand received" << std::endl;
+                // game_command->execute(game);
             }
         } catch (const ClosedQueue& err) {
             std::cout << "Queue closed" << std::endl;
@@ -79,18 +81,32 @@ void Match::run() {
         // Snapshot snapshot;
         // snapshot.code = 1;
         // snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
-        game.step();
-        Snapshot snapshot = game.get_game_snapshot();
+        // game.step();
+        // Snapshot snapshot = game.get_game_snapshot();
+
+        // It doesn't matter what I am sending.
+        // It is just to prove that the server and client are working with snapshots (and they do).
+        std::vector<WormSnapshot> worms;
+        PlatformSnapshot platform('p', 0, 0, 0);
+        std::vector<PlatformSnapshot> platforms;
+        platforms.push_back(platform);
+        Snapshot snapshot(worms, platforms);
         push_all_players(snapshot);
+
         // std::this_thread::sleep_for(std::chrono::milliseconds(16));
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
     }
 }
+
 
 void Match::stop() {
     keep_running = false;
 }
 
+bool Match::has_started() { return match_started; }
+
 // std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
-std::shared_ptr<Queue<GameCommand>> Match::get_queue() { return queue; }
+std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> Match::get_queue() { return queue; }
 
 Match::~Match() {}
