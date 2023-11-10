@@ -12,8 +12,6 @@
 #ifndef GAME_H
 #define GAME_H
 
-class GameCommand;
-
 
 class Game {
     std::string map;
@@ -38,7 +36,11 @@ public:
         player.move(direction);
     }
 
-    //  
+    void remove_player(char id){
+        //TODO
+        return ;
+    }
+
 
 
     void step() { world.Step(1.0f / 60.0f, 8, 3); }

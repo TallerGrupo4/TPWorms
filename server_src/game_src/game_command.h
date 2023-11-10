@@ -15,7 +15,7 @@ public:
 
 
     void virtual execute(Game& game) { return; };
-    // static std::shared_ptr<GameCommand> createCommand(char id, int direction, int type);
+    static std::shared_ptr<GameCommand> createCommand(char id, int direction, int type);
 };
 
 
@@ -35,7 +35,7 @@ class ExitCommand: public GameCommand {
 public:
     ExitCommand(char id) : GameCommand(id) {}
     ~ExitCommand() {}
-    // void execute(Game& game) override { game.remove_player(id_worm); }
+    void execute(Game& game) override { game.remove_player(id_worm); }
 };
 
 
@@ -49,17 +49,17 @@ public:
 
 
 
-// std::shared_ptr<GameCommand> GameCommand::createCommand(char id, int direction, int type) {
-//     switch (type) {
-//         case MOV:
-//             return std::make_shared<MoveCommand>(id, direction);
-//             break;
-//         case CASE_EXIT_SERVER:
-//             return std::make_shared<ExitCommand>(id);
-//             break;
-//     }
-//     return nullptr;
-// }
+inline std::shared_ptr<GameCommand> GameCommand::createCommand(char id, int direction, int type) {
+    switch (type) {
+        case MOV:
+            return std::make_shared<MoveCommand>(id, direction);
+            break;
+        case CASE_EXIT_SERVER:
+            return std::make_shared<ExitCommand>(id);
+            break;
+    }
+    return nullptr;
+}
 
 
 #endif  // GAME_COMMAND_H

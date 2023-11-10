@@ -6,6 +6,7 @@
 #include "../common_src/custom_errors.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+#include "game_src/game_command.h"
 #include "game_src/game.h"
 
 

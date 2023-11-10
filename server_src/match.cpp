@@ -6,8 +6,6 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
-#include "game_src/game_command.h"
-// #include "game_src/gameCommand.h"
 
 
 Match::Match(std::string map_route):
