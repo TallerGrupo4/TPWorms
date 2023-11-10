@@ -1,6 +1,12 @@
 #include <string>
-#include "../common_src/socket.h"
+
 #include "../common_src/constants.h"
+
+#ifndef TESTING
+#include "../common_src/socket.h"
+#else
+#include "../common_src/dummy_socket.h"
+#endif
 
 #ifndef ACTION_H
 #define ACTION_H

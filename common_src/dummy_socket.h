@@ -5,6 +5,8 @@
 #include <iostream>
 #include <map>
 
+// Move this to tests folder
+
 #ifdef TESTING
 #ifndef DUMMY_SOCKET_H
 #define DUMMY_SOCKET_H
@@ -13,7 +15,7 @@
 class Socket {
 public:
     // std::queue<char> my_queue;
-    std::deque<char> my_queue;
+    std::deque<char*> my_queue;
     int skt;
     Socket(const char* hostname, const char* servname) { this->skt = 0; }
 
@@ -22,12 +24,12 @@ public:
     int sendall(const void* data, unsigned int sz, bool* was_closed) {
         // Create a copy of the data and store it in my_queue
         // Try without the new
-        // char* copy = new char[sz];
-        for (unsigned int i = 0; i < sz; i++) {
-            my_queue.push_back(data[i]);
-        }
-        // memcpy(copy, data, sz);
-        // my_queue.push_back(copy);
+        char* copy = new char[sz];
+        memcpy(copy, data, sz);
+        my_queue.push_back(copy);
+        // for (unsigned int i = 0; i < sz; i++) {
+        //     my_queue.push_back(static_cast<char*>(data)[i]);
+        // }
         return sz;
     }
 
@@ -38,28 +40,28 @@ public:
             return -1;
         }
 
-        // Retrieve the stored data
-        // char* copy = static_cast<char*>(my_queue.front());
-        for (unsigned int i = 0; i < sz; i++) {
-            data[i] = my_queue.front();
-            my_queue.pop_front();
-        }
+        // for (unsigned int i = 0; i < sz; i++) {
+        //     data[i] = my_queue.front();
+        //     my_queue.pop_front();
+        // }
         // char copy = my_queue.front();
+        // Retrieve the stored data
+        char* copy = static_cast<char*>(my_queue.front());
 
-        // if (copy == nullptr) {
+        if (copy == nullptr) {
             // Handle the case when the copy is null (if it's ever possible)
             // Set was_closed or any other appropriate error handling
             // return -1;
-        // }
+        }
 
         // Copy the data back to the provided buffer
-        // memcpy(data, copy, sz);
+        memcpy(data, copy, sz);
 
         // Clean up the copied data
-        // delete[] copy;
+        delete[] copy;
 
         // Remove the data from the queue
-        // my_queue.pop_front();
+        my_queue.pop_front();
 
         return sz;
     }
@@ -70,7 +72,11 @@ public:
     Socket accept() { return *this; }
     bool operator==(const Socket& other) const { return this->skt == other.skt; }
     bool operator!=(const Socket& other) const { return !(*this == other); }
-    ~Socket() {}
+    ~Socket() {
+        for (unsigned int i = 0; i < my_queue.size(); i++) {
+            delete[] my_queue[i];
+        }
+    }
 };
 
 #endif  // DUMMY_SOCKET_H

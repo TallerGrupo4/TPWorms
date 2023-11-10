@@ -1,4 +1,4 @@
-#include "../common_src/protocol.h"
+// #include "../common_src/protocol.h"
 #include "../common_src/constants.h"
 #include "../common_src/snapshot.h"
 #include "action.h"
@@ -39,7 +39,9 @@ public:
     Snapshot recv_snapshot() /*override*/;
     int send_action(Action& action) /*override*/;
     bool is_connected() { return !was_closed;}
-
+    
+    bool operator==(const ProtocolClient& other) const { return this->socket == other.socket; }
+    bool operator!=(const ProtocolClient& other) const { return !(*this == other); }
 };
 
 #endif  // PROTOCOLO_H

@@ -43,6 +43,10 @@ public:
     // int recv_game_command(std::shared_ptr<GameCommand> game_command) /*override*/;
     std::shared_ptr<GameCommand> recv_game_command();
     bool is_connected() { return !was_closed;}
+
+
+    bool operator==(const ProtocolServer& other) const { return this->socket == other.socket; }
+    bool operator!=(const ProtocolServer& other) const { return !(*this == other); }
 };
 
 #endif  // PROTOCOL_SERVER_H
