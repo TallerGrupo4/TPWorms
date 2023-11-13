@@ -5,6 +5,26 @@
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
+enum BeamType {
+    LargeVertical,
+    Large65,
+    Large45,
+    Large25,
+    LargeHorizontal,
+    LargeMinus25,
+    LargeMinus45,
+    LargeMinus65,
+    LargeVerticalFlipped,
+    ShortVertical,
+    Short65,
+    Short45,
+    Short25,
+    ShortHorizontal,
+    ShortMinus25,
+    ShortMinus45,
+    ShortMinus65,
+    ShortVerticalFlipped,
+};
 
 class WormSnapshot {
 public:
@@ -12,18 +32,19 @@ public:
     float pos_x;
     float pos_y;
     float angle;
-    int life;
+    int max_health;
+    int health;
     int direction;
     int weapon;
     int state;
 
-    WormSnapshot(char id, float pos_x, float pos_y, float angle, int life, int direction, int weapon,
+    WormSnapshot(char id, float pos_x, float pos_y, float angle, int health, int direction, int weapon,
                  int state):
             id(id),
             pos_x(pos_x),
             pos_y(pos_y),
             angle(angle),
-            life(life),
+            health(health),
             direction(direction),
             weapon(weapon),
             state(state){};

@@ -9,7 +9,7 @@
 #include "../common_src/constants.h"
 #include "../common_src/liberror.h"
 
-ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): socket(socket), parser(parser)/*Protocol(socket, parser)*/ {}
+ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): socket(socket), parser(parser) {}
 
 // ------------------------------ PUBLIC METHODS ------------------------------
 
@@ -184,7 +184,20 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
     return 1;
 }
 
+/*
+    char id;
+    float pos_x;
+    float pos_y;
+    float angle;
+    int max_health;
+    int health;
+    int direction;
+    int weapon;
+    int state;
+*/
+
 int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
+    
     return 1;
 }
 

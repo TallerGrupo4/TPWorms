@@ -1,5 +1,4 @@
 #include <memory>
-// #include "../common_src/protocol.h"
 #include "game_src/game_command.h"
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
@@ -15,7 +14,7 @@
 #ifndef PROTOCOL_SERVER_H
 #define PROTOCOL_SERVER_H
 
-class ProtocolServer/*: public Protocol*/ {
+class ProtocolServer {
 
 private:
     Socket& socket;
@@ -35,12 +34,11 @@ public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);
 
     // Lobby
-    int send_command(Command& command) /*override*/;
-    int recv_command(Command& command) /*override*/;
+    int send_command(Command& command);
+    int recv_command(Command& command);
 
     // Match
-    int send_snapshot(Snapshot& snapshot) /*override*/;
-    // int recv_game_command(std::shared_ptr<GameCommand> game_command) /*override*/;
+    int send_snapshot(Snapshot& snapshot);
     std::shared_ptr<GameCommand> recv_game_command();
     bool is_connected() { return !was_closed;}
 

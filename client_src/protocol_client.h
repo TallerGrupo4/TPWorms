@@ -1,4 +1,3 @@
-// #include "../common_src/protocol.h"
 #include "../common_src/constants.h"
 #include "../common_src/snapshot.h"
 #include "action.h"
@@ -14,7 +13,7 @@
 #ifndef PROTOCOLO_H
 #define PROTOCOLO_H
 
-class ProtocolClient/*: public Protocol*/ {
+class ProtocolClient {
 
 private:
     Socket& socket;
@@ -22,8 +21,6 @@ private:
     ParserClient& parser;
     
     int recv_match_id(uint* match_id);
-    // int recv_platforms(Snapshot& snapshot);
-    // int recv_worms(Snapshot& snapshot);
     Snapshot recv_platforms();
     Snapshot recv_worms();
 
@@ -31,13 +28,12 @@ public:
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
 
     // Lobby
-    int recv_command(Command& command) /*override*/;
-    int send_command(Command& command) /*override*/;
+    int recv_command(Command& command);
+    int send_command(Command& command);
 
     // Match
-    // int recv_snapshot(Snapshot& snapshot) /*override*/;
-    Snapshot recv_snapshot() /*override*/;
-    int send_action(Action& action) /*override*/;
+    Snapshot recv_snapshot();
+    int send_action(Action& action);
     bool is_connected() { return !was_closed;}
     
     bool operator==(const ProtocolClient& other) const { return this->socket == other.socket; }

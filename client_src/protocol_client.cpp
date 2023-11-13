@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #include <sys/types.h>
 
-ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(socket), parser(parser) /*Protocol(socket, parser)*/ {}
+ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(socket), parser(parser) {}
 
 int ProtocolClient::send_command(Command& command) {
     char code[1] = {command.code};
@@ -101,7 +101,6 @@ int ProtocolClient::send_action(Action& action) {
     return action.send(socket, was_closed);
 }
 
-// int ProtocolClient::recv_snapshot(Snapshot& snapshot) {
 Snapshot ProtocolClient::recv_snapshot() {
     char code[1];
     socket.recvall(code, 1, &was_closed);
@@ -111,7 +110,6 @@ Snapshot ProtocolClient::recv_snapshot() {
 }
 
 
-// int ProtocolClient::recv_platforms(Snapshot& snapshot) {
 Snapshot ProtocolClient::recv_platforms() {
     Snapshot snapshot;
     uint16_t num_of_plats[1];
@@ -143,7 +141,6 @@ Snapshot ProtocolClient::recv_platforms() {
     return snapshot;
 }
 
-// int ProtocolClient::recv_worms(Snapshot& snapshot) {
 Snapshot ProtocolClient::recv_worms() {
     return Snapshot();
 }
