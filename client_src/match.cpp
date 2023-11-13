@@ -18,5 +18,8 @@ void Match::update(Snapshot snpsht, std::chrono::duration<double>& dt) {
     }
 }
 void Match::render(SDL2pp::Renderer& renderer) {
-     
+    bkgrnd.render(renderer);
+    for (Worm worm : this->worms) {
+        worm.render(renderer);    
+    }
 }

@@ -41,6 +41,7 @@ private:
 
 public:
     explicit Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    void render(SDL2pp::Renderer& renderer);
 };
 
 #endif  // BEAM_H
