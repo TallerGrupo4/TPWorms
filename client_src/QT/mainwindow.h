@@ -15,13 +15,13 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(Client& client);
+    explicit MainWindow(Client& client, bool& exit_succesful);
     ~MainWindow();
 
 private:
     Ui::MainWindow* ui;
     Client& client;
-
+    bool& exit_succesful;
     void joinMatch();
     void createMatch();
 };

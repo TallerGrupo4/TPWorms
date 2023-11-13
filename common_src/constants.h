@@ -29,10 +29,10 @@
 #define _START "Start"
 
 // Server codes
-#define CASE_MATCH_ALREADY_EXISTS 0x04
-#define CASE_MATCH_FULL 0x05
-#define CASE_MATCH_NOT_FOUND 0x06
-#define CASE_EXIT_SERVER 0x07
+#define CASE_MATCH_ALREADY_EXISTS 0x05
+#define CASE_MATCH_FULL 0x06
+#define CASE_MATCH_NOT_FOUND 0x07
+#define CASE_EXIT_SERVER 0x08
 // Remember that if a a client exited the server, it will not send to the server a msg,
 // but instead, the socket will fail and the server will detect it, removing it from the
 // list of clients, match, etc. (Whatever is needed) 
