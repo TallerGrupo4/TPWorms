@@ -4,8 +4,9 @@
 
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(Client& client): QMainWindow(nullptr), ui(new Ui::MainWindow), client(client) {
+MainWindow::MainWindow(Client& client, bool& exit_succesful): QMainWindow(nullptr), ui(new Ui::MainWindow), client(client), exit_succesful(exit_succesful) {
     ui->setupUi(this);
+    exit_succesful = false;
     // ui->Label_BackgroundImage->setPixmap(QPixmap(":/main_menu.png"));
 
     std::string path_to_img(__FILE__);
@@ -54,8 +55,8 @@ void MainWindow::joinMatch() {
                 break;
 
             case CASE_START:
+                exit_succesful = true;
                 this->close();
-                qApp->exit(4);
                 break;
             }
             
@@ -95,8 +96,8 @@ QString code_string = ui->CreateMatchLineEdit->text();
                 break;
 
             case CASE_START:
+                exit_succesful = true;
                 this->close();
-                qApp->exit(4);
                 break;
             }
             
