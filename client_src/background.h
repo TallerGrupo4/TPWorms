@@ -1,7 +1,6 @@
 #ifndef BACKGROUND_H
 #define BACKGROUND_H
 
-#include <list>
 #include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -12,7 +11,7 @@
 
 class Background {
 private:
-    std::list<Beam> beams;
+    std::vector<Beam> beams;
     //SDL2pp::Texture bkgrnd_image;
     int width;
     int height;

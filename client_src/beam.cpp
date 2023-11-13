@@ -1,68 +1,68 @@
 #include "beam.h"
 
-Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : beam_image(assign_texture(pltfrm,surfaces,renderer)) {
     // if (pltfrm.type) {
     //     if (pltfrm.angle) {
     //         /* code */
     //     }
         
     // }
-    switch (pltfrm.type) {
-        case LargeVertical :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_vertical);
-        break;
-        case Large65 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_65);
-        break;
-        case Large45 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_45);
-        break;
-        case Large25 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_25);
-        break;
-        case LargeHorizontal :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_horizontal);
-        break;
-        case LargeMinus25 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_25);
-        break;
-        case LargeMinus45 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_45);
-        break;
-        case LargeMinus65 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_65);
-        break;
-        case LargeVerticalFlipped :
-        beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_vertical_flipped);
-        break;
-        case ShortVertical :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_vertical);
-        break;
-        case Short65 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_65);
-        break;
-        case Short45 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_45);
-        break;
-        case Short25 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_25);
-        break;
-        case ShortHorizontal :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_horizontal);
-        break;
-        case ShortMinus25 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_25);
-        break;
-        case ShortMinus45 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_45);
-        break;
-        case ShortMinus65 :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_65);
-        break;
-        case ShortVerticalFlipped :
-        beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_vertical_flipped);
-        break;
-    }
+    // switch (pltfrm.type) {
+    //     case LargeVertical :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_vertical);
+    //     break;
+    //     case Large65 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_65);
+    //     break;
+    //     case Large45 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_45);
+    //     break;
+    //     case Large25 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_25);
+    //     break;
+    //     case LargeHorizontal :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_horizontal);
+    //     break;
+    //     case LargeMinus25 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_25);
+    //     break;
+    //     case LargeMinus45 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_45);
+    //     break;
+    //     case LargeMinus65 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_m_65);
+    //     break;
+    //     case LargeVerticalFlipped :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.large_beam_vertical_flipped);
+    //     break;
+    //     case ShortVertical :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_vertical);
+    //     break;
+    //     case Short65 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_65);
+    //     break;
+    //     case Short45 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_45);
+    //     break;
+    //     case Short25 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_25);
+    //     break;
+    //     case ShortHorizontal :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_horizontal);
+    //     break;
+    //     case ShortMinus25 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_25);
+    //     break;
+    //     case ShortMinus45 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_45);
+    //     break;
+    //     case ShortMinus65 :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_m_65);
+    //     break;
+    //     case ShortVerticalFlipped :
+    //     beam_image = SDL2pp::Texture(renderer, surfaces.short_beam_vertical_flipped);
+    //     break;
+    // }
     this->type = pltfrm.type;
     this->x = pltfrm.pos_x;
     this->y = pltfrm.pos_y;
@@ -78,4 +78,64 @@ void Beam::render(SDL2pp::Renderer& renderer) {
         dest_rect,
         0.0,              // don't rotate
         SDL2pp::NullOpt);
+}
+
+SDL2pp::Texture Beam::assign_texture(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+    SDL2pp::Texture texture(renderer, surfaces.large_beam_vertical); //Default large beam
+    switch (pltfrm.type) {
+        case LargeVertical :
+        break;
+        case Large65 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_65);
+        break;
+        case Large45 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_45);
+        break;
+        case Large25 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_25);
+        break;
+        case LargeHorizontal :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_horizontal);
+        break;
+        case LargeMinus25 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_m_25);
+        break;
+        case LargeMinus45 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_m_45);
+        break;
+        case LargeMinus65 :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_m_65);
+        break;
+        case LargeVerticalFlipped :
+        texture = SDL2pp::Texture(renderer, surfaces.large_beam_vertical_flipped);
+        break;
+        case ShortVertical :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_vertical);
+        break;
+        case Short65 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_65);
+        break;
+        case Short45 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_45);
+        break;
+        case Short25 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_25);
+        break;
+        case ShortHorizontal :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_horizontal);
+        break;
+        case ShortMinus25 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_m_25);
+        break;
+        case ShortMinus45 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_m_45);
+        break;
+        case ShortMinus65 :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_m_65);
+        break;
+        case ShortVerticalFlipped :
+        texture = SDL2pp::Texture(renderer, surfaces.short_beam_vertical_flipped);
+        break;
+    }
+    return texture;
 }
