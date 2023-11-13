@@ -43,8 +43,7 @@ Command Client::recv_lobby_command() {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
     }
-    Command command = INITIALIZE_COMMAND;
-    protocol.recv_command(command);
+    Command command = protocol.recv_command();
     return command;
 }
 

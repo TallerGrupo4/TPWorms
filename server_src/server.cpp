@@ -6,7 +6,6 @@
 
 #include <sys/socket.h>
 
-#include "../common_src/constants.h"
 #include "../common_src/liberror.h"
 
 

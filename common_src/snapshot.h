@@ -5,7 +5,7 @@
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
-enum BeamType {
+enum BeamType : char {
     LargeVertical,
     Large65,
     Large45,
@@ -53,12 +53,12 @@ public:
 
 class PlatformSnapshot {
 public:
-    char type;
+    BeamType type;
     float pos_x;
     float pos_y;
     float angle;
 
-    PlatformSnapshot(char type, float pos_x, float pos_y, float angle):
+    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float angle):
             type(type), pos_x(pos_x), pos_y(pos_y), angle(angle) {};
     ~PlatformSnapshot(){};
 };

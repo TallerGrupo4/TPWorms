@@ -1,6 +1,7 @@
 #include <vector>
 
 #include "constants.h"
+#include "command.h"
 #include "snapshot.h"
 // #include "game_command.h"
 #include "../client_src/action.h"

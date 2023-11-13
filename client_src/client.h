@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "../common_src/constants.h"
+#include "../common_src/command.h"
 #include "../common_src/snapshot.h"
 // #include "../common_src/game_command.h"
 #include "../common_src/queue.h"

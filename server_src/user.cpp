@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 
 #include "../common_src/constants.h"
+#include "../common_src/command.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
@@ -66,10 +67,7 @@ void User::handle_match() {
 
 void User::handle_lobby() {
     while (protocol.is_connected()) {
-        Command command = INITIALIZE_COMMAND;
-        if (protocol.recv_command(command) == SOCKET_FAILED) {
-            throw LibError(errno, "Socket failed");
-        }
+        Command command = protocol.recv_command();
         if (interpretate_command_in_lobby(command)) {
             break;
         }

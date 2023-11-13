@@ -6,83 +6,75 @@
 
 #include <arpa/inet.h>
 
-#include "../common_src/constants.h"
 #include "../common_src/liberror.h"
 
 ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): socket(socket), parser(parser) {}
 
 // ------------------------------ PUBLIC METHODS ------------------------------
 
-int ProtocolServer::send_command(Command& command) {
+void ProtocolServer::send_command(const Command& command) {
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
-    char code[1] = {command.code};
+    char code[1] = {command.get_code()};
     if (socket.sendall(code, 1, &was_closed) < 0) {
-        return SOCKET_FAILED;
+        // throw
     }
-    switch (command.code) {
+    switch (code[0]) {
         case CASE_JOIN: {
-            if (send_match_id(command) < 0) {
-                return SOCKET_FAILED;
-            }
-            uint8_t number_of_players[1] = {command.number_of_players};
-            if (socket.sendall(number_of_players, 1, &was_closed) < 0) {
-                return SOCKET_FAILED;
-            }
+            send_match_id(command.get_match_id());
+            send_map_name(command.get_map_name());
             break;
         }
         case CASE_CREATE: {
-            if (send_match_id(command) < 0) {
-                return SOCKET_FAILED;
-            }
+            send_match_id(command.get_match_id());
+            send_map_name(command.get_map_name());
             break;
         }
         case CASE_MATCH_NOT_FOUND: {
-            if (send_match_id(command) < 0) {
-                return SOCKET_FAILED;
-            }
+            send_match_id(command.get_match_id());
             break;
         }
+        case CASE_LIST: {
+            send_list(command.get_matches_availables());
+        }
         case CASE_MATCH_ALREADY_EXISTS: {
-            if (send_match_id(command) < 0) {
-                return SOCKET_FAILED;
-            }
+            send_match_id(command.get_match_id());
             break;
         }
         case CASE_MATCH_FULL: {
-            if (send_match_id(command) < 0) {
-                return SOCKET_FAILED;
-            }
+            send_match_id(command.get_match_id());
             break;
         }
         default:
             break;
     }
-    return 1;
 }
 
-int ProtocolServer::recv_command(Command& command) {
+const Command ProtocolServer::recv_command() {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);
     if (ret < 0) {
-        return SOCKET_FAILED;
+        // throw
     }
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
     switch (code[0]) {
         case CASE_CREATE: {
-            return recv_create(command, code);
+            return recv_create(code);
         }
         case CASE_JOIN: {
-            return recv_join(command, code);
+            return recv_join(code);
         }
+        case CASE_LIST:
+            return recv_list(code);
         default:
             // Handle error
             break;
     }
-    return -1;
+    // Handle error
+    return Command(DEFAULT, DEFAULT);
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
@@ -161,7 +153,8 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         return SOCKET_FAILED;
     }
     for (auto& platform : platforms) {
-        char type[1] = {platform.type};
+        // Check if 'type' is really a char or if it's an int
+        BeamType type[1] = {platform.type};
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
@@ -195,45 +188,66 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
     int weapon;
     int state;
 */
-
+/*
+send_worm, list_matches, id_of_my_worm, complete the Command class
+*/
 int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
     
     return 1;
 }
 
-int ProtocolServer::recv_create(Command& command, const char* code) {
+const Command ProtocolServer::recv_create(const char* code) {
+    return recv_match_id(code);
+}
+
+const Command ProtocolServer::recv_join(const char* code) {
+    return recv_match_id(code);
+}
+
+const Command ProtocolServer::recv_match_id(const char* code) {
     uint match_id[1];
     int ret = socket.recvall(match_id, 4, &was_closed);
     if (ret < 0) {
-        return SOCKET_FAILED;
+        // throw
     }
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
     match_id[0] = ntohl(match_id[0]);
-    parser.parse_receiving_command_create(command, code, match_id);
-    return 0;
+    return Command(code[0], match_id[0]);
 }
 
-int ProtocolServer::recv_join(Command& command, const char* code) {
-    uint match_id[1];
-    int ret = socket.recvall(match_id, 4, &was_closed);
-    if (ret < 0) {
-        return SOCKET_FAILED;
-    }
-    if (was_closed) {
-        throw LibError(errno, "Socket was closed");
-    }
-    match_id[0] = ntohl(match_id[0]);
-    parser.parse_receiving_command_join(command, code, match_id);
-    return 0;
+const Command ProtocolServer::recv_list(const char* code) {
+    return Command(code[0], DEFAULT);
 }
 
-int ProtocolServer::send_match_id(const Command& command) {
-    uint match_id[1] = {command.match_id};
+void ProtocolServer::send_match_id(const uint _match_id) {
+    uint match_id[1] = {_match_id};
     match_id[0] = htonl(match_id[0]);
-    if (socket.sendall(match_id, 4, &was_closed) < 0) {
-        return SOCKET_FAILED;
+    socket.sendall(match_id, 4, &was_closed);
+}
+
+void ProtocolServer::send_list(const std::map<uint, std::string>& matches_availables) {
+    uint8_t num_of_matches[1] = {static_cast<uint8_t>(matches_availables.size())};
+    socket.sendall(num_of_matches, 1, &was_closed);
+    for (auto& match : matches_availables) {
+        uint match_id[1] = {match.first};
+        match_id[0] = htonl(match_id[0]);
+        if (socket.sendall(match_id, 4, &was_closed) < 0) {
+            // throw
+        }
+        uint8_t map_name_size[1] = {static_cast<uint8_t>(match.second.size())};
+        if (socket.sendall(map_name_size, 1, &was_closed) < 0) {
+            // throw
+        }
+        if (socket.sendall(match.second.c_str(), match.second.size(), &was_closed) < 0) {
+            // throw
+        }
     }
-    return 0;
+}
+
+void ProtocolServer::send_map_name(const std::string map_name) {
+    uint16_t map_name_size[1] = {htons(static_cast<uint16_t>(map_name.size()))};
+    socket.sendall(map_name_size, 2, &was_closed);
+    socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
 }

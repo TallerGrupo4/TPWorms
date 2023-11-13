@@ -1,4 +1,5 @@
 #include "../common_src/constants.h"
+#include "../common_src/command.h"
 #include "../common_src/snapshot.h"
 #include "action.h"
 
@@ -20,7 +21,9 @@ private:
     bool was_closed = false;
     ParserClient& parser;
     
-    int recv_match_id(uint* match_id);
+    void recv_match_id(uint* match_id);
+    std::string recv_map_name();
+    std::map<uint, std::string> recv_list();
     Snapshot recv_platforms();
     Snapshot recv_worms();
 
@@ -28,12 +31,12 @@ public:
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
 
     // Lobby
-    int recv_command(Command& command);
-    int send_command(Command& command);
+    const Command recv_command();
+    void send_command(const Command& command);
 
     // Match
     Snapshot recv_snapshot();
-    int send_action(Action& action);
+    void send_action(Action& action);
     bool is_connected() { return !was_closed;}
     
     bool operator==(const ProtocolClient& other) const { return this->socket == other.socket; }

@@ -10,7 +10,6 @@
 #include "../server_src/parser_server.h"
 #include "../server_src/protocol_server.h"
 #include "../common_src/dummy_socket.h"
-#include "../common_src/constants.h"
 #include "../common_src/snapshot.h"
 #include "../server_src/game_src/game_command.h"
 #include "../client_src/action.h"

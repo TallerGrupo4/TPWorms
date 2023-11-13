@@ -1,6 +1,5 @@
 #include <memory>
 
-#include "../common_src/constants.h"
 #include "../common_src/liberror.h"
 #include "../common_src/queue.h"
 #include "../common_src/snapshot.h"

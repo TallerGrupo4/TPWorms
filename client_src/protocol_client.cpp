@@ -9,96 +9,75 @@
 
 ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(socket), parser(parser) {}
 
-int ProtocolClient::send_command(Command& command) {
-    char code[1] = {command.code};
+void ProtocolClient::send_command(const Command& command) {
+    char code[1] = {command.get_code()};
     if (socket.sendall(code, 1, &was_closed) < 0) {
-        return SOCKET_FAILED;
+        // throw error...
     }
-    uint len[1] = {htonl(command.match_id)};
-    if (socket.sendall(len, 4, &was_closed) < 0) {
-        return SOCKET_FAILED;
+    if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
+        // Send match_id
+        uint len[1] = {htonl(command.get_match_id())};
+        if (socket.sendall(len, 4, &was_closed) < 0) {
+            // throw error...
+        }
     }
-    return 1;
 }
 
-int ProtocolClient::recv_command(Command& command) {
+const Command ProtocolClient::recv_command() {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);
     if (ret < 0) {
-        return SOCKET_FAILED;
+        // Throw
     }
-    command.code = code[0];
     switch (code[0]) {
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
-            uint8_t number_of_players[1];
-            ret = socket.recvall(number_of_players, 1, &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            parser.parse_receiving_command_join(command, code, match_id, number_of_players);
-            break;
+            std::string map_name = recv_map_name();
+            return Command(code[0], match_id[0], map_name);
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
-            parser.parse_receiving_command_create(command, code, match_id);
-            break;
+            std::string map_name = recv_map_name();
+            return Command(code[0], match_id[0], map_name);
+        }
+        case CASE_LIST: {
+            std::map<uint, std::string> matches_availables = recv_list();
+            return Command(code[0], matches_availables);
         }
         case CASE_MATCH_FULL: {
             uint match_id[1];
             recv_match_id(match_id);
-            parser.parse_receiving_command_full(command, code, match_id);
-            break;
+            return Command(code[0], match_id[0]);
         }
         case CASE_EXIT_SERVER: {
-            uint8_t number_of_players[1];
-            ret = socket.recvall(number_of_players, 1, &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            uint8_t player_index[1];
-            ret = socket.recvall(player_index, 1, &was_closed);
-            if (ret < 0) {
-                return SOCKET_FAILED;
-            }
-            if (was_closed) {
-                return WAS_CLOSED;
-            }
-            parser.parse_receiving_command_exit(command, code, number_of_players, player_index);
+            return Command(code[0], DEFAULT);
         }
         case CASE_MATCH_NOT_FOUND: {
             uint match_id[1];
             recv_match_id(match_id);
-            parser.parse_receiving_command_not_found(command, code, match_id);
-            break;
+            return Command(code[0], match_id[0]);
         }
         case CASE_MATCH_ALREADY_EXISTS: {
             uint match_id[1];
             recv_match_id(match_id);
-            parser.parse_receiving_command_already_exists(command, code, match_id);
-            break;
+            return Command(code[0], match_id[0]);
         }
         default:
             break;
     }
     if (was_closed) {
-        return WAS_CLOSED;
+        // Throw
     }
-    return 1;
+    // Throw error
+    return Command(DEFAULT, DEFAULT);
 }
 
 
 
-int ProtocolClient::send_action(Action& action) {
-    return action.send(socket, was_closed);
+void ProtocolClient::send_action(Action& action) {
+    action.send(socket, was_closed);
 }
 
 Snapshot ProtocolClient::recv_snapshot() {
@@ -117,7 +96,7 @@ Snapshot ProtocolClient::recv_platforms() {
     // if (was_closed) throw WasClosed;
     num_of_plats[0] = ntohs(num_of_plats[0]);
     for (int i = 0; i < num_of_plats[0]; i++) {
-        char type[1];
+        BeamType type[1];
         int pos_x[1];
         int pos_y[1];
         int angle[1];
@@ -146,14 +125,59 @@ Snapshot ProtocolClient::recv_worms() {
 }
 
 
-int ProtocolClient::recv_match_id(uint* match_id) {
+void ProtocolClient::recv_match_id(uint* match_id) {
     int ret = socket.recvall(match_id, 4, &was_closed);
     if (ret < 0) {
-        return SOCKET_FAILED;
+        // throw
     }
     if (was_closed) {
-        return WAS_CLOSED;
+        // throw
     }
     match_id[0] = ntohl(match_id[0]);
-    return 0;
+}
+
+std::string ProtocolClient::recv_map_name() {
+    uint16_t len[1];
+    socket.recvall(len, 2, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    len[0] = ntohs(len[0]);
+    std::vector<char> map_name(len[0]);
+    socket.recvall(map_name.data(), len[0], &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    std::string map_name_str(map_name.begin(), map_name.end());
+    return map_name_str;
+}
+
+std::map<uint, std::string> ProtocolClient::recv_list() {
+    uint8_t num_of_matches[1];
+    socket.recvall(num_of_matches, 1, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    std::map<uint, std::string> matches_availables;
+    for (int i = 0; i < num_of_matches[0]; i++) {
+        uint match_id[1];
+        socket.recvall(match_id, 4, &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        match_id[0] = ntohl(match_id[0]);
+        uint8_t map_name_size[1];
+        socket.recvall(map_name_size, 1, &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        std::vector<char> map_name(map_name_size[0]);
+        socket.recvall(map_name.data(), map_name_size[0], &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        std::string map_name_str(map_name.begin(), map_name.end());
+        matches_availables[match_id[0]] = map_name_str;
+    }
+    return matches_availables;
 }

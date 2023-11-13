@@ -38,9 +38,7 @@ void MainWindow::joinMatch() {
                 ui->JoinMatchLineEdit->clear();
                 ui->JoinMatchLineEdit->setText("Error: Unable to convert code");
             }
-            Command cmd = INITIALIZE_COMMAND;
-            cmd.code = CASE_JOIN;            //Constructor del struct command (atributos con const)
-            cmd.match_id = match_code;
+            Command cmd(CASE_JOIN, match_code);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
             switch (recv_cmd.code) {
@@ -84,9 +82,7 @@ QString code_string = ui->CreateMatchLineEdit->text();
                 ui->CreateMatchLineEdit->clear();
                 ui->CreateMatchLineEdit->setText("Error: Unable to convert code");
             }
-            Command cmd = INITIALIZE_COMMAND;
-            cmd.code = CASE_CREATE;
-            cmd.match_id = match_code;
+            Command cmd(CASE_CREATE, match_code);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
             switch (recv_cmd.code) {
