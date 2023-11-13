@@ -3,6 +3,8 @@
 
 #include <qt5/QtWidgets/QMainWindow>
 
+#include "../client.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -13,10 +15,14 @@ class MainWindow: public QMainWindow {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget* parent = nullptr);
+    explicit MainWindow(Client& client);
     ~MainWindow();
 
 private:
     Ui::MainWindow* ui;
+    Client& client;
+
+    void joinMatch();
+    void createMatch();
 };
 #endif  // MAINWINDOW_H

@@ -3,11 +3,14 @@
 
 #include <exception>
 #include <iostream>
+#include <chrono>
 
 #include <SDL2pp/SDL2pp.hh>
-#include <unistd.h>
+#include <thread>
 
-#include "Player.h"
+#include "action.h"
+#include "worm.h"
+#include "match.h"
 #include "client.h"
 #include "surfaces.h"
 #include "constantes_cliente.h"
@@ -17,12 +20,11 @@ private:
     Client& client;
     MatchSurfaces surfaces;
 
+    bool handleEvents(Match& match);
 
-    bool handleEvents(Player& player);
+    void render(SDL2pp::Renderer& renderer, Match& match);
 
-    void render(SDL2pp::Renderer& renderer, Player& player);
-
-    void update(Player& player, float dt);
+    void update(Match& match, std::chrono::duration<double> dt);
 
 public:
     explicit MatchRenderer(Client& client);

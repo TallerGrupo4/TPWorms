@@ -34,6 +34,7 @@ message("Headers generados: ${UIS_HEADERS}")
 
 add_library(lobby
   assets/resources.qrc
+  lobby_renderer.cpp
   mainwindow.cpp
   ${UIS_HEADERS})
 

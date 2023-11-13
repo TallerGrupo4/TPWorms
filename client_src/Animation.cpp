@@ -11,7 +11,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-Animation::Animation(SDL2pp::Texture& texture, bool is_orientation_horizontal):
+Animation::Animation(SDL2pp::Texture texture, bool is_orientation_horizontal):
         texture(texture),
         is_orientation_horizontal(is_orientation_horizontal),
         currentFrame(0),
@@ -20,19 +20,19 @@ Animation::Animation(SDL2pp::Texture& texture, bool is_orientation_horizontal):
                           (this->texture.GetHeight() / this->texture.GetWidth())),
         size(this->is_orientation_horizontal ? this->texture.GetHeight() :
                                                this->texture.GetWidth()),
-        elapsed(0.0f) {
+        elapsed(0) {
     assert(this->numFrames > 0);
     assert(this->size > 0);
 }
 
 Animation::~Animation() {}
 
-void Animation::update(float dt) {
+void Animation::update(std::chrono::duration<double> dt) {
     this->elapsed += dt;
     /* checks if the frame should be updated based on the time elapsed since the last update */
-    while (this->elapsed > FRAME_RATE) {
+    while (this->elapsed > FRAME_DURATION) {
         this->advanceFrame();
-        this->elapsed -= FRAME_RATE;
+        this->elapsed -= FRAME_DURATION;
     }
 }
 

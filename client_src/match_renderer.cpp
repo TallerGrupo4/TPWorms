@@ -4,10 +4,12 @@ using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client) : client(client) {}
 
-bool MatchRenderer::handleEvents(Player& player) {
+bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
-    // GameCommand game_command;
+    Action action;
     while (SDL_PollEvent(&event)) {
+        bool is_moving_right;
+        bool is_moving_left;
         switch (event.type) {
             case SDL_KEYDOWN: {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
@@ -16,11 +18,18 @@ bool MatchRenderer::handleEvents(Player& player) {
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT:
-                        player.moveLeft();
+                        action.movement_x = 10;
+                        action.type = 0;
+                        client.send_action(action);
+                        //client.push_game_command(game_command);
+                        //player.moveLeft();
                         break;
                     case SDLK_RIGHT:
-                        // game_command.move = RIGHT;
-                        player.moveRigth();
+                        action.movement_x = 10;
+                        action.type = 1;
+                        client.send_action(action);
+                        //client.push_game_command(game_command);
+                        //player.moveRigth();
                         break;
                 }
             }  // Fin KEY_DOWN
@@ -29,15 +38,25 @@ bool MatchRenderer::handleEvents(Player& player) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_LEFT:
-                        player.stopMoving();
+                        action.movement_x = 0;
+                        action.type = 0;
+                        client.send_action(action);
+                        //player.stopMoving();
                         break;
                     case SDLK_RIGHT:
-                        player.stopMoving();
+                        action.movement_x = 0;
+                        action.type = 1;
+                        client.send_action(action);
+                        //player.stopMoving();
                         break;
                 }
             }  // Fin KEY_UP
             break;
             case SDL_MOUSEMOTION:
+                // SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
+                // SDL_GetRelativeMouseMode()
+                // SDL_SetRelativeMouseMode()
+                //mouseMotionEvent.xrel
                 // std::cout << "Oh! Mouse" << std::endl;
                 break;
             case SDL_QUIT:
@@ -49,14 +68,14 @@ bool MatchRenderer::handleEvents(Player& player) {
     return true;
 }
 
-void MatchRenderer::render(SDL2pp::Renderer& renderer, Player& player) {
+void MatchRenderer::render(SDL2pp::Renderer& renderer, Match& match) {
     renderer.SetDrawColor(0x80, 0x80, 0x80);
     renderer.Clear();
-    player.render(renderer);
+    match.render(renderer);
     renderer.Present();
 }
 
-void MatchRenderer::update(Player& player, float dt) { player.update(dt); }
+void MatchRenderer::update(Match& match, std::chrono::duration<double> dt) {}//{ match.update(dt); }
 
 int MatchRenderer::start() {
     try {
@@ -71,20 +90,29 @@ int MatchRenderer::start() {
         Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         // Load sprites image as a new texture
-        Texture worm_sprite(renderer, surfaces.walking_worm);
-        Player player(worm_sprite, true, false);
+        Match match(client.recv_snapshot(),surfaces,renderer);
+        //Texture worm_sprite(renderer, surfaces.walking_worm);
+        //Worm player(worm_sprite, true, false);
+        auto last_frame_time = std::chrono::high_resolution_clock::now();
+
         bool running = true;
         // Game state
         while (running) {
-            running = handleEvents(player);
-            // Snapshot snapshot = client.pop_snapshot();
-            // update(snapshot, FRAME_RATE);
-            // render(renderer);
-            update(player, FRAME_RATE);
-            render(renderer, player);
+            auto start = std::chrono::high_resolution_clock::now();
+            auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(start - last_frame_time);
+
+            running = handleEvents(match);
+            //while
+                // Snapshot snpsht = client.recv_snapshot();
+                // match.update(snpsht,elapsed_time);
+                // //update(match, elapsed_time);
+            Snapshot snpsht = client.recv_snapshot();
+            match.update(snpsht,elapsed_time);
+            render(renderer, match);
             // la cantidad de segundos que debo dormir se debe ajustar en función
             // de la cantidad de tiempo que demoró el handleEvents y el render
-            usleep(FRAME_RATE);
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            last_frame_time = start;
         }
     } catch (std::exception& e) {
         // If case of error, print it and exit with error
