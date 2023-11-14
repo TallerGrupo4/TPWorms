@@ -10,6 +10,7 @@ Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& 
     angle(worm_snpsht.angle),
     id(worm_snpsht.id),
     health_points(worm_snpsht.health),
+    max_health(worm_snpsht.max_health),
     state(worm_snpsht.state),
     weapon(worm_snpsht.weapon),
     x(worm_snpsht.pos_x),

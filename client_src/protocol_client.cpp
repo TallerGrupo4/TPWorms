@@ -120,7 +120,7 @@ Snapshot ProtocolClient::recv_platforms() {
         // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
         // The client must know that it probably has to divide by 1000
         // (The platforms have integers instead of floats from now on in the client)
-        PlatformSnapshot platform(type[0], pos_x[0], pos_y[0], angle[0]);
+        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], angle[0]);
         snapshot.platforms.push_back(platform);
     }
     return snapshot;

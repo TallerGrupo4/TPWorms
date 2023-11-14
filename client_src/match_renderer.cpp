@@ -8,8 +8,8 @@ bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
     Action action;
     while (SDL_PollEvent(&event)) {
-        bool is_moving_right;
-        bool is_moving_left;
+        //bool is_moving_right;
+        //bool is_moving_left;
         switch (event.type) {
             case SDL_KEYDOWN: {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
