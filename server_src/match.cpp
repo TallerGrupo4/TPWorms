@@ -1,4 +1,5 @@
 #include "./match.h"
+#include <cstdint>
 #include <iostream>
 #include <memory>
 
@@ -68,26 +69,42 @@ void Match::run() {
     int rate = FRAME_TIME;
     std::shared_ptr<GameCommand> game_command;
     auto time_1 = std::chrono::high_resolution_clock::now();
+    uint8_t turn = 0;
 
     try {
         while (keep_running) {
-            std::cout << "Match running" << std::endl;
-            if (queue->try_pop(game_command)) {
-                std::cout << "GameCommand received" << std::endl;
-                // game_command->execute(game);
-                
-                // // game.step();
+            /*
+            while (true) {
+                commands = getAllCommands();
+                for command in commands {
+                    command->execute(gamewordl);
+                }
+                loopsToSimulate = calculateRate(); // depende de si te atrasaste o no
+                gamewordl.simulateStep(loopsToSimulate);
+                broadcastSnapshot();  
+                sleep(...);
             }
+            */
+            std::cout << "Match running" << std::endl;
+             
+            while (queue->try_pop(game_command)) {
+                std::cout << "GameCommand received" << std::endl;
+                // The game_command should notify the game if it is a end_turn game_command
+                // game_command->execute(game)
+                // game.step();  // Check if turn ended (sum ticks, etc)
+            }
+            
+            // All of the above is what the game.get_game_snapshot() should do (and more)
+            // Snapshot snapshot = game.get_game_snapshot();
+
+            // If worms is empty, it will send the whole map
+            // Else, it will send only the worms
+            // Doing it this way, saves us from doing polymorfism in the Snapshot class.
             std::vector<WormSnapshot> worms;
             PlatformSnapshot platform('p', 0, 0, 0);
             std::vector<PlatformSnapshot> platforms;
             platforms.push_back(platform);
-            // If worms is empty, it will send the whole map
-            // Else, it will send only the worms
-            // Doing it this way, saves us from doing polymorfism in the Snapshot class.
             Snapshot snapshot(worms, platforms);
-            // All of the above is what the game.get_game_snapshot() should do (and more)
-            // Snapshot snapshot = game.get_game_snapshot();
 
             // Now it comes the part where we calculate the time we spent in the loop
             auto time_2 = std::chrono::high_resolution_clock::now();
@@ -106,12 +123,6 @@ void Match::run() {
 
             // Now we reset the time_1 (our 'clock')
             time_1 = std::chrono::high_resolution_clock::now();
-
-            // Snapshot snapshot;
-            // snapshot.code = 1;
-            // snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
-            // game.step();
-            // Snapshot snapshot = game.get_game_snapshot();
 
             // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         }

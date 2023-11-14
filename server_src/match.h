@@ -28,7 +28,7 @@ private:
     char id_counter;
     std::chrono::high_resolution_clock::time_point start_loop_time;
     uint32_t total_loop_time; 
-
+    
     void send_map();
     void move_player(int direction, char id);
     void push_all_players(Snapshot snapshot);
