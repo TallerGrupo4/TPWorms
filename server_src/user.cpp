@@ -67,6 +67,7 @@ void User::handle_match() {
 
 void User::handle_lobby() {
     while (protocol.is_connected()) {
+        std::cout << "wating for a command" << std::endl;
         Command command = protocol.recv_command();
         if (interpretate_command_in_lobby(command)) {
             break;
@@ -76,36 +77,48 @@ void User::handle_lobby() {
 
 bool User::interpretate_command_in_lobby(Command& command) {
     bool in_match = false;
-    switch (command.code) {
+    char code;
+    match_id = command.get_match_id();
+    uint8_t worm_id;
+    switch (command.get_code()) {
         case CASE_CREATE: {
             try {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.match_id);
+                command.get_match_id(), worm_id);
                 in_match = true;
-                match_id = command.match_id;
+                code = CASE_CREATE;
                 std::cout << "Match created with id: " << match_id << std::endl;
             } catch (const MatchAlreadyExists& err) {
-                command.code = CASE_MATCH_ALREADY_EXISTS;
-                std::cout << "Match already exists with id: " << command.match_id << std::endl;
+                code = CASE_MATCH_ALREADY_EXISTS;
+                std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
             }
-            // parser.parse_sending_command(command);
-            protocol.send_command(command);
+            Command command_to_send(code, match_id);
+            command_to_send.worm_id = worm_id;
+            protocol.send_command(command_to_send);
             break;
         }
         case CASE_JOIN: {
             try {
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.match_id);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_id);
                 in_match = true;
-                std::cout << "Match joined with id: " << command.match_id << std::endl;
+                code = CASE_JOIN;
+                std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
             } catch (const MatchFull& err) {
-                command.code = CASE_MATCH_FULL;
-                std::cout << "Match is full with id: " << command.match_id << std::endl;
+                code = CASE_MATCH_FULL;
+                std::cout << "Match is full with id: " << command.get_match_id() << std::endl;
             } catch (const MatchNotFound& err) {
-                command.code = CASE_MATCH_NOT_FOUND;
-                std::cout << "Match not found with id: " << command.match_id << std::endl;
+                code = CASE_MATCH_NOT_FOUND;
+                std::cout << "Match not found with id: " << command.get_match_id() << std::endl;
             }
-            // parser.parse_sending_command(command);
-            protocol.send_command(command);
+            Command command_to_send(code, match_id);
+            command_to_send.worm_id = worm_id;
+            protocol.send_command(command_to_send);
+            break;
+        }
+        case CASE_LIST: {
+            std::map<uint, std::string> matches_availables = monitor_matches.list_matches();
+            Command command_to_send(CASE_LIST, matches_availables);
+            protocol.send_command(command_to_send);
             break;
         }
         default:

@@ -34,13 +34,19 @@ const Command ProtocolClient::recv_command() {
             uint match_id[1];
             recv_match_id(match_id);
             std::string map_name = recv_map_name();
-            return Command(code[0], match_id[0], map_name);
+            uint8_t worm_id = recv_worm_id();
+            Command command(code[0], match_id[0], map_name);
+            command.worm_id = worm_id;
+            return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
             std::string map_name = recv_map_name();
-            return Command(code[0], match_id[0], map_name);
+            uint8_t worm_id = recv_worm_id();
+            Command command(code[0], match_id[0], map_name);
+            command.worm_id = worm_id;
+            return command;
         }
         case CASE_LIST: {
             std::map<uint, std::string> matches_availables = recv_list();
@@ -180,4 +186,13 @@ std::map<uint, std::string> ProtocolClient::recv_list() {
         matches_availables[match_id[0]] = map_name_str;
     }
     return matches_availables;
+}
+
+uint8_t ProtocolClient::recv_worm_id() {
+    uint8_t worm_id[1];
+    socket.recvall(worm_id, 1, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    return worm_id[0];
 }

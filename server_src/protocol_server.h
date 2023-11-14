@@ -27,6 +27,7 @@ private:
     void send_match_id(const uint _match_id);
     void send_list(const std::map<uint, std::string>& matches_availables);
     void send_map_name(const std::string map_name);
+    void send_worm_id(const uint8_t worm_id);
     const Command recv_create(const char* code);
     const Command recv_join(const char* code);
     const Command recv_match_id(const char* code);

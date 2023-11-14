@@ -50,11 +50,11 @@ public:
             float angle = platform["angle"].as<float>();
             if (platform["type"].as<std::string>() == "small") {
                 create_small_platform(x, y, angle);
-                PlatformSnapshot snap(x, y, angle, 's');
+                PlatformSnapshot snap(Large25, x, y, angle/*, 's'*/); // // I HAVE NO IDEA WHAT 's' MEANS
                 platforms_snap.push_back(snap);
             } else {
                 create_big_platform(x, y, angle);
-                PlatformSnapshot snap(x, y, angle, 'b');
+                PlatformSnapshot snap(Large25, x, y, angle/*, 'b'*/); // // I HAVE NO IDEA WHAT 'b' MEANS
                 platforms_snap.push_back(snap);
             }
         }

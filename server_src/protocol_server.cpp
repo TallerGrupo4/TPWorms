@@ -24,11 +24,13 @@ void ProtocolServer::send_command(const Command& command) {
         case CASE_JOIN: {
             send_match_id(command.get_match_id());
             send_map_name(command.get_map_name());
+            send_worm_id(command.worm_id);
             break;
         }
         case CASE_CREATE: {
             send_match_id(command.get_match_id());
             send_map_name(command.get_map_name());
+            send_worm_id(command.worm_id);
             break;
         }
         case CASE_MATCH_NOT_FOUND: {
@@ -53,6 +55,7 @@ void ProtocolServer::send_command(const Command& command) {
 
 const Command ProtocolServer::recv_command() {
     char code[1];
+    std::cout << "Waiting for command..." << std::endl;
     int ret = socket.recvall(code, 1, &was_closed);
     if (ret < 0) {
         // throw
@@ -143,7 +146,6 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_mov() {
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
-    // parser.parse_receiving_game_command(game_command, MOV, id_worm, movement_x);
     return std::make_shared<MoveCommand>(id_worm[0], movement_x[0]);
 }
 
@@ -178,21 +180,22 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
 }
 
 /*
-    char id;
-    float pos_x;
-    float pos_y;
-    float angle;
-    int max_health;
-    int health;
-    int direction;
-    int weapon;
-    int state;
-*/
-/*
-send_worm, list_matches, id_of_my_worm, complete the Command class
 */
 int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
-    
+
+    // COMPLETE THIS!!!!
+
+    /*
+        char id;
+        float pos_x;
+        float pos_y;
+        float angle;
+        int max_health;
+        int health;
+        int direction;
+        int weapon;
+        int state;
+    */
     return 1;
 }
 
@@ -250,4 +253,9 @@ void ProtocolServer::send_map_name(const std::string map_name) {
     uint16_t map_name_size[1] = {htons(static_cast<uint16_t>(map_name.size()))};
     socket.sendall(map_name_size, 2, &was_closed);
     socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
+}
+
+void ProtocolServer::send_worm_id(const uint8_t worm_id) {
+    uint8_t id[1] = {worm_id};
+    socket.sendall(id, 1, &was_closed);
 }

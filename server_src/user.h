@@ -19,7 +19,6 @@
 class User: public Thread {
 private:
     Socket socket;
-    // std::shared_ptr<Queue<GameCommand*>> queue_match = NULL;
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue_match = NULL;
     ParserServer parser;
     ProtocolServer protocol;

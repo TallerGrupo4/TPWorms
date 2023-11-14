@@ -46,6 +46,8 @@ public:
     
     void run() override;
     void start_match();
+
+    std::string get_map_name();
 };
 
 #endif

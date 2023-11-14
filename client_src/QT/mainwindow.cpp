@@ -41,7 +41,7 @@ void MainWindow::joinMatch() {
             Command cmd(CASE_JOIN, match_code);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
-            switch (recv_cmd.code) {
+            switch (recv_cmd.get_code()) {
             case CASE_MATCH_FULL:
                 ui->JoinMatchLineEdit->clear();
                 ui->JoinMatchLineEdit->setText("Error: Match full");
@@ -85,7 +85,7 @@ QString code_string = ui->CreateMatchLineEdit->text();
             Command cmd(CASE_CREATE, match_code);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
-            switch (recv_cmd.code) {
+            switch (recv_cmd.get_code()) {
             case CASE_MATCH_ALREADY_EXISTS:
                 ui->CreateMatchLineEdit->clear();
                 ui->CreateMatchLineEdit->setText("Error: Match already exist");

@@ -85,7 +85,7 @@ void Match::run() {
         // It doesn't matter what I am sending.
         // It is just to prove that the server and client are working with snapshots (and they do).
         std::vector<WormSnapshot> worms;
-        PlatformSnapshot platform('p', 0, 0, 0);
+        PlatformSnapshot platform(/*'p'*/Large25, 0, 0, 0); // I HAVE NO IDEA WHAT 'p' MEANS
         std::vector<PlatformSnapshot> platforms;
         platforms.push_back(platform);
         Snapshot snapshot(worms, platforms);
@@ -106,5 +106,7 @@ bool Match::has_started() { return match_started; }
 
 // std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> Match::get_queue() { return queue; }
+
+std::string Match::get_map_name() { return name; }
 
 Match::~Match() {}

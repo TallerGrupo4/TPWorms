@@ -26,6 +26,7 @@ private:
     std::map<uint, std::string> recv_list();
     Snapshot recv_platforms();
     Snapshot recv_worms();
+    uint8_t recv_worm_id();
 
 public:
     explicit ProtocolClient(Socket& socket, ParserClient& parser);
