@@ -48,14 +48,19 @@ Command Client::recv_lobby_command() {
     return command;
 }
 
-Snapshot Client::recv_snapshot() {
+// Snapshot Client::recv_snapshot() {
+bool Client::recv_snapshot(Snapshot& snapshot) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
     }
-    Snapshot snapshot;
-    queue_receiver_match->try_pop(snapshot);
-    return snapshot;
+    if (queue_receiver_match->try_pop(snapshot)) {
+        return true;
+    }
+    return false;
+    // Snapshot snapshot;
+    // queue_receiver_match->try_pop(snapshot);
+    // return snapshot;
 }
 
 void Client::send_lobby_command(Command command) {

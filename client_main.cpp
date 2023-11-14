@@ -145,8 +145,11 @@ int main(int argc, char* argv[]) {
         }
         client.send_action(action);
         // GameSnapshot game_snapshot = client.recv_game_snapshot();
-        Snapshot snapshot = client.recv_snapshot();
-        print_snapshot(snapshot);
+        Snapshot snapshot;
+        while (client.recv_snapshot(snapshot)) {
+            print_snapshot(snapshot);
+        }
+        // Snapshot snapshot = client.recv_snapshot();
     }
     // Render_match();
     
