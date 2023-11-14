@@ -3,22 +3,25 @@
 
 #include "../../common_src/snapshot.h"
 
-#define PLAT_SMALL 6
-#define PLAT_BIG 3
+#define PLAT_SMALL 3
+#define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8
 #define PLAT_FRICTION 0.5
 
-#define PLAYER_WIDTH 0.5
-#define PLAYER_HEIGHT 1.5
+#define PLAYER_WIDTH 1
+#define PLAYER_HEIGHT 1
 #define PLAYER_FRICTION 0.5
 
 #ifndef GAMEBUILDER_H
 #define GAMEBUILDER_H
 
+
+#define DEG_TO_RAD 0.0174532925199432957f
+
 class GameBuilder {
     b2World& world;
 
-    void create_platform(float x, float y, float width, float height) {
+    void create_platform(float x, float y, float width, float height, float angle) {
         b2BodyDef platform_def;
         platform_def.type = b2_staticBody;
         platform_def.position.Set(x, y);
@@ -47,27 +50,31 @@ public:
             YAML::Node platform = *it;
             float x = platform["x"].as<float>();
             float y = platform["y"].as<float>();
-            float angle = platform["angle"].as<float>();
-            if (platform["type"].as<std::string>() == "small") {
-                create_small_platform(x, y, angle);
-                PlatformSnapshot snap(Large25, x, y, angle/*, 's'*/); // // I HAVE NO IDEA WHAT 's' MEANS
+            BeamType type = (BeamType)platform["type"].as<char>();
+            create_platform_type(x, y, type);
+            if (type <= 8) { //Esto es para no hacer un switch gigantezco devuelta
+                PlatformSnapshot snap(type, x - PLAT_BIG/2, y + PLAT_HEIGHT/2);
                 platforms_snap.push_back(snap);
             } else {
-                create_big_platform(x, y, angle);
-                PlatformSnapshot snap(Large25, x, y, angle/*, 'b'*/); // // I HAVE NO IDEA WHAT 'b' MEANS
+                PlatformSnapshot snap(type, x - PLAT_SMALL/2, y + PLAT_HEIGHT);
                 platforms_snap.push_back(snap);
             }
         }
+        YAML::Node dimensions = map["dimensions"];
+        int width = dimensions["width"].as<int>();
+        int height = dimensions["height"].as<int>();
         Snapshot map_snap({},platforms_snap);
+        map_snap.set_dimensions(width, height);
+
         return map_snap;
     }
 
     void create_small_platform(float x, float y, float angle) {
-        create_platform(x, y, PLAT_SMALL, PLAT_HEIGHT);
+        create_platform(x, y, PLAT_SMALL, PLAT_HEIGHT , angle);
     }
 
     void create_big_platform(float x, float y, float angle) {
-        create_platform(x, y, PLAT_BIG, PLAT_HEIGHT);
+        create_platform(x, y, PLAT_BIG, PLAT_HEIGHT , angle);
     }
 
     b2Body* create_worm(float x, float y) {  // TODO: Create Class Worm
@@ -84,6 +91,69 @@ public:
         worm->CreateFixture(&worm_fixture);
         return worm;
     }
+
+
+
+    void create_platform_type(float x , float y, BeamType type){
+        switch (type){
+            case LargeVertical:
+                create_big_platform(x, y, 90 * DEG_TO_RAD);
+                break;
+            case Large65:
+                create_big_platform(x, y, 65 * DEG_TO_RAD);
+                break;
+            case Large45:
+                create_big_platform(x, y, 45 * DEG_TO_RAD);
+                break;
+            case Large25:
+                create_big_platform(x, y, 25 * DEG_TO_RAD);
+                break;
+            case LargeHorizontal:
+                create_big_platform(x, y, 0);
+                break;
+            case LargeMinus25:
+                create_big_platform(x, y, -25 * DEG_TO_RAD);
+                break;
+            case LargeMinus45:
+                create_big_platform(x, y, -45 * DEG_TO_RAD);
+                break;
+            case LargeMinus65:
+                create_big_platform(x, y, -65 * DEG_TO_RAD);
+                break;
+            case LargeVerticalFlipped:
+                create_big_platform(x, y, -90 * DEG_TO_RAD);
+                break;
+            case ShortVertical:
+                create_small_platform(x, y, 90 * DEG_TO_RAD);
+                break;
+            case Short65:
+                create_small_platform(x, y, 65 * DEG_TO_RAD);
+                break;
+            case Short45:
+                create_small_platform(x, y, 45 * DEG_TO_RAD);
+                break;
+            case Short25:
+                create_small_platform(x, y, 25 * DEG_TO_RAD);
+                break;
+            case ShortHorizontal:
+                create_small_platform(x, y, 0);
+                break;
+            case ShortMinus25:
+                create_small_platform(x, y, -25 * DEG_TO_RAD);
+                break;
+            case ShortMinus45:
+                create_small_platform(x, y, -45 * DEG_TO_RAD);
+                break;
+            case ShortMinus65:
+                create_small_platform(x, y, -65 * DEG_TO_RAD);
+                break;
+            case ShortVerticalFlipped:
+                create_small_platform(x, y, -90 * DEG_TO_RAD);
+                break;
+        }  
+    }
+
+
 };
 
 #endif
