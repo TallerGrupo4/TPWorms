@@ -6,7 +6,7 @@
 #define SNAPSHOT_H
 
 enum BeamType : char {
-    LargeVertical,
+    LargeVertical, // 0
     Large65,
     Large45,
     Large25,
@@ -14,7 +14,7 @@ enum BeamType : char {
     LargeMinus25,
     LargeMinus45,
     LargeMinus65,
-    LargeVerticalFlipped,
+    LargeVerticalFlipped, // 8
     ShortVertical,
     Short65,
     Short45,
@@ -23,7 +23,7 @@ enum BeamType : char {
     ShortMinus25,
     ShortMinus45,
     ShortMinus65,
-    ShortVerticalFlipped,
+    ShortVerticalFlipped, // 17
 };
 
 class WormSnapshot {
@@ -34,16 +34,17 @@ public:
     float angle;
     int max_health;
     int health;
-    int direction;
+    char direction;
     int weapon;
     int state;
 
-    WormSnapshot(char id, float pos_x, float pos_y, float angle, int health, int direction, int weapon,
+    WormSnapshot(char id, float pos_x, float pos_y, float angle, int max_health, int health, char direction, int weapon,
                  int state):
             id(id),
             pos_x(pos_x),
             pos_y(pos_y),
             angle(angle),
+            max_health(max_health),
             health(health),
             direction(direction),
             weapon(weapon),
@@ -56,10 +57,10 @@ public:
     BeamType type;
     float pos_x;
     float pos_y;
-    float angle;
+    
 
-    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float angle):
-            type(type), pos_x(pos_x), pos_y(pos_y), angle(angle) {};
+    PlatformSnapshot(BeamType type, float pos_x, float pos_y):
+            type(type), pos_x(pos_x), pos_y(pos_y) {};
     ~PlatformSnapshot(){};
 };
  
@@ -68,64 +69,19 @@ class Snapshot {
 public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
+    int height;
+    int width;
 
     Snapshot(){};
     Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
             worms(worms), platforms(platforms){};
     
     ~Snapshot(){};
+
+    void set_dimensions(int height, int width){
+        this->height = height;
+        this->width = width;
+    }
 };
-
-// Snapshot game_state(){
-    //return Snapshot(worms , {});
-// }
-
-// Snapshot map_state(){
-    //return Snapshot({}, platforms);
-
-
-
-// // server
-// WormSnapshot worm();
-// parser.parse_snapshot(Snapshot worm)
-// protocol.send_worm(Snapshot worm)
-
-// // client
-// received;
-// if (created) protocol.recv_map(received)
-// else protocol.recv_worm(received)
-// parser.parse(received) // Snapshot received
-// sdl.render(receieved)
-
-
-// TODO: IMPLEMENT POLYMORPHISM
-
-// class GameSnapshot: public Snapshot {
-//     std::vector<WormSnapshot> worms;
-//     // std::vector<ProjectileSnapshot> projectiles;
-
-// public:
-//     GameSnapshot(std::vector<WormSnapshot> worms): worms(worms){};
-//     ~GameSnapshot(){};
-
-//     std::vector<WormSnapshot> get_worms() { return worms; }
-
-//     // std::vector<ProjectileSnapshot> get_projectiles(){
-//     //     return projectiles;
-//     // }
-// };
-
-
-
-// class MapSnapshot: public Snapshot {
-//     std::vector<PlatformSnapshot> platforms;
-
-// public:
-//     MapSnapshot(std::vector<PlatformSnapshot> platforms): platforms(platforms){};
-//     ~MapSnapshot(){};
-
-//     std::vector<PlatformSnapshot> get_platforms() { return platforms; }
-// };
-
 
 #endif  // SNAPSHOT_H

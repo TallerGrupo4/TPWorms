@@ -1,3 +1,4 @@
+#include <memory>
 #include "../common_src/constants.h"
 #include "../common_src/command.h"
 #include "../common_src/snapshot.h"
@@ -37,6 +38,7 @@ public:
 
     // Match
     Snapshot recv_snapshot();
+    // void send_action(std::shared_ptr<Action> action);
     void send_action(Action& action);
     bool is_connected() { return !was_closed;}
     

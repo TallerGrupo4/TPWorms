@@ -84,12 +84,12 @@ void Match::run() {
 
         // It doesn't matter what I am sending.
         // It is just to prove that the server and client are working with snapshots (and they do).
-        std::vector<WormSnapshot> worms;
-        PlatformSnapshot platform(/*'p'*/Large25, 0, 0, 0); // I HAVE NO IDEA WHAT 'p' MEANS
-        std::vector<PlatformSnapshot> platforms;
-        platforms.push_back(platform);
-        Snapshot snapshot(worms, platforms);
-        push_all_players(snapshot);
+        // std::vector<WormSnapshot> worms;
+        // PlatformSnapshot platform(/*'p'*/Large25, 0, 0, 0); // I HAVE NO IDEA WHAT 'p' MEANS
+        // std::vector<PlatformSnapshot> platforms;
+        // platforms.push_back(platform);
+        // Snapshot snapshot(worms, platforms);
+        // push_all_players(snapshot);
 
         // std::this_thread::sleep_for(std::chrono::milliseconds(16));
 

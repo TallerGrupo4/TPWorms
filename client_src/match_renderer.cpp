@@ -1,4 +1,5 @@
 #include "match_renderer.h"
+#include <memory>
 
 using namespace SDL2pp;
 
@@ -6,6 +7,7 @@ MatchRenderer::MatchRenderer(Client& client) : client(client) {}
 
 bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
+    // std::shared_ptr<Action> action;
     Action action;
     while (SDL_PollEvent(&event)) {
         //bool is_moving_right;

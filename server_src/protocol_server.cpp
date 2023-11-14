@@ -155,7 +155,6 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         return SOCKET_FAILED;
     }
     for (auto& platform : platforms) {
-        // Check if 'type' is really a char or if it's an int
         BeamType type[1] = {platform.type};
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -170,11 +169,6 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int angle[1] = {static_cast<int>(platform.angle * MULTIPLIER)};
-        angle[0] = htonl(angle[0]);
-        if (socket.sendall(angle, 4, &was_closed) < 0) {
-            return SOCKET_FAILED;
-        }
     }
     return 1;
 }
@@ -182,20 +176,55 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
 /*
 */
 int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
-
-    // COMPLETE THIS!!!!
-
-    /*
-        char id;
-        float pos_x;
-        float pos_y;
-        float angle;
-        int max_health;
-        int health;
-        int direction;
-        int weapon;
-        int state;
-    */
+    uint16_t num_of_worms[1] = {htons(worms.size())};
+    if (socket.sendall(num_of_worms, 2, &was_closed) < 0) {
+        return SOCKET_FAILED;
+    }
+    for (auto& worm : worms) {
+        char id[1] = {worm.id};
+        if (socket.sendall(id, 1, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int pos_x[1] = {static_cast<int>(worm.pos_x * MULTIPLIER)};
+        pos_x[0] = htonl(pos_x[0]);
+        if (socket.sendall(pos_x, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int pos_y[1] = {static_cast<int>(worm.pos_y * MULTIPLIER)};
+        pos_y[0] = htonl(pos_y[0]);
+        if (socket.sendall(pos_y, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int angle[1] = {static_cast<int>(worm.angle * MULTIPLIER)};
+        angle[0] = htonl(angle[0]);
+        if (socket.sendall(angle, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int max_health[1] = {worm.max_health};
+        max_health[0] = htonl(max_health[0]);
+        if (socket.sendall(max_health, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int health[1] = {worm.health};
+        health[0] = htonl(health[0]);
+        if (socket.sendall(health, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        char direction[1] = {worm.direction};
+        if (socket.sendall(direction, 1, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int weapon[1] = {worm.weapon};
+        weapon[0] = htonl(weapon[0]);
+        if (socket.sendall(weapon, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int state[1] = {worm.state};
+        state[0] = htonl(state[0]);
+        if (socket.sendall(state, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+    }
     return 1;
 }
 

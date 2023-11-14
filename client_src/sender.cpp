@@ -1,6 +1,7 @@
 #include "sender.h"
 
 #include <iostream>
+#include <memory>
 
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
@@ -21,6 +22,7 @@ ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_l
 void ClientSender::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
+            // std::shared_ptr<Action> action = queue_match->pop();
             Action action = queue_match->pop();
             protocol.send_action(action);
         }

@@ -33,7 +33,7 @@ public:
         float pos_y = body->GetPosition().y;
         float angle = body->GetAngle();
         int direction = body->GetLinearVelocity().x > 0 ? 1 : -1;
-        WormSnapshot snapshot(id, pos_x, pos_y, angle, life, direction, weapon, state);
+        WormSnapshot snapshot(id, pos_x, pos_y, angle, 100, 100, direction, weapon, state);
         return snapshot;
     }
 };

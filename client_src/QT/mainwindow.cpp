@@ -52,7 +52,7 @@ void MainWindow::joinMatch() {
                 ui->JoinMatchLineEdit->setText("Error: Match not found");
                 break;
 
-            case CASE_START:
+            case CASE_JOIN:
                 exit_succesful = true;
                 this->close();
                 break;
@@ -91,7 +91,7 @@ QString code_string = ui->CreateMatchLineEdit->text();
                 ui->CreateMatchLineEdit->setText("Error: Match already exist");
                 break;
 
-            case CASE_START:
+            case CASE_CREATE:
                 exit_succesful = true;
                 this->close();
                 break;
@@ -103,5 +103,8 @@ QString code_string = ui->CreateMatchLineEdit->text();
         }
     }
 }
+
+// Create a START botton in qt that sends a StartCommand to the server
+// client.send_action(StartAction)
 
 MainWindow::~MainWindow() { delete ui; }

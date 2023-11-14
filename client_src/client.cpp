@@ -66,6 +66,8 @@ void Client::send_lobby_command(Command command) {
     protocol.send_command(command);
 }
 
+
+// void Client::send_action(std::shared_ptr<Action> action) {
 void Client::send_action(Action action) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");

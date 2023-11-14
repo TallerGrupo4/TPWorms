@@ -23,6 +23,7 @@ private:
     std::atomic<bool> is_dead = false;
     std::atomic<bool> in_match = false;
     std::shared_ptr<Queue<Command>> queue_sender_lobby;
+    // std::shared_ptr<Queue<std::shared_ptr<Action>>> queue_sender_match;
     std::shared_ptr<Queue<Action>> queue_sender_match;
     std::shared_ptr<Queue<Command>> queue_receiver_lobby;
     std::shared_ptr<Queue<Snapshot>> queue_receiver_match;
@@ -45,6 +46,7 @@ public:
 
     void send_lobby_command(Command command);
 
+    // void send_action(std::shared_ptr<Action>);
     void send_action(Action action);
 
     void exit();

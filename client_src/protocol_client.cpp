@@ -1,7 +1,9 @@
 #include "protocol_client.h"
 #include "../common_src/liberror.h"
 
+#include <cstdint>
 #include <iostream>
+#include <memory>
 #include <vector>
 
 #include <arpa/inet.h>
@@ -82,6 +84,7 @@ const Command ProtocolClient::recv_command() {
 
 
 
+// void ProtocolClient::send_action(std::shared_ptr<Action> action) {
 void ProtocolClient::send_action(Action& action) {
     action.send(socket, was_closed);
 }
@@ -105,8 +108,41 @@ Snapshot ProtocolClient::recv_platforms() {
         BeamType type[1];
         int pos_x[1];
         int pos_y[1];
-        int angle[1];
         socket.recvall(type, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(pos_x, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(pos_y, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+    // if (was_closed) throw WasClosed;
+        pos_x[0] = ntohl(pos_x[0]);
+        pos_y[0] = ntohl(pos_y[0]);
+        // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
+        // The client must know that it probably has to divide by 1000
+        // (The platforms have integers instead of floats from now on in the client)
+        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0]);
+        snapshot.platforms.push_back(platform);
+    }
+    return snapshot;
+}
+
+Snapshot ProtocolClient::recv_worms() {
+    Snapshot snapshot;
+    uint16_t num_of_worms[1];
+    socket.recvall(num_of_worms, 2, &was_closed);
+    // if (was_closed) throw WasClosed;
+    num_of_worms[0] = ntohs(num_of_worms[0]);
+    for (int i = 0; i < num_of_worms[0]; i++) {
+        char id[1];
+        int pos_x[1];
+        int pos_y[1];
+        int angle[1];
+        int max_health[1];
+        int health[1];
+        char direction[1];
+        int weapon[1];
+        int state[1];
+        socket.recvall(id, 1, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_x, 4, &was_closed);
     // if (was_closed) throw WasClosed;
@@ -114,20 +150,25 @@ Snapshot ProtocolClient::recv_platforms() {
     // if (was_closed) throw WasClosed;
         socket.recvall(angle, 4, &was_closed);
     // if (was_closed) throw WasClosed;
+        socket.recvall(max_health, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(health, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(direction, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(weapon, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(state, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         angle[0] = ntohl(angle[0]);
-        // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
-        // The client must know that it probably has to divide by 1000
-        // (The platforms have integers instead of floats from now on in the client)
-        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], angle[0]);
-        snapshot.platforms.push_back(platform);
+        max_health[0] = ntohl(max_health[0]);
+        health[0] = ntohl(health[0]);
+        WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0]);
+        snapshot.worms.push_back(worm);
     }
     return snapshot;
-}
-
-Snapshot ProtocolClient::recv_worms() {
-    return Snapshot();
 }
 
 

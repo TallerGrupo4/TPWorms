@@ -18,6 +18,7 @@ class ClientSender: public Thread {
 private:
     Socket& socket;
     std::shared_ptr<Queue<Command>> queue_lobby;
+    // std::shared_ptr<Queue<std::shared_ptr<Action>>> queue_match;
     std::shared_ptr<Queue<Action>> queue_match;
     std::atomic<bool>& in_match;
     ParserClient parser;
