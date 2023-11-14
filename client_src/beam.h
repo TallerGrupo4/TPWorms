@@ -9,27 +9,6 @@
 #include "surfaces.h"
 #include "beam.h"
 
-enum BeamType {
-    LargeVertical,
-    Large65,
-    Large45,
-    Large25,
-    LargeHorizontal,
-    LargeMinus25,
-    LargeMinus45,
-    LargeMinus65,
-    LargeVerticalFlipped,
-    ShortVertical,
-    Short65,
-    Short45,
-    Short25,
-    ShortHorizontal,
-    ShortMinus25,
-    ShortMinus45,
-    ShortMinus65,
-    ShortVerticalFlipped,
-};
-
 class Beam {
 private:
     SDL2pp::Texture beam_image;

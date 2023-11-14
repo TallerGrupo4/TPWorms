@@ -9,7 +9,8 @@ Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& 
     moving(false),
     angle(worm_snpsht.angle),
     id(worm_snpsht.id),
-    health_points(worm_snpsht.life),
+    health_points(worm_snpsht.health),
+    max_health(worm_snpsht.max_health),
     state(worm_snpsht.state),
     weapon(worm_snpsht.weapon),
     x(worm_snpsht.pos_x),
@@ -39,7 +40,7 @@ bool Worm::is_same_id(char id_to_check) {
 void Worm::update(WormSnapshot worm_snpsht, std::chrono::duration<double> dt) {
     angle = worm_snpsht.angle;
     facing_left = (worm_snpsht.direction == 0 ? true : false);
-    health_points = worm_snpsht.life;
+    health_points = worm_snpsht.health;
     state = worm_snpsht.state;
     y = worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;

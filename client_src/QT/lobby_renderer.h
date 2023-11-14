@@ -22,6 +22,6 @@ private:
 public:
     explicit LobbyRenderer(Client& client);
 
-    int start(int argc, char* argv[]);
+    bool start(int argc, char* argv[]);
 };
 #endif  // LOBBY_RENDERER_H

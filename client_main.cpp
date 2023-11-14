@@ -154,13 +154,13 @@ int main(int argc, char* argv[]) {
     // // MatchRenderer match(client);
     // // match.start();
     LobbyRenderer lobby(client);
-    int lobby_ret = lobby.start(argc, argv);
-    if (lobby_ret != 4) {
-        return 0;
+    if (!lobby.start(argc, argv)) {
+        return EXIT_SUCCESS;
     }
+    
     //MatchRenderer match(client);
     //ret = client.start();
     MatchRenderer match(client);
-    match.start();
+    ret = match.start();
     return ret;
 }

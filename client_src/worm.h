@@ -28,6 +28,7 @@ private:
     float angle;
     char id;
     int health_points;
+    int max_health;
     int state;
     int weapon;
     int x;
