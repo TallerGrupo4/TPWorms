@@ -22,8 +22,7 @@ private:
     ParserClient& parser;
     
     int recv_match_id(uint* match_id);
-    // int recv_platforms(Snapshot& snapshot);
-    // int recv_worms(Snapshot& snapshot);
+    void recv_worm_id(uint8_t& worm_id);
     Snapshot recv_platforms();
     Snapshot recv_worms();
 

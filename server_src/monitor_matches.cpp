@@ -11,12 +11,12 @@ MonitorMatches::MonitorMatches() {}
 
 // std::shared_ptr<Queue<GameCommand*>> MonitorMatches::create_match(
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(
-        std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id, uint8_t& worm_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
     matches[match_id] = std::make_unique<Match>("map1");
-    matches[match_id]->add_player(queue);
+    worm_id = matches[match_id]->add_player(queue);
     return matches[match_id]->get_queue();
 }
 
@@ -39,11 +39,11 @@ void MonitorMatches::start_match(uint match_id) {
 
 // std::shared_ptr<Queue<GameCommand*>> MonitorMatches::join_match(
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
-        std::shared_ptr<Queue<Snapshot>> queue, uint match_id) {
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id, uint8_t& worm_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
-    matches[match_id]->add_player(queue);
+    worm_id = matches[match_id]->add_player(queue);
     return matches[match_id]->get_queue();
 }
 

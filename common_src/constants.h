@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <string>
 
 #ifndef _CONSTANTS_H_
@@ -8,7 +9,7 @@
 // This DEFAULT macro is only used to initialize the Command struct
 #define DEFAULT 0x00
 #define INITIALIZE_COMMAND \
-    { DEFAULT, "", DEFAULT, DEFAULT, DEFAULT, DEFAULT }
+    { DEFAULT, "", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT }
 
 #define SOCKET_FAILED -1
 #define WAS_CLOSED -2
@@ -52,6 +53,7 @@ struct Command {
     // cppcheck-suppress unusedStructMember
     int read;
     uint match_id;
+    uint8_t worm_id;
 };
 
 // defines for physics of game

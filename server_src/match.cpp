@@ -17,12 +17,12 @@ Match::Match(std::string map_route):
         id_counter(0) {}
 
 
-int Match::add_player(std::shared_ptr<Queue<Snapshot>>
+uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
                               player_queue) {  // TODO: Make army (group of worms instead of one)
     // if (match_started) throw MatchAlreadyStarted();
     if (id_counter >= MAX_PLAYERS)
         throw MatchFull();
-    int current_id = id_counter;
+    uint8_t current_id = id_counter;
     players_queues.push_back(player_queue);
     id_counter++;
     return current_id;

@@ -1,6 +1,7 @@
 #include "protocol_client.h"
 #include "../common_src/liberror.h"
 
+#include <cstdint>
 #include <iostream>
 #include <vector>
 
@@ -40,12 +41,14 @@ int ProtocolClient::recv_command(Command& command) {
             if (was_closed) {
                 return WAS_CLOSED;
             }
+            recv_worm_id(command.worm_id);
             parser.parse_receiving_command_join(command, code, match_id, number_of_players);
             break;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
+            recv_worm_id(command.worm_id);
             parser.parse_receiving_command_create(command, code, match_id);
             break;
         }
@@ -159,4 +162,16 @@ int ProtocolClient::recv_match_id(uint* match_id) {
     }
     match_id[0] = ntohl(match_id[0]);
     return 0;
+}
+
+void ProtocolClient::recv_worm_id(uint8_t& worm_id) {
+    uint8_t _worm_id[1];
+    int ret = socket.recvall(_worm_id, 1, &was_closed);
+    if (ret < 0) {
+        throw LibError(errno, "Error receiving worm id");
+    }
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    worm_id = _worm_id[0];
 }

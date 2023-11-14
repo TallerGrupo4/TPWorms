@@ -82,7 +82,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
         case CASE_CREATE: {
             try {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.match_id);
+                command.match_id, command.worm_id);
                 in_match = true;
                 match_id = command.match_id;
                 std::cout << "Match created with id: " << match_id << std::endl;
@@ -90,13 +90,12 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 command.code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.match_id << std::endl;
             }
-            // parser.parse_sending_command(command);
             protocol.send_command(command);
             break;
         }
         case CASE_JOIN: {
             try {
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.match_id);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.match_id, command.worm_id);
                 in_match = true;
                 std::cout << "Match joined with id: " << command.match_id << std::endl;
             } catch (const MatchFull& err) {
@@ -106,7 +105,6 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 command.code = CASE_MATCH_NOT_FOUND;
                 std::cout << "Match not found with id: " << command.match_id << std::endl;
             }
-            // parser.parse_sending_command(command);
             protocol.send_command(command);
             break;
         }

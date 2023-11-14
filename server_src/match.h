@@ -35,7 +35,7 @@ public:
     Match(std::string map_route);
     ~Match();
 
-    int add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
+    uint8_t add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
 
     void stop();
 

@@ -24,6 +24,7 @@ private:
 
 private:
     int send_match_id(const Command& command);
+    void send_worm_id(const uint8_t& worm_id);
     int recv_create(Command& command, const char* code);
     int recv_join(Command& command, const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);

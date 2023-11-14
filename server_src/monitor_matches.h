@@ -20,16 +20,11 @@ private:
 public:
     MonitorMatches();
 
-    // Could return only the Match's queue
-    // std::shared_ptr<Queue<GameCommand*>> create_match(std::shared_ptr<Queue<Snapshot>> queue,
-    //                                                   uint match_id);
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> create_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id);
+                                                      uint match_id, uint8_t& worm_id);
 
-    // std::shared_ptr<Queue<GameCommand*>> join_match(std::shared_ptr<Queue<Snapshot>> queue,
-    //                                                 uint match_id);
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> join_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                    uint match_id);
+                                                    uint match_id, uint8_t& worm_id);
 
     void start_match(uint match_id);
 
