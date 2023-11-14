@@ -21,13 +21,11 @@ void print_command(const Command& command) {
         case CASE_JOIN: {
             std::cout << "There are " << +command.number_of_players
                       << " player/s in the match: " << +command.match_id << std::endl;
-            std::cout << "My worm id is: " << +command.worm_id << std::endl;
             break;
         }
         case CASE_CREATE: {
             std::cout << "Match succesfully created with the code: " << +command.match_id
                       << std::endl;
-            std::cout << "My worm id is: " << +command.worm_id << std::endl;
             break;
         }
         case CASE_MATCH_FULL: {
@@ -119,7 +117,7 @@ int main(int argc, char* argv[]) {
     }
     Client client(argv[1], argv[2]);
     bool in_lobby = true;
-    uint8_t worm_id;
+    uint8_t worm_id = DEFAULT;
     while (in_lobby) {
         // Render_lobby();
         Command command = INITIALIZE_COMMAND;
@@ -135,7 +133,7 @@ int main(int argc, char* argv[]) {
         }
         print_command(command);
     }
-
+    std::cout << "My worm id is: " << +worm_id << std::endl;
     // In match
     client.start();
     while (client.is_connected()) {

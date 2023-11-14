@@ -70,4 +70,8 @@ struct Command {
 #define START 0x03
 
 
+// Consts for game loop
+#define FPS 30
+#define FRAME_TIME 1000 / FPS
+
 #endif  // _CONSTANTS_H_
