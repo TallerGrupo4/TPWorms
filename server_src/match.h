@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <chrono>
 
 #include <box2d/box2d.h>
 
@@ -25,7 +26,9 @@ private:
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue;
     std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
     char id_counter;
-
+    std::chrono::high_resolution_clock::time_point start_loop_time;
+    uint32_t total_loop_time; 
+    
     void send_map();
     void move_player(int direction, char id);
     void push_all_players(Snapshot snapshot);
@@ -35,7 +38,7 @@ public:
     Match(std::string map_route);
     ~Match();
 
-    int add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
+    uint8_t add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
 
     void stop();
 

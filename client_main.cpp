@@ -107,6 +107,7 @@ Action get_action_in_match() {
 
 int dummy_client(Client& client) {
     bool in_lobby = true;
+    uint8_t worm_id = DEFAULT;
     while (in_lobby) {
         // Render_lobby();
         Command command = get_lobby_command();
@@ -117,13 +118,12 @@ int dummy_client(Client& client) {
         Command command_received = client.recv_lobby_command();
         if (command_received.get_code() == CASE_JOIN || command_received.get_code() == CASE_CREATE) {
             in_lobby = false;
+            worm_id = command.worm_id;
         }
         print_command(command_received);
     }
-
+    std::cout << "My worm id is: " << +worm_id << std::endl;
     // In match
-    // MapSnapshot map = client.recv_map();
-    // Render_map(map)
     client.start();
     while (client.is_connected()) {
         // Render_match();
@@ -134,8 +134,11 @@ int dummy_client(Client& client) {
         }
         client.send_action(action);
         // GameSnapshot game_snapshot = client.recv_game_snapshot();
-        Snapshot snapshot = client.recv_snapshot();
-        print_snapshot(snapshot);
+        Snapshot snapshot;
+        while (client.recv_snapshot(snapshot)) {
+            print_snapshot(snapshot);
+        }
+        // Snapshot snapshot = client.recv_snapshot();
     }
     return 0;
 }

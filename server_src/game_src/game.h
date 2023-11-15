@@ -42,8 +42,20 @@ public:
     }
 
 
-
-    void step() { world.Step(1.0f / 60.0f, 8, 3); }
+// Check parameter..
+    void step(int it) {
+        // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+        /*
+        float time_simulate = (float) it / FPS;
+        world.Step(1.0f / 60.0f, 8, 3);
+        turn_manager.update(it);
+        for (auto each_obj : obj) {
+            // each_obj knows how to step
+            each_obj->step(time_simulate);
+        }
+        */
+        // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+    }
 
     Snapshot get_game_snapshot() {
         std::vector<WormSnapshot> worms;

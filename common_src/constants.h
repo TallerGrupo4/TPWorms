@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <string>
 
 #ifndef _CONSTANTS_H_
@@ -37,21 +38,6 @@
 
 #define QUEUE_MAX_SIZE 1000
 
-// // Create constructors for the Command based on the code
-// // Make every attribute of the struct constant after initialization
-// struct Command {
-//     // cppcheck-suppress unusedStructMember
-//     char code;
-//     std::string msg;
-//     // cppcheck-suppress unusedStructMember
-//     uint8_t number_of_players;
-//     // cppcheck-suppress unusedStructMember
-//     uint8_t player_index;
-//     // cppcheck-suppress unusedStructMember
-//     int read;
-//     uint match_id;
-// };
-
 // defines for physics of game
 #define WORM_SPEED 0.4
 
@@ -65,5 +51,9 @@
 #define WORMS 0x02
 #define START 0x03
 
+
+// Consts for game loop
+#define FPS 30
+#define FRAME_TIME 1000 / FPS
 
 #endif  // _CONSTANTS_H_

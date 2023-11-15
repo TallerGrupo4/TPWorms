@@ -1,4 +1,6 @@
 #include "./match.h"
+#include <cstdint>
+#include <iostream>
 #include <memory>
 
 #include <yaml-cpp/yaml.h>
@@ -14,15 +16,16 @@ Match::Match(std::string map_route):
         match_started(false),
         // queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
         queue(std::make_shared<Queue<std::shared_ptr<GameCommand>>>(QUEUE_MAX_SIZE)),
-        id_counter(0) {}
+        id_counter(0), start_loop_time(std::chrono::high_resolution_clock::now()), 
+        total_loop_time(0) {}
 
 
-int Match::add_player(std::shared_ptr<Queue<Snapshot>>
+uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
                               player_queue) {  // TODO: Make army (group of worms instead of one)
     // if (match_started) throw MatchAlreadyStarted();
     if (id_counter >= MAX_PLAYERS)
         throw MatchFull();
-    int current_id = id_counter;
+    uint8_t current_id = id_counter;
     players_queues.push_back(player_queue);
     id_counter++;
     return current_id;
@@ -63,37 +66,94 @@ void Match::send_map() {
 }
 
 void Match::run() {
-    while (keep_running) {
-        std::shared_ptr<GameCommand> game_command;
-        try {
-            if (queue->try_pop(game_command)) {
-                std::cout << "GameCommand received" << std::endl;
-                // game_command->execute(game);
+    // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+    /*
+    int rate = FRAME_TIME;
+    std::shared_ptr<GameCommand> game_command;
+    auto time_1 = std::chrono::high_resolution_clock::now();
+    int it = 0;
+    */
+    // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+    try {
+        while (keep_running) {
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
+            while (true) {
+                commands = getAllCommands();
+                for command in commands {
+                    command->execute(gamewordl);
+                }
+                loopsToSimulate = calculateRate(); // depende de si te atrasaste o no
+                gamewordl.simulateStep(loopsToSimulate);
+                broadcastSnapshot();  
+                sleep(...);
             }
-        } catch (const ClosedQueue& err) {
-            std::cout << "Queue closed" << std::endl;
-            break;
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            std::cout << "Match running" << std::endl;
+             
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
+            while (queue->try_pop(game_command)) {
+                std::cout << "GameCommand received" << std::endl;
+                // The game_command should notify the game if it is a end_turn game_command
+                game_command->execute(game)
+            }
+            // Create class Timer that will count from 0 to MAX_TIME (ticks)
+            game->step(it_diff);  // Check if turn ended (sum ticks, etc)
+            
+            // All of the above is what the game.get_game_snapshot() should do (and more)
+            Snapshot snapshot = game.get_game_snapshot();
+            // Push to all players
+            push_all_players(snapshot);
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+
+            // If worms is empty, it will send the whole map
+            // Else, it will send only the worms
+            // Doing it this way, saves us from doing polymorfism in the Snapshot class.
+            std::vector<WormSnapshot> worms;
+            PlatformSnapshot platform('p', 0, 0, 0);
+            std::vector<PlatformSnapshot> platforms;
+            platforms.push_back(platform);
+            Snapshot snapshot(worms, platforms);
+
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
+            // Now it comes the part where we calculate the time we spent in the loop
+            auto time_2 = std::chrono::high_resolution_clock::now();
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(time_2 - time_1);//count casts to int
+            int rest = rate - diff.count();
+            // Rest if it is positive, else don't rest
+            if (rest > 0) std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+
+            // THIS IS NOT MATEO BUT IT IS IMPORTANT!!!!!!!!!!
+            // If the game has ended, we should stop the match
+            // if (game.has_ended()) {
+            //     stop();
+            // }
+
+            // Push to all players
+            push_all_players(snapshot);
+
+
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
+            // Now we reset the time_1 (our 'clock')
+            time_1 = std::chrono::high_resolution_clock::now();
+
+            // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            auto it_acum = it;
+            it = it + 1;
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
         }
-        // game.step();
-        // GameSnapshot snapshot = game.get_game_snapshot();
-        // Snapshot snapshot;
-        // snapshot.code = 1;
-        // snapshot.msg = "Hello! There are " + std::to_string(id_counter) + " players in this match";
-        // game.step();
-        // Snapshot snapshot = game.get_game_snapshot();
-
-        // It doesn't matter what I am sending.
-        // It is just to prove that the server and client are working with snapshots (and they do).
-        // std::vector<WormSnapshot> worms;
-        // PlatformSnapshot platform(/*'p'*/Large25, 0, 0, 0); // I HAVE NO IDEA WHAT 'p' MEANS
-        // std::vector<PlatformSnapshot> platforms;
-        // platforms.push_back(platform);
-        // Snapshot snapshot(worms, platforms);
-        // push_all_players(snapshot);
-
-        // std::this_thread::sleep_for(std::chrono::milliseconds(16));
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+    } catch (const ClosedQueue& err) {
+          if (!keep_running) return;
+            std::cerr << "Error: " << err.what() << std::endl;
+            keep_running = false;
     }
 }
 
@@ -109,4 +169,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> Match::get_queue() { return
 
 std::string Match::get_map_name() { return name; }
 
-Match::~Match() {}
+Match::~Match() {
+    // Perhaps it would be better to close the queue here
+    // queue->close();
+}

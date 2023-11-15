@@ -42,7 +42,8 @@ public:
 
     Command recv_lobby_command();
 
-    Snapshot recv_snapshot();
+    // Snapshot recv_snapshot();
+    bool recv_snapshot(Snapshot& snapshot);
 
     void send_lobby_command(Command command);
 
