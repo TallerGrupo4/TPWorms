@@ -66,13 +66,17 @@ void Match::send_map() {
 }
 
 void Match::run() {
+    // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+    /*
     int rate = FRAME_TIME;
     std::shared_ptr<GameCommand> game_command;
     auto time_1 = std::chrono::high_resolution_clock::now();
-    uint8_t turn = 0;
-
+    int it = 0;
+    */
+    // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
     try {
         while (keep_running) {
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
             /*
             while (true) {
                 commands = getAllCommands();
@@ -85,17 +89,25 @@ void Match::run() {
                 sleep(...);
             }
             */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
             std::cout << "Match running" << std::endl;
              
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
             while (queue->try_pop(game_command)) {
                 std::cout << "GameCommand received" << std::endl;
                 // The game_command should notify the game if it is a end_turn game_command
-                // game_command->execute(game)
-                // game.step();  // Check if turn ended (sum ticks, etc)
+                game_command->execute(game)
             }
+            // Create class Timer that will count from 0 to MAX_TIME (ticks)
+            game->step(it_diff);  // Check if turn ended (sum ticks, etc)
             
             // All of the above is what the game.get_game_snapshot() should do (and more)
-            // Snapshot snapshot = game.get_game_snapshot();
+            Snapshot snapshot = game.get_game_snapshot();
+            // Push to all players
+            push_all_players(snapshot);
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
 
             // If worms is empty, it will send the whole map
             // Else, it will send only the worms
@@ -106,13 +118,18 @@ void Match::run() {
             platforms.push_back(platform);
             Snapshot snapshot(worms, platforms);
 
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
             // Now it comes the part where we calculate the time we spent in the loop
             auto time_2 = std::chrono::high_resolution_clock::now();
             auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(time_2 - time_1);//count casts to int
             int rest = rate - diff.count();
             // Rest if it is positive, else don't rest
             if (rest > 0) std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
 
+            // THIS IS NOT MATEO BUT IT IS IMPORTANT!!!!!!!!!!
             // If the game has ended, we should stop the match
             // if (game.has_ended()) {
             //     stop();
@@ -121,10 +138,17 @@ void Match::run() {
             // Push to all players
             push_all_players(snapshot);
 
+
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            /*
             // Now we reset the time_1 (our 'clock')
             time_1 = std::chrono::high_resolution_clock::now();
 
             // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+            auto it_acum = it;
+            it = it + 1;
+            */
+            // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
         }
     } catch (const ClosedQueue& err) {
           if (!keep_running) return;

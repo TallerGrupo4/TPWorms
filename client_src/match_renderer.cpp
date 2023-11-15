@@ -1,4 +1,5 @@
 #include "match_renderer.h"
+#include "Animation.h"
 
 using namespace SDL2pp;
 
@@ -77,11 +78,27 @@ int MatchRenderer::start() {
         // Game state
         while (running) {
             running = handleEvents(player);
+            Snapshot snapshot;
+
+            // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
+            /*
+            while (client.recv_snapshot(snapshot)) {
+                update(snapshot);
+            }
+            update(FRAME_RATE); // Animations will advance now
+            render(); // Render the game
+            sleep(FRAME_RATE);
+            */
+            // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
+
+            // THIS CODE IS WRONG -----
             // Snapshot snapshot = client.pop_snapshot();
-            // update(snapshot, FRAME_RATE);
-            // render(renderer);
-            update(player, FRAME_RATE);
             render(renderer, player);
+            // THIS CODE IS WRONG -----
+
+
+            // update(player, FRAME_RATE);
+            // render(renderer, player);
             // la cantidad de segundos que debo dormir se debe ajustar en función
             // de la cantidad de tiempo que demoró el handleEvents y el render
             usleep(FRAME_RATE);
