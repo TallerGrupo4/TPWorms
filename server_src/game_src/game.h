@@ -3,6 +3,8 @@
 
 #include <box2d/box2d.h>
 
+#include "../../common_src/yamlReader.h"
+
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
 
@@ -14,6 +16,7 @@
 
 
 class Game {
+    // Debatible de tener el reader o no , taria bueno porque el string de la ruta se guardaria en el reader
     std::string map;
     int water_level;
     b2World world;
@@ -24,7 +27,12 @@ class Game {
 public:
     Game(std::string map_route): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
 
-    Snapshot start_and_send() { return builder.create_map(map); }
+    Snapshot start_and_send() {
+        MapReader map_reader(map); 
+        Snapshot snapshot = map_reader.read_map();
+        builder.create_map(snapshot);
+        return snapshot;
+    }
 
     void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
         b2Body* player = nullptr;

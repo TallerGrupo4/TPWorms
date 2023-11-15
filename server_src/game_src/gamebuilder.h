@@ -38,35 +38,16 @@ public:
     GameBuilder(b2World& world): world(world) {}
 
 
-    Snapshot create_map(std::string map_name) {
-        std::vector<PlatformSnapshot> platforms_snap;
-        std::string route = "../../external/";
-        route += map_name;
-        route += ".yaml";
-        YAML::Node map = YAML::LoadFile(route);
-        YAML::Node platforms = map["platforms"];
-        for (YAML::const_iterator it = platforms.begin(); it != platforms.end(); ++it) {
-            // Has type , x , y
-            YAML::Node platform = *it;
-            float x = platform["x"].as<float>();
-            float y = platform["y"].as<float>();
-            BeamType type = (BeamType)platform["type"].as<char>();
-            create_platform_type(x, y, type);
-            if (type <= 8) { //Esto es para no hacer un switch gigantezco devuelta
-                PlatformSnapshot snap(type, x - PLAT_BIG/2, y + PLAT_HEIGHT/2);
-                platforms_snap.push_back(snap);
+    void create_map(Snapshot& map_snap) {
+        for (PlatformSnapshot platform : map_snap.platforms) {
+            create_platform_type(platform.pos_x, platform.pos_y, platform.type);
+            if (platform.type <= 8){
+                platform.pos_x += PLAT_BIG * 0.5f;
             } else {
-                PlatformSnapshot snap(type, x - PLAT_SMALL/2, y + PLAT_HEIGHT);
-                platforms_snap.push_back(snap);
+                platform.pos_x += PLAT_SMALL * 0.5f;
             }
+            platform.pos_y += PLAT_HEIGHT * 0.5f;
         }
-        YAML::Node dimensions = map["dimensions"];
-        int width = dimensions["width"].as<int>();
-        int height = dimensions["height"].as<int>();
-        Snapshot map_snap({},platforms_snap);
-        map_snap.set_dimensions(width, height);
-
-        return map_snap;
     }
 
     void create_small_platform(float x, float y, float angle) {
