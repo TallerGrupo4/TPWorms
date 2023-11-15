@@ -12,10 +12,7 @@
 #define ACTION_H
 
 class Action {
-public:
-    // char code = -1;
-    // uint8_t number_of_players = 0;
-    // uint match_id = 0;
+public: // Protected and make getters
 
     char id_worm = -1;
     char movement_x = 0;
@@ -25,6 +22,9 @@ public:
     ~Action() = default;
     
     // It should be const socket
+    virtual bool is_exit() {
+        return false;
+    };
     virtual int send(Socket& socket, bool& was_closed) {
         return 0;
     };
@@ -33,15 +33,24 @@ public:
 
 // Create a class for each action
 
+class ActionExit : public Action {
+public:
+    bool is_exit() override {
+        return true;
+    };
+    ActionExit() : Action(ACTION_EXIT) {};
+    ~ActionExit() = default;
+};
+
 class ActionStart : public Action {
 public:
     int send(Socket& socket, bool& was_closed) override {
-        char code[1] = {START};
+        char code[1] = {ACTION_START};
         int ret = socket.sendall(code, 1, &was_closed);
         if (was_closed) return WAS_CLOSED;
         return ret;
     };
-    ActionStart() : Action(START) {};
+    ActionStart() : Action(ACTION_START) {};
     ~ActionStart() = default;
 };
 

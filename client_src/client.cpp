@@ -11,7 +11,8 @@
 Client::Client(const char* hostname, const char* servername):
         socket(hostname, servername),
         queue_sender_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        queue_sender_match(std::make_shared<Queue<Action>>(QUEUE_MAX_SIZE)),
+        // queue_sender_match(std::make_shared<Queue<Action>>(QUEUE_MAX_SIZE)),
+        queue_sender_match(std::make_shared<Queue<std::shared_ptr<Action>>>(QUEUE_MAX_SIZE)),
         queue_receiver_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
         queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
         client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
@@ -72,8 +73,8 @@ void Client::send_lobby_command(Command command) {
 }
 
 
-// void Client::send_action(std::shared_ptr<Action> action) {
-void Client::send_action(Action action) {
+void Client::send_action(std::shared_ptr<Action> action) {
+// void Client::send_action(Action action) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");

@@ -113,7 +113,7 @@ void Match::run() {
             // Else, it will send only the worms
             // Doing it this way, saves us from doing polymorfism in the Snapshot class.
             // std::vector<WormSnapshot> worms;
-            // PlatformSnapshot platform('p', 0, 0, 0);
+            // PlatformSnapshot platform(LargeVertical, 0, 0);
             // std::vector<PlatformSnapshot> platforms;
             // platforms.push_back(platform);
             // Snapshot snapshot(worms, platforms);
@@ -144,11 +144,11 @@ void Match::run() {
             // Now we reset the time_1 (our 'clock')
             time_1 = std::chrono::high_resolution_clock::now();
 
-            // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
             auto it_acum = it;
             it = it + 1;
             */
             // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
+            // std::this_thread::sleep_for(std::chrono::milliseconds(5000));
         }
     } catch (const ClosedQueue& err) {
           if (!keep_running) return;

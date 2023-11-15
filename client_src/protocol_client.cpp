@@ -84,9 +84,10 @@ const Command ProtocolClient::recv_command() {
 
 
 
-// void ProtocolClient::send_action(std::shared_ptr<Action> action) {
-void ProtocolClient::send_action(Action& action) {
-    action.send(socket, was_closed);
+void ProtocolClient::send_action(std::shared_ptr<Action> action) {
+// void ProtocolClient::send_action(Action& action) {
+    // action.send(socket, was_closed);
+    action->send(socket, was_closed);
 }
 
 Snapshot ProtocolClient::recv_snapshot() {

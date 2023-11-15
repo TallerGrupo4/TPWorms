@@ -49,7 +49,8 @@
 #define MULTIPLIER 1000 // to convert from float to int for protocol taking into account 3 decimal places
 #define MAP 0x01
 #define WORMS 0x02
-#define START 0x03
+#define ACTION_START 0x03
+#define ACTION_EXIT 0x04
 
 
 // Consts for game loop

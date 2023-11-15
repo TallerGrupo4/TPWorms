@@ -8,8 +8,8 @@ MatchRenderer::MatchRenderer(Client& client) : client(client) {}
 
 bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
-    // std::shared_ptr<Action> action;
-    Action action;
+    std::shared_ptr<Action> action;
+    // Action action;
     while (SDL_PollEvent(&event)) {
         //bool is_moving_right;
         //bool is_moving_left;
@@ -21,15 +21,19 @@ bool MatchRenderer::handleEvents(Match& match) {
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT:
-                        action.movement_x = 10;
-                        action.type = 0;
+                        // action.movement_x = 10;
+                        action->movement_x = 10;
+                        // action.type = 0;
+                        action->type = 0;
                         client.send_action(action);
                         //client.push_game_command(game_command);
                         //player.moveLeft();
                         break;
                     case SDLK_RIGHT:
-                        action.movement_x = 10;
-                        action.type = 1;
+                        // action.movement_x = 10;
+                        action->movement_x = 10;
+                        // action.type = 1;
+                        action->type = 1;
                         client.send_action(action);
                         //client.push_game_command(game_command);
                         //player.moveRigth();
@@ -41,14 +45,18 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_LEFT:
-                        action.movement_x = 0;
-                        action.type = 0;
+                        // action.movement_x = 0;
+                        action->movement_x = 0;
+                        // action.type = 0;
+                        action->type = 0;
                         client.send_action(action);
                         //player.stopMoving();
                         break;
                     case SDLK_RIGHT:
-                        action.movement_x = 0;
-                        action.type = 1;
+                        // action.movement_x = 0;
+                        action->movement_x = 0;
+                        // action.type = 1;
+                        action->type = 1;
                         client.send_action(action);
                         //player.stopMoving();
                         break;

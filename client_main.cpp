@@ -1,6 +1,8 @@
 #include <QApplication>
 #include <iostream>
+#include <memory>
 #include <sstream>
+#include <string>
 
 #include "client_src/client.h"
 #include "client_src/match_renderer.h"
@@ -17,11 +19,14 @@ void print_command(const Command& command) {
         case CASE_JOIN: {
             std::cout << "There are " << +command.get_number_of_players()
                       << " player/s in the match: " << +command.get_match_id() << std::endl;
+            std::cout << "My worm id is: " << +command.worm_id << std::endl;
+
             break;
         }
         case CASE_CREATE: {
             std::cout << "Match succesfully created with the code: " << +command.get_match_id()
                       << std::endl;
+            std::cout << "My worm id is: " << +command.worm_id << std::endl;
             break;
         }
         case CASE_MATCH_FULL: {
@@ -88,18 +93,17 @@ Command get_lobby_command() {
     return parse_sending_command(input);
 }
 
-Action parse_sending_action(std::string msg) {
+std::shared_ptr<Action> parse_sending_action(std::string msg) {
     std::istringstream str(msg);
     std::getline(str >> std::ws, msg, '\0');
     std::cout << "action (it will be a Start anyways): " << msg << std::endl;
     if (msg == EXIT) {
-        // return ActionExit;
-        return Action(CASE_EXIT);
+        return std::make_shared<ActionExit>();
     }// else if (msg == _START) ActionStart;
-    return Action();
+    return std::make_shared<ActionStart>();
 }
 
-Action get_action_in_match() {
+std::shared_ptr<Action> get_action_in_match() {
     std::string msg;
     std::getline(std::cin, msg);
     return parse_sending_action(msg);
@@ -107,7 +111,6 @@ Action get_action_in_match() {
 
 int dummy_client(Client& client) {
     bool in_lobby = true;
-    uint8_t worm_id = DEFAULT;
     while (in_lobby) {
         // Render_lobby();
         Command command = get_lobby_command();
@@ -118,17 +121,15 @@ int dummy_client(Client& client) {
         Command command_received = client.recv_lobby_command();
         if (command_received.get_code() == CASE_JOIN || command_received.get_code() == CASE_CREATE) {
             in_lobby = false;
-            worm_id = command.worm_id;
         }
         print_command(command_received);
     }
-    std::cout << "My worm id is: " << +worm_id << std::endl;
     // In match
     client.start();
     while (client.is_connected()) {
         // Render_match();
-        Action action = get_action_in_match();
-        if (action.type == CASE_EXIT) {
+        std::shared_ptr<Action> action = get_action_in_match();
+        if (action->is_exit()) {
             client.exit();
             return 0;
         }
@@ -140,6 +141,7 @@ int dummy_client(Client& client) {
         }
         // Snapshot snapshot = client.recv_snapshot();
     }
+
     return 0;
 }
 
@@ -151,7 +153,7 @@ int main(int argc, char* argv[]) {
     }
     Client client(argv[1], argv[2]);
     
-    // return dummy_client(client);
+    return dummy_client(client);
 
     
     // // Render_match();
@@ -162,11 +164,11 @@ int main(int argc, char* argv[]) {
     //ret = client.start();
 
 
-    LobbyRenderer lobby(client);
-    if (!lobby.start(argc, argv)) {
-        return EXIT_SUCCESS;
-    }
-    MatchRenderer match(client);
-    ret = match.start();
-    return ret;
+//     LobbyRenderer lobby(client);
+//     if (!lobby.start(argc, argv)) {
+//         return EXIT_SUCCESS;
+//     }
+//     MatchRenderer match(client);
+//     ret = match.start();
+//     return ret;
 }

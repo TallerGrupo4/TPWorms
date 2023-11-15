@@ -72,11 +72,11 @@ public:
     int height;
     int width;
 
-    Snapshot(){};
     Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
-            worms(worms), platforms(platforms){};
+            worms(worms), platforms(platforms) {};
     
-    ~Snapshot(){};
+    Snapshot() {};
+    ~Snapshot() {};
 
     void set_dimensions(int height, int width){
         this->height = height;

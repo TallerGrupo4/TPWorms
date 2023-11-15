@@ -119,7 +119,7 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         case MOV: {
             return recv_mov();
         }
-        case START: {
+        case ACTION_START: {
             return recv_start();
         }
         default:
