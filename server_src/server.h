@@ -25,7 +25,7 @@ private:
     void kill_users();
 
 public:
-    explicit Server(const char* port);
+    explicit Server(const char* port, const std::vector<std::string> routes);
 
     void run() override;
 

@@ -1,20 +1,24 @@
 #include "monitor_matches.h"
 
-#include <iostream>
-#include <memory>
-
 #include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
-MonitorMatches::MonitorMatches() {}
+MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
+    int map_id = 0;
+    for (int i = 0; i < routes.size(); i++) {
+        maps[map_id++] = Map(routes.at(i));
+    }
+}
 
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(
         std::shared_ptr<Queue<Snapshot>> queue, uint match_id, uint8_t& worm_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
-    matches[match_id] = std::make_unique<Match>("map1");
+
+    // HARDCODEO PORQUE NO ESTA IMPLEMENTADO LA ELECCION DEL MAPA
+    matches[match_id] = std::make_unique<Match>(maps.at(1));
     worm_id = matches[match_id]->add_player(queue);
     return matches[match_id]->get_queue();
 }
@@ -33,7 +37,7 @@ void MonitorMatches::start_match(uint match_id) {
         throw MatchNotFound();
     if (matches[match_id]->has_started())
         throw MatchAlreadyStarted();
-    matches[match_id]->start_match();
+    matches[match_id]->start_game();
 }
 
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(

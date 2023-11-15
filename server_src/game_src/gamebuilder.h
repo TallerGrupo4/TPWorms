@@ -41,12 +41,8 @@ public:
     void create_map(Snapshot& map_snap) {
         for (PlatformSnapshot platform : map_snap.platforms) {
             create_platform_type(platform.pos_x, platform.pos_y, platform.type);
-            if (platform.type <= 8){
-                platform.pos_x += PLAT_BIG * 0.5f;
-            } else {
-                platform.pos_x += PLAT_SMALL * 0.5f;
-            }
-            platform.pos_y += PLAT_HEIGHT * 0.5f;
+            platform.pos_x *= PIX_PER_METER;
+            platform.pos_y *= PIX_PER_METER;
         }
     }
 
