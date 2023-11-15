@@ -93,9 +93,11 @@ int MatchRenderer::start() {
         Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
 
         // Load sprites image as a new texture
-        Match match(client.recv_snapshot(),surfaces,renderer);
+        Snapshot snapshot;
+        client.recv_snapshot(snapshot);
+        Match match(snapshot,surfaces,renderer);
         //Texture worm_sprite(renderer, surfaces.walking_worm);
-        //Worm player(worm_sprite, true, false);
+        // Worm player(worm_sprite, true, false);
         auto last_frame_time = std::chrono::high_resolution_clock::now();
 
         bool running = true;
@@ -109,7 +111,8 @@ int MatchRenderer::start() {
                 // Snapshot snpsht = client.recv_snapshot();
                 // match.update(snpsht,elapsed_time);
                 // //update(match, elapsed_time);
-            Snapshot snpsht = client.recv_snapshot();
+            Snapshot snpsht;
+            client.recv_snapshot(snapshot);
             match.update(snpsht,elapsed_time);
             render(renderer, match);
 
@@ -129,7 +132,7 @@ int MatchRenderer::start() {
 
             // THIS CODE IS WRONG -----
             // Snapshot snapshot = client.pop_snapshot();
-            render(renderer, player);
+            // render(renderer, player);
             // THIS CODE IS WRONG -----
 
 

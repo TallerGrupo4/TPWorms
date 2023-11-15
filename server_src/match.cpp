@@ -112,11 +112,11 @@ void Match::run() {
             // If worms is empty, it will send the whole map
             // Else, it will send only the worms
             // Doing it this way, saves us from doing polymorfism in the Snapshot class.
-            std::vector<WormSnapshot> worms;
-            PlatformSnapshot platform('p', 0, 0, 0);
-            std::vector<PlatformSnapshot> platforms;
-            platforms.push_back(platform);
-            Snapshot snapshot(worms, platforms);
+            // std::vector<WormSnapshot> worms;
+            // PlatformSnapshot platform('p', 0, 0, 0);
+            // std::vector<PlatformSnapshot> platforms;
+            // platforms.push_back(platform);
+            // Snapshot snapshot(worms, platforms);
 
             // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
             /*
@@ -136,7 +136,7 @@ void Match::run() {
             // }
 
             // Push to all players
-            push_all_players(snapshot);
+            // push_all_players(snapshot);
 
 
             // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!

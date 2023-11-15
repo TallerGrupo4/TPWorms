@@ -135,13 +135,6 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_start() {
     return std::make_shared<StartCommand>();
 }
 
-void ProtocolServer::send_worm_id(const uint8_t& worm_id) {
-    uint8_t id[1] = {worm_id};
-    if (socket.sendall(id, 1, &was_closed) < 0) {
-        throw LibError(errno, "Socket failed");
-    }
-}
-
 std::shared_ptr<GameCommand> ProtocolServer::recv_mov() {
     char id_worm[1];
     int ret = socket.recvall(id_worm, 1, &was_closed);
