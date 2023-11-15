@@ -1,10 +1,17 @@
 #include "match_renderer.h"
 #include <memory>
 #include "Animation.h"
+#include "../common_src/clock.h"
 
 using namespace SDL2pp;
 
-MatchRenderer::MatchRenderer(Client& client) : client(client) {}
+MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDEO),
+                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
+                renderer(window, -1, SDL_RENDERER_ACCELERATED) {
+        Snapshot snapshot;
+        client.recv_snapshot(snapshot);
+        match = Match(snapshot,surfaces,renderer);
+}
 
 bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
@@ -86,45 +93,26 @@ void MatchRenderer::render(SDL2pp::Renderer& renderer, Match& match) {
     renderer.Present();
 }
 
-void MatchRenderer::update(Match& match, std::chrono::duration<double> dt) {}//{ match.update(dt); }
 
-int MatchRenderer::start() {
+
+void MatchRenderer::execute_and_update(int iter) {
     try {
-        // Initialize SDL library
-        SDL sdl(SDL_INIT_VIDEO);
-
-        // Create main window: 800x600 dimensions, resizable, "SDL2pp demo" title
-        Window window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600,
-                      SDL_WINDOW_RESIZABLE);
-
-        // Create accelerated video renderer with default driver
-        Renderer renderer(window, -1, SDL_RENDERER_ACCELERATED);
-
-        // Load sprites image as a new texture
+        running = handleEvents(match);
         Snapshot snapshot;
-        client.recv_snapshot(snapshot);
-        Match match(snapshot,surfaces,renderer);
-        //Texture worm_sprite(renderer, surfaces.walking_worm);
-        // Worm player(worm_sprite, true, false);
-        auto last_frame_time = std::chrono::high_resolution_clock::now();
-
-        bool running = true;
-        // Game state
-        while (running) {
-            auto start = std::chrono::high_resolution_clock::now();
-            auto elapsed_time = std::chrono::duration_cast<std::chrono::duration<double>>(start - last_frame_time);
-
-            running = handleEvents(match);
+        while (client.recv_snapshot(snapshot)) {
+            match.update_from_snapshot(snapshot);
+        }
+        
             //while
                 // Snapshot snpsht = client.recv_snapshot();
                 // match.update(snpsht,elapsed_time);
                 // //update(match, elapsed_time);
-            Snapshot snpsht;
-            client.recv_snapshot(snapshot);
-            match.update(snpsht,elapsed_time);
+            // Snapshot snapsht;
+            // client.recv_snapshot(snapshot);
+            // match.update(snpsht,elapsed_time); // iter / FPS
+            match.update_from_iter(iter); // iter
             render(renderer, match);
 
-            // STARTING MATEO OJO!!!!!!!!!!!
             Snapshot snapshot;
 
             // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
@@ -154,7 +142,10 @@ int MatchRenderer::start() {
     } catch (std::exception& e) {
         // If case of error, print it and exit with error
         std::cerr << e.what() << std::endl;
-        return 1;
     }
-    return 0;
+}
+
+void MatchRenderer::start() {
+    Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
+    clock.tick();
 }

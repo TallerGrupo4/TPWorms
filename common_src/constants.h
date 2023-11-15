@@ -53,6 +53,9 @@
 #define ACTION_EXIT 0x04
 
 
+//Consts for render
+#define PIX_PER_METER 60
+
 // Consts for game loop
 #define FPS 30
 #define FRAME_TIME 1000 / FPS
