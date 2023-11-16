@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <map>
 #include <memory>
 #include <vector>
@@ -29,6 +30,8 @@ public:
     std::map<uint, std::string> list_matches();
 
     void start_match(uint match_id);
+
+    uint8_t get_number_of_players(uint match_id);
 
     void stop();
 

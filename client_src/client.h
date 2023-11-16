@@ -42,13 +42,13 @@ public:
 
     Command recv_lobby_command();
 
-    // Snapshot recv_snapshot();
     bool recv_snapshot(Snapshot& snapshot);
+
+    Snapshot recv_map();
 
     void send_lobby_command(Command command);
 
     void send_action(std::shared_ptr<Action>);
-    // void send_action(Action action);
 
     void exit();
 

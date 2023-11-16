@@ -25,7 +25,7 @@ private:
     // This doesn't need to be a shared_ptr, we could pass a reference of it to the receiver
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue;
     std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
-    char id_counter;
+    uint8_t id_counter;
     std::chrono::high_resolution_clock::time_point start_loop_time;
     uint32_t total_loop_time; 
     
@@ -44,7 +44,8 @@ public:
 
     bool has_started();
     
-    // std::shared_ptr<Queue<GameCommand*>> get_queue();
+    uint8_t get_number_of_players();
+    
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> get_queue();
     
     void run() override;

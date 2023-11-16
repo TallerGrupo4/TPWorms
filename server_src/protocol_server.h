@@ -25,6 +25,7 @@ private:
 
 private:
     void send_match_id(const uint _match_id);
+    void send_number_of_players(const uint8_t number_of_players);
     void send_list(const std::map<uint, std::string>& matches_availables);
     void send_map_name(const std::string map_name);
     void send_worm_id(const uint8_t worm_id);

@@ -18,20 +18,22 @@
 #define CASE_JOIN 0x03
 #define CASE_LIST 0x04
 #define CASE_START 0x05
+#define CASE_NUMBER_OF_PLAYERS 0x06
+#define CASE_EXIT 0x07
+#define CASE_INVALID 0x08
+#define CASE_MATCH_ALREADY_EXISTS 0x09
+#define CASE_MATCH_FULL 0x10
+#define CASE_MATCH_NOT_FOUND 0x11
+#define CASE_MATCH_ALREADY_STARTED 0x12
+#define CASE_EXIT_SERVER 0x13
 
 // Client codes
-#define CASE_EXIT 0x06
-#define CASE_INVALID 0x07
 #define CREATE "Create"
 #define JOIN "Join"
 #define EXIT "Exit"
 #define _START "Start"
 
 // Server codes
-#define CASE_MATCH_ALREADY_EXISTS 0x08
-#define CASE_MATCH_FULL 0x09
-#define CASE_MATCH_NOT_FOUND 0x10
-#define CASE_EXIT_SERVER 0x11
 // Remember that if a a client exited the server, it will not send to the server a msg,
 // but instead, the socket will fail and the server will detect it, removing it from the
 // list of clients, match, etc. (Whatever is needed) 

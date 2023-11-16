@@ -14,7 +14,6 @@ Match::Match(std::string map_route):
         game(map_route),
         keep_running(true),
         match_started(false),
-        // queue(std::make_shared<Queue<GameCommand*>>(QUEUE_MAX_SIZE)),
         queue(std::make_shared<Queue<std::shared_ptr<GameCommand>>>(QUEUE_MAX_SIZE)),
         id_counter(0), start_loop_time(std::chrono::high_resolution_clock::now()), 
         total_loop_time(0) {}
@@ -22,7 +21,7 @@ Match::Match(std::string map_route):
 
 uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
                               player_queue) {  // TODO: Make army (group of worms instead of one)
-    // if (match_started) throw MatchAlreadyStarted();
+    if (match_started) throw MatchAlreadyStarted();
     if (id_counter >= MAX_PLAYERS)
         throw MatchFull();
     uint8_t current_id = id_counter;
@@ -39,6 +38,8 @@ void Match::start_match() {
     match_started = true;
     this->start();
 }
+
+uint8_t Match::get_number_of_players() { return id_counter; }
 
 void Match::push_all_players(Snapshot snapshot) {
     for (auto& player_queue: players_queues) {
@@ -117,7 +118,6 @@ void Match::run() {
             // std::vector<PlatformSnapshot> platforms;
             // platforms.push_back(platform);
             // Snapshot snapshot(worms, platforms);
-
             // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
             /*
             // Now it comes the part where we calculate the time we spent in the loop

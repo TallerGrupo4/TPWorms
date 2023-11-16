@@ -23,6 +23,7 @@ private:
     ParserClient& parser;
     
     void recv_match_id(uint* match_id);
+    void recv_number_of_players(uint8_t* number_of_players);
     std::string recv_map_name();
     std::map<uint, std::string> recv_list();
     Snapshot recv_platforms();

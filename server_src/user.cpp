@@ -22,6 +22,7 @@ User::User(Socket&& skt, MonitorMatches& _monitor_matches):
 void User::run() {
     try {
         handle_lobby();
+        if (is_creator) handle_starting_match();
         sender->start();
         handle_match();
     } catch (const LibError& err) {
@@ -33,9 +34,9 @@ void User::run() {
                 sender->stop();
                 sender->join();
             } catch (const PlayerNotFound& e) {
-                // It is an expected error but it should never reach this point
+                // It is an 'expected' error but it should never reach this point
             } catch (const ClosedQueue& e) {
-                // It is an expected error but it should never reach this point
+                // It is an 'expected' error but it should never reach this point
             }
         }
     } catch (...) {
@@ -44,23 +45,35 @@ void User::run() {
     }
 }
 
+void User::handle_starting_match() {
+    while (protocol.is_connected()) {
+        Command command = protocol.recv_command();
+        if (command.get_code() == CASE_START) {
+            try {
+                // We should check that match_id == command.get_match_id() for more security
+                monitor_matches.start_match(match_id);
+                std::cout << "Match started with id: " << match_id << std::endl;
+                return;
+            } catch (const MatchNotFound& err) {
+                // It should never reach this point I think
+                std::cout << "Match not found with id: " << match_id << std::endl;
+                continue;
+            } catch (const MatchAlreadyStarted& err) {
+                // It should never reach this point I think
+                std::cout << "Match already started with id: " << match_id << std::endl;
+                continue;
+            }
+        } else if (command.get_code() == CASE_NUMBER_OF_PLAYERS) {
+            uint8_t number_of_players = monitor_matches.get_number_of_players(match_id);
+            Command command_to_send(CASE_NUMBER_OF_PLAYERS, match_id, number_of_players);
+            protocol.send_command(command_to_send);
+        }
+    }
+}
 
 void User::handle_match() {
     while (protocol.is_connected()) {
         std::shared_ptr<GameCommand> game_command = protocol.recv_game_command();
-        if (game_command->is_start) {
-            try {
-                monitor_matches.start_match(match_id);
-                std::cout << "Match started with id: " << match_id << std::endl;
-                continue;
-            } catch (const MatchNotFound& err) {
-                std::cout << "Match not found with id: " << match_id << std::endl;
-                continue;
-            } catch (const MatchAlreadyStarted& err) {
-                std::cout << "Match already started with id: " << match_id << std::endl;
-                continue;
-            }
-        }
         queue_match->push(game_command);
     }
 }
@@ -86,6 +99,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
                 command.get_match_id(), worm_id);
                 in_match = true;
+                is_creator = true;
                 code = CASE_CREATE;
                 std::cout << "Match created with id: " << match_id << std::endl;
             } catch (const MatchAlreadyExists& err) {
@@ -109,6 +123,9 @@ bool User::interpretate_command_in_lobby(Command& command) {
             } catch (const MatchNotFound& err) {
                 code = CASE_MATCH_NOT_FOUND;
                 std::cout << "Match not found with id: " << command.get_match_id() << std::endl;
+            } catch (const MatchAlreadyStarted& err) {
+                code = CASE_MATCH_ALREADY_STARTED;
+                std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
             }
             Command command_to_send(code, match_id);
             command_to_send.worm_id = worm_id;

@@ -15,6 +15,7 @@ void UserSender::run() {
             // command.msg = command.msg.substr(0, command.msg.find('\0'));
             // parser.parse_sending_command_match(command);
             protocol.send_snapshot(snapshot);
+            std::cout << "UserSender has sent a snapshot" << std::endl;
 
             // if (protocol.send_match(command) == SOCKET_FAILED) {
             //     // Catch error SOCKET_FAILED

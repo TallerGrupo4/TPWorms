@@ -52,6 +52,17 @@ void print_command(const Command& command) {
             // in_match = false;
             break;
         }
+        case CASE_NUMBER_OF_PLAYERS: {
+            std::cout << "There are " << +command.get_number_of_players()
+                      << " player/s in the match: " << +command.get_match_id() << std::endl;
+            break;
+        }
+        case CASE_MATCH_ALREADY_STARTED: {
+            std::cout << "The match " << +command.get_match_id() << " has already started."
+                      << " Try again later or join another match." << std::endl;
+            // in_match = false;
+            break;
+        }
         default:
             // Throw custom error, it should never reach this point!
             break;
@@ -86,6 +97,32 @@ Command parse_sending_command(std::string input) {
     return Command(code, match_id);
 }
 
+Command parse_sending_pseudo_command(std::string input) {
+    std::istringstream str(input);
+    std::string type;
+    str >> type;
+    char code;
+    uint match_id = DEFAULT;
+    if (type == _START) {
+        code = CASE_START;
+    } else if (type == EXIT) {
+        code = CASE_EXIT;
+    } else if (type == "Refresh") {
+        code = CASE_NUMBER_OF_PLAYERS;
+    } else {
+        code = CASE_INVALID;
+    }
+    return Command(code, match_id);
+}
+
+Command get_pseudo_lobby_command() {
+    std::cout << "Enter a command: " << std::endl;
+    std::string input;
+    std::getline(std::cin, input);
+    return parse_sending_pseudo_command(input);
+}
+
+
 Command get_lobby_command() {
     std::cout << "Enter a command: " << std::endl;
     std::string input;
@@ -111,6 +148,7 @@ std::shared_ptr<Action> get_action_in_match() {
 
 int dummy_client(Client& client) {
     bool in_lobby = true;
+    bool is_creator = false;
     while (in_lobby) {
         // Render_lobby();
         Command command = get_lobby_command();
@@ -121,9 +159,48 @@ int dummy_client(Client& client) {
         Command command_received = client.recv_lobby_command();
         if (command_received.get_code() == CASE_JOIN || command_received.get_code() == CASE_CREATE) {
             in_lobby = false;
+            if (command_received.get_code() == CASE_CREATE) {
+                std::cout << "You are the creator of the match." << std::endl;
+                is_creator = true;
+            }
         }
         print_command(command_received);
     }
+    
+
+    // In pseudo-lobby
+    bool pseudo_lobby = true;
+    while (pseudo_lobby) {
+        // Render_pseudo_lobby();
+        if (is_creator) {
+            Command command = get_pseudo_lobby_command();
+            if (command.get_code() == CASE_EXIT) {
+                return 0;
+            }
+            if (command.get_code() == CASE_START) {
+                pseudo_lobby = false;
+                client.send_lobby_command(command);
+            std::cout << "Wating for map..." << std::endl;
+                Snapshot snapshot = client.recv_map();
+                std::cout << "Wating for map to be loaded in creator..." << std::endl;
+                print_snapshot(snapshot);
+            } else if (command.get_code() == CASE_NUMBER_OF_PLAYERS) {
+                client.send_lobby_command(command);
+                Command command_received = client.recv_lobby_command();
+                print_command(command_received);
+            }
+        } else {
+            std::cout << "Wating for map..." << std::endl;
+            Snapshot snapshot = client.recv_map();
+            // Load map
+            // Render_map();
+            pseudo_lobby = false; // break
+            std::cout << "Wating for map to be loaded..." << std::endl;
+            print_snapshot(snapshot);
+        }
+    }
+
+
     // In match
     client.start();
     while (client.is_connected()) {

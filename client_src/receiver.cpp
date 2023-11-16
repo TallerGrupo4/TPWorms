@@ -6,11 +6,10 @@
 #include "../common_src/liberror.h"
 
 
-ClientReceiver::ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
+ClientReceiver::ClientReceiver(Socket& skt,
                                std::shared_ptr<Queue<Snapshot>> _queue_match,
                                std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
-        queue_lobby(_queue_lobby),
         queue_match(_queue_match),
         in_match(_in_match),
         parser(),

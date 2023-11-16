@@ -17,7 +17,7 @@ Client::Client(const char* hostname, const char* servername):
         queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
         client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
                                                      in_match, is_dead)),
-        client_receiver(std::make_unique<ClientReceiver>(socket, queue_receiver_lobby,
+        client_receiver(std::make_unique<ClientReceiver>(socket,
                                                          queue_receiver_match, in_match, is_dead)),
         parser(), protocol(socket, parser) {
     }
@@ -48,7 +48,15 @@ Command Client::recv_lobby_command() {
     return command;
 }
 
-// Snapshot Client::recv_snapshot() {
+Snapshot Client::recv_map() {
+    if (!is_connected()) {
+        // throw LibError(errno, "Client is not connected");
+        // throw LostConnection("Client is not connected");
+    }
+    Snapshot snapshot = protocol.recv_snapshot();
+    return snapshot;
+}
+
 bool Client::recv_snapshot(Snapshot& snapshot) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
@@ -68,13 +76,11 @@ void Client::send_lobby_command(Command command) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
     }
-    // queue_sender_lobby->push(command);
     protocol.send_command(command);
 }
 
 
 void Client::send_action(std::shared_ptr<Action> action) {
-// void Client::send_action(Action action) {
     if (!is_connected()) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");

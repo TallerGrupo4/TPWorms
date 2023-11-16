@@ -17,7 +17,8 @@ void ProtocolClient::send_command(const Command& command) {
         // throw error...
     }
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
-        // Send match_id
+        // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
+        // Send_match_id(command.get_match_id());
         uint len[1] = {htonl(command.get_match_id())};
         if (socket.sendall(len, 4, &was_closed) < 0) {
             // throw error...
@@ -72,6 +73,18 @@ const Command ProtocolClient::recv_command() {
             recv_match_id(match_id);
             return Command(code[0], match_id[0]);
         }
+        case CASE_NUMBER_OF_PLAYERS: {
+            uint match_id[1];
+            recv_match_id(match_id);
+            uint8_t number_of_players[1];
+            recv_number_of_players(number_of_players);
+            return Command(code[0], match_id[0], number_of_players[0]);
+        }
+        case CASE_MATCH_ALREADY_STARTED: {
+            uint match_id[1];
+            recv_match_id(match_id);
+            return Command(code[0], match_id[0]);
+        }
         default:
             break;
     }
@@ -85,8 +98,6 @@ const Command ProtocolClient::recv_command() {
 
 
 void ProtocolClient::send_action(std::shared_ptr<Action> action) {
-// void ProtocolClient::send_action(Action& action) {
-    // action.send(socket, was_closed);
     action->send(socket, was_closed);
 }
 
@@ -182,6 +193,13 @@ void ProtocolClient::recv_match_id(uint* match_id) {
         // throw
     }
     match_id[0] = ntohl(match_id[0]);
+}
+
+void ProtocolClient::recv_number_of_players(uint8_t* number_of_players) {
+    socket.recvall(number_of_players, 1, &was_closed);
+    if (was_closed) {
+        // throw
+    }
 }
 
 std::string ProtocolClient::recv_map_name() {

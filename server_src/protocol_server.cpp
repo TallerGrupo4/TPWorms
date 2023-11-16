@@ -48,6 +48,15 @@ void ProtocolServer::send_command(const Command& command) {
             send_match_id(command.get_match_id());
             break;
         }
+        case CASE_MATCH_ALREADY_STARTED: {
+            send_match_id(command.get_match_id());
+            break;
+        }
+        case CASE_NUMBER_OF_PLAYERS: {
+            send_match_id(command.get_match_id());
+            send_number_of_players(command.get_number_of_players());
+            break;
+        }
         default:
             break;
     }
@@ -70,8 +79,15 @@ const Command ProtocolServer::recv_command() {
         case CASE_JOIN: {
             return recv_join(code);
         }
-        case CASE_LIST:
+        case CASE_LIST: {
             return recv_list(code);
+        }
+        case CASE_START: {
+            return Command(code[0], DEFAULT);
+        }
+        case CASE_NUMBER_OF_PLAYERS: {
+            return Command(code[0], DEFAULT);;
+        }
         default:
             // Handle error
             break;
@@ -119,9 +135,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         case MOV: {
             return recv_mov();
         }
-        case ACTION_START: {
-            return recv_start();
-        }
+        // case ACTION_START: {
+        //     return recv_start();
+        // }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
             return std::make_shared<GameCommand>();
@@ -257,6 +273,11 @@ void ProtocolServer::send_match_id(const uint _match_id) {
     uint match_id[1] = {_match_id};
     match_id[0] = htonl(match_id[0]);
     socket.sendall(match_id, 4, &was_closed);
+}
+
+void ProtocolServer::send_number_of_players(const uint8_t number_of_players) {
+    uint8_t num_of_players[1] = {number_of_players};
+    socket.sendall(num_of_players, 1, &was_closed);
 }
 
 void ProtocolServer::send_list(const std::map<uint, std::string>& matches_availables) {
