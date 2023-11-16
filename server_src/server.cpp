@@ -9,7 +9,7 @@
 #include "../common_src/liberror.h"
 
 
-Server::Server(const char* port): socket(port), monitor_matches() {}
+Server::Server(const char* port, std::vector<std::string> routes): socket(port), monitor_matches(routes) {}
 
 void Server::run() {
     while (true) {

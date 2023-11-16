@@ -7,6 +7,7 @@
 
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
+#include "../map.h"
 
 #include "gamebuilder.h"
 #include "worm.h"
@@ -16,8 +17,6 @@
 
 
 class Game {
-    // Debatible de tener el reader o no , taria bueno porque el string de la ruta se guardaria en el reader
-    std::string map;
     int water_level;
     b2World world;
     GameBuilder builder;
@@ -25,11 +24,11 @@ class Game {
     int turn;
 
 public:
-    Game(std::string map_route): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
+    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
 
-    Snapshot start_and_send() {
-        MapReader map_reader(map); 
-        Snapshot snapshot = map_reader.read_map();
+    Snapshot start_and_send(Map& map) {
+        Snapshot snapshot({}, map.platforms);
+        snapshot.set_dimensions(map.height, map.width);
         builder.create_map(snapshot);
         return snapshot;
     }

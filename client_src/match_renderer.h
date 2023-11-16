@@ -8,6 +8,8 @@
 #include <SDL2pp/SDL2pp.hh>
 #include <thread>
 
+#include "../common_src/clock.h"
+
 #include "action.h"
 #include "worm.h"
 #include "match.h"
@@ -19,16 +21,21 @@ class MatchRenderer {
 private:
     Client& client;
     MatchSurfaces surfaces;
+    SDL2pp::SDL sdl;
+    SDL2pp::Window window;
+    SDL2pp::Renderer renderer;
+    Match match;
+    bool running = true;
 
     bool handleEvents(Match& match);
 
     void render(SDL2pp::Renderer& renderer, Match& match);
 
-    void update(Match& match, std::chrono::duration<double> dt);
-
 public:
     explicit MatchRenderer(Client& client);
 
-    int start();
+    void start();
+    
+    void execute_and_update(int iter);
 };
 #endif  // MATCH_RENDERER_H

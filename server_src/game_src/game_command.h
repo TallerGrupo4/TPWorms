@@ -19,6 +19,15 @@ public:
 };
 
 
+// This could be a Command from the lobby
+class StartCommand: public GameCommand {
+public:
+    StartCommand(): GameCommand(-1 , true) {}
+    ~StartCommand() {}
+};
+
+
+
 class MoveCommand: public GameCommand {
 private:
     int direction;
@@ -39,13 +48,6 @@ public:
 };
 
 
-
-class StartCommand: public GameCommand {
-public:
-    StartCommand(): GameCommand(-1 , true) {}
-    ~StartCommand() {}
-    void execute(Game& game) override { game.start_and_send(); }
-};
 
 
 

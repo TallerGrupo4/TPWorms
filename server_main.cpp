@@ -11,7 +11,10 @@ int main(int argc, char* argv[]) {
                       << "E.g.: ./server 8080 \n";
             return ret;
         }
-        Server server(argv[1]);
+        // argv[2] == PATH
+        // Read folder from PATH 
+        std::vector<std::string> routes = {"../external/maps/map1.yaml"};
+        Server server(argv[1], routes);
         server.start();
         std::string line;
         for (line = ""; line != "q"; std::cin >> line) {}

@@ -4,6 +4,8 @@
 
 #define WORM_WALK_SPRITES_PATH WORMS_SPRITES_PATH "/wwalk.png"
 
+#define WORM_
+
 #define WORM_WALK_DOWN_SPRITES_PATH WORMS_SPRITES_PATH "/wwalkd.png"
 
 #define WORM_WALK_UP_SPRITES_PATH WORMS_SPRITES_PATH "/wwalku.png"

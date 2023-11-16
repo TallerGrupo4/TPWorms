@@ -27,13 +27,17 @@ Animation::Animation(SDL2pp::Texture texture, bool is_orientation_horizontal):
 
 Animation::~Animation() {}
 
-void Animation::update(std::chrono::duration<double> dt) {
-    this->elapsed += dt;
-    /* checks if the frame should be updated based on the time elapsed since the last update */
-    while (this->elapsed > FRAME_DURATION) {
+void Animation::update(int iter) {
+    for (int i = 0; i < iter; i++) {
         this->advanceFrame();
-        this->elapsed -= FRAME_DURATION;
     }
+    
+    // this->elapsed += dt;
+    // /* checks if the frame should be updated based on the time elapsed since the last update */
+    // while (this->elapsed > FRAME_DURATION) {
+    //     this->advanceFrame();
+    //     this->elapsed -= FRAME_DURATION;
+    // }
 }
 
 /**

@@ -18,6 +18,7 @@ private:
 
 public:
     explicit Background(std::vector<PlatformSnapshot> platforms, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    explicit Background();
     void render(SDL2pp::Renderer& renderer);
 };
 

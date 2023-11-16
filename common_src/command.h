@@ -15,6 +15,7 @@ private:
     const char code;
     const uint match_id;
     const std::string map_name;
+    const bool StartMatch = false;
 
     const std::map<uint, std::string> matches_availables;
     const uint8_t number_of_players;
