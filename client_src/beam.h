@@ -19,6 +19,7 @@ private:
     int height;
 
     SDL2pp::Texture assign_texture(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    void assign_positions(int x, int y);
 public:
     explicit Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     void render(SDL2pp::Renderer& renderer);

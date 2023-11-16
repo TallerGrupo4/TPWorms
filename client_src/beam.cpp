@@ -64,8 +64,7 @@ Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& r
     //     break;
     // }
     this->type = pltfrm.type;
-    this->x = pltfrm.pos_x;
-    this->y = pltfrm.pos_y;
+    assign_positions(pltfrm.pos_x, pltfrm.pos_y);
 }
 
 void Beam::render(SDL2pp::Renderer& renderer) {
@@ -78,6 +77,87 @@ void Beam::render(SDL2pp::Renderer& renderer) {
         dest_rect,
         0.0,              // don't rotate
         SDL2pp::NullOpt);
+}
+
+void Beam::assign_positions(int x, int y) {
+    int top_left_x = 0;
+    int top_left_y = 0;
+    switch (this->type) {
+        case LargeVertical :
+        top_left_x = x-BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y = y-BEAM_LARGE_VERTICAL_CENTER_Y;
+        break;
+        case Large65 :
+        top_left_x = x-BEAM_LARGE_65_CENTER_X;
+        top_left_y = y-BEAM_LARGE_65_CENTER_Y;
+        break;
+        case Large45 :
+        top_left_x = x-BEAM_LARGE_45_CENTER;
+        top_left_y = y-BEAM_LARGE_45_CENTER;
+        break;
+        case Large25 :
+        top_left_x = x-BEAM_LARGE_25_CENTER_X;
+        top_left_y = y-BEAM_LARGE_25_CENTER_Y;
+        break;
+        case LargeHorizontal :
+        top_left_x = x-BEAM_LARGE_HORIZONTAL_CENTER_X;
+        top_left_y = y-BEAM_LARGE_HORIZONTAL_CENTER_Y;
+        break;
+        case LargeMinus25 :
+        top_left_x = x-BEAM_LARGE_MINUS_25_CENTER_X;
+        top_left_y = y-BEAM_LARGE_MINUS_25_CENTER_Y;
+        break;
+        case LargeMinus45 :
+        top_left_x = x-BEAM_LARGE_45_CENTER;
+        top_left_y = y-BEAM_LARGE_45_CENTER;
+        break;
+        case LargeMinus65 :
+        top_left_x = x-BEAM_LARGE_MINUS_65_CENTER_X;
+        top_left_y = y-BEAM_LARGE_MINUS_65_CENTER_Y;
+        break;
+        case LargeVerticalFlipped :
+        top_left_x = x-BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y = y-BEAM_LARGE_VERTICAL_CENTER_Y;
+        break;
+        case ShortVertical :
+        top_left_x = x-BEAM_SHORT_VERTICAL_CENTER_X;
+        top_left_y = y-BEAM_SHORT_VERTICAL_CENTER_Y;
+        break;
+        case Short65 :
+        top_left_x = x-BEAM_SHORT_65_CENTER_X;
+        top_left_y = y-BEAM_SHORT_65_CENTER_Y;
+        break;
+        case Short45 :
+        top_left_x = x-BEAM_SHORT_45_CENTER;
+        top_left_y = y-BEAM_SHORT_45_CENTER;
+        break;
+        case Short25 :
+        top_left_x = x-BEAM_SHORT_25_CENTER_X;
+        top_left_y = y-BEAM_SHORT_25_CENTER_Y;
+        break;
+        case ShortHorizontal :
+        top_left_x = x-BEAM_SHORT_HORIZONTAL_CENTER_X;
+        top_left_y = y-BEAM_SHORT_HORIZONTAL_CENTER_Y;
+        break;
+        case ShortMinus25 :
+        top_left_x = x-BEAM_SHORT_M_25_CENTER_X;
+        top_left_y = y-BEAM_SHORT_M_25_CENTER_Y;
+        break;
+        case ShortMinus45 :
+        top_left_x = x-BEAM_SHORT_45_CENTER;
+        top_left_y = y-BEAM_SHORT_45_CENTER;
+        break;
+        case ShortMinus65 :
+        top_left_x = x-BEAM_SHORT_M_65_CENTER_X;
+        top_left_y = y-BEAM_SHORT_M_65_CENTER_Y;
+        break;
+        case ShortVerticalFlipped :
+        top_left_x = x-BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y = y-BEAM_LARGE_VERTICAL_CENTER_Y;
+        break;
+    }
+    this->x = top_left_x;
+    this->y = top_left_y;
 }
 
 SDL2pp::Texture Beam::assign_texture(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {

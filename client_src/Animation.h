@@ -20,7 +20,8 @@ class Animation {
 public:
     Animation(SDL2pp::Texture texture, bool is_orientation_horizontal);
     ~Animation();
-    void update(std::chrono::duration<double> iter);
+    void update_once();
+    void update(int iter);
     void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType);
 
 

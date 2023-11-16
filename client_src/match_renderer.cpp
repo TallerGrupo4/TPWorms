@@ -11,6 +11,7 @@ MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDE
         Snapshot snapshot;
         client.recv_snapshot(snapshot);
         match = Match(snapshot,surfaces,renderer);
+        this->render(renderer,match);
 }
 
 bool MatchRenderer::handleEvents(Match& match) {
@@ -113,7 +114,7 @@ void MatchRenderer::execute_and_update(int iter) {
             match.update_from_iter(iter); // iter
             render(renderer, match);
 
-            Snapshot snapshot;
+            //Snapshot snapshot;
 
             // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
             /*
@@ -130,15 +131,6 @@ void MatchRenderer::execute_and_update(int iter) {
             // Snapshot snapshot = client.pop_snapshot();
             // render(renderer, player);
             // THIS CODE IS WRONG -----
-
-
-            // update(player, FRAME_RATE);
-            // render(renderer, player);
-            // la cantidad de segundos que debo dormir se debe ajustar en función
-            // de la cantidad de tiempo que demoró el handleEvents y el render
-            std::this_thread::sleep_for(std::chrono::milliseconds(1));
-            last_frame_time = start;
-        }
     } catch (std::exception& e) {
         // If case of error, print it and exit with error
         std::cerr << e.what() << std::endl;

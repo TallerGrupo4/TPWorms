@@ -15,13 +15,14 @@ class Match {
 private:
 
     Background bkgrnd;
-    std::map<char,Worm> worms_map;
+    std::map<char,std::shared_ptr<Worm>> worms_map;
     //Worm actual_worm; //Camera
 
 public:
     explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     explicit Match();
-    void update(Snapshot snpsht, int);
+    void update_from_snapshot(Snapshot snpsht);
+    void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer);
 };
 

@@ -222,15 +222,25 @@ int dummy_client(Client& client) {
     return 0;
 }
 
-int main(int argc, char* argv[]) {
-    int ret = 1;
+int main(int argc, char* argv[]) { try {
     if (argc != 3) {
         std::cerr << "Bad program call. Expected " << argv[0] << " with 2 arguments." << std::endl;
-        return ret;
+        return EXIT_FAILURE;
     }
     Client client(argv[1], argv[2]);
-    
-    return dummy_client(client);
+    // return dummy_client(client);
+    LobbyRenderer lobby(client);
+    if (!lobby.start(argc, argv)) {
+        return EXIT_SUCCESS;
+    }
+    MatchRenderer match(client);
+    match.start();
+    return EXIT_SUCCESS;
+    } catch (std::exception& e) {
+        // If case of error, print it and exit with error
+        std::cerr << e.what() << std::endl;
+        return EXIT_FAILURE;
+    }
 
     
     // // Render_match();
@@ -239,13 +249,4 @@ int main(int argc, char* argv[]) {
     // // match.start();
     //MatchRenderer match(client);
     //ret = client.start();
-
-
-//     LobbyRenderer lobby(client);
-//     if (!lobby.start(argc, argv)) {
-//         return EXIT_SUCCESS;
-//     }
-//     MatchRenderer match(client);
-//     ret = match.start();
-//     return ret;
 }

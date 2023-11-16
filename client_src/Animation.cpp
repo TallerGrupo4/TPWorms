@@ -19,13 +19,16 @@ Animation::Animation(SDL2pp::Texture texture, bool is_orientation_horizontal):
                           (this->texture.GetWidth() / this->texture.GetHeight()) :
                           (this->texture.GetHeight() / this->texture.GetWidth())),
         size(this->is_orientation_horizontal ? this->texture.GetHeight() :
-                                               this->texture.GetWidth()),
-        elapsed(0) {
+                                               this->texture.GetWidth()) {
     assert(this->numFrames > 0);
     assert(this->size > 0);
 }
 
 Animation::~Animation() {}
+
+void Animation::update_once() {
+    this->advanceFrame();
+}
 
 void Animation::update(int iter) {
     for (int i = 0; i < iter; i++) {

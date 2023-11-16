@@ -37,7 +37,7 @@ bool Worm::is_same_id(char id_to_check) {
  * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
  * Esto les va a resultar muy util.
  */
-void Worm::update(WormSnapshot worm_snpsht, std::chrono::duration<double> dt) {
+void Worm::update_from_snapshot(WormSnapshot worm_snpsht) {
     angle = worm_snpsht.angle;
     facing_left = (worm_snpsht.direction == 0 ? true : false);
     health_points = worm_snpsht.health;
@@ -45,7 +45,7 @@ void Worm::update(WormSnapshot worm_snpsht, std::chrono::duration<double> dt) {
     y = worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
     if (state == 0) {
-        walking_an.update(dt);
+        walking_an.update_once();
         // if (facing_left)
         //     x -= 10;
         // else
@@ -56,7 +56,9 @@ void Worm::update(WormSnapshot worm_snpsht, std::chrono::duration<double> dt) {
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     std::cout << "x: " << x << " y: " << y << std::endl;
-    walking_an.render(renderer, SDL2pp::Rect(x, y, 200, 200), flip);
+    int top_left_x = x-WORM_CENTER;
+    int top_left_y = y-WORM_CENTER;
+    walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 200, 200), flip);
 }
 
 void Worm::moveRigth() {
