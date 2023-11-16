@@ -1,6 +1,7 @@
 #include <yaml-cpp/yaml.h>
 #include <vector>
 #include "snapshot.h"
+#include <iostream> 
 
 #ifndef YAML_READER_H
 #define YAML_READER_H
@@ -63,17 +64,18 @@ class MapReader : public Reader {
             std::vector<PlatformSnapshot> platforms_snap;
             YAML::Node platforms = node["platforms"];
             for (YAML::const_iterator it = platforms.begin(); it != platforms.end(); ++it) {
+
                 // Has type , x , y
                 YAML::Node platform = *it;
+                BeamType type =platform["type"].as<BeamType>();
                 float x = platform["x"].as<float>();
                 float y = platform["y"].as<float>();
-                BeamType type =platform["type"].as<BeamType>();
                 platforms_snap.push_back(PlatformSnapshot(type, x, y));
             }
             Snapshot map_snap({}, platforms_snap);
             YAML::Node dimensions = node["dimensions"];
-            int width = dimensions["width"].as<int>();
-            int height = dimensions["height"].as<int>();
+            int height = dimensions[0]["height"].as<int>();
+            int width = dimensions[0]["width"].as<int>();
             map_snap.set_dimensions(width, height);
             return map_snap;
         }
