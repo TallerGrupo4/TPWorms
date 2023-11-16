@@ -30,8 +30,8 @@ class Match: public Thread {
         std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
         char id_counter;
         
-        void send_map();
-        void move_player(int direction, char id);
+        void send_initial_data();
+        // void move_player(int direction, char id);
         void push_all_players(Snapshot snapshot);
 
 

@@ -8,11 +8,12 @@
 #include "../common_src/snapshot.h"
 #include "surfaces.h"
 #include "Animation.h"
+#include "background.h"
 
 class Worm {
 public:
     //Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal);
-    Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, Background& bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot worm_snpsht);
     void render(SDL2pp::Renderer& renderer);
@@ -22,6 +23,7 @@ public:
     bool is_same_id(char id_to_check);
 
 private:
+    Background& bkgrnd;
     Animation walking_an;
     bool facing_left;
     bool moving;

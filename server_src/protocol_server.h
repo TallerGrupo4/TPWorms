@@ -34,6 +34,7 @@ private:
     const Command recv_match_id(const char* code);
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
+    int send_map_dimensions(const int& width, const int& height);
     int send_worms(std::vector<WormSnapshot>& worms);
     std::shared_ptr<GameCommand> recv_mov();
     std::shared_ptr<GameCommand> recv_start();

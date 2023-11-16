@@ -4,12 +4,19 @@
 
 #include "../../common_src/constants.h"
 
+#ifndef WORM_H
+#define WORM_H
+
+class WormNotFound: public std::exception {
+    const char* what() const noexcept override {
+        return "The worm body is a null pointer";
+    }
+};
+
 #define START_LIFE 100
 #define NO_WEAPON 0
 #define NULL_STATE 0
 
-#ifndef WORM_H
-#define WORM_H
 
 class Worm {
     b2Body* body;
@@ -29,6 +36,7 @@ public:
     }
 
     WormSnapshot get_snapshot() {
+        if (body == nullptr){throw WormNotFound();}
         float pos_x = body->GetPosition().x;
         float pos_y = body->GetPosition().y;
         float angle = body->GetAngle();

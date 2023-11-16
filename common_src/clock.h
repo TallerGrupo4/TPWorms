@@ -1,6 +1,7 @@
 #include <functional>
 #include <chrono>
 #include <thread>
+#include <iostream>
 
 #include "yamlReader.h"
 
@@ -21,13 +22,15 @@ class Clock {
 
     void tick() {
         int iter = 1;
-        auto t1 = std::chrono::high_resolution_clock::now();
+        auto t1 = std::chrono::high_resolution_clock::now(); // 17:25:02
         while (keep_ticking){
             func(iter);
             iter = 0;
-            auto t2 = std::chrono::high_resolution_clock::now();
-            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+            auto t2 = std::chrono::high_resolution_clock::now(); // 17:25:03
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();;
+            std::cout << int(diff) << std::endl;
             int rest = rate - diff;
+            std::cout << int(rest) << std::endl;
             if (rest < 0) {
                 int behind = -rest;
                 rest = rate - behind % rate;
@@ -35,9 +38,10 @@ class Clock {
                 t1 += std::chrono::milliseconds(lost);
                 iter += lost / rate;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
+            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             t1 += std::chrono::milliseconds(rate);
             iter++;
+
         }
     }
 

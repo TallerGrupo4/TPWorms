@@ -11,6 +11,7 @@
 
 #include "gamebuilder.h"
 #include "worm.h"
+#include <iostream>
 
 #ifndef GAME_H
 #define GAME_H
@@ -26,15 +27,22 @@ class Game {
 public:
     Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
 
-    Snapshot start_and_send(Map& map) {
+    Snapshot start_and_send(Map& map, int number_of_players) {
         Snapshot snapshot({}, map.platforms);
         snapshot.set_dimensions(map.height, map.width);
         builder.create_map(snapshot);
+        std::vector <WormSnapshot> wormsSnapshots;
+        for (int i = 0; i < number_of_players; i++) {
+            add_player(i);
+            wormsSnapshots.push_back(players[i].get_snapshot());
+        }
+        std:: cout << (int) wormsSnapshots.size() << std::endl;
+        snapshot.worms = wormsSnapshots;
         return snapshot;
     }
 
     void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
-        b2Body* player = nullptr;
+        b2Body* player = builder.create_worm(0, 0);
         players.push_back(Worm(current_id, player));
     }
 

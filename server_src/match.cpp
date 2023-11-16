@@ -31,10 +31,7 @@ uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
 }
 
 void Match::start_game() {
-    send_map();
-    for (int i = 0; i < id_counter; i++) {
-        game.add_player(id_counter);
-    }
+    send_initial_data();
     match_started = true;
     this->start();
 }
@@ -61,10 +58,11 @@ void Match::push_all_players(Snapshot snapshot) {
     }
 }
 
-void Match::send_map() {
-    Snapshot map_snap = game.start_and_send(map);
-    push_all_players(map_snap);
+void Match::send_initial_data() {
+    Snapshot start_snap = game.start_and_send(map , id_counter);
+    push_all_players(start_snap);
 }
+
 void Match::run(){
     Clock clock(std::bind(&Match::execute_and_step, this, std::placeholders::_1), FRAME_TIME, keep_running);
     clock.tick();

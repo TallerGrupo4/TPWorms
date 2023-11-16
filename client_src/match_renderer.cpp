@@ -8,8 +8,11 @@ using namespace SDL2pp;
 MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDEO),
                 window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
-        Snapshot snapshot;
-        client.recv_snapshot(snapshot);
+        Snapshot snapshot = client.recv_map();
+        // Snapshot snpsht;
+        // while (client.recv_snapshot(snpsht);
+        // snapshot.worms = snpsht.worms;
+        std::cout << "match height: " << snapshot.height << "\n match width: " << snapshot.width << std::endl;
         match = Match(snapshot,surfaces,renderer);
         this->render(renderer,match);
 }

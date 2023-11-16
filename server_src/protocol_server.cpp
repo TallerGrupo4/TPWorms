@@ -66,6 +66,8 @@ const Command ProtocolServer::recv_command() {
     char code[1];
     std::cout << "Waiting for command..." << std::endl;
     int ret = socket.recvall(code, 1, &was_closed);
+    std::cout << "Received a command code: " << int(code[0]) << std::endl;
+
     if (ret < 0) {
         // throw
     }
@@ -97,7 +99,7 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (snapshot.worms.empty()) {
+    if (snapshot.worms.empty()) { // Worms will not be empty!!!
         // Move this into a function
         char is_map[1] = {MAP};
         if (socket.sendall(is_map, 1, &was_closed) < 0) {
@@ -105,6 +107,9 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
         }
         if (was_closed) {
             throw LibError(errno, "Socket was closed");
+        }
+        if (send_map_dimension(snapshot.width, snapshot.height) < 0) {
+            return SOCKET_FAILED;
         }
         if (send_platforms(snapshot.platforms) < 0) {
             return SOCKET_FAILED;
@@ -165,6 +170,16 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_mov() {
     return std::make_shared<MoveCommand>(id_worm[0], movement_x[0]);
 }
 
+int ProtocolServer::send_map_dimensions(const int& width, const int& height) {
+    int width[1] = {width};
+    int height[1] = {height};
+    width[0] = htonl(width[0]);
+    height[0] = htonl(height[0]);
+    socket.sendall(width, 4, &was_closed);
+    socket.sendall(height, 4, &was_closed);
+    return 1;
+}
+
 int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
     uint16_t num_of_plats[1] = {htons(platforms.size())};
     if (socket.sendall(num_of_plats, 2, &was_closed) < 0) {
@@ -175,12 +190,12 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_x[1] = {static_cast<int>(platform.pos_x * MULTIPLIER)};
+        int pos_x[1] = {static_cast<int>(std::round(platform.pos_x))};
         pos_x[0] = htonl(pos_x[0]);
         if (socket.sendall(pos_x, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_y[1] = {static_cast<int>(platform.pos_y * MULTIPLIER)};
+        int pos_y[1] = {static_cast<int>(std::round(platform.pos_y))};
         pos_y[0] = htonl(pos_y[0]);
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -262,6 +277,7 @@ const Command ProtocolServer::recv_match_id(const char* code) {
         throw LibError(errno, "Socket was closed");
     }
     match_id[0] = ntohl(match_id[0]);
+    std::cout << "Received a match id: " << int(match_id[0]) << std::endl;
     return Command(code[0], match_id[0]);
 }
 

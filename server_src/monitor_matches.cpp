@@ -4,11 +4,14 @@
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
-MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
-    int map_id = 0;
-    for (int i = 0; i < routes.size(); i++) {
-        maps[map_id++] = Map(routes.at(i));
+class MapNotFound: public std::exception {
+    const char* what() const noexcept override {
+        return "Was not able to find Map with that id when creating the match";
     }
+};
+
+MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
+    maps[(uint)1] = Map(routes[0]);
 }
 
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(
@@ -18,6 +21,10 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
         throw MatchAlreadyExists();
 
     // HARDCODEO PORQUE NO ESTA IMPLEMENTADO LA ELECCION DEL MAPA
+    std::cout << "Creating match with id: " << match_id << std::endl;
+    if (maps.find((uint)1) == maps.end()) {
+        throw MapNotFound();
+    }
     matches[match_id] = std::make_unique<Match>(maps.at(1));
     worm_id = matches[match_id]->add_player(queue);
     return matches[match_id]->get_queue();

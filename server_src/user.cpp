@@ -26,6 +26,8 @@ void User::run() {
         sender->start();
         handle_match();
     } catch (const LibError& err) {
+        std::cout << "User connection was closed: "
+                  << err.what() << std::endl;
         _is_dead = true;
         if (queue_match) {
             try {
@@ -39,7 +41,10 @@ void User::run() {
                 // It is an 'expected' error but it should never reach this point
             }
         }
-    } catch (...) {
+    } catch (const std::exception& err) {
+        std::cerr << "Something went wrong and an exception was caught in the User: "
+                  << err.what() << std::endl;
+    }catch (...) {
         std::cerr << "Something went wrong and an unknown exception was caught in the User"
                   << std::endl;
     }

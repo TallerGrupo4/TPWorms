@@ -77,7 +77,7 @@ QString code_string = ui->CreateMatchLineEdit->text();
         QRegExp re("\\d*");
         if (re.exactMatch(code_string)) {
             bool ok;
-            int match_code = code_string.toUInt(&ok);
+            uint match_code = code_string.toUInt(&ok);
             if(!ok) {
                 ui->CreateMatchLineEdit->clear();
                 ui->CreateMatchLineEdit->setText("Error: Unable to convert code");

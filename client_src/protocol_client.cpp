@@ -112,6 +112,14 @@ Snapshot ProtocolClient::recv_snapshot() {
 
 Snapshot ProtocolClient::recv_platforms() {
     Snapshot snapshot;
+    int width[1];
+    int height[1];
+    socket.recvall(width, 4, &was_closed);
+    socket.recvall(height, 4, &was_closed);
+    width[0] = ntohl(width[0]);
+    height[0] = ntohl(height[0]);
+    snapshot.width = width[0];
+    snapshot.height = height[0];
     uint16_t num_of_plats[1];
     socket.recvall(num_of_plats, 2, &was_closed);
     // if (was_closed) throw WasClosed;

@@ -41,8 +41,6 @@ public:
     void create_map(Snapshot& map_snap) {
         for (PlatformSnapshot platform : map_snap.platforms) {
             create_platform_type(platform.pos_x, platform.pos_y, platform.type);
-            platform.pos_x *= PIX_PER_METER;
-            platform.pos_y *= PIX_PER_METER;
         }
     }
 

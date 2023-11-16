@@ -17,7 +17,7 @@ private:
     int height;
 
 public:
-    explicit Background(std::vector<PlatformSnapshot> platforms, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    explicit Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     explicit Background();
     void render(SDL2pp::Renderer& renderer);
 };

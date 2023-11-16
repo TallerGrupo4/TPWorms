@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include "constants.h"
 
 
 #ifndef SNAPSHOT_H
@@ -79,7 +80,7 @@ public:
     ~Snapshot() {};
 
     void set_dimensions(int height, int width){
-        this->height = height;
+        this->height = height ;
         this->width = width;
     }
 };

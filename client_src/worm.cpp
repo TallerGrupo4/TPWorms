@@ -1,8 +1,7 @@
 #include "worm.h"
 
-#include <iostream>
-
-Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
+Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, Background& bkgrnd) : 
+    bkgrnd(bkgrnd),
     walking_an(SDL2pp::Texture(renderer, surfaces.walking_worm), false),
     facing_left(worm_snpsht.direction == 0 ? true : false),
     //facing_left(worm_snpsht.direction),
@@ -56,8 +55,9 @@ void Worm::update_from_snapshot(WormSnapshot worm_snpsht) {
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     std::cout << "x: " << x << " y: " << y << std::endl;
+    // int pix_x = x*PIX_PER_METER + ;
     int top_left_x = x-WORM_CENTER;
-    int top_left_y = y-WORM_CENTER;
+    int top_left_y = y+WORM_CENTER;
     walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 200, 200), flip);
 }
 
