@@ -70,8 +70,8 @@ class Snapshot {
 public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
-    int height;
-    int width;
+    float height;
+    float width;
 
     Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
             worms(worms), platforms(platforms) {};

@@ -15,7 +15,7 @@ class Clock {
     public:
     // Framerate is for example 60 fps, so frame duration is 1/60 seconds , we convert them to miliseconds
     Clock(std::function<void(int)> func, float frameDuration, bool& keep_ticking): func(func), keep_ticking(keep_ticking){
-        rate = int (frameDuration * 1000); 
+        rate = std::round (frameDuration * 1000);
     }
     
     ~Clock() {}
@@ -28,21 +28,20 @@ class Clock {
             iter = 0;
             auto t2 = std::chrono::high_resolution_clock::now(); // 17:25:03
             auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();;
-            std::cout << int(diff) << std::endl;
             int rest = rate - diff;
-            std::cout << int(rest) << std::endl;
             if (rest < 0) {
-                int behind = -rest;
+                int behind = (-1) * rest;
                 rest = rate - behind % rate;
                 int lost = behind + rest;
                 t1 += std::chrono::milliseconds(lost);
                 iter += lost / rate;
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            std::this_thread::sleep_for(std::chrono::milliseconds(rest));
             t1 += std::chrono::milliseconds(rate);
             iter++;
 
         }
+
     }
 
     void stop_ticking(){

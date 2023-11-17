@@ -5,6 +5,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <cmath>
 
 #include <arpa/inet.h>
 #include <sys/types.h>
@@ -102,24 +103,25 @@ void ProtocolClient::send_action(std::shared_ptr<Action> action) {
 }
 
 Snapshot ProtocolClient::recv_snapshot() {
-    char code[1];
-    socket.recvall(code, 1, &was_closed);
-    if (code[0] == MAP) return recv_platforms();
-    else if (code[0] == WORMS) return recv_worms();
-    return Snapshot();
+    Snapshot snapshot;
+    recv_dimensions_and_platforms(snapshot);
+    recv_worms(snapshot);
+    return snapshot;
 }
 
 
-Snapshot ProtocolClient::recv_platforms() {
-    Snapshot snapshot;
+// (7.35235 , 2.253536) => *1000 (7352 , 2253) => (7352*60 , 2253*60) => (441120 , 135180) => (441120/1000 , 135180/1000) => (441.12 , 135.18)
+
+void ProtocolClient::recv_dimensions_and_platforms(Snapshot& snapshot) {
     int width[1];
     int height[1];
     socket.recvall(width, 4, &was_closed);
     socket.recvall(height, 4, &was_closed);
     width[0] = ntohl(width[0]);
     height[0] = ntohl(height[0]);
-    snapshot.width = width[0];
-    snapshot.height = height[0];
+    // Move this to  a 'Parser'
+    snapshot.width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
     uint16_t num_of_plats[1];
     socket.recvall(num_of_plats, 2, &was_closed);
     // if (was_closed) throw WasClosed;
@@ -137,17 +139,18 @@ Snapshot ProtocolClient::recv_platforms() {
     // if (was_closed) throw WasClosed;
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
+        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
+        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
+
         // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
         // The client must know that it probably has to divide by 1000
         // (The platforms have integers instead of floats from now on in the client)
         PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0]);
         snapshot.platforms.push_back(platform);
     }
-    return snapshot;
 }
 
-Snapshot ProtocolClient::recv_worms() {
-    Snapshot snapshot;
+void ProtocolClient::recv_worms(Snapshot& snapshot) {
     uint16_t num_of_worms[1];
     socket.recvall(num_of_worms, 2, &was_closed);
     // if (was_closed) throw WasClosed;
@@ -180,15 +183,18 @@ Snapshot ProtocolClient::recv_worms() {
     // if (was_closed) throw WasClosed;
         socket.recvall(state, 1, &was_closed);
     // if (was_closed) throw WasClosed;
+    std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_x[0] = ntohl(pos_x[0]);
+        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_y[0] = ntohl(pos_y[0]);
+        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
         angle[0] = ntohl(angle[0]);
+        angle[0] = (static_cast<float>(angle[0])) / MULTIPLIER;
         max_health[0] = ntohl(max_health[0]);
         health[0] = ntohl(health[0]);
         WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0]);
         snapshot.worms.push_back(worm);
     }
-    return snapshot;
 }
 
 

@@ -99,33 +99,14 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (snapshot.worms.empty()) { // Worms will not be empty!!!
-        // Move this into a function
-        char is_map[1] = {MAP};
-        if (socket.sendall(is_map, 1, &was_closed) < 0) {
-            return SOCKET_FAILED;
-        }
-        if (was_closed) {
-            throw LibError(errno, "Socket was closed");
-        }
-        if (send_map_dimension(snapshot.width, snapshot.height) < 0) {
-            return SOCKET_FAILED;
-        }
-        if (send_platforms(snapshot.platforms) < 0) {
-            return SOCKET_FAILED;
-        }
-    } else {
-        // Move this into a function
-        char is_worms[1] = {WORMS};
-        if (socket.sendall(is_worms, 1, &was_closed) < 0) {
-            return SOCKET_FAILED;
-        }
-        if (was_closed) {
-            throw LibError(errno, "Socket was closed");
-        }
-        if (send_worms(snapshot.worms) < 0) {
-            return SOCKET_FAILED;
-        }
+    if (send_map_dimensions(snapshot.width, snapshot.height) < 0) {
+        return SOCKET_FAILED;
+    }
+    if (send_platforms(snapshot.platforms) < 0) {
+        return SOCKET_FAILED;
+    }
+    if (send_worms(snapshot.worms) < 0) {
+        return SOCKET_FAILED;
     }
     return 1;
 }
@@ -170,9 +151,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_mov() {
     return std::make_shared<MoveCommand>(id_worm[0], movement_x[0]);
 }
 
-int ProtocolServer::send_map_dimensions(const int& width, const int& height) {
-    int width[1] = {width};
-    int height[1] = {height};
+int ProtocolServer::send_map_dimensions(const int& _width, const int& _height) {
+    int width[1] = {static_cast<int>(std::round(_width * MULTIPLIER))};
+    int height[1] = {static_cast<int>(std::round(_height * MULTIPLIER))};
     width[0] = htonl(width[0]);
     height[0] = htonl(height[0]);
     socket.sendall(width, 4, &was_closed);
@@ -190,12 +171,13 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_x[1] = {static_cast<int>(std::round(platform.pos_x))};
+
+        int pos_x[1] = {static_cast<int>(std::round(platform.pos_x * MULTIPLIER))};
         pos_x[0] = htonl(pos_x[0]);
         if (socket.sendall(pos_x, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_y[1] = {static_cast<int>(std::round(platform.pos_y))};
+        int pos_y[1] = {static_cast<int>(std::round(platform.pos_y * MULTIPLIER))};
         pos_y[0] = htonl(pos_y[0]);
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -226,7 +208,7 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int angle[1] = {static_cast<int>(worm.angle * MULTIPLIER)};
+        int angle[1] = {static_cast<int>(worm.angle * RADTODEG * MULTIPLIER)};
         angle[0] = htonl(angle[0]);
         if (socket.sendall(angle, 4, &was_closed) < 0) {
             return SOCKET_FAILED;

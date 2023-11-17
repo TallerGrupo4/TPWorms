@@ -46,6 +46,11 @@
 // Codes for game actions
 #define MOV 0x01
 
+//
+#define PLAT_SMALL 3
+#define PLAT_BIG 6
+#define PLAT_HEIGHT 0.8
+
 
 // Code for protocol
 #define MULTIPLIER 1000 // to convert from float to int for protocol taking into account 3 decimal places
@@ -56,10 +61,12 @@
 
 
 //Consts for render
-#define PIX_PER_METER 60
+#define PIX_PER_METER 1
 
 // Consts for game loop
 #define FPS 30
-#define FRAME_TIME 1000 / FPS
+#define FRAME_TIME 1
+#define DEGTORAD 0.0174532925199432957f
+#define RADTODEG 57.295779513082320876f
 
 #endif  // _CONSTANTS_H_

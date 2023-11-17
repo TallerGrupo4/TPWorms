@@ -16,6 +16,7 @@
 #ifndef GAME_H
 #define GAME_H
 
+// (7.35235 , 2.253536) => *1000 (7352 , 2253) => (7352*60 , 2253*60) => (441120 , 135180) => (441120/1000 , 135180/1000) => (int(441.12) , int(135.18))
 
 class Game {
     int water_level;
@@ -59,6 +60,8 @@ public:
 
 // Check parameter..
     void step(int it) {
+        float time_simulate = (float) it / FPS;
+        world.Step(time_simulate, 8, 3);
         // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
         /*
         float time_simulate = (float) it / FPS;

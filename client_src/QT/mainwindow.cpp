@@ -13,7 +13,10 @@ MainWindow::MainWindow(Client& client, bool& exit_succesful): QMainWindow(nullpt
     path_to_img = path_to_img.substr(0, path_to_img.size() - 14);
     path_to_img = path_to_img + "main_menu.jpg";
     ui->Label_BackgroundImage->setPixmap(QPixmap(path_to_img.data()));
-    
+    ui->MatchOptionsFrame->setVisible(true);
+    ui->MatchOptionsFrame->setEnabled(true);
+    ui->PreMatchFrame->setVisible(false);
+    ui->PreMatchFrame->setEnabled(false);
     QObject::connect(ui->JoinMatchButton, &QPushButton::clicked,
                      this, &MainWindow::joinMatch);
     

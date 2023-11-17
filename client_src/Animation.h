@@ -18,7 +18,7 @@ class Area;
 
 class Animation {
 public:
-    Animation(SDL2pp::Texture texture, bool is_orientation_horizontal);
+    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal);
     ~Animation();
     void update_once();
     void update(int iter);
@@ -28,7 +28,7 @@ public:
 private:
     void advanceFrame();
     /** SDL texture of the raw image. */
-    SDL2pp::Texture& texture;
+    SDL2pp::Texture texture;
     /** Animation Orientation. */
     bool is_orientation_horizontal;
     /** Current animation frame. */

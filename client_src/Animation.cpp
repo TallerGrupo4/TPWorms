@@ -11,8 +11,8 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-Animation::Animation(SDL2pp::Texture texture, bool is_orientation_horizontal):
-        texture(texture),
+Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal) :
+        texture(SDL2pp::Texture(renderer,surface)),
         is_orientation_horizontal(is_orientation_horizontal),
         currentFrame(0),
         numFrames(this->is_orientation_horizontal ?
@@ -53,7 +53,7 @@ void Animation::update(int iter) {
 void Animation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                        SDL_RendererFlip& flipType) {
     renderer.Copy(
-            texture,
+            this->texture,
             (this->is_orientation_horizontal ?
                      SDL2pp::Rect(this->size * this->currentFrame, 0, this->size, this->size) :
                      SDL2pp::Rect(0, this->size * this->currentFrame, this->size, this->size)),

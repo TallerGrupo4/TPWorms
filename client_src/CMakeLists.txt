@@ -6,6 +6,8 @@ add_definitions(-DEFFECTS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Effects"
 -DWEAPONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Weapons"
 -DWORMS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Worms"
 )
+
+# message(STATUS "Files in ${PROJECT_SOURCE_DIR}")
 add_subdirectory(QT)
 add_library(client_lib STATIC
 ${client_src_files})

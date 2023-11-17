@@ -26,8 +26,8 @@ private:
     void recv_number_of_players(uint8_t* number_of_players);
     std::string recv_map_name();
     std::map<uint, std::string> recv_list();
-    Snapshot recv_platforms();
-    Snapshot recv_worms();
+    void recv_dimensions_and_platforms(Snapshot& snapshot);
+    void recv_worms(Snapshot& snapshot);
     uint8_t recv_worm_id();
 
 public:

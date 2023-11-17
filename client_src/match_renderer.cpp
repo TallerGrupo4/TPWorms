@@ -6,7 +6,7 @@
 using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDEO),
-                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
+                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1800, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         Snapshot snapshot = client.recv_map();
         // Snapshot snpsht;
@@ -81,9 +81,15 @@ bool MatchRenderer::handleEvents(Match& match) {
                 //mouseMotionEvent.xrel
                 // std::cout << "Oh! Mouse" << std::endl;
                 break;
-            case SDL_QUIT:
+            case SDL_MOUSEBUTTONDOWN: {
+                SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
+                std::cout << "x:" << mouseButtonEvent.x << " y: " << mouseButtonEvent.y << std::endl;
+                break;
+            }
+            case SDL_QUIT: {
                 std::cout << "Quit :(" << std::endl;
                 return false;
+            }
         }  // fin switch(event)
     }      // fin while(SDL_PollEvents)
     // client.push_game_command(game_command);
