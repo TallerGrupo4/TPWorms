@@ -14,11 +14,10 @@ class WormNotFound: public std::exception {
 };
 
 #define START_LIFE 100
-#define NO_WEAPON 0
-#define NULL_STATE 0
 
 
 class Worm {
+    friend class Game;
     b2Body* body;
     char id;
     int life;
@@ -27,12 +26,13 @@ class Worm {
 
 public:
     Worm(char id, b2Body* body):
-            body(body), id(id), life(START_LIFE), weapon(NO_WEAPON), state(NULL_STATE) {}
+            body(body), id(id), life(START_LIFE), weapon(NO_WEAPON), state(STILL) {}
 
     void move(int direction) {
         body->SetLinearVelocity(b2Vec2(0, 0));
         float impulse = body->GetMass() * direction * WORM_SPEED;
         body->ApplyLinearImpulseToCenter(b2Vec2(impulse, 0), true);
+        state = MOVING;
     }
 
     WormSnapshot get_snapshot() {

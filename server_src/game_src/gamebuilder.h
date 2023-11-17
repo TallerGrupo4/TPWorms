@@ -8,8 +8,8 @@
 #define PLAT_HEIGHT 0.8
 #define PLAT_FRICTION 0.5
 
-#define PLAYER_WIDTH 1
-#define PLAYER_HEIGHT 1
+#define PLAYER_WIDTH 2
+#define PLAYER_HEIGHT 1.5
 #define PLAYER_FRICTION 0.5
 
 #ifndef GAMEBUILDER_H
@@ -19,13 +19,13 @@
 #define DEG_TO_RAD 0.0174532925199432957f
 
 class GameBuilder {
-    b2World& world;
+    b2World* world;
 
     void create_platform(float x, float y, float width, float height, float angle) {
         b2BodyDef platform_def;
         platform_def.type = b2_staticBody;
         platform_def.position.Set(x, y);
-        b2Body* platform = world.CreateBody(&platform_def);
+        b2Body* platform = world->CreateBody(&platform_def);
         b2PolygonShape platform_shape;
         platform_shape.SetAsBox(width / 2, height / 2);
         b2FixtureDef platform_fixture;
@@ -35,7 +35,7 @@ class GameBuilder {
     }
 
 public:
-    GameBuilder(b2World& world): world(world) {}
+    GameBuilder(b2World* world): world(world) {}
 
 
     void create_map(Snapshot& map_snap) {
@@ -57,10 +57,11 @@ public:
         worm_def.type = b2_dynamicBody;
         worm_def.position.Set(x, y);
         worm_def.fixedRotation = true;
-        b2Body* worm = world.CreateBody(&worm_def);
+        b2Body* worm = world->CreateBody(&worm_def);
         b2PolygonShape worm_shape;
         worm_shape.SetAsBox(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
         b2FixtureDef worm_fixture;
+        worm_fixture.density = 1;
         worm_fixture.shape = &worm_shape;
         worm_fixture.friction = PLAYER_FRICTION;
         worm->CreateFixture(&worm_fixture);

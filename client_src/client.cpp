@@ -62,10 +62,7 @@ bool Client::recv_snapshot(Snapshot& snapshot) {
         // throw LibError(errno, "Client is not connected");
         // throw LostConnection("Client is not connected");
     }
-    if (queue_receiver_match->try_pop(snapshot)) {
-        return true;
-    }
-    return false;
+    return queue_receiver_match->try_pop(snapshot);
     // Snapshot snapshot;
     // queue_receiver_match->try_pop(snapshot);
     // return snapshot;

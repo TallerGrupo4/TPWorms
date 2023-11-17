@@ -36,28 +36,26 @@ bool Worm::is_same_id(char id_to_check) {
  * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
  * Esto les va a resultar muy util.
  */
-void Worm::update_from_snapshot(WormSnapshot worm_snpsht) {
+void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     angle = worm_snpsht.angle;
     facing_left = (worm_snpsht.direction == 0 ? true : false);
     health_points = worm_snpsht.health;
     state = worm_snpsht.state;
+    //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
+    //std::cout << "update_from_snapshot nueva pos_x snap: " << worm_snpsht.pos_x << std::endl;
     y = worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
-    if (state == 0) {
+    if (state == MOVING) {
         walking_an.update_once();
-        // if (facing_left)
-        //     x -= 10;
-        // else
-        //     x += 10;
     }
 }
 
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    //std::cout << "x: " << x << " y: " << y << std::endl;
+    // std::cout << "x worm: " << x << " y worm: " << y << std::endl;
     int top_left_x = x-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2);
-    int top_left_y = y-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2);
-    std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
+    int top_left_y = ((-1)*y)-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2);
+    // std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
     walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 60*RESOLUTION_MULTIPLIER, 60*RESOLUTION_MULTIPLIER), flip);
 }
 

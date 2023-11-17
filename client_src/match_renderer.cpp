@@ -10,9 +10,6 @@ MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDE
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         Snapshot snapshot = client.recv_map();
-        // Snapshot snpsht;
-        // while (client.recv_snapshot(snpsht);
-        // snapshot.worms = snpsht.worms;
         std::cout << "match height: " << snapshot.height << "\n match width: " << snapshot.width << std::endl;
         match = Match(snapshot,surfaces,renderer);
         this->render(renderer,match);
@@ -20,7 +17,7 @@ MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDE
 
 bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
-    std::shared_ptr<Action> action;
+    std::shared_ptr<Action> action = std::make_shared<Action>();
     // Action action;
     while (SDL_PollEvent(&event)) {
         //bool is_moving_right;
@@ -32,17 +29,17 @@ bool MatchRenderer::handleEvents(Match& match) {
                     case SDLK_ESCAPE:
                     case SDLK_q:
                         return false;
-                    case SDLK_LEFT:
-                        action->id_worm = 0;
+                    case SDLK_LEFT: {
+                        // std::shared_ptr<ActionMovLeft> action = std::make_shared<ActionMovLeft>();
                         action->movement_x = 10;
-                        // action.type = 0;
                         action->type = 0;
+                        // action->type = 0;
                         client.send_action(action);
                         //client.push_game_command(game_command);
                         //player.moveLeft();
                         break;
+                    }
                     case SDLK_RIGHT:
-                        action->id_worm = 0;
                         action->movement_x = 10;
                         // action.type = 1;
                         action->type = 1;
@@ -57,7 +54,6 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_LEFT:
-                        action->id_worm = 0;
                         action->movement_x = 0;
                         // action.type = 0;
                         action->type = 0;
@@ -65,7 +61,6 @@ bool MatchRenderer::handleEvents(Match& match) {
                         //player.stopMoving();
                         break;
                     case SDLK_RIGHT:
-                        action->id_worm = 0;
                         action->movement_x = 0;
                         // action.type = 1;
                         action->type = 1;
@@ -142,12 +137,14 @@ void MatchRenderer::execute_and_update(int iter) {
             // render(renderer, player);
             // THIS CODE IS WRONG -----
     } catch (std::exception& e) {
+
         // If case of error, print it and exit with error
-        std::cerr << e.what() << std::endl;
+        std::cerr<< "Uknown execption catched in Main thread, match_renderer " << e.what() << std::endl;
     }
 }
 
 void MatchRenderer::start() {
+    client.start();
     Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
     clock.tick();
 }

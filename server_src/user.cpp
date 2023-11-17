@@ -78,7 +78,7 @@ void User::handle_starting_match() {
 
 void User::handle_match() {
     while (protocol.is_connected()) {
-        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command();
+        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worm_id);
         queue_match->push(game_command);
     }
 }

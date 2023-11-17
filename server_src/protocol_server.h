@@ -36,7 +36,7 @@ private:
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
     int send_map_dimensions(const int& _width, const int& _height);
     int send_worms(std::vector<WormSnapshot>& worms);
-    std::shared_ptr<GameCommand> recv_mov();
+    std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_start();
 
 public:
@@ -48,7 +48,7 @@ public:
 
     // Match
     int send_snapshot(Snapshot& snapshot);
-    std::shared_ptr<GameCommand> recv_game_command();
+    std::shared_ptr<GameCommand> recv_game_command(uint8_t& worm_id);
     bool is_connected() { return !was_closed;}
 
 

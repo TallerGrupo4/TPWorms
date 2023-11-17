@@ -111,7 +111,7 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
     return 1;
 }
 
-std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
+std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(uint8_t& worm_id) {
     char code[1];
     socket.recvall(code, 1, &was_closed);
     if (was_closed) {
@@ -119,7 +119,7 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
     }
     switch (code[0]) {
         case MOV: {
-            return recv_mov();
+            return recv_mov(worm_id);
         }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
@@ -134,7 +134,7 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_start() {
     return std::make_shared<StartCommand>();
 }
 
-std::shared_ptr<GameCommand> ProtocolServer::recv_mov() {
+std::shared_ptr<GameCommand> ProtocolServer::recv_mov(uint8_t& worm_id) {
     char id_worm[1];
     int ret = socket.recvall(id_worm, 1, &was_closed);
     if (was_closed) {

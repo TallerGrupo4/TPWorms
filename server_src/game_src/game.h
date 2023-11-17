@@ -24,11 +24,11 @@ class Game {
     int water_level;
     b2World world;
     GameBuilder builder;
-    std::vector<Worm> players;
+    std::vector<std::shared_ptr<Worm>>  players;
     int turn;
 
 public:
-    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {}
+    Game(): world(b2Vec2(0.0f, -10.0f)), builder(&world), turn(0) {}
 
     Snapshot start_and_send(Map& map, int number_of_players) {
         Snapshot snapshot({}, map.platforms);
@@ -37,7 +37,7 @@ public:
         std::vector <WormSnapshot> wormsSnapshots;
         for (int i = 0; i < number_of_players; i++) {
             add_player(i);
-            wormsSnapshots.push_back(players[i].get_snapshot());
+            wormsSnapshots.push_back(players[i]->get_snapshot());
         }
         std:: cout << (int) wormsSnapshots.size() << std::endl;
         snapshot.worms = wormsSnapshots;
@@ -45,20 +45,18 @@ public:
     }
 
     void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
-        b2Body* player = builder.create_worm(0, 0);
-        players.push_back(Worm(current_id, player));
+        players.push_back(std::make_shared<Worm>(current_id, builder.create_worm(0, 40)));
     }
 
     void move_player(char id, int direction) {
-        Worm player = players[id];
-        player.move(direction);
+        players[id]->move(direction);
     }
 
 
     void remove_player(char id) {
-        players.erase(std::remove_if(players.begin(), players.end(),
-                        [id](const Worm& worm) { return worm.get_id() == id; }),
-                    players.end());
+        // players.erase(std::remove_if(players.begin(), players.end(),
+        //                 [id](const Worm& worm) { return worm.get_id() == id; }),
+        //             players.end());
     }
 
     // void remove_player(char id){
@@ -72,8 +70,27 @@ public:
 
 // Check parameter..
     void step(int it) {
-        float time_simulate = (float) it / FPS;
-        world.Step(time_simulate, 8, 3);
+        float time_simulate = it * (FRAME_TIME);
+        world.Step( time_simulate, 8, 3);
+        //Iterate bodies in world 
+        // for (b2Body* body = world.GetBodyList(); body != nullptr; body = body->GetNext()) {
+        //     //Get position and angle of body
+        //     float x = body->GetPosition().x;
+        //     float y = body->GetPosition().y;
+        //     if (body->GetType() == b2_dynamicBody){
+        //         std::cout << "pos de worm x: " << int(x) << std::endl;
+        //         std::cout << "pos del worm y: " << y << std::endl;
+        //     } else{
+        //         std::cout << "pos de plataforma x: " << int(x) << std::endl;
+        //         std::cout << "pos del plataforma y: " << y << std::endl;
+        //     }
+        for (auto each_player : players) {
+            if (each_player->body->GetLinearVelocity() == b2Vec2(0, 0)){
+               each_player->state = STILL;
+            }
+        }
+    }
+        // std::shared_ptr<Worm> w = players[0];
         // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
         /*
         float time_simulate = (float) it / FPS;
@@ -85,12 +102,12 @@ public:
         }
         */
         // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
-    }
+    
 
     Snapshot get_game_snapshot() {
         std::vector<WormSnapshot> worms;
-        for (Worm& worm: players) {
-            worms.push_back(worm.get_snapshot());
+        for (std::shared_ptr<Worm> worm: players) {
+            worms.push_back(worm->get_snapshot());
         }
         Snapshot snapshot(worms, {});
         return snapshot;

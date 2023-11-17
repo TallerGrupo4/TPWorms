@@ -20,7 +20,6 @@ ClientReceiver::ClientReceiver(Socket& skt,
 void ClientReceiver::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
-            std::cout << "ClientReceiver is waiting for a snapshot" << std::endl;
             Snapshot snapshot = protocol.recv_snapshot();
             queue_match->push(snapshot);
         }

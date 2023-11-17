@@ -7,6 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/snapshot.h"
+#include "../common_src/constants.h"
 #include "surfaces.h"
 #include "Animation.h"
 #include "background.h"
@@ -16,7 +17,7 @@ public:
     //Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal);
     Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
-    void update_from_snapshot(WormSnapshot worm_snpsht);
+    void update_from_snapshot(WormSnapshot& worm_snpsht);
     void render(SDL2pp::Renderer& renderer);
     void moveRigth();
     void moveLeft();

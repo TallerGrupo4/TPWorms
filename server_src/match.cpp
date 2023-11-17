@@ -64,7 +64,7 @@ void Match::send_initial_data() {
 }
 
 void Match::run(){
-    Clock clock(std::bind(&Match::execute_and_step, this, std::placeholders::_1), FRAME_TIME, keep_running);
+    Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, keep_running);
     clock.tick();
 }
 
@@ -76,7 +76,7 @@ void Match::execute_and_step(int iter) {
             game_command->execute(game);
         }
         // Iter is the number of times you should advance frames, not the time
-        game.step(iter / FPS);// Check if turn ended (sum ticks, etc)
+        game.step(iter);// Check if turn ended (sum ticks, etc)
         
         Snapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);

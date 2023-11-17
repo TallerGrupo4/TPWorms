@@ -43,8 +43,17 @@
 // defines for physics of game
 #define WORM_SPEED 0.4
 
+//Common Weapon states
+#define NO_WEAPON 0
+
+//Common worm States
+#define STILL 0
+#define MOVING 1
+
 // Codes for game actions
 #define MOV 0x01
+#define LEFT 0x01
+#define RIGHT 0x02
 
 //
 #define PLAT_SMALL 3
@@ -53,7 +62,7 @@
 
 
 // Code for protocol
-#define MULTIPLIER 1000 // to convert from float to int for protocol taking into account 3 decimal places
+#define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places
 #define MAP 0x01
 #define WORMS 0x02
 #define ACTION_START 0x03
@@ -61,11 +70,11 @@
 
 
 //Consts for render
-#define PIX_PER_METER 1
+#define PIX_PER_METER 8.0f
 
 // Consts for game loop
 #define FPS 30
-#define FRAME_TIME 1
+#define FRAME_TIME 0.0333333333333f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 

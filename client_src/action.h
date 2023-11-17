@@ -14,7 +14,6 @@
 class Action {
 public: // Protected and make getters
 
-    char id_worm = -1;
     char movement_x = 0;
     char type;
 
@@ -63,12 +62,6 @@ public:
             return SOCKET_FAILED;
         }
         if (was_closed) return WAS_CLOSED;
-        char id_worm[1] = {this->id_worm};
-        ret = socket.sendall(id_worm, 1, &was_closed);
-        if (ret < 0) {
-            return SOCKET_FAILED;
-        }
-        if (was_closed) return WAS_CLOSED;
         char movement_x[1] = {this->movement_x};
         ret = socket.sendall(movement_x, 1, &was_closed);
         if (ret < 0) {
@@ -76,11 +69,32 @@ public:
         }
         return ret;
     }
-    ActionMov(char id_worm, char movement_x) : Action(MOV) {
-        this->id_worm = id_worm;
+    ActionMov( char movement_x) : Action(MOV) {
         this->movement_x = movement_x;
     };
     ~ActionMov() = default;
 };
+
+// class ActionMovLeft : public Action {
+// public:
+//     int send(Socket& socket, bool& was_closed) override {
+//         char code[1] = {MOV};
+//         int ret = socket.sendall(code, 1, &was_closed);
+//         if (ret < 0) {
+//             return SOCKET_FAILED;
+//         }
+//         if (was_closed) return WAS_CLOSED;
+//         char movement_x[1] = {this->movement_x};
+//         ret = socket.sendall(movement_x, 1, &was_closed);
+//         if (ret < 0) {
+//             return SOCKET_FAILED;
+//         }
+//         return ret;
+//     }
+//     ActionMovLeft() : Action(LEFT) {
+//         this->movement_x = movement_x;
+//     };
+//     ~ActionMovLeft() = default;
+// };
 
 #endif // ACTION_H
