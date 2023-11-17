@@ -3,18 +3,19 @@
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+    // std::cout << "Antes de crear el background" << std::endl;
     bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.width, snpsht.height, surfaces, renderer);
-    std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
+    // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
-        std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
-        std::cout << "Direccion del gusano: " << (int)worm_snpsht.direction << std::endl;
-        std::cout << "Vida del gusano: " << worm_snpsht.health << std::endl;
-        std::cout << "ID del gusano: " << (int)worm_snpsht.id << std::endl;
-        std::cout << "Vida Max del gusano: " << worm_snpsht.max_health << std::endl;
-        std::cout << "Pos X del gusano: " << worm_snpsht.pos_x << std::endl;
-        std::cout << "Pos Y del gusano: " << worm_snpsht.pos_y << std::endl;
-        std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
-        std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
+        // std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
+        // std::cout << "Direccion del gusano: " << (int)worm_snpsht.direction << std::endl;
+        // std::cout << "Vida del gusano: " << worm_snpsht.health << std::endl;
+        // std::cout << "ID del gusano: " << (int)worm_snpsht.id << std::endl;
+        // std::cout << "Vida Max del gusano: " << worm_snpsht.max_health << std::endl;
+        // std::cout << "Pos X del gusano: " << worm_snpsht.pos_x << std::endl;
+        // std::cout << "Pos Y del gusano: " << worm_snpsht.pos_y << std::endl;
+        // std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
+        // std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
         std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, surfaces, renderer, bkgrnd);
         this->worms_map[worm_snpsht.id] = worm;
         // this->worms.push_back(worm);

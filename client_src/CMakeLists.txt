@@ -8,7 +8,7 @@ add_definitions(-DEFFECTS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Effects"
 -DBACKGROUND_PATH="${PROJECT_SOURCE_DIR}/backgrounds"
 )
 
-# message(STATUS "Files in ${PROJECT_SOURCE_DIR}")
+message(STATUS "Files in ${PROJECT_SOURCE_DIR}")
 add_subdirectory(QT)
 add_library(client_lib STATIC
 ${client_src_files})
