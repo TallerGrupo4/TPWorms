@@ -121,9 +121,6 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         case MOV: {
             return recv_mov();
         }
-        // case ACTION_START: {
-        //     return recv_start();
-        // }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
             return std::make_shared<GameCommand>();

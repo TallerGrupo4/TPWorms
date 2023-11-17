@@ -1,4 +1,5 @@
 project(Worms)
+add_definitions(-DASSETS_PATH="${PROJECT_SOURCE_DIR}/assets")
 cmake_minimum_required(VERSION 3.8)
 # Find the QtWidgets library
 find_package(Qt5 COMPONENTS Widgets REQUIRED)

@@ -80,8 +80,27 @@ TEST(ProtocolHappyCases, StartMatch) {
     ProtocolServer protocolServer = protocols.second;
     std::shared_ptr<ActionStart> action = std::make_shared<ActionStart>();
     protocolClient.send_action(action);
+    // is command now
+    // std::shared_ptr<GameCommand> game_command = protocolServer.recv_game_command();
+    // ASSERT_EQ(game_command->is_start, true);
+}
+
+TEST(ProtocolHappyCases, MoveWorm) {
+    Socket dummy_socket(serverPort);
+    ParserClient parserClient;
+    ParserServer parserServer;
+    auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
+    ProtocolClient protocolClient = protocols.first;
+    ProtocolServer protocolServer = protocols.second;
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionMov>(1, 10);
+    protocolClient.send_action(action);
     std::shared_ptr<GameCommand> game_command = protocolServer.recv_game_command();
-    ASSERT_EQ(game_command->is_start, true);
+    ASSERT_EQ(game_command->is_start, false);
+    ASSERT_EQ(game_command->id_worm, 1);
+    // Check if game_command is an instance of MoveCommand
+    MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
+    ASSERT_NE(moveCommand, nullptr);
+    
 }
 
 // TEST(ProtocolHappyCases, ExitServer) {

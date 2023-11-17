@@ -1,6 +1,6 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, Background& bkgrnd) : 
+Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
     bkgrnd(bkgrnd),
     walking_an(renderer,surfaces.walking_worm, false),
     facing_left(worm_snpsht.direction == 0 ? true : false),
@@ -55,10 +55,10 @@ void Worm::update_from_snapshot(WormSnapshot worm_snpsht) {
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     //std::cout << "x: " << x << " y: " << y << std::endl;
-    int top_left_x = x-WORM_CENTER + (int)(bkgrnd.get_map_width()/2);
-    int top_left_y = y-WORM_CENTER + (int)(bkgrnd.get_map_height()/2);
+    int top_left_x = x-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2);
+    int top_left_y = y-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2);
     std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
-    walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 200, 200), flip);
+    walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 60*RESOLUTION_MULTIPLIER, 60*RESOLUTION_MULTIPLIER), flip);
 }
 
 void Worm::moveRigth() {

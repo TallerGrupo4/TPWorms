@@ -12,13 +12,12 @@
 class Background {
 private:
     std::vector<Beam> beams;
-    //SDL2pp::Texture bkgrnd_image;
+    SDL2pp::Texture bkgrnd_image;
     int width;
     int height;
 
 public:
     explicit Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
-    explicit Background();
     void render(SDL2pp::Renderer& renderer);
     int get_map_width();
     int get_map_height();

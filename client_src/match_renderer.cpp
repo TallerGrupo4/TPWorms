@@ -6,8 +6,9 @@
 using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDEO),
-                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1920, 1800, SDL_WINDOW_RESIZABLE),
+                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
+        renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         Snapshot snapshot = client.recv_map();
         // Snapshot snpsht;
         // while (client.recv_snapshot(snpsht);
@@ -32,7 +33,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT:
-                        // action.movement_x = 10;
+                        action->id_worm = 0;
                         action->movement_x = 10;
                         // action.type = 0;
                         action->type = 0;
@@ -41,7 +42,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         //player.moveLeft();
                         break;
                     case SDLK_RIGHT:
-                        // action.movement_x = 10;
+                        action->id_worm = 0;
                         action->movement_x = 10;
                         // action.type = 1;
                         action->type = 1;
@@ -56,7 +57,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_LEFT:
-                        // action.movement_x = 0;
+                        action->id_worm = 0;
                         action->movement_x = 0;
                         // action.type = 0;
                         action->type = 0;
@@ -64,7 +65,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         //player.stopMoving();
                         break;
                     case SDLK_RIGHT:
-                        // action.movement_x = 0;
+                        action->id_worm = 0;
                         action->movement_x = 0;
                         // action.type = 1;
                         action->type = 1;

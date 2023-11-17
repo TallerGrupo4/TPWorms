@@ -44,6 +44,10 @@ public:
         WormSnapshot snapshot(id, pos_x, pos_y, angle, 100, 100, direction, weapon, state);
         return snapshot;
     }
+
+    const char get_id() const {
+        return id;
+    }
 };
 
 #endif  // WORM_H

@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 
+#include <algorithm>
+
 #include <box2d/box2d.h>
 
 #include "../../common_src/yamlReader.h"
@@ -52,10 +54,20 @@ public:
         player.move(direction);
     }
 
-    void remove_player(char id){
-        //TODO
-        return ;
+
+    void remove_player(char id) {
+        players.erase(std::remove_if(players.begin(), players.end(),
+                        [id](const Worm& worm) { return worm.get_id() == id; }),
+                    players.end());
     }
+
+    // void remove_player(char id){
+    //     //TODO
+    //     // Something like this...
+    //     players.erase(players.begin() + id);
+    //     // players.erase(std::remove(players.begin(), players.end(), id), players.end());
+    //     return ;
+    // }
 
 
 // Check parameter..

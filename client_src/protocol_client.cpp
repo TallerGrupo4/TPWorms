@@ -179,9 +179,9 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
     // if (was_closed) throw WasClosed;
         socket.recvall(direction, 1, &was_closed);
     // if (was_closed) throw WasClosed;
-        socket.recvall(weapon, 1, &was_closed);
+        socket.recvall(weapon, 4, &was_closed);
     // if (was_closed) throw WasClosed;
-        socket.recvall(state, 1, &was_closed);
+        socket.recvall(state, 4, &was_closed);
     // if (was_closed) throw WasClosed;
     std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_x[0] = ntohl(pos_x[0]);
@@ -192,6 +192,8 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         angle[0] = (static_cast<float>(angle[0])) / MULTIPLIER;
         max_health[0] = ntohl(max_health[0]);
         health[0] = ntohl(health[0]);
+        weapon[0] = ntohl(weapon[0]);
+        state[0] = ntohl(state[0]);
         WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0]);
         snapshot.worms.push_back(worm);
     }

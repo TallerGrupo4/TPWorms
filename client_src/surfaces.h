@@ -8,6 +8,7 @@
 using namespace SDL2pp;
 class MatchSurfaces {
 public:    
+    Surface background1;
     Surface walking_worm;
     Surface walking_up_worm;
     Surface walking_down_worm;

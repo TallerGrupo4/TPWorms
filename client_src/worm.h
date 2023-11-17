@@ -2,6 +2,7 @@
 #define WORM_H
 
 #include <chrono>
+#include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -13,7 +14,7 @@
 class Worm {
 public:
     //Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal);
-    Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, Background& bkgrnd);
+    Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot worm_snpsht);
     void render(SDL2pp::Renderer& renderer);
@@ -23,7 +24,7 @@ public:
     bool is_same_id(char id_to_check);
 
 private:
-    Background& bkgrnd;
+    std::shared_ptr<Background> bkgrnd;
     Animation walking_an;
     bool facing_left;
     bool moving;

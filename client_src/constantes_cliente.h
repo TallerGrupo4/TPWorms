@@ -2,6 +2,10 @@
 #ifndef CLIENTE_CONSTANTES_H
 #define CLIENTE_CONSTANTES_H
 
+#define RESOLUTION_MULTIPLIER 2
+
+#define BACKGROUND1_PATH BACKGROUND_PATH "/background1.jpg"
+
 #define WORM_WALK_SPRITES_PATH WORMS_SPRITES_PATH "/wwalk.png"
 // #define WORM_WALK_SPRITES_PATH "../client_src/sprites/Worms" "/wwalk.png"
 

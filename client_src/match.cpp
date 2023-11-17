@@ -2,7 +2,8 @@
 #include <iostream>
 Match::Match() {}
 
-Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : bkgrnd(snpsht.platforms, snpsht.width, snpsht.height, surfaces, renderer) {
+Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.width, snpsht.height, surfaces, renderer);
     std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
         std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
@@ -39,7 +40,7 @@ void Match::update_from_snapshot(Snapshot snpsht) {
 void Match::update_from_iter(int iter) {}
 
 void Match::render(SDL2pp::Renderer& renderer) {
-    bkgrnd.render(renderer);
+    bkgrnd->render(renderer);
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
         it->second->render(renderer);
     }

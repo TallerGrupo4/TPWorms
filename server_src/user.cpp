@@ -31,7 +31,7 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
-                std::shared_ptr<ExitCommand> exit_command;
+                std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(worm_id);
                 queue_match->push(exit_command);
                 sender->stop();
                 sender->join();
@@ -97,7 +97,6 @@ bool User::interpretate_command_in_lobby(Command& command) {
     bool in_match = false;
     char code;
     match_id = command.get_match_id();
-    uint8_t worm_id;
     switch (command.get_code()) {
         case CASE_CREATE: {
             try {

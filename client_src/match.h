@@ -13,8 +13,7 @@
 
 class Match {
 private:
-
-    Background bkgrnd;
+    std::shared_ptr<Background> bkgrnd;
     std::map<char,std::shared_ptr<Worm>> worms_map;
     //Worm actual_worm; //Camera
 

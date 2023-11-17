@@ -2,7 +2,8 @@
 
 using namespace SDL2pp;
 
-MatchSurfaces::MatchSurfaces() : walking_worm(WORM_WALK_SPRITES_PATH),
+MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
+                                 walking_worm(WORM_WALK_SPRITES_PATH),
                                  walking_up_worm(WORM_WALK_UP_SPRITES_PATH),
                                  walking_down_worm(WORM_WALK_DOWN_SPRITES_PATH),
                                  large_beam_vertical(BEAM_LARGE_VERTICAL),

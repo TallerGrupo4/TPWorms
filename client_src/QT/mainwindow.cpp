@@ -9,9 +9,8 @@ MainWindow::MainWindow(Client& client, bool& exit_succesful): QMainWindow(nullpt
     exit_succesful = false;
     // ui->Label_BackgroundImage->setPixmap(QPixmap(":/main_menu.png"));
 
-    std::string path_to_img(__FILE__);
-    path_to_img = path_to_img.substr(0, path_to_img.size() - 14);
-    path_to_img = path_to_img + "main_menu.jpg";
+    std::string path_to_img(ASSETS_PATH);
+    path_to_img = path_to_img + "/main_menu.png";
     ui->Label_BackgroundImage->setPixmap(QPixmap(path_to_img.data()));
     ui->MatchOptionsFrame->setVisible(true);
     ui->MatchOptionsFrame->setEnabled(true);
