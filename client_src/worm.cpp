@@ -55,9 +55,8 @@ void Worm::update_from_snapshot(WormSnapshot worm_snpsht) {
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     std::cout << "x: " << x << " y: " << y << std::endl;
-    // int pix_x = x*PIX_PER_METER + ;
-    int top_left_x = x-WORM_CENTER;
-    int top_left_y = y+WORM_CENTER;
+    int top_left_x = (x*PIX_PER_METER)-WORM_CENTER + (int)(bkgrnd.get_map_width()/2);
+    int top_left_y = (y*PIX_PER_METER)-WORM_CENTER + (int)(bkgrnd.get_map_height()/2);
     walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 200, 200), flip);
 }
 
