@@ -1,6 +1,6 @@
 #include "background.h"
 
-Background::Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : bkgrnd_image(SDL2pp::Texture(renderer,surfaces.background1), width(map_width), height(map_height) {
+Background::Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : bkgrnd_image(SDL2pp::Texture(renderer,surfaces.background1)), width(map_width), height(map_height) {
     for (size_t i = 0; i < platforms.size(); i++) {
         this->beams.push_back(Beam(platforms[i],surfaces,renderer,map_width,map_height));
     }
