@@ -40,20 +40,23 @@
 
 #define QUEUE_MAX_SIZE 1000
 
-// defines for physics of game
-#define WORM_SPEED 0.4
-
 //Common Weapon states
 #define NO_WEAPON 0
 
 //Common worm States
 #define STILL 0
 #define MOVING 1
+#define JUMPING 2
+#define BACKFLIPPING 3
+#define FALLING 4
 
 // Codes for game actions
 #define MOV 0x01
-#define LEFT 0x01
+#define LEFT 0x01 
 #define RIGHT 0x02
+#define JUMP 0x03
+#define BACKFLIP 0x04
+#define SHOOT 0x05
 
 //
 #define PLAT_SMALL 3
