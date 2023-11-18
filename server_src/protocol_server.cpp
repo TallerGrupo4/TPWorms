@@ -23,14 +23,16 @@ void ProtocolServer::send_command(const Command& command) {
     switch (code[0]) {
         case CASE_JOIN: {
             send_match_id(command.get_match_id());
-            send_map_name(command.get_map_name());
-            send_worm_id(command.worm_id);
+            send_worm_id(command.get_worm_id());
+            send_list(command.get_matches_availables());
+            // send_number_of_players(command.get_number_of_players());
             break;
         }
         case CASE_CREATE: {
             send_match_id(command.get_match_id());
-            send_map_name(command.get_map_name());
-            send_worm_id(command.worm_id);
+            send_worm_id(command.get_worm_id());
+            send_list(command.get_matches_availables());
+            // send_number_of_players(command.get_number_of_players());
             break;
         }
         case CASE_MATCH_NOT_FOUND: {
@@ -85,7 +87,9 @@ const Command ProtocolServer::recv_command() {
             return recv_list(code);
         }
         case CASE_START: {
-            return Command(code[0], DEFAULT);
+            uint match_id = recv_match_id();
+            std::string map_name = recv_map_name();
+            return Command(code[0], match_id, map_name);
         }
         case CASE_NUMBER_OF_PLAYERS: {
             return Command(code[0], DEFAULT);;
@@ -130,22 +134,13 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(uint8_t& worm_id)
 
 // ------------------------------ PRIVATE METHODS ------------------------------
 
-std::shared_ptr<GameCommand> ProtocolServer::recv_start() {
-    return std::make_shared<StartCommand>();
-}
-
 std::shared_ptr<GameCommand> ProtocolServer::recv_mov(uint8_t& worm_id) {
-    char id_worm[1];
-    int ret = socket.recvall(id_worm, 1, &was_closed);
-    if (was_closed) {
-        throw LibError(errno, "Socket was closed");
-    }
     char movement_x[1];
-    ret = socket.recvall(movement_x, 1, &was_closed);
+    socket.recvall(movement_x, 1, &was_closed);
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
-    return std::make_shared<MoveCommand>(id_worm[0], movement_x[0]);
+    return std::make_shared<MoveCommand>(worm_id, movement_x[0]);
 }
 
 int ProtocolServer::send_map_dimensions(const int& _width, const int& _height) {
@@ -239,14 +234,32 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
 }
 
 const Command ProtocolServer::recv_create(const char* code) {
-    return recv_match_id(code);
+    const uint match_id = recv_match_id();
+    return Command(code[0], match_id);
 }
 
 const Command ProtocolServer::recv_join(const char* code) {
-    return recv_match_id(code);
+    const uint match_id = recv_match_id();
+    return Command(code[0], match_id);
 }
 
-const Command ProtocolServer::recv_match_id(const char* code) {
+const std::string ProtocolServer::recv_map_name() {
+    uint16_t map_name_size[1];
+    socket.recvall(map_name_size, 2, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    map_name_size[0] = ntohs(map_name_size[0]);
+    std::vector<char> map_name(map_name_size[0]);
+    socket.recvall(map_name.data(), map_name_size[0], &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    std::string map_name_str(map_name.begin(), map_name.end());
+    return map_name_str;
+}
+
+const uint ProtocolServer::recv_match_id() {
     uint match_id[1];
     int ret = socket.recvall(match_id, 4, &was_closed);
     if (ret < 0) {
@@ -256,8 +269,7 @@ const Command ProtocolServer::recv_match_id(const char* code) {
         throw LibError(errno, "Socket was closed");
     }
     match_id[0] = ntohl(match_id[0]);
-    std::cout << "Received a match id: " << int(match_id[0]) << std::endl;
-    return Command(code[0], match_id[0]);
+    return match_id[0];
 }
 
 const Command ProtocolServer::recv_list(const char* code) {

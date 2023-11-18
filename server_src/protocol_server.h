@@ -31,13 +31,13 @@ private:
     void send_worm_id(const uint8_t worm_id);
     const Command recv_create(const char* code);
     const Command recv_join(const char* code);
-    const Command recv_match_id(const char* code);
+    const uint recv_match_id();
+    const std::string recv_map_name();
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
     int send_map_dimensions(const int& _width, const int& _height);
     int send_worms(std::vector<WormSnapshot>& worms);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
-    std::shared_ptr<GameCommand> recv_start();
 
 public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);

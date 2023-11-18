@@ -29,6 +29,8 @@ private:
     void recv_dimensions_and_platforms(Snapshot& snapshot);
     void recv_worms(Snapshot& snapshot);
     uint8_t recv_worm_id();
+    void send_match_id(const uint match_id);
+    void send_map_name(const std::string map_name);
 
 public:
     explicit ProtocolClient(Socket& socket, ParserClient& parser);

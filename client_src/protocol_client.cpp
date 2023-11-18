@@ -12,6 +12,8 @@
 
 ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(socket), parser(parser) {}
 
+// ------------------------------ PUBLIC ------------------------------
+
 void ProtocolClient::send_command(const Command& command) {
     char code[1] = {command.get_code()};
     if (socket.sendall(code, 1, &was_closed) < 0) {
@@ -20,10 +22,10 @@ void ProtocolClient::send_command(const Command& command) {
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
         // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
         // Send_match_id(command.get_match_id());
-        uint len[1] = {htonl(command.get_match_id())};
-        if (socket.sendall(len, 4, &was_closed) < 0) {
-            // throw error...
-        }
+        send_match_id(command.get_match_id());
+    } else if (code[0] == CASE_START) {
+        send_match_id(command.get_match_id());
+        send_map_name(command.get_map_name());
     }
 }
 
@@ -37,19 +39,19 @@ const Command ProtocolClient::recv_command() {
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
-            std::string map_name = recv_map_name();
             uint8_t worm_id = recv_worm_id();
-            Command command(code[0], match_id[0], map_name);
-            command.worm_id = worm_id;
+            std::map<uint, std::string> matches_availables = recv_list();
+            // recv_number_of_players(number_of_players);
+            Command command(code[0], match_id[0], matches_availables, worm_id);
             return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
-            std::string map_name = recv_map_name();
             uint8_t worm_id = recv_worm_id();
-            Command command(code[0], match_id[0], map_name);
-            command.worm_id = worm_id;
+            std::map<uint, std::string> matches_availables = recv_list();
+            // recv_number_of_players(number_of_players);
+            Command command(code[0], match_id[0], matches_availables, worm_id);
             return command;
         }
         case CASE_LIST: {
@@ -110,7 +112,24 @@ Snapshot ProtocolClient::recv_snapshot() {
 }
 
 
-// (7.35235 , 2.253536) => *1000 (7352 , 2253) => (7352*60 , 2253*60) => (441120 , 135180) => (441120/1000 , 135180/1000) => (441.12 , 135.18)
+// ---------------------------------- PRIVATE ----------------------------------
+
+void ProtocolClient::send_match_id(const uint match_id) {
+    uint match_id_to_send = htonl(match_id);
+    if (socket.sendall(&match_id_to_send, 4, &was_closed) < 0) {
+        // throw error...
+    }
+}
+
+void ProtocolClient::send_map_name(const std::string map_name) {
+    uint16_t len = htons(static_cast<uint16_t>(map_name.size()));
+    if (socket.sendall(&len, 2, &was_closed) < 0) {
+        // throw error...
+    }
+    if (socket.sendall(map_name.c_str(), map_name.size(), &was_closed) < 0) {
+        // throw error...
+    }
+}
 
 void ProtocolClient::recv_dimensions_and_platforms(Snapshot& snapshot) {
     int width[1];
@@ -194,8 +213,6 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         weapon[0] = ntohl(weapon[0]);
         state[0] = ntohl(state[0]);
         WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0]);
-        // std::cout << "received worm pos_x: " << +pos_x[0] << std::endl;
-        // std::cout << "received worm pos_y: " << +pos_y[0] << std::endl;
         snapshot.worms.push_back(worm);
     }
 }

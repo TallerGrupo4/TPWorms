@@ -25,6 +25,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     if (maps.find((uint)1) == maps.end()) {
         throw MapNotFound();
     }
+    // The map should be passed in the start() method
     matches[match_id] = std::make_unique<Match>(maps.at(1));
     worm_id = matches[match_id]->add_player(queue);
     return matches[match_id]->get_queue();
