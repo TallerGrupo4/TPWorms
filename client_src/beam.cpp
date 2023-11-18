@@ -9,8 +9,9 @@ Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& r
 
 void Beam::render(SDL2pp::Renderer& renderer) {
     SDL2pp::Rect source_rect(0,0,beam_image.GetWidth(),beam_image.GetHeight());
-    SDL2pp::Rect dest_rect(x,y,width,height);
-    //std::cout << "x de la viga: " << x << " y de la viga: " << y << " width de la viga : " << width << " height de la viga: " << height << std::endl;
+    std::cout << " width de la imagen de la viga : " << beam_image.GetWidth() << " height de la imagen de laviga: " << beam_image.GetHeight() << std::endl;
+    SDL2pp::Rect dest_rect(x+(int)(renderer.GetLogicalWidth()/2),y+(int)(renderer.GetLogicalHeight()/2),width,height);
+    std::cout << "x de la viga: " << x+(int)(renderer.GetLogicalWidth()/2) << " y de la viga: " << y+(int)(renderer.GetLogicalHeight()/2) << " width de la viga : " << width << " height de la viga: " << height << std::endl;
 
     renderer.Copy(
         beam_image,
@@ -20,87 +21,131 @@ void Beam::render(SDL2pp::Renderer& renderer) {
         SDL2pp::NullOpt);
 }
 
+int Beam::calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width) {
+    return round(beam_actual_height*sin(degree*M_PI/180)+beam_actual_width*cos(degree*M_PI/180))*PIX_PER_METER;
+}
+
+int Beam::calculate_beam_height(int degree, float beam_actual_height, float beam_actual_width) {
+    return round(beam_actual_height*cos(degree*M_PI/180)+beam_actual_width*sin(degree*M_PI/180))*PIX_PER_METER;
+}
+
 void Beam::assign_positions(SDL2pp::Renderer& renderer, int x, int y, int map_width, int map_height) {
     int top_left_x = x;
     int top_left_y = 0-y;
-    this->width = 140*RESOLUTION_MULTIPLIER;
-    this->height = 20*RESOLUTION_MULTIPLIER;
     switch (this->type) {
         case LargeVertical :
-        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y;
+        this->width = round(PLAT_HEIGHT)*PIX_PER_METER;
+        this->height = round(PLAT_BIG)*PIX_PER_METER;
         break;
         case Large65 :
-        top_left_x =- BEAM_LARGE_65_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_65_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_65_CENTER_X;
+        top_left_y =- BEAM_LARGE_65_CENTER_Y;
+        this->width = calculate_beam_width(65,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(65,PLAT_HEIGHT,PLAT_BIG);
         break;
         case Large45 :
-        top_left_x =- BEAM_LARGE_45_CENTER*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_45_CENTER*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_45_CENTER;
+        top_left_y =- BEAM_LARGE_45_CENTER;
+        this->width = calculate_beam_width(45,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(45,PLAT_HEIGHT,PLAT_BIG);
         break;
         case Large25 :
-        top_left_x =- BEAM_LARGE_25_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_25_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_25_CENTER_X;
+        top_left_y =- BEAM_LARGE_25_CENTER_Y;
+        this->width = calculate_beam_width(25,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(25,PLAT_HEIGHT,PLAT_BIG);
         break;
         case LargeHorizontal :
-        top_left_x =- BEAM_LARGE_HORIZONTAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_HORIZONTAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- PLAT_BIG*PIX_PER_METER/2;//BEAM_LARGE_HORIZONTAL_CENTER_X;
+        top_left_y =- PLAT_HEIGHT*PIX_PER_METER/2;//BEAM_LARGE_HORIZONTAL_CENTER_Y;
+        this->width = PLAT_BIG*PIX_PER_METER;
+        this->height = PLAT_HEIGHT*PIX_PER_METER;
         break;
         case LargeMinus25 :
-        top_left_x =- BEAM_LARGE_MINUS_25_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_MINUS_25_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_MINUS_25_CENTER_X;
+        top_left_y =- BEAM_LARGE_MINUS_25_CENTER_Y;
+        this->width = calculate_beam_width(25,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(25,PLAT_HEIGHT,PLAT_BIG);
         break;
         case LargeMinus45 :
-        top_left_x =- BEAM_LARGE_45_CENTER*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_45_CENTER*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_45_CENTER;
+        top_left_y =- BEAM_LARGE_45_CENTER;
+        this->width = calculate_beam_width(45,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(45,PLAT_HEIGHT,PLAT_BIG);
         break;
         case LargeMinus65 :
-        top_left_x =- BEAM_LARGE_MINUS_65_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_MINUS_65_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_MINUS_65_CENTER_X;
+        top_left_y =- BEAM_LARGE_MINUS_65_CENTER_Y;
+        this->width = calculate_beam_width(65,PLAT_HEIGHT,PLAT_BIG);
+        this->height = calculate_beam_height(65,PLAT_HEIGHT,PLAT_BIG);
         break;
         case LargeVerticalFlipped :
-        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y;
+        this->width = round(PLAT_HEIGHT)*PIX_PER_METER;
+        this->height = round(PLAT_BIG)*PIX_PER_METER;
         break;
         case ShortVertical :
-        top_left_x =- BEAM_SHORT_VERTICAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_VERTICAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_VERTICAL_CENTER_X;
+        top_left_y =- BEAM_SHORT_VERTICAL_CENTER_Y;
+        this->width = round(PLAT_HEIGHT)*PIX_PER_METER;
+        this->height = round(PLAT_SMALL)*PIX_PER_METER;
         break;
         case Short65 :
-        top_left_x =- BEAM_SHORT_65_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_65_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_65_CENTER_X;
+        top_left_y =- BEAM_SHORT_65_CENTER_Y;
+        this->width = calculate_beam_width(65,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(65,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case Short45 :
-        top_left_x =- BEAM_SHORT_45_CENTER*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_45_CENTER*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_45_CENTER;
+        top_left_y =- BEAM_SHORT_45_CENTER;
+        this->width = calculate_beam_width(45,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(45,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case Short25 :
-        top_left_x =- BEAM_SHORT_25_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_25_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_25_CENTER_X;
+        top_left_y =- BEAM_SHORT_25_CENTER_Y;
+        this->width = calculate_beam_width(25,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(25,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case ShortHorizontal :
-        top_left_x =- BEAM_SHORT_HORIZONTAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_HORIZONTAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_HORIZONTAL_CENTER_X;
+        top_left_y =- BEAM_SHORT_HORIZONTAL_CENTER_Y;
+        this->width = round(PLAT_SMALL)*PIX_PER_METER;
+        this->height = round(PLAT_HEIGHT)*PIX_PER_METER;
         break;
         case ShortMinus25 :
-        top_left_x =- BEAM_SHORT_M_25_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_M_25_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_M_25_CENTER_X;
+        top_left_y =- BEAM_SHORT_M_25_CENTER_Y;
+        this->width = calculate_beam_width(25,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(25,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case ShortMinus45 :
-        top_left_x =- BEAM_SHORT_45_CENTER*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_45_CENTER*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_45_CENTER;
+        top_left_y =- BEAM_SHORT_45_CENTER;
+        this->width = calculate_beam_width(45,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(45,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case ShortMinus65 :
-        top_left_x =- BEAM_SHORT_M_65_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_SHORT_M_65_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_SHORT_M_65_CENTER_X;
+        top_left_y =- BEAM_SHORT_M_65_CENTER_Y;
+        this->width = calculate_beam_width(65,PLAT_HEIGHT,PLAT_SMALL);
+        this->height = calculate_beam_height(65,PLAT_HEIGHT,PLAT_SMALL);
         break;
         case ShortVerticalFlipped :
-        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X*RESOLUTION_MULTIPLIER;
-        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y*RESOLUTION_MULTIPLIER;
+        top_left_x =- BEAM_LARGE_VERTICAL_CENTER_X;
+        top_left_y =- BEAM_LARGE_VERTICAL_CENTER_Y;
+        this->width = round(PLAT_HEIGHT)*PIX_PER_METER;
+        this->height = round(PLAT_SMALL)*PIX_PER_METER;
         break;
     }
-    this->x = top_left_x + (int)(renderer.GetLogicalWidth()/2);
-    this->y = top_left_y + (int)(renderer.GetLogicalHeight()/2);
+    this->x = top_left_x*RESOLUTION_MULTIPLIER;
+    this->y = top_left_y*RESOLUTION_MULTIPLIER;
+    this->width *= RESOLUTION_MULTIPLIER;
+    this->height *= RESOLUTION_MULTIPLIER;
 }
 
 SDL2pp::Texture Beam::assign_texture(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {

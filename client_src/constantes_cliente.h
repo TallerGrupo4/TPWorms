@@ -1,15 +1,21 @@
-#include <string>
+#include "../common_src/constants.h"
+
 #ifndef CLIENTE_CONSTANTES_H
 #define CLIENTE_CONSTANTES_H
 
-#define RESOLUTION_MULTIPLIER 2
+#define RESOLUTION_MULTIPLIER 6
 
 #define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"
 
 #define WORM_WALK_SPRITES_PATH WORMS_SPRITES_PATH "/wwalk.png"
 // #define WORM_WALK_SPRITES_PATH "../client_src/sprites/Worms" "/wwalk.png"
 
-#define WORM_CENTER 29
+#define WORM_CENTER_X (PLAYER_WIDTH*PIX_PER_METER/2)
+#define WORM_CENTER_Y (PLAYER_HEIGHT*PIX_PER_METER/2)
+#define WORM_WALK_LEFT_OFFSET 15
+#define WORM_WALK_RIGHT_OFFSET 11
+#define WORM_WALK_ABOVE_OFFSET 13
+#define WORM_WALK_BELLOW_OFFSET 15
 
 // #define WORM_WALK_DOWN_SPRITES_PATH WORMS_SPRITES_PATH "/wwalkd.png"
 #define WORM_WALK_DOWN_SPRITES_PATH "../client_src/sprites/Worms" "/wwalkd.png"

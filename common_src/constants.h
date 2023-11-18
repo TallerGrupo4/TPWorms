@@ -62,6 +62,8 @@
 #define PLAT_SMALL 3
 #define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8
+#define PLAYER_WIDTH 2
+#define PLAYER_HEIGHT 2
 
 
 // Code for protocol
@@ -72,7 +74,7 @@
 
 
 //Consts for render
-#define PIX_PER_METER 8.0f
+#define PIX_PER_METER 6.0f
 
 // Consts for game loop
 #define FPS 30

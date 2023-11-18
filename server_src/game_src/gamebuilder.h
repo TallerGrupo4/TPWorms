@@ -9,7 +9,7 @@
 #define PLAT_FRICTION 0.5
 
 #define PLAYER_WIDTH 2
-#define PLAYER_HEIGHT 1.5
+#define PLAYER_HEIGHT 2
 #define PLAYER_FRICTION 0.5
 
 #ifndef GAMEBUILDER_H
