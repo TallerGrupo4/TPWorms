@@ -110,8 +110,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id);
-            command_to_send.worm_id = worm_id;
+            Command command_to_send(code, match_id, worm_id);
             protocol.send_command(command_to_send);
             break;
         }
@@ -131,8 +130,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_STARTED;
                 std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id);
-            command_to_send.worm_id = worm_id;
+            Command command_to_send(code, match_id, worm_id);
             protocol.send_command(command_to_send);
             break;
         }

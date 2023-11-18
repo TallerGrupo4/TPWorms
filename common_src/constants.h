@@ -15,9 +15,9 @@
 // Common codes
 #define CASE_CHAT 0x01
 #define CASE_CREATE 0x02
-#define CASE_JOIN 0x03
-#define CASE_LIST 0x04
-#define CASE_START 0x05
+#define CASE_START 0x03
+#define CASE_JOIN 0x04
+#define CASE_LIST 0x05
 #define CASE_NUMBER_OF_PLAYERS 0x06
 #define CASE_EXIT 0x07
 #define CASE_INVALID 0x08
@@ -65,8 +65,7 @@
 #define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places
 #define MAP 0x01
 #define WORMS 0x02
-#define ACTION_START 0x03
-#define ACTION_EXIT 0x04
+#define ACTION_EXIT 0x03
 
 
 //Consts for render

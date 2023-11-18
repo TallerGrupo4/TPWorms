@@ -19,14 +19,14 @@ void print_command(const Command& command) {
         case CASE_JOIN: {
             std::cout << "There are " << +command.get_number_of_players()
                       << " player/s in the match: " << +command.get_match_id() << std::endl;
-            std::cout << "My worm id is: " << +command.worm_id << std::endl;
+            std::cout << "My worm id is: " << +command.get_worm_id() << std::endl;
 
             break;
         }
         case CASE_CREATE: {
             std::cout << "Match succesfully created with the code: " << +command.get_match_id()
                       << std::endl;
-            std::cout << "My worm id is: " << +command.worm_id << std::endl;
+            std::cout << "My worm id is: " << +command.get_worm_id() << std::endl;
             break;
         }
         case CASE_MATCH_FULL: {
@@ -137,7 +137,9 @@ std::shared_ptr<Action> parse_sending_action(std::string msg) {
     if (msg == EXIT) {
         return std::make_shared<ActionExit>();
     }// else if (msg == _START) ActionStart;
-    return std::make_shared<ActionStart>();
+    // return Command(CASE_START, DEFAULT);
+    // return std::make_shared<ActionStart>();
+    return std::make_shared<Action>();
 }
 
 std::shared_ptr<Action> get_action_in_match() {
