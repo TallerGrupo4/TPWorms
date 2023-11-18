@@ -52,8 +52,8 @@
 
 // Codes for game actions
 #define MOV 0x01
-#define LEFT 0x01 
-#define RIGHT 0x02
+#define LEFT -0x01
+#define RIGHT 0x01
 #define JUMP 0x03
 #define BACKFLIP 0x04
 #define SHOOT 0x05
@@ -76,7 +76,7 @@
 
 // Consts for game loop
 #define FPS 30
-#define FRAME_TIME 0.0333333333333f
+#define FRAME_TIME 0.01666666666f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
