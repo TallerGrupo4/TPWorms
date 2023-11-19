@@ -18,11 +18,11 @@ const char* serverPort = "8080";
 const char* ip = "localhost";
 
 std::pair<ProtocolClient, ProtocolServer> createProtocols(Socket& dummy_socket,
-                                                          ParserClient& parserClient,
-                                                          ParserServer& parserServer) {
-    ProtocolClient protocolClient(dummy_socket, parserClient);
-    ProtocolServer protocolServer(dummy_socket, parserServer);
-    return std::make_pair(protocolClient, protocolServer);
+                                                          ParserClient& parser_client,
+                                                          ParserServer& parser_server) {
+    ProtocolClient protocol_client(dummy_socket, parser_client);
+    ProtocolServer protocol_server(dummy_socket, parser_server);
+    return std::make_pair(protocol_client, protocol_server);
 }
 
 
@@ -38,78 +38,111 @@ TEST(Socket, SocketTest) {
 
 // ----------------------- HAPPY CASES -----------------------
 
-TEST(ProtocolHappyCases, Join) {
+TEST(ProtocolHappyCasesLobby, Join) {
     Socket dummy_socket(serverPort);
-    ParserClient parserClient;
-    ParserServer parserServer;
-    auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-    ProtocolClient protocolClient = protocols.first;
-    ProtocolServer protocolServer = protocols.second;
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
     Command command_sent(CASE_JOIN, 10);
-    protocolClient.send_command(command_sent);
-    Command command_received = protocolServer.recv_command();
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_JOIN);
     ASSERT_EQ(command_received.get_match_id(), 10);
     ASSERT_NE(command_received.get_code(), CASE_CREATE);
     ASSERT_NE(command_received.get_match_id(), 1);
 }
 
-TEST(ProtocolHappyCases, Create) {
+TEST(ProtocolHappyCasesLobby, Create) {
     Socket dummy_socket(serverPort);
-    ParserClient parserClient;
-    ParserServer parserServer;
-    auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-    ProtocolClient protocolClient = protocols.first;
-    ProtocolServer protocolServer = protocols.second;
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
     Command command_sent(CASE_CREATE, 1);
-    protocolClient.send_command(command_sent);
-    Command command_received = protocolServer.recv_command();
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_CREATE);
     ASSERT_EQ(command_received.get_match_id(), 1);
     ASSERT_NE(command_received.get_code(), CASE_JOIN);
     ASSERT_NE(command_received.get_match_id(), 10);
 }
 
-
-TEST(ProtocolHappyCases, StartMatch) {
+TEST(ProtocolHappyCasesLobby, List_0_Matches) {
     Socket dummy_socket(serverPort);
-    ParserClient parserClient;
-    ParserServer parserServer;
-    auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-    ProtocolClient protocolClient = protocols.first;
-    ProtocolServer protocolServer = protocols.second;
-    // std::shared_ptr<ActionStart> action = std::make_shared<ActionStart>();
-    // protocolClient.send_action(action);
-    // is command now
-    // std::shared_ptr<GameCommand> game_command = protocolServer.recv_game_command();
-    // ASSERT_EQ(game_command->is_start, true);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_LIST, DEFAULT);
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_LIST);
+    ASSERT_EQ(command_received.get_matches_availables().size(), 0);
+    ASSERT_NE(command_received.get_code(), CASE_JOIN);
 }
 
-TEST(ProtocolHappyCases, MoveWorm) {
+TEST(ProtocolHappyCasesLobby, List_1_Match) {
     Socket dummy_socket(serverPort);
-    ParserClient parserClient;
-    ParserServer parserServer;
-    auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-    ProtocolClient protocolClient = protocols.first;
-    ProtocolServer protocolServer = protocols.second;
-    std::shared_ptr<ActionMov> action = std::make_shared<ActionMov>(1, 10);
-    protocolClient.send_action(action);
-    std::shared_ptr<GameCommand> game_command = protocolServer.recv_game_command();
-    ASSERT_EQ(game_command->is_start, false);
-    ASSERT_EQ(game_command->id_worm, 1);
-    // Check if game_command is an instance of MoveCommand
-    MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
-    ASSERT_NE(moveCommand, nullptr);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_send_create = Command(CASE_CREATE, 1);
+    protocol_client.send_command(command_send_create);
+    Command command_send_list(CASE_LIST, DEFAULT);
+    protocol_client.send_command(command_send_list);
+    Command command_received = protocol_server.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_LIST);
+    ASSERT_EQ(command_received.get_matches_availables().at(0), 0);
+    ASSERT_NE(command_received.get_matches_availables().size(), 0);
+}
+
+
+TEST(ProtocolHappyCasesPseudoLobby, StartMatch) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_START, 1, "map_name");
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_START);
+    ASSERT_EQ(command_received.get_match_id(), 1);
+    ASSERT_EQ(command_received.get_map_name(), "map_name");
+}
+
+// TEST(ProtocolHappyCasesMatch, MoveWorm) {
+//     Socket dummy_socket(serverPort);
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
+//     std::shared_ptr<ActionMov> action = std::make_shared<ActionMov>(1, 10);
+//     protocol_client.send_action(action);
+//     std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+//     ASSERT_EQ(game_command->is_start, false);
+//     ASSERT_EQ(game_command->id_worm, 1);
+//     // Check if game_command is an instance of MoveCommand
+//     MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
+//     ASSERT_NE(moveCommand, nullptr);
     
-}
+// }
 
 // TEST(ProtocolHappyCases, ExitServer) {
 //     Socket dummy_socket(serverPort);
-//     ParserClient parserClient;
-//     ParserServer parserServer;
-//     auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-//     ProtocolClient protocolClient = protocols.first;
-//     ProtocolServer protocolServer = protocols.second;
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
 //     // Exit not implemented yet
 // }
 
@@ -119,17 +152,17 @@ TEST(ProtocolHappyCases, MoveWorm) {
 
 // TEST(ProtocolSadCases, FullMatch) {
 //     Socket dummy_socket(serverPort);
-//     ParserClient parserClient;
-//     ParserServer parserServer;
-//     auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-//     ProtocolClient protocolClient = protocols.first;
-//     ProtocolServer protocolServer = protocols.second;
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
 //     Command command_sent = INITIALIZE_COMMAND;
 //     command_sent.code = CASE_MATCH_FULL;
 //     command_sent.match_id = 1;
-//     protocolServer.send_lobby(command_sent);
+//     protocol_server.send_lobby(command_sent);
 //     Command command_received = INITIALIZE_COMMAND;
-//     protocolClient.recv_lobby(command_received);
+//     protocol_client.recv_lobby(command_received);
 //     ASSERT_EQ(command_received.code, CASE_MATCH_FULL);
 //     ASSERT_EQ(command_received.match_id, 1);
 //     ASSERT_NE(command_received.code, CASE_MATCH_ALREADY_EXISTS);
@@ -138,17 +171,17 @@ TEST(ProtocolHappyCases, MoveWorm) {
 
 // TEST(ProtocolSadCases, MatchNotFound) {
 //     Socket dummy_socket(serverPort);
-//     ParserClient parserClient;
-//     ParserServer parserServer;
-//     auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-//     ProtocolClient protocolClient = protocols.first;
-//     ProtocolServer protocolServer = protocols.second;
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
 //     Command command_sent = INITIALIZE_COMMAND;
 //     command_sent.code = CASE_MATCH_NOT_FOUND;
 //     command_sent.match_id = 1;
-//     protocolServer.send_lobby(command_sent);
+//     protocol_server.send_lobby(command_sent);
 //     Command command_received = INITIALIZE_COMMAND;
-//     protocolClient.recv_lobby(command_received);
+//     protocol_client.recv_lobby(command_received);
 //     ASSERT_EQ(command_received.code, CASE_MATCH_NOT_FOUND);
 //     ASSERT_EQ(command_received.match_id, 1);
 //     ASSERT_NE(command_received.code, CASE_MATCH_FULL);
@@ -157,17 +190,17 @@ TEST(ProtocolHappyCases, MoveWorm) {
 
 // TEST(ProtocolSadCases, MatchAlreadyExists) {
 //     Socket dummy_socket(serverPort);
-//     ParserClient parserClient;
-//     ParserServer parserServer;
-//     auto protocols = createProtocols(dummy_socket, parserClient, parserServer);
-//     ProtocolClient protocolClient = protocols.first;
-//     ProtocolServer protocolServer = protocols.second;
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
 //     Command command_sent = INITIALIZE_COMMAND;
 //     command_sent.code = CASE_MATCH_ALREADY_EXISTS;
 //     command_sent.match_id = 1;
-//     protocolServer.send_lobby(command_sent);
+//     protocol_server.send_lobby(command_sent);
 //     Command command_received = INITIALIZE_COMMAND;
-//     protocolClient.recv_lobby(command_received);
+//     protocol_client.recv_lobby(command_received);
 //     ASSERT_EQ(command_received.code, CASE_MATCH_ALREADY_EXISTS);
 //     ASSERT_EQ(command_received.match_id, 1);
 //     ASSERT_NE(command_received.code, CASE_MATCH_NOT_FOUND);
