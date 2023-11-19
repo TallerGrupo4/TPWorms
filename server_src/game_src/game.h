@@ -23,13 +23,17 @@ class Game {
     int water_level;
     b2World world;
     GameBuilder builder;
+    std::unordered_set<b2ContactListener*> listeners;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     int turn;
 
 public:
     Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), turn(0) {
-        world.SetContactListener(new JumpListener());
+        JumpListener* jump_listener = new JumpListener();
+        listeners.insert(jump_listener);
+        world.SetContactListener(jump_listener);
+        
     }
 
     Snapshot start_and_send(Map& map, int number_of_players) {
@@ -122,6 +126,12 @@ public:
         }
         Snapshot snapshot(worms, {});
         return snapshot;
+    }
+
+    ~Game(){
+        for (auto listener : listeners){
+            delete listener;
+        }
     }
 };
 
