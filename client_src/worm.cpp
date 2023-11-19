@@ -3,7 +3,7 @@
 Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
     bkgrnd(bkgrnd),
     walking_an(renderer,surfaces.walking_worm, false),
-    facing_left(worm_snpsht.direction == 0 ? true : false),
+    facing_left(worm_snpsht.direction == LEFT ? true : false),
     //facing_left(worm_snpsht.direction),
     moving(false),
     angle(worm_snpsht.angle),
@@ -38,7 +38,7 @@ bool Worm::is_same_id(char id_to_check) {
  */
 void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     angle = worm_snpsht.angle;
-    facing_left = (worm_snpsht.direction == 0 ? true : false);
+    facing_left = (worm_snpsht.direction == LEFT ? true : false);
     health_points = worm_snpsht.health;
     state = worm_snpsht.state;
     //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
