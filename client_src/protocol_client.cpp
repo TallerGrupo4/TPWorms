@@ -40,18 +40,20 @@ const Command ProtocolClient::recv_command() {
             uint match_id[1];
             recv_match_id(match_id);
             uint8_t worm_id = recv_worm_id();
-            std::map<uint, std::string> matches_availables = recv_list();
-            // recv_number_of_players(number_of_players);
-            Command command(code[0], match_id[0], matches_availables, worm_id);
+            std::vector<std::string> maps_available = recv_map_names();
+            const uint8_t number_of_players = recv_number_of_players();
+            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
+            // Command command(code[0], match_id[0], worm_id);
             return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
             uint8_t worm_id = recv_worm_id();
-            std::map<uint, std::string> matches_availables = recv_list();
-            // recv_number_of_players(number_of_players);
-            Command command(code[0], match_id[0], matches_availables, worm_id);
+            std::vector<std::string> maps_available = recv_map_names();
+            const uint8_t number_of_players = recv_number_of_players();
+            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
+            // Command command(code[0], match_id[0], worm_id);
             return command;
         }
         case CASE_LIST: {
@@ -289,4 +291,39 @@ uint8_t ProtocolClient::recv_worm_id() {
         // throw
     }
     return worm_id[0];
+}
+
+std::vector<std::string> ProtocolClient::recv_map_names() {
+    uint16_t num_of_maps[1];
+    socket.recvall(num_of_maps, 2, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    num_of_maps[0] = ntohs(num_of_maps[0]);
+    std::vector<std::string> map_names;
+    for (int i = 0; i < num_of_maps[0]; i++) {
+        uint16_t len[1];
+        socket.recvall(len, 2, &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        len[0] = ntohs(len[0]);
+        std::vector<char> map_name(len[0]);  // <char>?? 
+        socket.recvall(map_name.data(), len[0], &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        std::string map_name_str(map_name.begin(), map_name.end());
+        map_names.push_back(map_name_str);
+    }
+    return map_names;
+}
+
+uint8_t ProtocolClient::recv_number_of_players() {
+    uint8_t number_of_players[1];
+    socket.recvall(number_of_players, 1, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    return number_of_players[0];
 }

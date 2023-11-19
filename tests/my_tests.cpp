@@ -38,7 +38,7 @@ TEST(Socket, SocketTest) {
 
 // ----------------------- HAPPY CASES -----------------------
 
-TEST(ProtocolHappyCasesLobby, Join) {
+TEST(ProtocolHappyCasesLobbyClient, Join) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -54,7 +54,7 @@ TEST(ProtocolHappyCasesLobby, Join) {
     ASSERT_NE(command_received.get_match_id(), 1);
 }
 
-TEST(ProtocolHappyCasesLobby, Create) {
+TEST(ProtocolHappyCasesLobbyClient, Create) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -70,7 +70,7 @@ TEST(ProtocolHappyCasesLobby, Create) {
     ASSERT_NE(command_received.get_match_id(), 10);
 }
 
-TEST(ProtocolHappyCasesLobby, List_0_Matches) {
+TEST(ProtocolHappyCasesLobbyClient, ListMatches) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -85,38 +85,95 @@ TEST(ProtocolHappyCasesLobby, List_0_Matches) {
     ASSERT_NE(command_received.get_code(), CASE_JOIN);
 }
 
-TEST(ProtocolHappyCasesLobby, List_1_Match) {
+TEST(ProtocolHappyCasesLobbyServer, Create) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    Command command_send_create = Command(CASE_CREATE, 1);
-    protocol_client.send_command(command_send_create);
-    Command command_send_list(CASE_LIST, DEFAULT);
-    protocol_client.send_command(command_send_list);
-    Command command_received = protocol_server.recv_command();
-    ASSERT_EQ(command_received.get_code(), CASE_LIST);
-    ASSERT_EQ(command_received.get_matches_availables().at(0), 0);
-    ASSERT_NE(command_received.get_matches_availables().size(), 0);
-}
-
-
-TEST(ProtocolHappyCasesPseudoLobby, StartMatch) {
-    Socket dummy_socket(serverPort);
-    ParserClient parser_client;
-    ParserServer parser_server;
-    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-    ProtocolClient protocol_client = protocols.first;
-    ProtocolServer protocol_server = protocols.second;
-    Command command_sent(CASE_START, 1, "map_name");
-    protocol_client.send_command(command_sent);
-    Command command_received = protocol_server.recv_command();
-    ASSERT_EQ(command_received.get_code(), CASE_START);
+    std::vector<std::string> map_names = {"1", "2", "3"};
+    Command command_to_send(CASE_CREATE, 1, map_names, 10, 0);
+    protocol_server.send_command(command_to_send);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_CREATE);
     ASSERT_EQ(command_received.get_match_id(), 1);
-    ASSERT_EQ(command_received.get_map_name(), "map_name");
+    ASSERT_EQ(command_received.get_map_names().size(), 3);
+    ASSERT_EQ(command_received.get_map_names().at(0), "1");
+    ASSERT_NE(command_received.get_map_names().at(1), "3");
+    ASSERT_EQ(command_received.get_number_of_players(), 10);
+    ASSERT_EQ(command_received.get_worm_id(), 0);
 }
+
+TEST(ProtocolHappyCasesLobbyServer, Join) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::vector<std::string> map_names = {"1", "2", "3", "4"};
+    Command command_to_send(CASE_JOIN, 10, map_names, 100, 1);
+    protocol_server.send_command(command_to_send);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_JOIN);
+    ASSERT_EQ(command_received.get_match_id(), 10);
+    ASSERT_EQ(command_received.get_map_names().size(), 4);
+    ASSERT_EQ(command_received.get_map_names().at(1), "2");
+    ASSERT_NE(command_received.get_map_names().at(2), "4");
+    ASSERT_EQ(command_received.get_number_of_players(), 100);
+    ASSERT_EQ(command_received.get_worm_id(), 1);
+}
+
+TEST(ProtocolHappyCasesLobbyServer, List_1_Match) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::map<uint, std::string> matches_availables = {{1, "map_name"}};
+    Command command_send_list(CASE_LIST, matches_availables);
+    protocol_server.send_command(command_send_list);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_LIST);
+    ASSERT_EQ(command_received.get_matches_availables().size(), 1);
+    ASSERT_EQ(command_received.get_matches_availables().at(1), "map_name");
+}
+
+TEST(ProtocolHappyCasesLobbyServer, List_more_than_1_Match) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::map<uint, std::string> matches_availables = {{1, "map_name"}, {2, "map_name2"}, {3, "map_name3"}};
+    Command command_send_list(CASE_LIST, matches_availables);
+    protocol_server.send_command(command_send_list);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_LIST);
+    ASSERT_EQ(command_received.get_matches_availables().size(), 3);
+    ASSERT_EQ(command_received.get_matches_availables().at(1), "map_name");
+    ASSERT_EQ(command_received.get_matches_availables().at(3), "map_name3");
+    ASSERT_NE(command_received.get_matches_availables().at(2), "map_name3");
+}
+
+
+// TEST(ProtocolHappyCasesPseudoLobby, StartMatch) {
+//     Socket dummy_socket(serverPort);
+//     ParserClient parser_client;
+//     ParserServer parser_server;
+//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+//     ProtocolClient protocol_client = protocols.first;
+//     ProtocolServer protocol_server = protocols.second;
+//     Command command_sent(CASE_START, 1, "map_name");
+//     protocol_client.send_command(command_sent);
+//     Command command_received = protocol_server.recv_command();
+//     ASSERT_EQ(command_received.get_code(), CASE_START);
+//     ASSERT_EQ(command_received.get_match_id(), 1);
+//     ASSERT_EQ(command_received.get_map_name(), "map_name");
+// }
 
 // TEST(ProtocolHappyCasesMatch, MoveWorm) {
 //     Socket dummy_socket(serverPort);

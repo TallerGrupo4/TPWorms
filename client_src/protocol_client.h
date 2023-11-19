@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <memory>
 #include "../common_src/constants.h"
 #include "../common_src/command.h"
@@ -25,6 +26,8 @@ private:
     void recv_match_id(uint* match_id);
     void recv_number_of_players(uint8_t* number_of_players);
     std::string recv_map_name();
+    std::vector<std::string> recv_map_names();
+    uint8_t recv_number_of_players();
     std::map<uint, std::string> recv_list();
     void recv_dimensions_and_platforms(Snapshot& snapshot);
     void recv_worms(Snapshot& snapshot);

@@ -85,7 +85,6 @@ void User::handle_match() {
 
 void User::handle_lobby() {
     while (protocol.is_connected()) {
-        std::cout << "wating for a command" << std::endl;
         Command command = protocol.recv_command();
         if (interpretate_command_in_lobby(command)) {
             break;
@@ -97,11 +96,14 @@ bool User::interpretate_command_in_lobby(Command& command) {
     bool in_match = false;
     char code;
     match_id = command.get_match_id();
+    std::vector<std::string> map_names({});
+    uint8_t number_of_players = 0;
     switch (command.get_code()) {
         case CASE_CREATE: {
             try {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.get_match_id(), worm_id);
+                command.get_match_id(), worm_id, map_names);
+                number_of_players = 1;
                 in_match = true;
                 is_creator = true;
                 code = CASE_CREATE;
@@ -110,13 +112,13 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, worm_id);
+            Command command_to_send(code, match_id, map_names, number_of_players, worm_id);
             protocol.send_command(command_to_send);
             break;
         }
         case CASE_JOIN: {
             try {
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_id);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_id, map_names, number_of_players);
                 in_match = true;
                 code = CASE_JOIN;
                 std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
@@ -130,7 +132,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_STARTED;
                 std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, worm_id);
+            Command command_to_send(code, match_id, map_names, number_of_players, worm_id);
             protocol.send_command(command_to_send);
             break;
         }

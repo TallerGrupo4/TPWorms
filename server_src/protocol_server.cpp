@@ -24,15 +24,15 @@ void ProtocolServer::send_command(const Command& command) {
         case CASE_JOIN: {
             send_match_id(command.get_match_id());
             send_worm_id(command.get_worm_id());
-            send_list(command.get_matches_availables());
-            // send_number_of_players(command.get_number_of_players());
+            send_map_names(command.get_map_names());
+            send_number_of_players(command.get_number_of_players());
             break;
         }
         case CASE_CREATE: {
             send_match_id(command.get_match_id());
             send_worm_id(command.get_worm_id());
-            send_list(command.get_matches_availables());
-            // send_number_of_players(command.get_number_of_players());
+            send_map_names(command.get_map_names());
+            send_number_of_players(command.get_number_of_players());
             break;
         }
         case CASE_MATCH_NOT_FOUND: {
@@ -41,6 +41,7 @@ void ProtocolServer::send_command(const Command& command) {
         }
         case CASE_LIST: {
             send_list(command.get_matches_availables());
+            break;
         }
         case CASE_MATCH_ALREADY_EXISTS: {
             send_match_id(command.get_match_id());
@@ -66,10 +67,7 @@ void ProtocolServer::send_command(const Command& command) {
 
 const Command ProtocolServer::recv_command() {
     char code[1];
-    std::cout << "Waiting for command..." << std::endl;
     int ret = socket.recvall(code, 1, &was_closed);
-    std::cout << "Received a command code: " << int(code[0]) << std::endl;
-
     if (ret < 0) {
         // throw
     }
@@ -280,6 +278,16 @@ void ProtocolServer::send_match_id(const uint _match_id) {
     uint match_id[1] = {_match_id};
     match_id[0] = htonl(match_id[0]);
     socket.sendall(match_id, 4, &was_closed);
+}
+
+void ProtocolServer::send_map_names(const std::vector<std::string>& map_names) {
+    uint16_t num_of_maps[1] = {htons(static_cast<uint16_t>(map_names.size()))};
+    socket.sendall(num_of_maps, 2, &was_closed);
+    for (auto& map_name : map_names) {
+        uint16_t map_name_size[1] = {htons(static_cast<uint16_t>(map_name.size()))};
+        socket.sendall(map_name_size, 2, &was_closed);
+        socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
+    }
 }
 
 void ProtocolServer::send_number_of_players(const uint8_t number_of_players) {
