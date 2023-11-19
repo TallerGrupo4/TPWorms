@@ -51,12 +51,16 @@ void Animation::update(int iter) {
  * @param y Y corrdinate.
  */
 void Animation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                       SDL_RendererFlip& flipType) {
+                       SDL_RendererFlip& flipType,
+                       int left_offset,
+                       int right_offset,
+                       int above_offset,
+                       int bellow_offset) {
     renderer.Copy(
             this->texture,
             (this->is_orientation_horizontal ?
-                     SDL2pp::Rect(this->size * this->currentFrame, 0, this->size, this->size) :
-                     SDL2pp::Rect(0, this->size * this->currentFrame, this->size, this->size)),
+                     SDL2pp::Rect(left_offset + this->size * this->currentFrame, above_offset, this->size - left_offset - right_offset, this->size - above_offset - bellow_offset) :
+                     SDL2pp::Rect(left_offset, this->size * this->currentFrame + above_offset, this->size - left_offset - right_offset, this->size - above_offset - bellow_offset)),
             dst,
             0.0,              // don't rotate
             SDL2pp::NullOpt,  // rotation center - not needed

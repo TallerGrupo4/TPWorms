@@ -6,8 +6,6 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#include <chrono>
-
 #include <SDL2pp/SDL2pp.hh>
 
 const int FRAME_RATE = 40;
@@ -22,7 +20,12 @@ public:
     ~Animation();
     void update_once();
     void update(int iter);
-    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType);
+    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest,
+                SDL_RendererFlip& flipType,
+                int left_offset = 0,
+                int right_offset = 0,
+                int above_offset = 0,
+                int bellow_offset = 0);
 
 
 private:

@@ -9,7 +9,7 @@
 #define PLAT_FRICTION 0.5
 
 #define PLAYER_WIDTH 2
-#define PLAYER_HEIGHT 1.5
+#define PLAYER_HEIGHT 2
 #define PLAYER_FRICTION 0.5
 
 #ifndef GAMEBUILDER_H
@@ -19,13 +19,13 @@
 #define DEG_TO_RAD 0.0174532925199432957f
 
 class GameBuilder {
-    b2World* world;
+    b2World& world;
 
     void create_platform(float x, float y, float width, float height, float angle) {
         b2BodyDef platform_def;
         platform_def.type = b2_staticBody;
         platform_def.position.Set(x, y);
-        b2Body* platform = world->CreateBody(&platform_def);
+        b2Body* platform = world.CreateBody(&platform_def);
         b2PolygonShape platform_shape;
         platform_shape.SetAsBox(width / 2, height / 2);
         b2FixtureDef platform_fixture;
@@ -35,13 +35,37 @@ class GameBuilder {
     }
 
 public:
-    GameBuilder(b2World* world): world(world) {}
+    GameBuilder(b2World& world): world(world) {}
 
 
     void create_map(Snapshot& map_snap) {
         for (PlatformSnapshot platform : map_snap.platforms) {
             create_platform_type(platform.pos_x, platform.pos_y, platform.type);
         }
+        create_walls(b2Vec2_zero , map_snap.width , map_snap.height);
+
+    }
+
+    void create_wall(b2Vec2 coords , float width, float angle){
+        b2BodyDef wall;
+        wall.type = b2_staticBody;
+        wall.position.Set(coords.x, coords.y);
+        wall.angle = angle;
+        b2Body* wall_body = world.CreateBody(&wall);
+        b2PolygonShape wall_shape;
+        wall_shape.SetAsBox(width/2, 0.1);
+        b2FixtureDef wall_fixture;
+        wall_fixture.shape = &wall_shape;
+
+        wall_fixture.friction = 0.5;
+        wall_body->CreateFixture(&wall_fixture);
+    }
+
+    void create_walls(b2Vec2 center_world,  float width , float height_world){
+        create_wall(b2Vec2(center_world.x - width/2 , center_world.y) , height_world , 90 * DEGTORAD);
+        create_wall(b2Vec2(center_world.x + width/2 , center_world.y) , height_world, 90 * DEGTORAD);
+        create_wall(b2Vec2(center_world.x , center_world.y - height_world/2) , width, 0);
+        create_wall(b2Vec2(center_world.x , center_world.y + height_world/2) , width, 0);
     }
 
     void create_small_platform(float x, float y, float angle) {
@@ -57,7 +81,7 @@ public:
         worm_def.type = b2_dynamicBody;
         worm_def.position.Set(x, y);
         worm_def.fixedRotation = true;
-        b2Body* worm = world->CreateBody(&worm_def);
+        b2Body* worm = world.CreateBody(&worm_def);
         b2PolygonShape worm_shape;
         worm_shape.SetAsBox(PLAYER_WIDTH / 2, PLAYER_HEIGHT / 2);
         b2FixtureDef worm_fixture;

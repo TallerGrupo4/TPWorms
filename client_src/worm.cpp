@@ -3,7 +3,7 @@
 Worm::Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
     bkgrnd(bkgrnd),
     walking_an(renderer,surfaces.walking_worm, false),
-    facing_left(worm_snpsht.direction == 0 ? true : false),
+    facing_left(worm_snpsht.direction == LEFT ? true : false),
     //facing_left(worm_snpsht.direction),
     moving(false),
     angle(worm_snpsht.angle),
@@ -38,7 +38,7 @@ bool Worm::is_same_id(char id_to_check) {
  */
 void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     angle = worm_snpsht.angle;
-    facing_left = (worm_snpsht.direction == 0 ? true : false);
+    facing_left = (worm_snpsht.direction == LEFT ? true : false);
     health_points = worm_snpsht.health;
     state = worm_snpsht.state;
     //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
@@ -52,11 +52,17 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
 
 void Worm::render(SDL2pp::Renderer& renderer) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    // std::cout << "x worm: " << x << " y worm: " << y << std::endl;
-    int top_left_x = x-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2);
-    int top_left_y = ((-1)*y)-WORM_CENTER*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2);
-    // std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
-    walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, 60*RESOLUTION_MULTIPLIER, 60*RESOLUTION_MULTIPLIER), flip);
+    std::cout << "x worm: " << x << " y worm: " << y << std::endl;
+    int top_left_x = (x-WORM_CENTER_X)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2);
+    int top_left_y = (y+WORM_CENTER_Y)*(-1)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2);
+    std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
+    walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, WORM_CENTER_X*2*RESOLUTION_MULTIPLIER,
+                      WORM_CENTER_Y*2*RESOLUTION_MULTIPLIER),
+                      flip,
+                      WORM_WALK_LEFT_OFFSET,
+                      WORM_WALK_RIGHT_OFFSET,
+                      WORM_WALK_ABOVE_OFFSET,
+                      WORM_WALK_BELLOW_OFFSET);
 }
 
 void Worm::moveRigth() {

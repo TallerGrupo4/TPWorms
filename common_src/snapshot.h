@@ -27,6 +27,18 @@ enum BeamType : char {
     ShortVerticalFlipped, // 17
 };
 
+class ProjectileSnapshot {
+    public:
+    float pos_x;
+    float pos_y;
+    float angle;
+    int type;
+
+    ProjectileSnapshot(int type, float pos_x, float pos_y, float angle):
+            pos_x(pos_x), pos_y(pos_y), angle(angle), type(type) {};
+
+};
+
 class WormSnapshot {
 public:
     char id;
@@ -38,6 +50,7 @@ public:
     char direction;
     int weapon;
     int state;
+
 
     WormSnapshot(char id, float pos_x, float pos_y, float angle, int max_health, int health, char direction, int weapon,
                  int state):
@@ -70,6 +83,7 @@ class Snapshot {
 public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
+    // std::vector<ProjectileSnapshot> projectiles;
     float height = 0;
     float width = 0;
 

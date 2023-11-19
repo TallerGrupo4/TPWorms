@@ -40,25 +40,30 @@
 
 #define QUEUE_MAX_SIZE 1000
 
-// defines for physics of game
-#define WORM_SPEED 0.4
-
 //Common Weapon states
 #define NO_WEAPON 0
 
 //Common worm States
 #define STILL 0
 #define MOVING 1
+#define JUMPING 2
+#define BACKFLIPPING 3
+#define FALLING 4
 
 // Codes for game actions
 #define MOV 0x01
-#define LEFT 0x01
-#define RIGHT 0x02
+#define LEFT -0x01
+#define RIGHT 0x01
+#define JUMP 0x03
+#define BACKFLIP 0x04
+#define SHOOT 0x05
 
 //
 #define PLAT_SMALL 3
 #define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8
+#define PLAYER_WIDTH 2
+#define PLAYER_HEIGHT 2
 
 
 // Code for protocol
@@ -69,11 +74,11 @@
 
 
 //Consts for render
-#define PIX_PER_METER 8.0f
+#define PIX_PER_METER 6.0f
 
 // Consts for game loop
 #define FPS 30
-#define FRAME_TIME 0.0333333333333f
+#define FRAME_TIME 0.01666666666f
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 
