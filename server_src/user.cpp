@@ -56,16 +56,23 @@ void User::handle_starting_match() {
         if (command.get_code() == CASE_START) {
             try {
                 // We should check that match_id == command.get_match_id() for more security
-                monitor_matches.start_match(match_id);
+                monitor_matches.start_match(match_id, command.get_map_name());
                 std::cout << "Match started with id: " << match_id << std::endl;
                 return;
             } catch (const MatchNotFound& err) {
                 // It should never reach this point I think
                 std::cout << "Match not found with id: " << match_id << std::endl;
+                // KILL THIS CORRUPTED CLIENT
                 continue;
             } catch (const MatchAlreadyStarted& err) {
                 // It should never reach this point I think
                 std::cout << "Match already started with id: " << match_id << std::endl;
+                // KILL THIS CORRUPTED CLIENT
+                continue;
+            } catch (const MapNotFound& err) {
+                // It should never reach this point I think
+                std::cout << "Map not found with name: " << command.get_map_name() << std::endl;
+                // KILL THIS CORRUPTED CLIENT
                 continue;
             }
         } else if (command.get_code() == CASE_NUMBER_OF_PLAYERS) {

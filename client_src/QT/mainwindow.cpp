@@ -94,7 +94,8 @@ QString code_string = ui->CreateMatchLineEdit->text();
                     break;
 
                 case CASE_CREATE:
-                    Command cmd2(CASE_START,match_code,"hola");
+                    // For now the map's name is the id of the map (send it as a string anyways)
+                    Command cmd2(CASE_START,match_code,"1");
                     client.send_lobby_command(cmd2);
                     exit_succesful = true;
                     this->close();

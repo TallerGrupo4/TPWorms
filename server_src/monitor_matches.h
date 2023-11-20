@@ -32,7 +32,7 @@ public:
 
     std::map<uint, std::string> list_matches();
 
-    void start_match(uint match_id);
+    void start_match(uint match_id, std::string map_name);
 
     uint8_t get_number_of_players(uint match_id);
 

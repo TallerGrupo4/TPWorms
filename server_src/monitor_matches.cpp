@@ -20,7 +20,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     //     throw MapNotFound();
     // }
     // The map should be passed in the start() method
-    matches[match_id] = std::make_unique<Match>(maps.at(1));
+    matches[match_id] = std::make_unique<Match>();
     // matches[match_id] = std::make_unique<Match>();
     worm_id = matches[match_id]->add_player(queue);
     // Copy in map names the ids of the maps
@@ -38,14 +38,18 @@ void MonitorMatches::stop() {
     }
 }
 
-void MonitorMatches::start_match(uint match_id/*, std::string map_name*/) {
+void MonitorMatches::start_match(uint match_id, std::string map_name) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
     if (matches[match_id]->has_started())
         throw MatchAlreadyStarted();
-    // We should pass the selected map here
-    matches[match_id]->start_game(/*map_name*/);
+    // Map's key should be a string but for now it is an uint
+    // Check if map exists
+    uint map_name_int = std::stoi(map_name);
+    if (maps.find(std::stoi(map_name)) == maps.end())
+        throw MapNotFound();
+    matches[match_id]->start_game(maps.at(map_name_int));
 }
 
 uint8_t MonitorMatches::get_number_of_players(uint match_id) {

@@ -36,7 +36,7 @@ class Match: public Thread {
 
 
     public:
-        Match(Map& map);
+        Match();
         ~Match();
 
         uint8_t add_player(std::shared_ptr<Queue<Snapshot>> player_queue);
@@ -51,7 +51,7 @@ class Match: public Thread {
 
         void run() override;
         void execute_and_step(int iter);
-        void start_game();
+        void start_game(Map& map);
 
         std::string get_map_name();
 };

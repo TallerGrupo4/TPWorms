@@ -10,8 +10,8 @@
 #include "../common_src/thread.h"
 
 
-Match::Match(Map& map):
-        map(map),
+Match::Match():
+        map(),
         game(),
         keep_running(true),
         match_started(false),
@@ -30,7 +30,8 @@ uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
     return current_id;
 }
 
-void Match::start_game() {
+void Match::start_game(Map& map) {
+    this->map = map;
     send_initial_data();
     match_started = true;
     this->start();
