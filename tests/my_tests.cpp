@@ -302,62 +302,47 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
 
 // Not handling sad cases yet
 
-// TEST(ProtocolSadCases, FullMatch) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     Command command_sent = INITIALIZE_COMMAND;
-//     command_sent.code = CASE_MATCH_FULL;
-//     command_sent.match_id = 1;
-//     protocol_server.send_lobby(command_sent);
-//     Command command_received = INITIALIZE_COMMAND;
-//     protocol_client.recv_lobby(command_received);
-//     ASSERT_EQ(command_received.code, CASE_MATCH_FULL);
-//     ASSERT_EQ(command_received.match_id, 1);
-//     ASSERT_NE(command_received.code, CASE_MATCH_ALREADY_EXISTS);
-//     ASSERT_NE(command_received.match_id, 10);
-// }
+TEST(ProtocolSadCasesLobby, FullMatch) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_MATCH_FULL, 1);
+    protocol_server.send_command(command_sent);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_MATCH_FULL);
+    ASSERT_EQ(command_received.get_match_id(), 1);
+}
 
-// TEST(ProtocolSadCases, MatchNotFound) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     Command command_sent = INITIALIZE_COMMAND;
-//     command_sent.code = CASE_MATCH_NOT_FOUND;
-//     command_sent.match_id = 1;
-//     protocol_server.send_lobby(command_sent);
-//     Command command_received = INITIALIZE_COMMAND;
-//     protocol_client.recv_lobby(command_received);
-//     ASSERT_EQ(command_received.code, CASE_MATCH_NOT_FOUND);
-//     ASSERT_EQ(command_received.match_id, 1);
-//     ASSERT_NE(command_received.code, CASE_MATCH_FULL);
-//     ASSERT_NE(command_received.match_id, 10);
-// }
+TEST(ProtocolSadCases, MatchNotFound) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_MATCH_NOT_FOUND, 1);
+    protocol_server.send_command(command_sent);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_MATCH_NOT_FOUND);
+    ASSERT_EQ(command_received.get_match_id(), 1);
+}
 
-// TEST(ProtocolSadCases, MatchAlreadyExists) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     Command command_sent = INITIALIZE_COMMAND;
-//     command_sent.code = CASE_MATCH_ALREADY_EXISTS;
-//     command_sent.match_id = 1;
-//     protocol_server.send_lobby(command_sent);
-//     Command command_received = INITIALIZE_COMMAND;
-//     protocol_client.recv_lobby(command_received);
-//     ASSERT_EQ(command_received.code, CASE_MATCH_ALREADY_EXISTS);
-//     ASSERT_EQ(command_received.match_id, 1);
-//     ASSERT_NE(command_received.code, CASE_MATCH_NOT_FOUND);
-//     ASSERT_NE(command_received.match_id, 10);
-// }
+TEST(ProtocolSadCases, MatchAlreadyExists) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_MATCH_ALREADY_EXISTS, 1);
+    protocol_server.send_command(command_sent);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_MATCH_ALREADY_EXISTS);
+    ASSERT_EQ(command_received.get_match_id(), 1);
+}
 
 int main(int argc, char** argv) {
     testing::InitGoogleTest(&argc, argv);
