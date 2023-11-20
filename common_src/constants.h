@@ -58,13 +58,16 @@
 #define BACKFLIP 0x04
 #define SHOOT 0x05
 
-//
+// Platforms codes
 #define PLAT_SMALL 3
 #define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8
-#define PLAYER_WIDTH 2
-#define PLAYER_HEIGHT 2
+#define PLAT_FRICTION 0.5
 
+// Worms codes
+#define WORM_WIDTH 2
+#define WORM_HEIGHT 2
+#define WORM_FRICTION 0.5
 
 // Code for protocol
 #define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places

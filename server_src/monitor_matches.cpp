@@ -4,12 +4,6 @@
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
 
-class MapNotFound: public std::exception {
-    const char* what() const noexcept override {
-        return "Was not able to find Map with that id when creating the match";
-    }
-};
-
 MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
     maps[(uint)1] = Map(routes[0]);
 }

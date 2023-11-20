@@ -36,7 +36,7 @@ private:
     const std::string recv_map_name();
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
-    int send_map_dimensions(const int& _width, const int& _height);
+    int send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height);
     int send_worms(std::vector<WormSnapshot>& worms);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
 

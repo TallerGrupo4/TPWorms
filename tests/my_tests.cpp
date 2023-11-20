@@ -1,3 +1,4 @@
+#include <cstdint>
 #include <cstdlib>
 #include <memory>
 #include <thread>
@@ -38,6 +39,9 @@ TEST(Socket, SocketTest) {
 
 // ----------------------- HAPPY CASES -----------------------
 
+
+// LOBBY
+
 TEST(ProtocolHappyCasesLobbyClient, Join) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
@@ -70,7 +74,7 @@ TEST(ProtocolHappyCasesLobbyClient, Create) {
     ASSERT_NE(command_received.get_match_id(), 10);
 }
 
-TEST(ProtocolHappyCasesLobbyClient, ListMatches) {
+TEST(ProtocolHappyCasesLobbyClient, List_matches) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -159,39 +163,130 @@ TEST(ProtocolHappyCasesLobbyServer, List_more_than_1_Match) {
     ASSERT_NE(command_received.get_matches_availables().at(2), "map_name3");
 }
 
+// END LOBBY
 
-// TEST(ProtocolHappyCasesPseudoLobby, StartMatch) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     Command command_sent(CASE_START, 1, "map_name");
-//     protocol_client.send_command(command_sent);
-//     Command command_received = protocol_server.recv_command();
-//     ASSERT_EQ(command_received.get_code(), CASE_START);
-//     ASSERT_EQ(command_received.get_match_id(), 1);
-//     ASSERT_EQ(command_received.get_map_name(), "map_name");
-// }
 
-// TEST(ProtocolHappyCasesMatch, MoveWorm) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     std::shared_ptr<ActionMov> action = std::make_shared<ActionMov>(1, 10);
-//     protocol_client.send_action(action);
-//     std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
-//     ASSERT_EQ(game_command->is_start, false);
-//     ASSERT_EQ(game_command->id_worm, 1);
-//     // Check if game_command is an instance of MoveCommand
-//     MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
-//     ASSERT_NE(moveCommand, nullptr);
-    
-// }
+
+
+
+
+// PSEUDO LOBBY
+
+TEST(ProtocolHappyCasesPseudoLobbyClient, Start_match) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_START, 1, "map_name");
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_START);
+    ASSERT_EQ(command_received.get_match_id(), 1);
+    ASSERT_EQ(command_received.get_map_name(), "map_name");
+}
+
+TEST(ProtocolHappyCasesPseudoLobbyClient, Number_of_players_1) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_sent(CASE_NUMBER_OF_PLAYERS, 1);
+    protocol_client.send_command(command_sent);
+    Command command_received = protocol_server.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
+}
+
+TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1);
+    PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
+    std::vector<WormSnapshot> worms = {worm_snapshot};
+    std::vector<PlatformSnapshot> platforms = {platform_snapshot};
+    Snapshot snapshot_to_send(worms, platforms, 1, 1, WORM_WIDTH, WORM_HEIGHT);
+    protocol_server.send_snapshot(snapshot_to_send);
+    Snapshot snapshot_received = protocol_client.recv_snapshot();
+    ASSERT_EQ(snapshot_received.worms.size(), 1);
+    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
+    ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
+    ASSERT_EQ(snapshot_received.platforms.size(), 1);
+    ASSERT_EQ(snapshot_received.height, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.width, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.worm_width, WORM_WIDTH * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.worm_height, WORM_HEIGHT * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
+    ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.platforms.at(0).type, LargeVertical);
+    ASSERT_EQ(snapshot_received.platforms.at(0).pos_x, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.platforms.at(0).width, std::round(PLAT_BIG * PIX_PER_METER));
+    ASSERT_EQ(snapshot_received.platforms.at(0).height, std::round(PLAT_HEIGHT * PIX_PER_METER));
+}
+
+TEST(ProtocolHappyCasesPseudoLobbyServer, Number_of_players_1) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Command command_to_send(CASE_NUMBER_OF_PLAYERS, 1);
+    protocol_server.send_command(command_to_send);
+    Command command_received = protocol_client.recv_command();
+    ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
+}
+
+// END PSEUDO LOBBY
+
+
+
+
+// MATCH
+
+TEST(ProtocolHappyCasesMatch, Send_action_mov_right_and_recv_gameCommand_mov_right) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionMovRight>();
+    protocol_client.send_action(action);
+    uint8_t worm_id = 1;
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_id);
+    MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
+    ASSERT_NE(moveCommand, nullptr);
+    ASSERT_EQ(moveCommand->get_direction(), RIGHT);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2);
+    std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
+    Snapshot snapshot_to_send(worms, {});
+    protocol_server.send_snapshot(snapshot_to_send);
+    Snapshot snapshot_received = protocol_client.recv_snapshot();
+    ASSERT_EQ(snapshot_received.worms.size(), 2);
+    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
+    ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
+    ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
+    ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
+    ASSERT_EQ(snapshot_received.platforms.size(), 0);
+    ASSERT_NE(snapshot_received.height, 10);
+}
 
 // TEST(ProtocolHappyCases, ExitServer) {
 //     Socket dummy_socket(serverPort);

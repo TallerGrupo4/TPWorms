@@ -101,7 +101,7 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (send_map_dimensions(snapshot.width, snapshot.height) < 0) {
+    if (send_map_dimensions(snapshot.width, snapshot.height, snapshot.worm_width, snapshot.worm_height) < 0) {
         return SOCKET_FAILED;
     }
     if (send_platforms(snapshot.platforms) < 0) {
@@ -141,13 +141,19 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_mov(uint8_t& worm_id) {
     return std::make_shared<MoveCommand>(worm_id, movement_x[0]);
 }
 
-int ProtocolServer::send_map_dimensions(const int& _width, const int& _height) {
+int ProtocolServer::send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height) {
     int width[1] = {static_cast<int>(std::round(_width * MULTIPLIER))};
     int height[1] = {static_cast<int>(std::round(_height * MULTIPLIER))};
     width[0] = htonl(width[0]);
     height[0] = htonl(height[0]);
     socket.sendall(width, 4, &was_closed);
     socket.sendall(height, 4, &was_closed);
+    int worm_width[1] = {static_cast<int>(std::round(_worm_width * MULTIPLIER))};
+    int worm_height[1] = {static_cast<int>(std::round(_worm_height * MULTIPLIER))};
+    worm_width[0] = htonl(worm_width[0]);
+    worm_height[0] = htonl(worm_height[0]);
+    socket.sendall(worm_width, 4, &was_closed);
+    socket.sendall(worm_height, 4, &was_closed);
     return 1;
 }
 
@@ -161,7 +167,6 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-
         int pos_x[1] = {static_cast<int>(std::round(platform.pos_x * MULTIPLIER))};
         pos_x[0] = htonl(pos_x[0]);
         if (socket.sendall(pos_x, 4, &was_closed) < 0) {
@@ -170,6 +175,16 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         int pos_y[1] = {static_cast<int>(std::round(platform.pos_y * MULTIPLIER))};
         pos_y[0] = htonl(pos_y[0]);
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int width[1] = {static_cast<int>(std::round(platform.width * MULTIPLIER))};
+        width[0] = htonl(width[0]);
+        if (socket.sendall(width, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
+        int height[1] = {static_cast<int>(std::round(platform.height * MULTIPLIER))};
+        height[0] = htonl(height[0]);
+        if (socket.sendall(height, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
     }

@@ -88,18 +88,18 @@ QString code_string = ui->CreateMatchLineEdit->text();
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
             switch (recv_cmd.get_code()) {
-            case CASE_MATCH_ALREADY_EXISTS:
-                ui->CreateMatchLineEdit->clear();
-                ui->CreateMatchLineEdit->setText("Error: Match already exist");
-                break;
+                case CASE_MATCH_ALREADY_EXISTS:
+                    ui->CreateMatchLineEdit->clear();
+                    ui->CreateMatchLineEdit->setText("Error: Match already exist");
+                    break;
 
-            case CASE_CREATE:
-                Command cmd2(CASE_START,match_code,"hola");
-                client.send_lobby_command(cmd2);
-                exit_succesful = true;
-                this->close();
-                break;
-            }
+                case CASE_CREATE:
+                    Command cmd2(CASE_START,match_code,"hola");
+                    client.send_lobby_command(cmd2);
+                    exit_succesful = true;
+                    this->close();
+                    break;
+                }
             
         } else {
             ui->CreateMatchLineEdit->clear();

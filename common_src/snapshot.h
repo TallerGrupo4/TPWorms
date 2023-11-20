@@ -31,7 +31,7 @@ class ProjectileSnapshot {
     public:
     float pos_x;
     float pos_y;
-    float angle;
+    float angle; // Remove this, I think it is never been used (it is setted in the server but in the client it's never used)
     int type;
 
     ProjectileSnapshot(int type, float pos_x, float pos_y, float angle):
@@ -71,10 +71,11 @@ public:
     BeamType type;
     float pos_x;
     float pos_y;
-    
+    float width;  // cast to int in client
+    float height;  // This one is always the same
 
-    PlatformSnapshot(BeamType type, float pos_x, float pos_y):
-            type(type), pos_x(pos_x), pos_y(pos_y) {};
+    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float width = PLAT_SMALL, float height = PLAT_HEIGHT):
+            type(type), pos_x(pos_x), pos_y(pos_y), width(width), height(height) {};
     ~PlatformSnapshot(){};
 };
  
@@ -84,11 +85,13 @@ public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
     // std::vector<ProjectileSnapshot> projectiles;
-    float height = 0;
-    float width = 0;
+    float height;
+    float width;
+    float worm_width;
+    float worm_height;
 
-    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
-            worms(worms), platforms(platforms) {};
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms, float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT):
+            worms(worms), platforms(platforms), height(height), width(width), worm_width(worm_width), worm_height(worm_height) {};
     
     Snapshot() {};
     ~Snapshot() {};

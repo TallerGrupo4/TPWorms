@@ -108,7 +108,8 @@ void ProtocolClient::send_action(std::shared_ptr<Action> action) {
 
 Snapshot ProtocolClient::recv_snapshot() {
     Snapshot snapshot;
-    recv_dimensions_and_platforms(snapshot);
+    recv_dimensions(snapshot);
+    recv_platforms(snapshot);
     recv_worms(snapshot);
     return snapshot;
 }
@@ -133,16 +134,27 @@ void ProtocolClient::send_map_name(const std::string map_name) {
     }
 }
 
-void ProtocolClient::recv_dimensions_and_platforms(Snapshot& snapshot) {
+void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     int width[1];
     int height[1];
+    int worm_width[1];
+    int worm_height[1];
     socket.recvall(width, 4, &was_closed);
     socket.recvall(height, 4, &was_closed);
+    socket.recvall(worm_width, 4, &was_closed);
+    socket.recvall(worm_height, 4, &was_closed);
     width[0] = ntohl(width[0]);
     height[0] = ntohl(height[0]);
+    worm_width[0] = ntohl(worm_width[0]);
+    worm_height[0] = ntohl(worm_height[0]);
     // Move this to  a 'Parser'
     snapshot.width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
     snapshot.height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.worm_width = std::round((static_cast<float>(worm_width[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.worm_height = std::round((static_cast<float>(worm_height[0] * PIX_PER_METER)) / MULTIPLIER);
+}
+
+void ProtocolClient::recv_platforms(Snapshot& snapshot) {
     uint16_t num_of_plats[1];
     socket.recvall(num_of_plats, 2, &was_closed);
     // if (was_closed) throw WasClosed;
@@ -151,22 +163,35 @@ void ProtocolClient::recv_dimensions_and_platforms(Snapshot& snapshot) {
         BeamType type[1];
         int pos_x[1];
         int pos_y[1];
+        int width[1];
+        int height[1];
         socket.recvall(type, 1, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_x, 4, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_y, 4, &was_closed);
     // if (was_closed) throw WasClosed;
+        socket.recvall(width, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(height, 4, &was_closed);
     // if (was_closed) throw WasClosed;
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
+        width[0] = ntohl(width[0]);
+        height[0] = ntohl(height[0]);
         pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
-
-        // The pos_x and pos_y are multiplied by 1000 to avoid sending floats
-        // The client must know that it probably has to divide by 1000
-        // (The platforms have integers instead of floats from now on in the client)
-        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0]);
+        width[0] = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
+        height[0] = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
+        
+        // PARSER!!!!
+        int degree = 0;
+        if (get_degree_of_beam_type(type[0], degree)) {
+            height[0] = calculate_beam_height(degree, height[0], width[0]);
+            width[0] = calculate_beam_width(degree, height[0], width[0]);
+        }
+        
+        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
         snapshot.platforms.push_back(platform);
     }
 }
@@ -327,3 +352,4 @@ uint8_t ProtocolClient::recv_number_of_players() {
     }
     return number_of_players[0];
 }
+

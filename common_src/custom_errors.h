@@ -38,6 +38,12 @@ public:
     virtual const char* what() const noexcept { return "Match already started"; }
 };
 
+class MapNotFound: public std::exception {
+    const char* what() const noexcept override {
+        return "Was not able to find Map with that id when creating the match";
+    }
+};
+
 // class NonStopExecption: public std::exception{
 // public:
 //     NonStopExecption() {}

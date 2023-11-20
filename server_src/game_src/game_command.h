@@ -15,12 +15,13 @@ struct ShootCommandAttributes {
 };
 
 class GameCommand {
-public:
+protected:
     // Make this private and add a getter
     char id_worm = -1; 
-    bool is_start = false;
+    int direction;
 
-    GameCommand(char id = -1, bool _is_start = false): id_worm(id), is_start(_is_start) {};
+public:
+    GameCommand(char id = -1, int direction = 0): id_worm(id), direction(direction) {};
     ~GameCommand() = default;
 
 
@@ -29,31 +30,17 @@ public:
 };
 
 
-// This could be a Command from the lobby
-class StartCommand: public GameCommand {
-public:
-    StartCommand(): GameCommand(-1 , true) {}
-    ~StartCommand() {}
-};
-
-
-
 class MoveCommand: public GameCommand {
-private:
-    int direction;
-
 public:
-    MoveCommand(char id, int direction): GameCommand(id), direction(direction) {}
+    int get_direction() { return direction; }
+    MoveCommand(char id, int direction): GameCommand(id, direction) {}
     ~MoveCommand() {}
     void execute(Game& game) override { game.move_player(id_worm, direction); }
 };
 
 class JumpCommand: public GameCommand {
-    private:
-    int direction;
-
     public:
-    JumpCommand(char id, int direction): GameCommand(id), direction(direction) {}
+    JumpCommand(char id, int direction): GameCommand(id, direction) {}
     ~JumpCommand() {}
     void execute(Game& game) override { game.jump_player(id_worm, direction); }
 
@@ -68,6 +55,7 @@ public:
 
 
 // class ShootCommand: public GameCommand {
+// Attributes must be GameCommand attributes because a GameCommand is what it is being used in the server
 //     private:
 //     float angle;
 //     int potency;

@@ -70,7 +70,9 @@ class MapReader : public Reader {
                 BeamType type =platform["type"].as<BeamType>();
                 float x = platform["x"].as<float>();
                 float y = platform["y"].as<float>();
-                platforms_snap.push_back(PlatformSnapshot(type, x, y));
+                float width = platform["width"].as<float>();
+                float height = platform["height"].as<float>();
+                platforms_snap.push_back(PlatformSnapshot(type, x, y, width, height));
             }
             Snapshot map_snap({}, platforms_snap);
             YAML::Node dimensions = node["dimensions"];
