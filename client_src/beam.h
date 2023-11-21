@@ -23,7 +23,7 @@ private:
     int calculate_beam_height(int degree, float beam_actual_height, float beam_actual_width);
 public:
     explicit Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, int map_width, int map_height);
-    void render(SDL2pp::Renderer& renderer);
+    void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
 };
 
 #endif  // BEAM_H

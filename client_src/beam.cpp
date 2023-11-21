@@ -7,10 +7,10 @@ Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& r
     assign_positions(renderer, pltfrm.pos_x, pltfrm.pos_y, map_width, map_height);
 }
 
-void Beam::render(SDL2pp::Renderer& renderer) {
+void Beam::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
     SDL2pp::Rect source_rect(0,0,beam_image.GetWidth(),beam_image.GetHeight());
     std::cout << " width de la imagen de la viga : " << beam_image.GetWidth() << " height de la imagen de laviga: " << beam_image.GetHeight() << std::endl;
-    SDL2pp::Rect dest_rect(x+(int)(renderer.GetLogicalWidth()/2),y+(int)(renderer.GetLogicalHeight()/2),width,height);
+    SDL2pp::Rect dest_rect(x+(int)(renderer.GetLogicalWidth()/2) - camera_offset_x,y+(int)(renderer.GetLogicalHeight()/2) - camera_offset_y,width,height);
     std::cout << "x de la viga: " << x+(int)(renderer.GetLogicalWidth()/2) << " y de la viga: " << y+(int)(renderer.GetLogicalHeight()/2) << " width de la viga : " << width << " height de la viga: " << height << std::endl;
 
     renderer.Copy(

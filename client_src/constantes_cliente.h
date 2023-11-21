@@ -3,6 +3,21 @@
 #ifndef CLIENTE_CONSTANTES_H
 #define CLIENTE_CONSTANTES_H
 
+enum TargetType : char {
+    PlayerType,
+    WormType,
+    ProjectileType,
+    NoneType,
+};
+
+struct Target {
+    TargetType type_of_target = NoneType;
+    int worm_id = -1;
+    int projectile_id = -1;
+    int x_offset = 0;
+    int y_offset = 0;
+};
+
 #define RESOLUTION_MULTIPLIER 6
 
 #define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"

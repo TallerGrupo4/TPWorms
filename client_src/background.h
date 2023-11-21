@@ -18,7 +18,7 @@ private:
 
 public:
     explicit Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
-    void render(SDL2pp::Renderer& renderer);
+    void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     int get_map_width();
     int get_map_height();
 };
