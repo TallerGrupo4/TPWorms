@@ -69,11 +69,11 @@ bool MatchRenderer::handleEvents(Match& match) {
             break;
             case SDL_MOUSEMOTION: {
                 if(camera_activated) {
-                    std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
+                    //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
                     SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
                     mouse_motion_x += mouseMotionEvent.xrel;
                     mouse_motion_y += mouseMotionEvent.yrel;
-                    std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
+                    //std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
                     match.update_camera(mouse_motion_x,mouse_motion_y);
                 }
                 break;
