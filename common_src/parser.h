@@ -1,6 +1,11 @@
 #include <vector>
 
 #include "constants.h"
+#include "command.h"
+#include "snapshot.h"
+// #include "game_command.h"
+#include "../client_src/action.h"
+// #include "../server_src/game_src/gameCommand.h"
 
 #ifndef PARSER_H
 #define PARSER_H
@@ -11,6 +16,10 @@ public:
     Parser() = default;
 
     virtual void parse_sending_command(Command& command);
+
+    virtual void parse_sending_snapshot(Snapshot& snapshot);
+
+    virtual void parse_sending_action(Action& action);
 
     virtual void parse_receiving_command_join(Command& command, const char* code,
                                               const uint* match_id,

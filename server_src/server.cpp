@@ -7,22 +7,20 @@
 #include <sys/socket.h>
 
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
-Server::Server(const char* port): socket(port), monitor_matches() {}
+Server::Server(const char* port, std::vector<std::string> routes): socket(port), monitor_matches(routes) {}
 
 void Server::run() {
     while (true) {
         try {
-            Socket client_skt = socket.accept();
-            clients.push_back(
-                    std::make_unique<ServerClient>(std::move(client_skt), monitor_matches));
-            clients.back()->start();
-            free_dead_clients();
+            Socket user_skt = socket.accept();
+            users.push_back(std::make_unique<User>(std::move(user_skt), monitor_matches));
+            users.back()->start();
+            free_dead_users();
         } catch (const LibError& err) {
             if (is_dead) {
-                kill_clients();
+                kill_users();
                 break;
             } else {
                 std::cout << R"(Something went wrong and \
@@ -38,22 +36,23 @@ void Server::run() {
 }
 
 
-void Server::free_dead_clients() {
-    for (auto clients_it = clients.begin(); clients_it != clients.end(); clients_it++) {
-        if ((*clients_it)->is_dead()) {
-            (*clients_it)->join();
-            clients_it = clients.erase(clients_it);
+void Server::free_dead_users() {
+    for (auto users_it = users.begin(); users_it != users.end(); users_it++) {
+        if ((*users_it)->is_dead()) {
+            (*users_it)->join();
+            users_it = users.erase(users_it);
         }
     }
 }
 
-void Server::kill_clients() {
-    for (auto clients_it = clients.begin(); clients_it != clients.end(); ++clients_it) {
-        if (!(*clients_it)->is_dead()) {
-            (*clients_it)->stop();
+void Server::kill_users() {
+    for (auto users_it = users.begin(); users_it != users.end(); ++users_it) {
+        if (!(*users_it)->is_dead()) {
+            (*users_it)->stop();
         }
-        (*clients_it)->join();
+        (*users_it)->join();
     }
+    monitor_matches.stop();
 }
 
 void Server::stop() {

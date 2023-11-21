@@ -9,3 +9,5 @@ message (STATUS "Cargué ${common_src}")
 add_library(common_lib STATIC
   ${common_src_files}
 )
+
+target_link_libraries(common_lib yaml-cpp)

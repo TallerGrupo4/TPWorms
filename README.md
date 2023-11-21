@@ -5,7 +5,7 @@ Final project for the subject Taller de Programacion I
 | Nombre | Apellido | Padrón | Mail                |
 | ------ | -------- | ------ | ------------------- |
 | Facundo  | Huttin | 107854 | fhuttin@fi.uba.ar |
-| Theo | Lijs | 109472 | *** |
+| Theo | Lijs | 109472 | tlijs@fi.uba.ar |
 | Ivan | Erlich | 105989 | ierlich@fi.uba.ar |
 
 ## SDL2
@@ -13,6 +13,19 @@ In order to properly run the game, you need to install the SDL2 library. To do s
 ```
 sudo apt-get install libsdl2-dev
 ```
+
+## QT5
+In order to properly run the game, you need to install the qt5 library. To do so, run the following commands:
+```
+sudo apt-get install qtbase5-dev
+```
+
+## YAML
+In order to properly run the game, you need to install the yaml library. To do so, run the following commands:
+```
+sudo apt-get install -y libyaml-cpp-dev
+```
+
 Also you will need to incorporate the SDL2 and BOX2dsubmodule. To do so, run the following commands:
 ```
 git submodule update --init --recursive
@@ -30,7 +43,7 @@ mkdir build
 cd build
 cmake ..
 ```
-TIP: If you already have a build folder with the cmake script already ran, you can run the 
+TIP: If you already have a build folder with the cmake script already ran (if not, skip this command), you can run the 
 following command to re-build the project using the cache and compile it at the same time without
 needing to be at the build folder (you need to be at the root folder of the project):
 ```
@@ -85,8 +98,21 @@ pre-commit run --all-files
 
 
 ### Testing
-In order to run the tests, you will need to run the following commands in /build (with the build and make already done):
+In order to run the tests, you will need to run the following commands in /build:
+First you will need to run the cmake script for removing the cache and re-generate it with the testing flag:
+```
+rm CMakeCache.txt && cmake .. -DTESTING=ON
+```
+Then you will need to run the makefile:
+```
+make -j4
+```
+And finally you will need to run the tests:
 ```
 GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
 ```
-
+For running the project normally once again you will need to run the cmake script for removing the cache and re-generate it without the testing flag:
+```
+rm CMakeCache.txt && cmake ..
+```
+And then run the makefile as explained before.

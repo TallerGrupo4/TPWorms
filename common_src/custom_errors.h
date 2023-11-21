@@ -1,3 +1,8 @@
+#include <exception>
+
+#ifndef CUSTOM_ERRORS_H
+#define CUSTOM_ERRORS_H
+
 class MatchAlreadyExists: public std::exception {
 public:
     MatchAlreadyExists() {}
@@ -25,3 +30,25 @@ public:
     ~PlayerNotFound() {}
     virtual const char* what() const noexcept { return "Player not found"; }
 };
+
+class MatchAlreadyStarted: public std::exception {
+public:
+    MatchAlreadyStarted() {}
+    ~MatchAlreadyStarted() {}
+    virtual const char* what() const noexcept { return "Match already started"; }
+};
+
+class MapNotFound: public std::exception {
+    const char* what() const noexcept override {
+        return "Was not able to find Map with that id when creating the match";
+    }
+};
+
+// class NonStopExecption: public std::exception{
+// public:
+//     NonStopExecption() {}
+//     ~NonStopExecption() {}
+//     virtual const char* what() const noexcept { return "Non stop exception"; }
+// };
+
+#endif

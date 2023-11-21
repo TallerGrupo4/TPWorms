@@ -1,25 +1,31 @@
 #include "sender.h"
 
 #include <iostream>
+#include <memory>
 
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
-ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> queue, bool& in_match):
-        socket(skt), queue(queue), in_match(in_match), parser(), protocol(socket, parser) {}
+ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
+                        //    std::shared_ptr<Queue<Action>> _queue_match,
+                           std::shared_ptr<Queue<std::shared_ptr<Action>>> _queue_match,
+                           std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
+        socket(skt),
+        queue_lobby(_queue_lobby),
+        queue_match(_queue_match),
+        in_match(_in_match),
+        parser(),
+        protocol(socket, parser),
+        is_dead(_is_dead) {}
 
 
 void ClientSender::run() {
     try {
-        while (protocol.is_connected() && !_is_dead) {
-            Command command = queue->pop();
-            if (!in_match) {
-                handle_command_not_in_match(command);
-            } else {
-                handle_command_in_match(command);
-            }
+        while (protocol.is_connected() && !is_dead) {
+            // std::shared_ptr<Action> action = queue_match->pop();
+            std::shared_ptr<Action> action = queue_match->pop();
+            protocol.send_action(action);
         }
     } catch (const LibError& e) {
         std::cout << "ClientSender has finished because LibError: " << e.what() << std::endl;
@@ -28,23 +34,6 @@ void ClientSender::run() {
         // std::cout << "ClientSender has finished because ClosedQueue: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "ClientSender has finished because of an unknown error" << std::endl;
-    }
-}
-
-void ClientSender::handle_command_not_in_match(Command& command) {
-    protocol.send_create_join(command);
-}
-
-void ClientSender::handle_command_in_match(const Command& command) {
-    switch (command.code) {
-        case CASE_CHAT: {
-            // TODO: CATCH ERROR SOCKET_FAILED
-            protocol.send(command);
-            break;
-        }
-        default:
-            // TODO: throw a custom error, it should never reach this point.
-            break;
     }
 }
 

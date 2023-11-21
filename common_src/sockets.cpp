@@ -1,5 +1,7 @@
 // Copyright 2022 <GPL v2>
 
+#ifndef TESTING
+
 #include <stdexcept>
 
 #include <arpa/inet.h>
@@ -427,3 +429,5 @@ void Socket::chk_skt_or_fail() const {
                                  "socket (and therefore invalid).");
     }
 }
+
+#endif  // TESTING

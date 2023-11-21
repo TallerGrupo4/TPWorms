@@ -2,11 +2,11 @@
 #include <memory>
 #include <vector>
 
-#include "../common_src/monitor_matches.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
-#include "server_client.h"
+#include "monitor_matches.h"
+#include "user.h"
 
 #ifndef SERVER_H
 #define SERVER_H
@@ -16,16 +16,16 @@ private:
     Socket socket;
     MonitorMatches monitor_matches;
     bool is_dead = false;
-    std::vector<std::unique_ptr<ServerClient>> clients;
+    std::vector<std::unique_ptr<User>> users;
     /*
-     * We store the clients in a Vector using shared pointers to avoid memory leaks ("RAII").
+     * We store the users in a Vector using shared pointers to avoid memory leaks ("RAII").
      * (Perhaps it is a little bit overkill, but it is a good practice)
      */
-    void free_dead_clients();
-    void kill_clients();
+    void free_dead_users();
+    void kill_users();
 
 public:
-    explicit Server(const char* port);
+    explicit Server(const char* port, const std::vector<std::string> routes);
 
     void run() override;
 

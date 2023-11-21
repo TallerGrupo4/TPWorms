@@ -4,21 +4,24 @@
 
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
-#include "../common_src/constants.h"
 
 
-ClientReceiver::ClientReceiver(Socket& skt, std::shared_ptr<Queue<Command>> queue, bool& in_match):
-        socket(skt), queue(queue), in_match(in_match), parser(), protocol(socket, parser) {}
+ClientReceiver::ClientReceiver(Socket& skt,
+                               std::shared_ptr<Queue<Snapshot>> _queue_match,
+                               std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
+        socket(skt),
+        queue_match(_queue_match),
+        in_match(_in_match),
+        parser(),
+        protocol(socket, parser),
+        is_dead(_is_dead) {}
 
 
 void ClientReceiver::run() {
     try {
-        while (protocol.is_connected() && !_is_dead) {
-            Command command = INITIALIZE_COMMAND;
-            protocol.recv(command);
-            if (!in_match && (command.code == CASE_JOIN || command.code == CASE_CREATE))
-                in_match = true;
-            queue->push(command);
+        while (protocol.is_connected() && !is_dead) {
+            Snapshot snapshot = protocol.recv_snapshot();
+            queue_match->push(snapshot);
         }
     } catch (const LibError& e) {
         std::cout << "ClientReceiver has finished because LibError: " << e.what() << std::endl;
