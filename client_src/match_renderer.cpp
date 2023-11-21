@@ -9,6 +9,7 @@ MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDE
                 window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
+        SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
         Snapshot snapshot = client.recv_map();
         std::cout << "match height: " << snapshot.height << "\n match width: " << snapshot.width << std::endl;
         match = Match(snapshot,surfaces,renderer);
@@ -18,15 +19,20 @@ MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDE
 bool MatchRenderer::handleEvents(Match& match) {
     SDL_Event event;
     std::shared_ptr<Action> action;
-    // Action action;
     while (SDL_PollEvent(&event)) {
-        //bool is_moving_right;
-        //bool is_moving_left;
         switch (event.type) {
             case SDL_KEYDOWN: {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
-                    case SDLK_ESCAPE:
+                    case SDLK_ESCAPE: {
+                        camera_activated = camera_activated ? false : true;
+                        SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2 - mouse_motion_x,window.GetHeight()/2 - mouse_motion_y);
+                        mouse_motion_x = 0;
+                        mouse_motion_y = 0;
+                        match.update_camera(mouse_motion_x, mouse_motion_y, true);
+                        break;
+                        // return false;
+                    }
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT: {
@@ -62,13 +68,17 @@ bool MatchRenderer::handleEvents(Match& match) {
                 }
             }  // Fin KEY_UP
             break;
-            case SDL_MOUSEMOTION:
-                // SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
-                // SDL_GetRelativeMouseMode()
-                // SDL_SetRelativeMouseMode()
-                //mouseMotionEvent.xrel
-                // std::cout << "Oh! Mouse" << std::endl;
+            case SDL_MOUSEMOTION: {
+                if(camera_activated) {
+                    std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
+                    SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
+                    mouse_motion_x += mouseMotionEvent.xrel;
+                    mouse_motion_y += mouseMotionEvent.yrel;
+                    std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
+                    match.update_camera(mouse_motion_x,mouse_motion_y);
+                }
                 break;
+            }
             case SDL_MOUSEBUTTONDOWN: {
                 SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
                 std::cout << "x:" << mouseButtonEvent.x << " y: " << mouseButtonEvent.y << std::endl;
@@ -80,7 +90,6 @@ bool MatchRenderer::handleEvents(Match& match) {
             }
         }  // fin switch(event)
     }      // fin while(SDL_PollEvents)
-    // client.push_game_command(game_command);
     return true;
 }
 

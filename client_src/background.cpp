@@ -6,7 +6,7 @@ Background::Background(std::vector<PlatformSnapshot> platforms, int map_width, i
     }
 }
 
-void Background::render(SDL2pp::Renderer& renderer) {
+void Background::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
     SDL2pp::Rect source_rect(0,0,bkgrnd_image.GetWidth(),bkgrnd_image.GetHeight());
     SDL2pp::Rect dest_rect(0,0,renderer.GetLogicalWidth(),renderer.GetLogicalHeight());
     renderer.Copy(
@@ -17,7 +17,7 @@ void Background::render(SDL2pp::Renderer& renderer) {
         SDL2pp::NullOpt);
 
     for (size_t i = 0; i < beams.size(); i++) {
-        beams[i].render(renderer);
+        beams[i].render(renderer, camera_offset_x, camera_offset_y);
     }
 }
 

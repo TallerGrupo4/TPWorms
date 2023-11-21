@@ -27,7 +27,7 @@ void Match::update_from_snapshot(Snapshot& snpsht) {
     for (auto& worm_snpsht : snpsht.worms) {
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }
-    
+    update_camera();
     
     // for (Worm worm : this->worms) { // {w1 , w2 , w3} for each w.update()
     //     for (WormSnapshot worm_snpsht : snpsht.worms) {
@@ -39,12 +39,69 @@ void Match::update_from_snapshot(Snapshot& snpsht) {
     // }
 }
 
+bool Match::get_next_target(Target& new_target) {
+    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
+        if(it->second->get_worm_state() != STILL) {
+            new_target = {
+                WormType,
+                it->first,
+                -1,
+                it->second->get_worm_x()*RESOLUTION_MULTIPLIER,
+                it->second->get_worm_y()*RESOLUTION_MULTIPLIER,
+            };
+            return true;
+        }
+    }
+    return false;
+}
+
+void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_camera) { 
+    TargetType target_type = this->camera.has_target();
+    Target new_target;
+    switch (target_type) {
+    case WormType: {
+        auto target_worm = worms_map.at(camera.get_target_worm_id());
+        if(target_worm->get_worm_state() != STILL) {
+            new_target = {
+                WormType,
+                camera.get_target_worm_id(),
+                -1,
+                target_worm->get_worm_x()*RESOLUTION_MULTIPLIER,
+                target_worm->get_worm_y()*RESOLUTION_MULTIPLIER,
+            };
+            camera.update(new_target);
+            break;
+        }
+    }
+    case NoneType:
+    case PlayerType:
+        if(get_next_target(new_target)) {
+            camera.update(new_target);
+            break;
+        }
+        if (((camera_offset_x != 0) and (camera_offset_y != 0)) or center_camera) {
+            new_target = {
+                PlayerType,
+                -1,
+                -1,
+                camera_offset_x,
+                camera_offset_y
+            };
+            camera.update(new_target);
+        }
+        break;
+    case ProjectileType:
+        /* code */
+        break;
+    }
+}
+
 void Match::update_from_iter(int iter) {}
 
 void Match::render(SDL2pp::Renderer& renderer) {
-    bkgrnd->render(renderer);
+    bkgrnd->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
-        it->second->render(renderer);
+        it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
     
     // for (std::shared_ptr<Worm> worm : worms_map) {

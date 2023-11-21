@@ -18,12 +18,13 @@ public:
     Worm(WormSnapshot worm_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot& worm_snpsht);
-    void render(SDL2pp::Renderer& renderer);
+    void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     void moveRigth();
     void moveLeft();
     void stopMoving();
-    bool is_same_id(char id_to_check);
-
+    int get_worm_state();
+    int get_worm_x();
+    int get_worm_y();
 private:
     std::shared_ptr<Background> bkgrnd;
     Animation walking_an;

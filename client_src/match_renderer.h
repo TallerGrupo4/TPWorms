@@ -26,6 +26,9 @@ private:
     SDL2pp::Renderer renderer;
     Match match;
     bool running = true;
+    int mouse_motion_x = 0;
+    int mouse_motion_y = 0;
+    bool camera_activated = false;
 
     bool handleEvents(Match& match);
 
