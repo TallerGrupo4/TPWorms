@@ -16,6 +16,9 @@ MainWindow::MainWindow(Client& client, bool& exit_succesful): QMainWindow(nullpt
     ui->MatchOptionsFrame->setEnabled(true);
     ui->PreMatchFrame->setVisible(false);
     ui->PreMatchFrame->setEnabled(false);
+
+    // AGARRO LAS LISTAS DE LAS PARTIDAS
+
     QObject::connect(ui->JoinMatchButton, &QPushButton::clicked,
                      this, &MainWindow::joinMatch);
     
