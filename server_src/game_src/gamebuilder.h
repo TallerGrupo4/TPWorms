@@ -14,6 +14,7 @@ class GameBuilder {
         b2BodyDef platform_def;
         platform_def.type = b2_staticBody;
         platform_def.position.Set(x, y);
+        platform_def.angle = angle;
         b2Body* platform = world.CreateBody(&platform_def);
         b2PolygonShape platform_shape;
         platform_shape.SetAsBox(width / 2, height / 2);
