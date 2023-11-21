@@ -26,6 +26,7 @@
 #define CASE_MATCH_NOT_FOUND 0x11
 #define CASE_MATCH_ALREADY_STARTED 0x12
 #define CASE_EXIT_SERVER 0x13
+#define CASE_STARTING_MATCH 0x14
 
 // Client codes
 #define CREATE "Create"

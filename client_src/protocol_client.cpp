@@ -83,7 +83,7 @@ const Command ProtocolClient::recv_command() {
             recv_match_id(match_id);
             uint8_t number_of_players[1];
             recv_number_of_players(number_of_players);
-            return Command(code[0], match_id[0], number_of_players[0]);
+            return Command(code[0], match_id[0], {""},  number_of_players[0], DEFAULT);
         }
         case CASE_MATCH_ALREADY_STARTED: {
             uint match_id[1];

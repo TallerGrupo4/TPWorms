@@ -40,7 +40,7 @@ void ProtocolServer::send_command(const Command& command) {
             break;
         }
         case CASE_LIST: {
-            send_list(command.get_matches_availables());
+            send_list(command.get_available_matches());
             break;
         }
         case CASE_MATCH_ALREADY_EXISTS: {

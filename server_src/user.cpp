@@ -55,29 +55,34 @@ void User::handle_starting_match() {
         Command command = protocol.recv_command();
         if (command.get_code() == CASE_START) {
             try {
-                // We should check that match_id == command.get_match_id() for more security
+                if (match_id != command.get_match_id()) {
+                    // It should never reach this point I think
+                    std::cout << "Match id does not match with the one in the server" << std::endl;
+                    // TODO: KILL THIS CORRUPTED CLIENT
+                    continue;
+                }
                 monitor_matches.start_match(match_id, command.get_map_name());
                 std::cout << "Match started with id: " << match_id << std::endl;
                 return;
             } catch (const MatchNotFound& err) {
                 // It should never reach this point I think
                 std::cout << "Match not found with id: " << match_id << std::endl;
-                // KILL THIS CORRUPTED CLIENT
+                // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             } catch (const MatchAlreadyStarted& err) {
                 // It should never reach this point I think
                 std::cout << "Match already started with id: " << match_id << std::endl;
-                // KILL THIS CORRUPTED CLIENT
+                // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             } catch (const MapNotFound& err) {
                 // It should never reach this point I think
                 std::cout << "Map not found with name: " << command.get_map_name() << std::endl;
-                // KILL THIS CORRUPTED CLIENT
+                // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             }
         } else if (command.get_code() == CASE_NUMBER_OF_PLAYERS) {
             uint8_t number_of_players = monitor_matches.get_number_of_players(match_id);
-            Command command_to_send(CASE_NUMBER_OF_PLAYERS, match_id, number_of_players);
+            Command command_to_send(CASE_NUMBER_OF_PLAYERS, match_id, {""}, number_of_players, DEFAULT);
             protocol.send_command(command_to_send);
         }
     }

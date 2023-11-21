@@ -81,11 +81,11 @@ TEST(ProtocolHappyCasesLobbyClient, List_matches) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    Command command_sent(CASE_LIST, DEFAULT);
+    Command command_sent(CASE_LIST);
     protocol_client.send_command(command_sent);
     Command command_received = protocol_server.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_LIST);
-    ASSERT_EQ(command_received.get_matches_availables().size(), 0);
+    ASSERT_EQ(command_received.get_available_matches().size(), 0);
     ASSERT_NE(command_received.get_code(), CASE_JOIN);
 }
 
@@ -141,8 +141,8 @@ TEST(ProtocolHappyCasesLobbyServer, List_1_Match) {
     protocol_server.send_command(command_send_list);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_LIST);
-    ASSERT_EQ(command_received.get_matches_availables().size(), 1);
-    ASSERT_EQ(command_received.get_matches_availables().at(1), "map_name");
+    ASSERT_EQ(command_received.get_available_matches().size(), 1);
+    ASSERT_EQ(command_received.get_available_matches().at(1), "map_name");
 }
 
 TEST(ProtocolHappyCasesLobbyServer, List_more_than_1_Match) {
@@ -157,10 +157,10 @@ TEST(ProtocolHappyCasesLobbyServer, List_more_than_1_Match) {
     protocol_server.send_command(command_send_list);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_LIST);
-    ASSERT_EQ(command_received.get_matches_availables().size(), 3);
-    ASSERT_EQ(command_received.get_matches_availables().at(1), "map_name");
-    ASSERT_EQ(command_received.get_matches_availables().at(3), "map_name3");
-    ASSERT_NE(command_received.get_matches_availables().at(2), "map_name3");
+    ASSERT_EQ(command_received.get_available_matches().size(), 3);
+    ASSERT_EQ(command_received.get_available_matches().at(1), "map_name");
+    ASSERT_EQ(command_received.get_available_matches().at(3), "map_name3");
+    ASSERT_NE(command_received.get_available_matches().at(2), "map_name3");
 }
 
 // END LOBBY
@@ -194,7 +194,7 @@ TEST(ProtocolHappyCasesPseudoLobbyClient, Number_of_players_1) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    Command command_sent(CASE_NUMBER_OF_PLAYERS, 1);
+    Command command_sent(CASE_NUMBER_OF_PLAYERS);
     protocol_client.send_command(command_sent);
     Command command_received = protocol_server.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
@@ -237,10 +237,11 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Number_of_players_1) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    Command command_to_send(CASE_NUMBER_OF_PLAYERS, 1);
+    Command command_to_send(CASE_NUMBER_OF_PLAYERS, 1, {""}, 10, DEFAULT);
     protocol_server.send_command(command_to_send);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
+    ASSERT_EQ(command_received.get_number_of_players(), 10);
 }
 
 // END PSEUDO LOBBY

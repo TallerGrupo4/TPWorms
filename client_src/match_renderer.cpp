@@ -5,14 +5,13 @@
 
 using namespace SDL2pp;
 
-MatchRenderer::MatchRenderer(Client& client) : client(client), sdl(SDL_INIT_VIDEO),
+MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO),
                 window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
-        Snapshot snapshot = client.recv_map();
-        std::cout << "match height: " << snapshot.height << "\n match width: " << snapshot.width << std::endl;
-        match = Match(snapshot,surfaces,renderer);
+        std::cout << "match height: " << map_received.height << "\n match width: " << map_received.width << std::endl;
+        match = Match(map_received,surfaces,renderer);
         this->render(renderer,match);
 }
 

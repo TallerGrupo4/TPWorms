@@ -35,7 +35,7 @@ private:
     void render(SDL2pp::Renderer& renderer, Match& match);
 
 public:
-    explicit MatchRenderer(Client& client);
+    explicit MatchRenderer(Client& client, Snapshot map_received);
 
     void start();
     

@@ -15,7 +15,6 @@ private:
     const char code;
     const uint match_id;
     const std::string map_name;
-    const bool StartMatch = false;
 
     const std::map<uint, std::string> matches_availables;
     const uint8_t number_of_players;
@@ -24,8 +23,9 @@ private:
 
 public:
 
-    Command(const char code, const uint match_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code): code(code), match_id(DEFAULT), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
 
+    Command(const char code, const uint match_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
 
     Command(const char code, const uint match_id, const uint8_t worm_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(worm_id) {};
 
@@ -47,7 +47,7 @@ public:
 
     std::string get_map_name() const { return map_name; }
 
-    std::map<uint, std::string> get_matches_availables() const { return matches_availables; }
+    std::map<uint, std::string> get_available_matches() const { return matches_availables; }
 
     std::vector<std::string> get_map_names() const { return map_names; }
 

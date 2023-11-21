@@ -235,7 +235,7 @@ int main(int argc, char* argv[]) { try {
     if (!lobby.start(argc, argv)) {
         return EXIT_SUCCESS;
     }
-    MatchRenderer match(client);
+    MatchRenderer match(client, lobby.get_received_map());
     match.start();
     return EXIT_SUCCESS;
     } catch (std::exception& e) {

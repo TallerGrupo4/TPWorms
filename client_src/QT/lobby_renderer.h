@@ -12,16 +12,11 @@
 class LobbyRenderer {
 private:
     Client& client;
-
-    // bool handleEvents(Worm& player);
-
-    // void render(SDL2pp::Renderer& renderer, Worm& player);
-
-    // void update(Worm& player, float dt);
+    Snapshot map_snapshot;
 
 public:
     explicit LobbyRenderer(Client& client);
-
+    Snapshot get_received_map();
     bool start(int argc, char* argv[]);
 };
 #endif  // LOBBY_RENDERER_H

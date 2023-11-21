@@ -5,7 +5,7 @@
 #define NO_WEAPON 0
 #define NULL_STATE 0
 #define INITIAL_WORMS_TURN 0
-#define TURN_TIME 5 * FPS * 2  // 60 seconds
+#define TURN_TIME 60 * FPS * 2  // SET to 60 seconds!!! 
 
 //Movement constants 
 #define IZQ -1
