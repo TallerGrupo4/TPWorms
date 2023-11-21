@@ -51,7 +51,7 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     state = worm_snpsht.state;
     //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
     //std::cout << "update_from_snapshot nueva pos_x snap: " << worm_snpsht.pos_x << std::endl;
-    y = worm_snpsht.pos_y;
+    y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
     if (state == MOVING) {
         walking_an.update_once();
@@ -62,7 +62,7 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
     std::cout << "x worm: " << x << " y worm: " << y << std::endl;
     int top_left_x = (x-WORM_CENTER_X)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2) - camera_offset_x;
-    int top_left_y = (y+WORM_CENTER_Y)*(-1)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) + camera_offset_y;
+    int top_left_y = (y-WORM_CENTER_Y)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
     std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
     walking_an.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, WORM_CENTER_X*2*RESOLUTION_MULTIPLIER,
                       WORM_CENTER_Y*2*RESOLUTION_MULTIPLIER),
