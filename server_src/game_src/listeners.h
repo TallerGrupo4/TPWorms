@@ -79,17 +79,27 @@
 //     }
 // };
 
-class JumpListener : public b2ContactListener{
+class MyListener : public b2ContactListener{
 
-    void execute_contact(b2Body* bodyA , b2Body* bodyB){
-        WormData* wA = reinterpret_cast<WormData*>(static_cast<uintptr_t>(bodyA->GetUserData().pointer));
-        if (wA && bodyB->GetType() == b2_staticBody) {
-            if (wA->get_state() == FALLING) {
-                wA->set_state(STILL);
-                bodyA->SetLinearVelocity(b2Vec2(0, 0));
+    void execute_contact_jump(b2Body* bodyA , b2Body* bodyB){
+        if (bodyA && bodyB && bodyA->GetUserData().pointer){
+            WormData* wA = reinterpret_cast<WormData*>(bodyA->GetUserData().pointer);
+            if (wA && wA->get_type() == WORM && bodyB->GetType() == b2_staticBody) {
+                wA->set_contact(true);
+                if (wA->get_state() == JUMPING || wA->get_state() == FALLING){
+                    float y_diff = bodyA->GetPosition().y - wA->get_last_y();
+                    if (y_diff < -FALL_DISTANCE_THRESHOLD){
+                        int damage = abs(std::round(y_diff));
+                        if (damage > FALL_DAMAGE_THRESHOLD){
+                            wA->apply_damage(FALL_DAMAGE_THRESHOLD);
+                        } else {wA->apply_damage(damage);}
+                    }
+                }
             }
         }
     }
+
+
 
     void BeginContact(b2Contact* contact) override {
 
@@ -99,8 +109,29 @@ class JumpListener : public b2ContactListener{
         b2Body* bodyA = fixtureA->GetBody();
         b2Body* bodyB = fixtureB->GetBody();
 
-        execute_contact(bodyA, bodyB);
-        execute_contact(bodyB, bodyA);
+        execute_contact_jump(bodyA, bodyB);
+        execute_contact_jump(bodyB, bodyA);
+    }
+
+    void change_last_y(b2Body* bodyA , b2Body* bodyB){
+        if (bodyA && bodyB && bodyA->GetUserData().pointer){
+            WormData* wA = reinterpret_cast<WormData*>(bodyA->GetUserData().pointer);
+            if (wA && bodyB->GetType() == b2_staticBody && wA->get_type() == WORM) {
+                wA->set_contact(false);
+                wA->set_last_y(bodyA->GetPosition().y);
+            }
+        }
+    }
+
+    void EndContact(b2Contact* contact) override {
+        b2Fixture* fixtureA = contact->GetFixtureA();
+        b2Fixture* fixtureB = contact->GetFixtureB();
+
+        b2Body* bodyA = fixtureA->GetBody();
+        b2Body* bodyB = fixtureB->GetBody();
+
+        change_last_y(bodyA, bodyB);
+        change_last_y(bodyB, bodyA);
     }
 };
 

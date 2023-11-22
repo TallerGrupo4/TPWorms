@@ -42,31 +42,32 @@ bool MatchRenderer::handleEvents(Match& match) {
                         //player.moveLeft();
                         break;
                     }
-                    case SDLK_RIGHT:
+                    case SDLK_RIGHT: {
                         action = std::make_shared<ActionMovRight>();
                         client.send_action(action);
                         //client.push_game_command(game_command);
                         //player.moveRigth();
                         break;
+                    }
                 }
             }  // Fin KEY_DOWN
             break;
-            case SDL_KEYUP: {
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
-                switch (keyEvent.keysym.sym) {
-                    case SDLK_LEFT:
-                        action = std::make_shared<ActionMovLeft>();
-                        client.send_action(action);
-                        //player.stopMoving();
-                        break;
-                    case SDLK_RIGHT:
-                        action = std::make_shared<ActionMovRight>();
-                        client.send_action(action);
-                        //player.stopMoving();
-                        break;
-                }
-            }  // Fin KEY_UP
-            break;
+            // case SDL_KEYUP: {
+            //     SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+            //     switch (keyEvent.keysym.sym) {
+            //         case SDLK_LEFT:
+            //             action = std::make_shared<ActionMovLeft>();
+            //             client.send_action(action);
+            //             //player.stopMoving();
+            //             break;
+            //         case SDLK_RIGHT:
+            //             action = std::make_shared<ActionMovRight>();
+            //             client.send_action(action);
+            //             //player.stopMoving();
+            //             break;
+            //     }
+            // }  // Fin KEY_UP
+            // break;
             case SDL_MOUSEMOTION: {
                 if(camera_activated) {
                     //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;

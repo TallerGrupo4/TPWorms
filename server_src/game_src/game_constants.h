@@ -5,7 +5,7 @@
 #define NO_WEAPON 0
 #define NULL_STATE 0
 #define INITIAL_WORMS_TURN 0
-#define TURN_TIME 60 * FPS * 2  // SET to 60 seconds!!! 
+#define TURN_TIME 60 * FPS  // SET to 60 seconds!!! 
 
 //Movement constants 
 #define IZQ -1
@@ -14,11 +14,20 @@
 #define BACKWARD -1
 
 // defines for physics of game
-#define WORM_SPEED 0.8;
-#define WORM_JUMP_HEIGHT 1.0;
-#define WORM_JUMP_SPEED 1.5;
-#define WORM_BACKFLIP_SPEED 0.5;
-#define WORM_BACKFLIP_HEIGHT 2;
+#define WORM_SPEED 4
+#define WORM_JUMP_SPEED 6
+#define WORM_JUMP_HOR_SPEED 4
+#define WORM_BACKFLIP_SPEED 10
+#define WORM_BACKFLIP_HOR_SPEED 2
+
+//constants for thresholds
+#define VEL_THRESHOLD 0.05f
+#define ANG_VEL_THRESHOLD 0.5f
+#define LAST_ANG_THRESHOLD 30
+#define ANG_THRESHOLD 50
+#define FALL_DAMAGE_THRESHOLD 25
+#define FALL_DISTANCE_THRESHOLD 2
+
 
 
 enum PROJECTILE_TYPES{

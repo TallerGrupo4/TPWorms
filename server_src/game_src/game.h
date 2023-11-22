@@ -24,6 +24,7 @@ class Game {
     int water_level;
     b2World world;
     GameBuilder builder;
+    MyListener listener;
     std::unordered_set<b2ContactListener*> listeners;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
@@ -33,10 +34,8 @@ class Game {
 
 public:
     Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME) {
-        JumpListener* jump_listener = new JumpListener();
-        listeners.insert(jump_listener);
-        world.SetContactListener(jump_listener);
-        
+        listener = MyListener();
+        world.SetContactListener(&listener);
     }
 
     Snapshot start_and_send(Map& map, int number_of_players) {
@@ -90,25 +89,64 @@ public:
     //     }
     // }
 
-    void check_states(){
-        for (auto& pair: players) {
-            std::shared_ptr<Worm> player = pair.second;
-            if (player->body->GetLinearVelocity() == b2Vec2_zero){
-                player->set_state(STILL);            
-            } else if (player->body->GetLinearVelocity().y < 0){
-                player->set_state(FALLING);
-            } 
+    void check_angles(Worm& w){
+        if (w.get_state() == STILL){
+            if (abs ( w.get_angle() ) <= LAST_ANG_THRESHOLD){
+                w.set_last_still_angle(w.body->GetAngle());
+            }
+        }
+        if (abs (w.get_angle()) >= ANG_THRESHOLD){
+            b2Body* body = w.body;
+            body->SetTransform(body->GetPosition(), w.last_angle());
         }
     }
 
 
 
+    void check_states(Worm& w){
+        float diff = w.body->GetPosition().y - w.data.get_last_y();
+        if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
+            w.set_state(FALLING);
+        }
+        if (w.body->GetLinearVelocity() == b2Vec2_zero && w.body->GetAngularVelocity() == 0){
+            w.set_state(STILL);
+        }
+
+    }
+
+    void check_velocities(Worm& w){
+        if (w.body->GetLinearVelocity().Length() < VEL_THRESHOLD ){
+            w.body->SetLinearVelocity(b2Vec2_zero);
+            w.body->SetAngularVelocity(0);
+        } 
+        if (abs (w.body->GetAngularVelocity()) > 0){
+            w.body->SetAngularVelocity(0);
+        }
+
+    }
+
+    void worm_comprobations(){
+        for (auto& pair: players) { // Pair: {id, worm}
+            std::shared_ptr<Worm> worm = pair.second;
+            check_velocities(*worm);
+            check_states(*worm);
+            check_angles(*worm);
+        }
+    }
+
+
+    void print_current_state(){
+        std::shared_ptr<Worm> worm = players.at(current_turn_player_id);
+        std::cout << "Worm " << current_turn_player_id << " state: " << worm->get_state() << std::endl;
+    }
+
 // Check parameter..
     void step(int it) {
         float time_simulate = (float) it / FPS;
-        // advance_timers(time_simulate);
         // reap_dead();
-        check_states();
+        worm_comprobations();
+        print_current_state();
+
         world.Step(time_simulate, 8, 3);
         manage_turn(it);
         // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
@@ -131,7 +169,6 @@ public:
         // Check if the turn time is over
         turn_time -= it;
         if (turn_time > 0) return;
-        if (players.size() == 1) return;
         // Switch to the next player's turn
         current_turn_player_id = (current_turn_player_id + 1) % players.size();
         // Reset the turn timer for the next player

@@ -50,6 +50,11 @@
 #define JUMPING 2
 #define BACKFLIPPING 3
 #define FALLING 4
+#define CLIMBING 5
+#define SLIDING 6
+#define DAMAGED 7
+#define DYING 8
+#define DEAD 9
 
 // Codes for game actions
 #define MOV 0x01
@@ -63,12 +68,12 @@
 #define PLAT_SMALL 3
 #define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8
-#define PLAT_FRICTION 0.5
+#define PLAT_FRICTION 0.1
 
 // Worms codes
-#define WORM_WIDTH 2
-#define WORM_HEIGHT 2
-#define WORM_FRICTION 0.5
+#define WORM_WIDTH 1.5f
+#define WORM_HEIGHT 1.5f
+#define WORM_FRICTION 1
 
 // Code for protocol
 #define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places
@@ -81,11 +86,11 @@
 #define PIX_PER_METER 6.0f
 
 // Consts for game loop
-#define FPS 30
-#define FRAME_TIME 0.01666666666f
+#define FPS 30.0f
+#define FRAME_TIME 1.0f / FPS
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
-
+#define PI 3.14159265358979323846f
 
 
 #endif  // _CONSTANTS_H_

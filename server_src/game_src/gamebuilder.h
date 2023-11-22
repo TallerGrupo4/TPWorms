@@ -10,17 +10,28 @@
 class GameBuilder {
     b2World& world;
 
+
+    float calculate_plat_frict(float angle){
+        float friction = 0;
+        if (abs(angle) > 45){
+            return friction;
+        } else {
+            friction = (abs(angle) * 0.02f) + PLAT_FRICTION;
+            return friction;
+        }
+    }
+
     void create_platform(float x, float y, float width, float height, float angle) {
         b2BodyDef platform_def;
         platform_def.type = b2_staticBody;
         platform_def.position.Set(x, y);
-        platform_def.angle = angle;
+        platform_def.angle = angle * DEGTORAD;
         b2Body* platform = world.CreateBody(&platform_def);
         b2PolygonShape platform_shape;
         platform_shape.SetAsBox(width / 2, height / 2);
         b2FixtureDef platform_fixture;
         platform_fixture.shape = &platform_shape;
-        platform_fixture.friction = PLAT_FRICTION;
+        platform_fixture.friction = calculate_plat_frict(angle);
         platform->CreateFixture(&platform_fixture);
     }
 
@@ -53,8 +64,8 @@ public:
     }
 
     void create_walls(b2Vec2 center_world,  float width , float height_world){
-        create_wall(b2Vec2(center_world.x - width/2 , center_world.y) , height_world , 90 * DEGTORAD);
-        create_wall(b2Vec2(center_world.x + width/2 , center_world.y) , height_world, 90 * DEGTORAD);
+        create_wall(b2Vec2(center_world.x - width/2 , center_world.y) , height_world , 90);
+        create_wall(b2Vec2(center_world.x + width/2 , center_world.y) , height_world, 90);
         create_wall(b2Vec2(center_world.x , center_world.y - height_world/2) , width, 0);
         create_wall(b2Vec2(center_world.x , center_world.y + height_world/2) , width, 0);
     }
@@ -71,10 +82,9 @@ public:
         b2BodyDef worm_def;
         worm_def.type = b2_dynamicBody;
         worm_def.position.Set(x, y);
-        worm_def.fixedRotation = true;
         b2Body* worm = world.CreateBody(&worm_def);
         b2PolygonShape worm_shape;
-        worm_shape.SetAsBox(WORM_WIDTH / 2, WORM_HEIGHT / 2);
+        worm_shape.SetAsBox(WORM_WIDTH / 2.0f, WORM_HEIGHT / 2.0f);
         b2FixtureDef worm_fixture;
         worm_fixture.density = 1;
         worm_fixture.shape = &worm_shape;
@@ -88,58 +98,58 @@ public:
     void create_platform_type(float x , float y, BeamType type){
         switch (type){
             case LargeVertical:
-                create_big_platform(x, y, 90 * DEGTORAD);
+                create_big_platform(x, y, 90);
                 break;
             case Large65:
-                create_big_platform(x, y, 65 * DEGTORAD);
+                create_big_platform(x, y, 65);
                 break;
             case Large45:
-                create_big_platform(x, y, 45 * DEGTORAD);
+                create_big_platform(x, y, 45);
                 break;
             case Large25:
-                create_big_platform(x, y, 25 * DEGTORAD);
+                create_big_platform(x, y, 25);
                 break;
             case LargeHorizontal:
                 create_big_platform(x, y, 0);
                 break;
             case LargeMinus25:
-                create_big_platform(x, y, -25 * DEGTORAD);
+                create_big_platform(x, y, -25);
                 break;
             case LargeMinus45:
-                create_big_platform(x, y, -45 * DEGTORAD);
+                create_big_platform(x, y, -45);
                 break;
             case LargeMinus65:
-                create_big_platform(x, y, -65 * DEGTORAD);
+                create_big_platform(x, y, -65);
                 break;
             case LargeVerticalFlipped:
-                create_big_platform(x, y, -90 * DEGTORAD);
+                create_big_platform(x, y, -90);
                 break;
             case ShortVertical:
-                create_small_platform(x, y, 90 * DEGTORAD);
+                create_small_platform(x, y, 90);
                 break;
             case Short65:
-                create_small_platform(x, y, 65 * DEGTORAD);
+                create_small_platform(x, y, 65);
                 break;
             case Short45:
-                create_small_platform(x, y, 45 * DEGTORAD);
+                create_small_platform(x, y, 45);
                 break;
             case Short25:
-                create_small_platform(x, y, 25 * DEGTORAD);
+                create_small_platform(x, y, 25);
                 break;
             case ShortHorizontal:
                 create_small_platform(x, y, 0);
                 break;
             case ShortMinus25:
-                create_small_platform(x, y, -25 * DEGTORAD);
+                create_small_platform(x, y, -25);
                 break;
             case ShortMinus45:
-                create_small_platform(x, y, -45 * DEGTORAD);
+                create_small_platform(x, y, -45);
                 break;
             case ShortMinus65:
-                create_small_platform(x, y, -65 * DEGTORAD);
+                create_small_platform(x, y, -65);
                 break;
             case ShortVerticalFlipped:
-                create_small_platform(x, y, -90 * DEGTORAD);
+                create_small_platform(x, y, -90);
                 break;
         }  
     }
