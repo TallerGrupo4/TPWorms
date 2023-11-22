@@ -187,8 +187,10 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         // PARSER!!!!
         int degree = 0;
         if (get_degree_of_beam_type(type[0], degree)) {
-            height[0] = calculate_beam_height(degree, height[0], width[0]);
-            width[0] = calculate_beam_width(degree, height[0], width[0]);
+            int height_recieved = height[0];
+            int width_recieved = width[0];
+            height[0] = calculate_beam_height(degree, height_recieved, width_recieved);
+            width[0] = calculate_beam_width(degree, height_recieved, width_recieved);
         }
         
         PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
