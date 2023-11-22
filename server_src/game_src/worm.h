@@ -159,7 +159,7 @@ public:
         if (body == nullptr){throw WormNotFound();}
         float pos_x = body->GetPosition().x;
         float pos_y = body->GetPosition().y;
-        float angle = body->GetAngle();
+        int angle = get_angle();
         WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_weapon, data.state);
         return snapshot;
     }
