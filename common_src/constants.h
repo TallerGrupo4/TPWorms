@@ -45,15 +45,18 @@
 #define NO_WEAPON 0
 
 //Common worm States
-#define STILL 0
-#define MOVING 1
-#define JUMPING 2
-#define BACKFLIPPING 3
-#define FALLING 4
-#define CLIMBING 5
-#define SLIDING 6
-#define DAMAGED 7
-#define DEAD 8
+enum WormStates : char {
+    STILL,
+    MOVING,
+    JUMPING,
+    BACKFLIPPING,
+    FALLING, 
+    CLIMBING, 
+    SLIDING, 
+    AIMING,
+    DAMAGED, 
+    DEAD
+};
 
 // Codes for game actions
 #define MOV 0x01
@@ -82,7 +85,7 @@
 
 
 //Consts for render
-#define PIX_PER_METER 5.0f
+#define PIX_PER_METER 6.0f
 
 // Consts for game loop
 #define FPS 30.0f

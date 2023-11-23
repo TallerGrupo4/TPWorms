@@ -3,9 +3,14 @@
 using namespace SDL2pp;
 
 MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
+                                 still_1_worm(WORM_STILL_SPRITES_1_PATH),
                                  walking_worm(WORM_WALK_SPRITES_PATH),
                                  walking_up_worm(WORM_WALK_UP_SPRITES_PATH),
                                  walking_down_worm(WORM_WALK_DOWN_SPRITES_PATH),
+                                 backflip_worm(WORM_BACKFLIP_SPRITES_PATH),
+                                 jump_worm(WORM_JUMP_SPRITES_PATH),
+                                 jump_up_worm(WORM_JUMP_UP_SPRITES_PATH),
+                                 jump_down_worm(WORM_JUMP_DOWN_SPRITES_PATH),
                                  large_beam_vertical(BEAM_LARGE_VERTICAL),
                                  large_beam_65(BEAM_LARGE_65),
                                  large_beam_45(BEAM_LARGE_45),
@@ -24,9 +29,14 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                  short_beam_m_45(BEAM_SHORT_MINUS_45),
                                  short_beam_m_65(BEAM_SHORT_MINUS_65),
                                  short_beam_vertical_flipped(BEAM_SHORT_VERTICAL_FLIPPED) {
+    still_1_worm.SetColorKey(true, 0);
     walking_worm.SetColorKey(true, 0);
     walking_up_worm.SetColorKey(true, 0);
     walking_down_worm.SetColorKey(true, 0);
+    backflip_worm.SetColorKey(true, 0);
+    jump_worm.SetColorKey(true, 0);
+    jump_up_worm.SetColorKey(true, 0);
+    jump_down_worm.SetColorKey(true, 0);
     large_beam_vertical.SetColorKey(true, 0);
     large_beam_65.SetColorKey(true, 0);
     large_beam_45.SetColorKey(true, 0);

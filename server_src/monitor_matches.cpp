@@ -5,7 +5,10 @@
 #include "../common_src/liberror.h"
 
 MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
-    maps[(uint)1] = Map(routes[0]);
+    uint map_id = 1;
+    for (auto& route: routes) {
+        maps[map_id++] = Map(route);
+    }
 }
 
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(

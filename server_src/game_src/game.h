@@ -14,6 +14,7 @@
 #include "gamebuilder.h"
 #include "worm.h"
 #include "listeners.h"
+#include "filter.h"
 // #include "weapons.h"
 #include <iostream>
 
@@ -25,7 +26,7 @@ class Game {
     b2World world;
     GameBuilder builder;
     MyListener listener;
-    std::unordered_set<b2ContactListener*> listeners;
+    MyFilter filter;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     int current_turn_player_id;
@@ -35,7 +36,9 @@ class Game {
 public:
     Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME) {
         listener = MyListener();
+        filter = MyFilter();
         world.SetContactListener(&listener);
+        world.SetContactFilter(&filter);
     }
 
     Snapshot start_and_send(Map& map, int number_of_players) {
@@ -201,32 +204,25 @@ public:
         turn_time -= it;
         if (turn_time > 0 || players.size() == 1) return;
         // Switch to the next player's turn
-        printf("Changed turn\n");
         current_turn_player_id = (current_turn_player_id + 1) % players.size();
         while (players[current_turn_player_id]->get_state() == DEAD){
             current_turn_player_id = (current_turn_player_id + 1) % players.size();
         }
         // Reset the turn timer for the next player
-        turn_time = 10.0f * FPS;
+        turn_time = TURN_TIME;
     }
 
     Snapshot get_game_snapshot() {
-        printf("Getting snapshot\n");
         std::vector<WormSnapshot> worms;    
         for (auto& pair: players) { // Pair: {id, worm}
             worms.push_back(pair.second->get_snapshot());
         }
-        printf("sent snapshot\n");
         Snapshot snapshot(worms, {});
         snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
         return snapshot;
     }
 
-    ~Game(){
-        for (auto listener : listeners){
-            delete listener;
-        }
-    }
+    ~Game(){}
 };
 
 #endif  // GAME_H

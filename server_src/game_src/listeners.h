@@ -86,7 +86,7 @@ class MyListener : public b2ContactListener{
             WormData* wA = reinterpret_cast<WormData*>(bodyA->GetUserData().pointer);
             if (wA && wA->get_type() == WORM && bodyB->GetType() == b2_staticBody) {
                 wA->add_contact();
-                if (wA->get_state() == JUMPING || wA->get_state() == FALLING){
+                if (wA->get_state() == JUMPING || wA->get_state() == FALLING || wA->get_state() == BACKFLIPPING){
                     float y_diff = bodyA->GetPosition().y - wA->get_last_y();
                     if (y_diff < -FALL_DISTANCE_THRESHOLD){
                         int damage = abs(std::round(y_diff));

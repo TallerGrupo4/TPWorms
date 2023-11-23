@@ -97,7 +97,12 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_
     }
 }
 
-void Match::update_from_iter(int iter) {}
+void Match::update_from_iter(int iter) {
+    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
+        it->second->update_from_iter(iter);
+    }
+    update_camera();
+}
 
 void Match::render(SDL2pp::Renderer& renderer) {
     bkgrnd->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());

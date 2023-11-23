@@ -18,6 +18,7 @@ public:
     Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot& worm_snpsht);
+    void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     void moveRigth();
     void moveLeft();
@@ -27,7 +28,14 @@ public:
     int get_worm_y();
 private:
     std::shared_ptr<Background> bkgrnd;
+    Animation still_1_an;
     Animation walking_an;
+    Animation walking_up_an;
+    Animation walking_down_an;
+    Animation backflip_an;
+    Animation jump_an;
+    Animation jump_up_an;
+    Animation jump_down_an;
     bool facing_left;
     bool moving;
     float angle;
