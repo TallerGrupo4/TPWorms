@@ -97,7 +97,7 @@ TEST(ProtocolHappyCasesLobbyServer, Create) {
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
     std::vector<std::string> map_names = {"1", "2", "3"};
-    Command command_to_send(CASE_CREATE, 1, map_names, 10, 0);
+    Command command_to_send(CASE_CREATE, 1, map_names, 10, {0});
     protocol_server.send_command(command_to_send);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_CREATE);
@@ -106,7 +106,7 @@ TEST(ProtocolHappyCasesLobbyServer, Create) {
     ASSERT_EQ(command_received.get_map_names().at(0), "1");
     ASSERT_NE(command_received.get_map_names().at(1), "3");
     ASSERT_EQ(command_received.get_number_of_players(), 10);
-    ASSERT_EQ(command_received.get_worm_id(), 0);
+    ASSERT_EQ(command_received.get_worm_ids().size(), 1);
 }
 
 TEST(ProtocolHappyCasesLobbyServer, Join) {
@@ -117,7 +117,7 @@ TEST(ProtocolHappyCasesLobbyServer, Join) {
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
     std::vector<std::string> map_names = {"1", "2", "3", "4"};
-    Command command_to_send(CASE_JOIN, 10, map_names, 100, 1);
+    Command command_to_send(CASE_JOIN, 10, map_names, 100, {1});
     protocol_server.send_command(command_to_send);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_JOIN);
@@ -126,7 +126,7 @@ TEST(ProtocolHappyCasesLobbyServer, Join) {
     ASSERT_EQ(command_received.get_map_names().at(1), "2");
     ASSERT_NE(command_received.get_map_names().at(2), "4");
     ASSERT_EQ(command_received.get_number_of_players(), 100);
-    ASSERT_EQ(command_received.get_worm_id(), 1);
+    ASSERT_EQ(command_received.get_worm_ids()[0], 1);
 }
 
 TEST(ProtocolHappyCasesLobbyServer, List_1_Match) {
@@ -221,8 +221,8 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
     ASSERT_EQ(snapshot_received.platforms.size(), 1);
     ASSERT_EQ(snapshot_received.map_dimensions.height, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.map_dimensions.width, 1 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.map_dimensions.worm_width, WORM_WIDTH * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.map_dimensions.worm_height, WORM_HEIGHT * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_width, std::round(WORM_WIDTH * PIX_PER_METER));
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_height, std::round(WORM_HEIGHT * PIX_PER_METER));
     ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
     ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.platforms.at(0).type, LargeVertical);
@@ -238,7 +238,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Number_of_players_1) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    Command command_to_send(CASE_NUMBER_OF_PLAYERS, 1, {""}, 10, DEFAULT);
+    Command command_to_send(CASE_NUMBER_OF_PLAYERS, 1, {""}, 10, {DEFAULT});
     protocol_server.send_command(command_to_send);
     Command command_received = protocol_client.recv_command();
     ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
