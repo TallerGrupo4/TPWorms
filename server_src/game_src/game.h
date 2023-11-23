@@ -202,6 +202,7 @@ public:
         if (turn_time > 0 || players.size() == 1) return;
         // Switch to the next player's turn
         printf("Changed turn\n");
+        current_turn_player_id = (current_turn_player_id + 1) % players.size();
         while (players[current_turn_player_id]->get_state() == DEAD){
             current_turn_player_id = (current_turn_player_id + 1) % players.size();
         }
