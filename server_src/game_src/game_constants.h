@@ -14,11 +14,11 @@
 #define BACKWARD -1
 
 // defines for physics of game
-#define WORM_SPEED 4
-#define WORM_JUMP_SPEED 6
-#define WORM_JUMP_HOR_SPEED 4
-#define WORM_BACKFLIP_SPEED 10
-#define WORM_BACKFLIP_HOR_SPEED 2
+#define WORM_SPEED 2
+#define WORM_JUMP_SPEED 4
+#define WORM_JUMP_HOR_SPEED 3
+#define WORM_BACKFLIP_SPEED 6
+#define WORM_BACKFLIP_HOR_SPEED 1
 
 //constants for thresholds
 #define VEL_THRESHOLD 0.05f

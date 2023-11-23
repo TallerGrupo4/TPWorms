@@ -40,7 +40,7 @@ private:
 
     // PARSER!!!!
     int calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width) {
-            return round(beam_actual_height*sin(degree*M_PI/180)+beam_actual_width*cos(degree*M_PI/180));
+        return round(beam_actual_height*sin(degree*M_PI/180)+beam_actual_width*cos(degree*M_PI/180));
     }
     int calculate_beam_height(int degree, float beam_actual_height, float beam_actual_width) {
         return round(beam_actual_height*cos(degree*M_PI/180)+beam_actual_width*sin(degree*M_PI/180));

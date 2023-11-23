@@ -22,23 +22,20 @@ class WormData{
     char id;
     int life;
     int state;
-    int curr_weapon = NO_WEAPON;
-    int act_dir = DER;
+    int curr_weapon;
+    int act_dir;
     float last_still_angle;
     float last_y;
-    bool in_contact = false;
+    int number_contacts;
     int type;
     // std::unordered_map<int, int> weapons;
     
-    WormData(char id): id(id), life(START_LIFE), state(STILL) , last_still_angle(0), last_y(0), type(WORM) {
+    WormData(char id): id(id), life(START_LIFE), state(STILL), curr_weapon(NO_WEAPON) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM)  {
         //TODO insert weapons with their respective starting ammo
     }
 
     public:
 
-    void set_contact(bool contact){
-        in_contact = contact;
-    }
 
     int get_type(){
         return type;
@@ -70,12 +67,22 @@ class WormData{
 
     void apply_damage(int damage){
         life -= damage;
+        state = DAMAGED;
         if (life <= 0){
             life = 0;
-            state = DYING;
+            state = DEAD;
         }
-        printf("life: %d\n", life);
     }
+
+
+    void add_contact(){
+        number_contacts++;
+    }
+
+    void remove_contact(){
+        number_contacts--;
+    }
+    
 
 
     ~WormData(){}
@@ -95,6 +102,7 @@ public:
         }
 
     int get_angle(){
+        if (body == nullptr){throw WormNotFound();}
         float angle = body->GetAngle() ;
         float normalized_angle = fmod(angle, PI);
         int degree = round(normalized_angle * RADTODEG);
@@ -102,16 +110,14 @@ public:
     }
 
     void move(int dir){
+        if (!in_contact()) {return;}
         if (data.state != STILL && data.state != MOVING && data.state != CLIMBING) {return;}
         data.act_dir = dir;
         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
         float m = body->GetMass();
         float impulse_x = dir * WORM_SPEED * cos(body->GetAngle()) * m;
         float impulse_y = dir * WORM_SPEED * sin(body->GetAngle()) * m;
-        printf("impulse_x: %f\n", impulse_x);
-        printf("impulse_y: %f\n", impulse_y);
         body->ApplyLinearImpulseToCenter( b2Vec2(impulse_x , impulse_y) , true);
-        printf("angle: %d\n", get_angle());
         if (get_angle() != 0){
             data.state = CLIMBING;
         } else{
@@ -120,7 +126,7 @@ public:
     }
 
     void jump (int dir){
-        if (data.state != STILL) {return;}
+        if (data.state != STILL && !in_contact()) {return;}
         data.state = JUMPING;
         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
         float m = body->GetMass();
@@ -133,7 +139,15 @@ public:
     }
 
     bool in_contact(){
-        return data.in_contact;
+        return data.number_contacts > 0;
+    }
+
+    void add_contact(){
+        data.number_contacts++;
+    }
+
+    void remove_contact(){
+        data.number_contacts--;
     }
     
 
@@ -156,10 +170,16 @@ public:
     // }
 
     WormSnapshot get_snapshot() {
-        if (body == nullptr){throw WormNotFound();}
-        float pos_x = body->GetPosition().x;
-        float pos_y = body->GetPosition().y;
-        float angle = body->GetAngle();
+        float pos_x ; float pos_y ; int angle;
+        if (body == nullptr){ // SHOULD DECIDE WHAT TO DO WITH WORM BODY OR SOMETHING
+            pos_x = 0;
+            pos_y = 0;
+            angle = 0;
+        } else {
+            pos_x = body->GetPosition().x;
+            pos_y = body->GetPosition().y;
+            angle = get_angle();
+        }
         WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_weapon, data.state);
         return snapshot;
     }

@@ -56,7 +56,7 @@ public:
     char id;
     float pos_x;
     float pos_y;
-    float angle;
+    int angle;
     int max_health;
     int health;
     char direction;
@@ -64,7 +64,7 @@ public:
     int state;
 
 
-    WormSnapshot(char id, float pos_x, float pos_y, float angle, int max_health, int health, char direction, int weapon,
+    WormSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health, char direction, int weapon,
                  int state):
             id(id),
             pos_x(pos_x),

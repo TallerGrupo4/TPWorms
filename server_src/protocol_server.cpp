@@ -240,8 +240,9 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int angle[1] = {static_cast<int>(worm.angle * RADTODEG * MULTIPLIER)};
-        angle[0] = htonl(angle[0]);
+        // int angle[1] = {static_cast<int>(worm.angle * RADTODEG * MULTIPLIER)};
+        // angle[0] = htonl(angle[0]);
+        int angle[1] = {worm.angle};
         if (socket.sendall(angle, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }

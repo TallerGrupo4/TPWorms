@@ -188,8 +188,10 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         // PARSER!!!!
         int degree = 0;
         if (get_degree_of_beam_type(type[0], degree)) {
-            height[0] = calculate_beam_height(degree, height[0], width[0]);
-            width[0] = calculate_beam_width(degree, height[0], width[0]);
+            int height_recieved = height[0];
+            int width_recieved = width[0];
+            height[0] = calculate_beam_height(degree, height_recieved, width_recieved);
+            width[0] = calculate_beam_width(degree, height_recieved, width_recieved);
         }
         
         PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
@@ -248,7 +250,7 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
         angle[0] = ntohl(angle[0]);
-        angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
+        // angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
         max_health[0] = ntohl(max_health[0]);
         health[0] = ntohl(health[0]);
         weapon[0] = ntohl(weapon[0]);
