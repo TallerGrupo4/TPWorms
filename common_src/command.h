@@ -18,30 +18,30 @@ private:
 
     const std::map<uint, std::string> matches_availables;
     const uint8_t number_of_players;
-    uint8_t worm_id;
+    std::vector<uint8_t> worm_ids = {};
     const std::vector<std::string> map_names = {};
 
 public:
 
-    Command(const char code): code(code), match_id(DEFAULT), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code): code(code), match_id(DEFAULT), map_name(""), matches_availables({}), number_of_players(DEFAULT) {};
 
-    Command(const char code, const uint match_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code, const uint match_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT) {};
 
-    Command(const char code, const uint match_id, const uint8_t worm_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_id(worm_id) {};
+    Command(const char code, const uint match_id, const std::vector<uint8_t> worm_ids): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(DEFAULT), worm_ids(worm_ids) {};
 
-    Command(const char code, const uint match_id, const std::string map_name): code(code), match_id(match_id), map_name(map_name), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code, const uint match_id, const std::string map_name): code(code), match_id(match_id), map_name(map_name), matches_availables({}), number_of_players(DEFAULT) {};
 
-    Command(const char code, const uint match_id, const std::string map_name, const uint8_t worm_id): code(code), match_id(match_id), map_name(map_name), matches_availables({}), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code, const uint match_id, const std::string map_name, const std::vector<uint8_t> worm_ids): code(code), match_id(match_id), map_name(map_name), matches_availables({}), number_of_players(DEFAULT), worm_ids(worm_ids) {};
 
-    Command(const char code, const std::map<uint, std::string> matches_availables): code(code), match_id(DEFAULT), map_name(""), matches_availables(matches_availables), number_of_players(DEFAULT), worm_id(DEFAULT) {};
+    Command(const char code, const std::map<uint, std::string> matches_availables): code(code), match_id(DEFAULT), map_name(""), matches_availables(matches_availables), number_of_players(DEFAULT) {};
 
-    Command(const char code, const uint match_id, const std::map<uint, std::string> matches_availables, const uint8_t worm_id): code(code), match_id(match_id), map_name(""), matches_availables(matches_availables), number_of_players(DEFAULT), worm_id(worm_id) {};
+    Command(const char code, const uint match_id, const std::map<uint, std::string> matches_availables, const std::vector<uint8_t> worm_ids): code(code), match_id(match_id), map_name(""), matches_availables(matches_availables), number_of_players(DEFAULT), worm_ids(worm_ids) {};
 
-    Command(const char code, const uint match_id, const std::vector<std::string> map_names, const uint8_t number_of_players, const uint8_t worm_id): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(number_of_players), worm_id(worm_id), map_names(map_names) {};
+    Command(const char code, const uint match_id, const std::vector<std::string> map_names, const uint8_t number_of_players, const std::vector<uint8_t> worm_ids): code(code), match_id(match_id), map_name(""), matches_availables({}), number_of_players(number_of_players), worm_ids(worm_ids), map_names(map_names) {};
 
     char get_code() const { return code; }
 
-    uint8_t get_worm_id() const { return worm_id; }
+    std::vector<uint8_t> get_worm_ids() const { return worm_ids; }
 
     uint get_match_id() const { return match_id; }
 

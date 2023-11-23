@@ -21,8 +21,8 @@ void ProtocolClient::send_command(const Command& command) {
     }
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
         // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
-        // Send_match_id(command.get_match_id());
         send_match_id(command.get_match_id());
+        send_quantity_of_worms(command.get_worm_ids().size());
     } else if (code[0] == CASE_START) {
         send_match_id(command.get_match_id());
         send_map_name(command.get_map_name());
@@ -39,21 +39,19 @@ const Command ProtocolClient::recv_command() {
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
-            uint8_t worm_id = recv_worm_id();
+            std::vector<uint8_t> worm_ids = recv_worm_ids();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
-            // Command command(code[0], match_id[0], worm_id);
+            Command command(code[0], match_id[0], maps_available, number_of_players, worm_ids);
             return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
-            uint8_t worm_id = recv_worm_id();
+            std::vector<uint8_t> worm_ids = recv_worm_ids();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
-            // Command command(code[0], match_id[0], worm_id);
+            Command command(code[0], match_id[0], maps_available, number_of_players, worm_ids);
             return command;
         }
         case CASE_LIST: {
@@ -83,7 +81,7 @@ const Command ProtocolClient::recv_command() {
             recv_match_id(match_id);
             uint8_t number_of_players[1];
             recv_number_of_players(number_of_players);
-            return Command(code[0], match_id[0], {""},  number_of_players[0], DEFAULT);
+            return Command(code[0], match_id[0], {""},  number_of_players[0], {DEFAULT});
         }
         case CASE_MATCH_ALREADY_STARTED: {
             uint match_id[1];
@@ -325,13 +323,22 @@ std::map<uint, std::string> ProtocolClient::recv_list() {
     return matches_availables;
 }
 
-uint8_t ProtocolClient::recv_worm_id() {
-    uint8_t worm_id[1];
-    socket.recvall(worm_id, 1, &was_closed);
+std::vector<uint8_t> ProtocolClient::recv_worm_ids() {
+    uint8_t num_of_worms_ids[1];
+    socket.recvall(num_of_worms_ids, 1, &was_closed);
     if (was_closed) {
         // throw
     }
-    return worm_id[0];
+    std::vector<uint8_t> worm_ids;
+    for (int i = 0; i < num_of_worms_ids[0]; i++) {
+        uint8_t worm_id[1];
+        socket.recvall(worm_id, 1, &was_closed);
+        if (was_closed) {
+            // throw
+        }
+        worm_ids.push_back(worm_id[0]);
+    }
+    return worm_ids;
 }
 
 std::vector<std::string> ProtocolClient::recv_map_names() {
@@ -367,5 +374,12 @@ uint8_t ProtocolClient::recv_number_of_players() {
         // throw
     }
     return number_of_players[0];
+}
+
+void ProtocolClient::send_quantity_of_worms(const uint8_t quantity_of_worms) {
+    uint8_t quantity_of_worms_to_send[1] = {quantity_of_worms};
+    if (socket.sendall(quantity_of_worms_to_send, 1, &was_closed) < 0) {
+        // throw error...
+    }
 }
 
