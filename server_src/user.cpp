@@ -116,11 +116,11 @@ bool User::interpretate_command_in_lobby(Command& command) {
     switch (command.get_code()) {
         case CASE_CREATE: {
             try {
-                // queue_match = monitor_matches.create_match(sender->get_queue(),
-                // command.get_match_id(), worm_ids, command.worm_ids.size(), map_names);
-                // number_of_players = command.worm_ids.size();
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.get_match_id(), worm_ids[0], map_names);
+                command.get_match_id(), worm_ids, command.get_worm_ids().size(), map_names);
+                number_of_players = command.get_worm_ids().size();
+                // queue_match = monitor_matches.create_match(sender->get_queue(),
+                // command.get_match_id(), worm_ids[0], map_names);
                 number_of_players = 1;
                 in_match = true;
                 is_creator = true;
@@ -136,8 +136,8 @@ bool User::interpretate_command_in_lobby(Command& command) {
         }
         case CASE_JOIN: {
             try {
-                // queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids, command.worm_ids.size(), map_names, number_of_players);
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids[0], map_names, number_of_players);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids, command.get_worm_ids().size(), map_names, number_of_players);
+                // queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids[0], map_names, number_of_players);
                 in_match = true;
                 code = CASE_JOIN;
                 std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
