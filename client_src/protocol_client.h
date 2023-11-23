@@ -32,6 +32,7 @@ private:
     std::map<uint, std::string> recv_list();
     void recv_dimensions(Snapshot& snapshot);
     void recv_platforms(Snapshot& snapshot);
+    void recv_time_and_worm_turn(Snapshot& snapshot);
     void recv_worms(Snapshot& snapshot);
     uint8_t recv_worm_id();
     void send_match_id(const uint match_id);

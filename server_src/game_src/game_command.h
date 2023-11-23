@@ -40,6 +40,7 @@ public:
 
 class JumpCommand: public GameCommand {
     public:
+    int get_direction() { return direction; }
     JumpCommand(char id, int direction): GameCommand(id, direction) {}
     ~JumpCommand() {}
     void execute(Game& game) override { game.jump_player(id_worm, direction); }

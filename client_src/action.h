@@ -47,10 +47,11 @@ public:
     ~ActionExit() = default;
 };
 
+
 class ActionMov : public Action {
 public:
     int send(Socket& socket, bool& was_closed) override {
-        char code[1] = {MOV};
+        char code[1] = {type};
         int ret = socket.sendall(code, 1, &was_closed);
         if (ret < 0) {
             return SOCKET_FAILED;
@@ -63,20 +64,33 @@ public:
         }
         return ret;
     }
-    ActionMov(char movement_x) : Action(MOV, movement_x) {};
+    ActionMov(char type, char movement_x) : Action(type, movement_x) {};
     ~ActionMov() = default;
 };
 
 class ActionMovLeft : public ActionMov {
 public:
-    ActionMovLeft() : ActionMov(LEFT) {};
+    ActionMovLeft() : ActionMov(MOV, LEFT) {};
     ~ActionMovLeft() = default;
 };
 
 class ActionMovRight : public ActionMov {
 public:
-    ActionMovRight() : ActionMov(RIGHT) {};
+    ActionMovRight() : ActionMov(MOV, RIGHT) {};
     ~ActionMovRight() = default;
 };
+
+class ActionJumpRight : public ActionMov {
+public:
+    ActionJumpRight() : ActionMov(JUMP, RIGHT) {};
+    ~ActionJumpRight() = default;
+};
+
+class ActionJumpLeft : public ActionMov {
+public:
+    ActionJumpLeft() : ActionMov(JUMP, LEFT) {};
+    ~ActionJumpLeft() = default;
+};
+    
 
 #endif // ACTION_H

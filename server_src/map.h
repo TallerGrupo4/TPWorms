@@ -14,8 +14,8 @@ class Map {
     Map(std::string map_route) {
         MapReader map_reader(map_route); 
         Snapshot snapshot = map_reader.read_map();
-        width = snapshot.width;
-        height = snapshot.height;
+        width = snapshot.map_dimensions.width;
+        height = snapshot.map_dimensions.height;
         platforms = snapshot.platforms;
     }
 

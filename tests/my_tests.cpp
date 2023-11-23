@@ -211,17 +211,18 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
     PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
     std::vector<WormSnapshot> worms = {worm_snapshot};
     std::vector<PlatformSnapshot> platforms = {platform_snapshot};
-    Snapshot snapshot_to_send(worms, platforms, 1, 1, WORM_WIDTH, WORM_HEIGHT);
+    Snapshot snapshot_to_send(worms, platforms);
+    snapshot_to_send.set_dimensions(1, 1, WORM_WIDTH, WORM_HEIGHT);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
     ASSERT_EQ(snapshot_received.worms.size(), 1);
     ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
     ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
     ASSERT_EQ(snapshot_received.platforms.size(), 1);
-    ASSERT_EQ(snapshot_received.height, 1 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.width, 1 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.worm_width, WORM_WIDTH * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.worm_height, WORM_HEIGHT * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.height, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.width, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_width, WORM_WIDTH * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_height, WORM_HEIGHT * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
     ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.platforms.at(0).type, LargeVertical);
@@ -267,7 +268,24 @@ TEST(ProtocolHappyCasesMatch, Send_action_mov_right_and_recv_gameCommand_mov_rig
     ASSERT_EQ(moveCommand->get_direction(), RIGHT);
 }
 
+TEST(ProtocolHappyCasesMatch, Send_action_jump_right_and_recv_gameCommand_jump_right) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionJumpRight>();
+    protocol_client.send_action(action);
+    uint8_t worm_id = 1;
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_id);
+    JumpCommand* jumpCommand = dynamic_cast<JumpCommand*>(game_command.get());
+    ASSERT_NE(jumpCommand, nullptr);
+    ASSERT_EQ(jumpCommand->get_direction(), RIGHT);
+}
+
 TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
+    // SEPARATE THIS TEST INTO MULTIPLE TESTS
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -278,6 +296,8 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
     Snapshot snapshot_to_send(worms, {});
+    snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
+    snapshot_to_send.set_dimensions(100, 100, 100, 100);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
     ASSERT_EQ(snapshot_received.worms.size(), 2);
@@ -286,7 +306,12 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
     ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
     ASSERT_EQ(snapshot_received.platforms.size(), 0);
-    ASSERT_NE(snapshot_received.height, 10);
+    ASSERT_EQ(snapshot_received.map_dimensions.width, 100 * PIX_PER_METER);
+    ASSERT_NE(snapshot_received.map_dimensions.height, 10 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_width, 100 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.worm_height, 100 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.turn_time_and_worm_turn.turn_time, 12);
+    ASSERT_NE(snapshot_received.turn_time_and_worm_turn.worm_turn, 12);
 }
 
 // TEST(ProtocolHappyCases, ExitServer) {

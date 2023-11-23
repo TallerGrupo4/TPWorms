@@ -6,6 +6,18 @@
 #ifndef SNAPSHOT_H
 #define SNAPSHOT_H
 
+struct MapDimensions {
+    float height = DEFAULT;
+    float width = DEFAULT;
+    float worm_width = WORM_WIDTH;
+    float worm_height = WORM_HEIGHT;
+} typedef MapDimensions_t;
+
+struct TurnTimeAndWormTurn {
+    int turn_time = DEFAULT;
+    int worm_turn = DEFAULT;
+} typedef TurnTimeAndWormTurn_t;
+
 enum BeamType : char {
     LargeVertical, // 0
     Large65,
@@ -71,8 +83,9 @@ public:
     BeamType type;
     float pos_x;
     float pos_y;
-    float width;  // cast to int in client
-    float height;  // This one is always the same
+    float width;
+    float height;
+
 
     PlatformSnapshot(BeamType type, float pos_x, float pos_y, float width = PLAT_SMALL, float height = PLAT_HEIGHT):
             type(type), pos_x(pos_x), pos_y(pos_y), width(width), height(height) {};
@@ -85,20 +98,24 @@ public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
     // std::vector<ProjectileSnapshot> projectiles;
-    float height;
-    float width;
-    float worm_width;
-    float worm_height;
+    MapDimensions_t map_dimensions;
+    TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
-    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms, float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT):
-            worms(worms), platforms(platforms), height(height), width(width), worm_width(worm_width), worm_height(worm_height) {};
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
+            worms(worms), platforms(platforms), map_dimensions() {};
     
     Snapshot() {};
     ~Snapshot() {};
 
-    void set_dimensions(int height, int width){
-        this->height = height ;
-        this->width = width;
+    void set_dimensions(float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT) {
+        map_dimensions.height = height;
+        map_dimensions.width = width;
+        map_dimensions.worm_width = worm_width;
+        map_dimensions.worm_height = worm_height;
+    }
+    void set_turn_time_and_worm_turn(int turn_time = 0, int worm_turn = 0) {
+        turn_time_and_worm_turn.turn_time = turn_time;
+        turn_time_and_worm_turn.worm_turn = worm_turn;
     }
 };
 

@@ -37,8 +37,10 @@ private:
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
     int send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height);
+    int send_time_and_worm_turn(const int& _turn_time, const int& _worm_turn);
     int send_worms(std::vector<WormSnapshot>& worms);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
+    std::shared_ptr<GameCommand> recv_jump(uint8_t& worm_id);
 
 public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);

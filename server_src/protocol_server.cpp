@@ -101,10 +101,13 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (send_map_dimensions(snapshot.width, snapshot.height, snapshot.worm_width, snapshot.worm_height) < 0) {
+    if (send_map_dimensions(snapshot.map_dimensions.width, snapshot.map_dimensions.height, snapshot.map_dimensions.worm_width, snapshot.map_dimensions.worm_height) < 0) {
         return SOCKET_FAILED;
     }
     if (send_platforms(snapshot.platforms) < 0) {
+        return SOCKET_FAILED;
+    }
+    if (send_time_and_worm_turn(snapshot.turn_time_and_worm_turn.turn_time, snapshot.turn_time_and_worm_turn.worm_turn) < 0) {
         return SOCKET_FAILED;
     }
     if (send_worms(snapshot.worms) < 0) {
@@ -123,6 +126,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(uint8_t& worm_id)
         case MOV: {
             return recv_mov(worm_id);
         }
+        case JUMP: {
+            return recv_jump(worm_id);
+        }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
             return std::make_shared<GameCommand>();
@@ -139,6 +145,15 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_mov(uint8_t& worm_id) {
         throw LibError(errno, "Socket was closed");
     }
     return std::make_shared<MoveCommand>(worm_id, movement_x[0]);
+}
+
+std::shared_ptr<GameCommand> ProtocolServer::recv_jump(uint8_t& worm_id) {
+    char movement_x[1];
+    socket.recvall(movement_x, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    return std::make_shared<JumpCommand>(worm_id, movement_x[0]);
 }
 
 int ProtocolServer::send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height) {
@@ -191,8 +206,20 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
     return 1;
 }
 
-/*
-*/
+int ProtocolServer::send_time_and_worm_turn(const int& _turn_time, const int& _worm_turn) {
+    int turn_time[1] = {_turn_time};
+    turn_time[0] = htonl(turn_time[0]);
+    if (socket.sendall(turn_time, 4, &was_closed) < 0) {
+        return SOCKET_FAILED;
+    }
+    int worm_turn[1] = {_worm_turn};
+    worm_turn[0] = htonl(worm_turn[0]);
+    if (socket.sendall(worm_turn, 4, &was_closed) < 0) {
+        return SOCKET_FAILED;
+    }
+    return 1;
+}
+
 int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
     uint16_t num_of_worms[1] = {htons(worms.size())};
     if (socket.sendall(num_of_worms, 2, &was_closed) < 0) {

@@ -4,7 +4,7 @@ Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
     // std::cout << "Antes de crear el background" << std::endl;
-    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.width, snpsht.height, surfaces, renderer);
+    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
     // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
         // std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
@@ -16,7 +16,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         // std::cout << "Pos Y del gusano: " << worm_snpsht.pos_y << std::endl;
         // std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
         // std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
-        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.worm_width, snpsht.worm_height, surfaces, renderer, bkgrnd);
+        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, surfaces, renderer, bkgrnd);
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
         this->worms_map[worm_snpsht.id] = worm;
         // this->worms.push_back(worm);
@@ -24,6 +24,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 }
 
 void Match::update_from_snapshot(Snapshot& snpsht) {
+    // Now you can access the turn_time and worm_turn by doing: snpsht.turn_time_and_worm_turn.turn_time and snpsht.turn_time_and_worm_turn.worm_turn
     for (auto& worm_snpsht : snpsht.worms) {
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }

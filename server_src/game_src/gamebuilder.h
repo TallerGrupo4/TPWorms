@@ -44,7 +44,7 @@ public:
             // Add width and height to platform
             create_platform_type(platform.pos_x, platform.pos_y, platform.type);
         }
-        create_walls(b2Vec2_zero , map_snap.width , map_snap.height);
+        create_walls(b2Vec2_zero , map_snap.map_dimensions.width , map_snap.map_dimensions.height);
 
     }
 

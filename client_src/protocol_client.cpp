@@ -110,6 +110,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     Snapshot snapshot;
     recv_dimensions(snapshot);
     recv_platforms(snapshot);
+    recv_time_and_worm_turn(snapshot);
     recv_worms(snapshot);
     return snapshot;
 }
@@ -148,10 +149,10 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     worm_width[0] = ntohl(worm_width[0]);
     worm_height[0] = ntohl(worm_height[0]);
     // Move this to  a 'Parser'
-    snapshot.width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.worm_width = std::round((static_cast<float>(worm_width[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.worm_height = std::round((static_cast<float>(worm_height[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.map_dimensions.width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.map_dimensions.height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.map_dimensions.worm_width = std::round((static_cast<float>(worm_width[0] * PIX_PER_METER)) / MULTIPLIER);
+    snapshot.map_dimensions.worm_height = std::round((static_cast<float>(worm_height[0] * PIX_PER_METER)) / MULTIPLIER);
 }
 
 void ProtocolClient::recv_platforms(Snapshot& snapshot) {
@@ -194,6 +195,19 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
         snapshot.platforms.push_back(platform);
     }
+}
+
+void ProtocolClient::recv_time_and_worm_turn(Snapshot& snapshot) {
+    int turn_time[1];
+    int worm_turn[1];
+    socket.recvall(turn_time, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+    socket.recvall(worm_turn, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+    turn_time[0] = ntohl(turn_time[0]);
+    worm_turn[0] = ntohl(worm_turn[0]);
+    snapshot.turn_time_and_worm_turn.turn_time = turn_time[0];
+    snapshot.turn_time_and_worm_turn.worm_turn = worm_turn[0];
 }
 
 void ProtocolClient::recv_worms(Snapshot& snapshot) {

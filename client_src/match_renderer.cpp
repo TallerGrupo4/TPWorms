@@ -10,7 +10,7 @@ MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(cli
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
-        std::cout << "match height: " << map_received.height << "\n match width: " << map_received.width << std::endl;
+        std::cout << "match height: " << map_received.map_dimensions.height << "\n match width: " << map_received.map_dimensions.width << std::endl;
         match = Match(map_received,surfaces,renderer);
         this->render(renderer,match);
 }
