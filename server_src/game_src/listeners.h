@@ -85,7 +85,7 @@ class MyListener : public b2ContactListener{
         if (bodyA && bodyB && bodyA->GetUserData().pointer){
             WormData* wA = reinterpret_cast<WormData*>(bodyA->GetUserData().pointer);
             if (wA && wA->get_type() == WORM && bodyB->GetType() == b2_staticBody) {
-                wA->set_contact(true);
+                wA->add_contact();
                 if (wA->get_state() == JUMPING || wA->get_state() == FALLING){
                     float y_diff = bodyA->GetPosition().y - wA->get_last_y();
                     if (y_diff < -FALL_DISTANCE_THRESHOLD){
@@ -117,7 +117,7 @@ class MyListener : public b2ContactListener{
         if (bodyA && bodyB && bodyA->GetUserData().pointer){
             WormData* wA = reinterpret_cast<WormData*>(bodyA->GetUserData().pointer);
             if (wA && bodyB->GetType() == b2_staticBody && wA->get_type() == WORM) {
-                wA->set_contact(false);
+                wA->remove_contact();
                 wA->set_last_y(bodyA->GetPosition().y);
             }
         }

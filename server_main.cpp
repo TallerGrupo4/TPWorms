@@ -13,7 +13,7 @@ int main(int argc, char* argv[]) {
         }
         // argv[2] == PATH
         // Read folder from PATH 
-        std::vector<std::string> routes = {"../external/maps/map1.yaml"};
+        std::vector<std::string> routes = {"../external/maps/map1.yaml", "../external/maps/map2.yaml"};
         Server server(argv[1], routes);
         server.start();
         std::string line;

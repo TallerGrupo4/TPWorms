@@ -53,8 +53,7 @@
 #define CLIMBING 5
 #define SLIDING 6
 #define DAMAGED 7
-#define DYING 8
-#define DEAD 9
+#define DEAD 8
 
 // Codes for game actions
 #define MOV 0x01
@@ -83,7 +82,7 @@
 
 
 //Consts for render
-#define PIX_PER_METER 6.0f
+#define PIX_PER_METER 5.0f
 
 // Consts for game loop
 #define FPS 30.0f

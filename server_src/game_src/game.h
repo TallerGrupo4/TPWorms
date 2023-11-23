@@ -52,7 +52,7 @@ public:
     }
 
     void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
-        b2Body* player = builder.create_worm(0, 5);
+        b2Body* player = builder.create_worm(0, -5);
         players[current_id] = std::make_shared<Worm>(player, current_id);
     }
 
@@ -63,6 +63,7 @@ public:
     }
 
     void jump_player(int id , int direction){
+        if (current_turn_player_id != id) return;
         std::shared_ptr<Worm> player = players.at(id);
         player->jump(direction);
     }
@@ -104,6 +105,20 @@ public:
 
 
     void check_states(Worm& w){
+        if (w.get_state() == DAMAGED){
+            turn_time = 0;
+            return;
+        }
+        if (w.body->GetContactList()) {
+            for (b2Contact* contact = world.GetContactList(); contact; contact = contact->GetNext()){
+                b2Body* body = w.body->GetContactList()->other;
+                if (body && body->GetType() == b2_staticBody){
+                    if (body->GetFixtureList()->GetFriction() == 0){
+                        w.set_state(SLIDING);
+                    }
+                }
+            }
+        }
         float diff = w.body->GetPosition().y - w.data.get_last_y();
         if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
             w.set_state(FALLING);
@@ -128,6 +143,9 @@ public:
     void worm_comprobations(){
         for (auto& pair: players) { // Pair: {id, worm}
             std::shared_ptr<Worm> worm = pair.second;
+            if (worm->get_state() == DEAD){
+                continue;
+            }
             check_velocities(*worm);
             check_states(*worm);
             check_angles(*worm);
@@ -137,7 +155,20 @@ public:
 
     void print_current_state(){
         std::shared_ptr<Worm> worm = players.at(current_turn_player_id);
-        std::cout << "Worm " << current_turn_player_id << " state: " << worm->get_state() << std::endl;
+        // std::cout << "Worm " << current_turn_player_id << " state: " << worm->get_state() << std::endl;
+    }
+
+    void worm_clean_up(){
+        for (auto& pair: players) { // Pair: {id, worm}
+            std::shared_ptr<Worm> worm = pair.second;
+            if (worm->get_state() == DAMAGED){
+                worm->set_state(STILL);
+            }
+            if (worm->get_state() == DEAD && worm->body != nullptr){
+                world.DestroyBody(worm->body);
+                worm->body = nullptr;
+            }
+        }
     }
 
 // Check parameter..
@@ -145,9 +176,9 @@ public:
         float time_simulate = (float) it / FPS;
         // reap_dead();
         worm_comprobations();
-        print_current_state();
 
         world.Step(time_simulate, 8, 3);
+
         manage_turn(it);
         // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
         /*
@@ -168,18 +199,23 @@ public:
 
         // Check if the turn time is over
         turn_time -= it;
-        if (turn_time > 0) return;
+        if (turn_time > 0 || players.size() == 1) return;
         // Switch to the next player's turn
-        current_turn_player_id = (current_turn_player_id + 1) % players.size();
+        printf("Changed turn\n");
+        while (players[current_turn_player_id]->get_state() == DEAD){
+            current_turn_player_id = (current_turn_player_id + 1) % players.size();
+        }
         // Reset the turn timer for the next player
-        turn_time = TURN_TIME;
+        turn_time = 10.0f * FPS;
     }
 
     Snapshot get_game_snapshot() {
+        printf("Getting snapshot\n");
         std::vector<WormSnapshot> worms;    
         for (auto& pair: players) { // Pair: {id, worm}
             worms.push_back(pair.second->get_snapshot());
         }
+        printf("sent snapshot\n");
         Snapshot snapshot(worms, {});
         return snapshot;
     }
