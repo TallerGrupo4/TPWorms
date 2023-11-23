@@ -127,14 +127,16 @@ public:
 
     void jump (int dir){
         if (data.state != STILL && !in_contact()) {return;}
-        data.state = JUMPING;
         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
         float m = body->GetMass();
         if (dir == FOWARD) {
             body->ApplyLinearImpulseToCenter( b2Vec2( m * WORM_JUMP_HOR_SPEED * data.act_dir, m * WORM_JUMP_SPEED), true );
+            data.state = JUMPING;
+
         }
         else if (dir == BACKWARD) {
             body->ApplyLinearImpulseToCenter( b2Vec2( m * -WORM_BACKFLIP_HOR_SPEED * data.act_dir,m * WORM_BACKFLIP_SPEED), true );
+            data.state = BACKFLIPPING;
         }
     }
 

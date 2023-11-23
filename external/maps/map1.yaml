@@ -1,3 +1,5 @@
+name : map1
+
 platforms:
 - type: LargeHorizontal
   x: 0
