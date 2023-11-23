@@ -102,11 +102,11 @@ void MainWindow::joinMatch() {
                 ui->JoinMatchLineEdit->clear();
                 ui->JoinMatchLineEdit->setText("Error: Unable to convert code");
             }
-            std::vector<uint8_t> worm_ids = {1}; // Vector must have as many elements as the worms that the client wants to add
-            Command cmd(CASE_JOIN, match_id, worm_ids);
+            std::vector<uint8_t> worms_ids = {1}; // Vector must have as many elements as the worms that the client wants to add
+            Command cmd(CASE_JOIN, match_id, worms_ids);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
-            // Now you have your worms's ids in recv_cmd.get_worm_ids() (its a vect of ids)
+            // Now you have your worms's ids in recv_cmd.get_worms_ids() (its a vect of ids)
             switch (recv_cmd.get_code()) {
             case CASE_MATCH_FULL:
                 ui->JoinMatchLineEdit->clear();
@@ -155,11 +155,11 @@ QString code_string = ui->CreateMatchLineEdit->text();
                 ui->CreateMatchLineEdit->clear();
                 ui->CreateMatchLineEdit->setText("Error: Unable to convert code");
             }
-            std::vector<uint8_t> worm_ids = {1}; // Vector must have as many elements as the worms that the client wants to add
-            Command cmd(CASE_CREATE, match_id, worm_ids);
+            std::vector<uint8_t> worms_ids = {1}; // Vector must have as many elements as the worms that the client wants to add
+            Command cmd(CASE_CREATE, match_id, worms_ids);
             client.send_lobby_command(cmd);
             Command recv_cmd = client.recv_lobby_command();
-            // Now you have your worms's ids in recv_cmd.get_worm_ids() (its a vect of ids)
+            // Now you have your worms's ids in recv_cmd.get_worms_ids() (its a vect of ids)
             switch (recv_cmd.get_code()) {
                 case CASE_MATCH_ALREADY_EXISTS:
                     ui->CreateMatchLineEdit->clear();

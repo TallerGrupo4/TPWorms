@@ -15,7 +15,7 @@ MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
 // std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(std::shared_ptr<Queue<Snapshot>> queue,
 //                                                     uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names) {
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, std::vector<uint8_t>& worm_ids, int quantity_of_worms, std::vector<std::string>& map_names) {
+                                                      uint match_id, std::vector<uint8_t>& worms_ids, int quantity_of_worms, std::vector<std::string>& map_names) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
@@ -28,9 +28,10 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     // The map should be passed in the start() method
     matches[match_id] = std::make_unique<Match>();
     // matches[match_id] = std::make_unique<Match>();
-    std::cout << "Quantity of worms: " << quantity_of_worms << std::endl;
     for (int i = 0; i < quantity_of_worms; i++) {
-        worm_ids.push_back(matches[match_id]->add_player(queue));
+        uint8_t worm_id = matches[match_id]->add_player(queue);
+        worms_ids.push_back(worm_id);
+        // worms_ids.push_back(matches[match_id]->add_player(queue));
     }
     // worm_id = matches[match_id]->add_player(queue);
     // Copy in map names the ids of the maps
@@ -72,12 +73,14 @@ uint8_t MonitorMatches::get_number_of_players(uint match_id) {
 // std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(std::shared_ptr<Queue<Snapshot>> queue,
 //                                                 uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names, uint8_t& number_of_players) {
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, std::vector<uint8_t>& worm_ids, int quantity_of_worms, std::vector<std::string>& map_names, uint8_t& number_of_players) {
+                                                      uint match_id, std::vector<uint8_t>& worms_ids, int quantity_of_worms, std::vector<std::string>& map_names, uint8_t& number_of_players) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
     for (int i = 0; i < quantity_of_worms; i++) {
-        worm_ids.push_back(matches[match_id]->add_player(queue));
+        uint8_t worm_id = matches[match_id]->add_player(queue);
+        worms_ids.push_back(worm_id);
+        // worms_ids.push_back(matches[match_id]->add_player(queue));
     }
     // worm_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();

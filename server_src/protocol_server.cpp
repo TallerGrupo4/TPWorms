@@ -24,14 +24,14 @@ void ProtocolServer::send_command(const Command& command) {
     switch (code[0]) {
         case CASE_JOIN: {
             send_match_id(command.get_match_id());
-            send_worm_ids(command.get_worm_ids());
+            send_worms_ids(command.get_worms_ids());
             send_map_names(command.get_map_names());
             send_number_of_players(command.get_number_of_players());
             break;
         }
         case CASE_CREATE: {
             send_match_id(command.get_match_id());
-            send_worm_ids(command.get_worm_ids());
+            send_worms_ids(command.get_worms_ids());
             send_map_names(command.get_map_names());
             send_number_of_players(command.get_number_of_players());
             break;
@@ -277,14 +277,14 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
 
 const Command ProtocolServer::recv_create(const char* code) {
     const uint match_id = recv_match_id();
-    std::vector<uint8_t> worm_ids = recv_worm_ids();
-    return Command(code[0], match_id, worm_ids);
+    std::vector<uint8_t> worms_ids = recv_worms_ids();
+    return Command(code[0], match_id, worms_ids);
 }
 
 const Command ProtocolServer::recv_join(const char* code) {
     const uint match_id = recv_match_id();
-    std::vector<uint8_t> worm_ids = recv_worm_ids();
-    return Command(code[0], match_id, worm_ids);
+    std::vector<uint8_t> worms_ids = recv_worms_ids();
+    return Command(code[0], match_id, worms_ids);
 }
 
 const std::string ProtocolServer::recv_map_name() {
@@ -366,24 +366,24 @@ void ProtocolServer::send_map_name(const std::string map_name) {
     socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
 }
 
-void ProtocolServer::send_worm_ids(const std::vector<uint8_t> worm_ids) {
-    uint8_t num_of_worms_ids[1] = {static_cast<uint8_t>(worm_ids.size())};
+void ProtocolServer::send_worms_ids(const std::vector<uint8_t> worms_ids) {
+    uint8_t num_of_worms_ids[1] = {static_cast<uint8_t>(worms_ids.size())};
     socket.sendall(num_of_worms_ids, 1, &was_closed);
-    for (auto& worm_id : worm_ids) {
+    for (auto& worm_id : worms_ids) {
         uint8_t id[1] = {worm_id};
         socket.sendall(id, 1, &was_closed);
     }
 }
 
-std::vector<uint8_t> ProtocolServer::recv_worm_ids() {
+std::vector<uint8_t> ProtocolServer::recv_worms_ids() {
     uint8_t num_of_worms_ids[1];
     socket.recvall(num_of_worms_ids, 1, &was_closed);
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
-    std::vector<uint8_t> worm_ids;
+    std::vector<uint8_t> worms_ids;
     for (uint8_t i = 0; i < num_of_worms_ids[0]; i++) {
-        worm_ids.push_back(i); // It doesn't matter what we push back here, the monitor (->game) will set the real ids
+        worms_ids.push_back(i); // It doesn't matter what we push back here, the monitor (->game) will set the real ids
     }
-    return worm_ids;
+    return worms_ids;
 }

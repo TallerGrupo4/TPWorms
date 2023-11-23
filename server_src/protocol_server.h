@@ -29,10 +29,10 @@ private:
     void send_list(const std::map<uint, std::string>& matches_availables);
     void send_map_name(const std::string map_name);
     void send_map_names(const std::vector<std::string>& map_names);
-    void send_worm_ids(const std::vector<uint8_t> worm_id);
+    void send_worms_ids(const std::vector<uint8_t> worm_id);
     const Command recv_create(const char* code);
     const Command recv_join(const char* code);
-    std::vector<uint8_t> recv_worm_ids();
+    std::vector<uint8_t> recv_worms_ids();
     const uint recv_match_id();
     const std::string recv_map_name();
     const Command recv_list(const char* code);

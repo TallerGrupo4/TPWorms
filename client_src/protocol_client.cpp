@@ -22,7 +22,7 @@ void ProtocolClient::send_command(const Command& command) {
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
         // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
         send_match_id(command.get_match_id());
-        send_quantity_of_worms(command.get_worm_ids().size());
+        send_quantity_of_worms(command.get_worms_ids().size());
     } else if (code[0] == CASE_START) {
         send_match_id(command.get_match_id());
         send_map_name(command.get_map_name());
@@ -39,19 +39,19 @@ const Command ProtocolClient::recv_command() {
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
-            std::vector<uint8_t> worm_ids = recv_worm_ids();
+            std::vector<uint8_t> worms_ids = recv_worms_ids();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_ids);
+            Command command(code[0], match_id[0], maps_available, number_of_players, worms_ids);
             return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
-            std::vector<uint8_t> worm_ids = recv_worm_ids();
+            std::vector<uint8_t> worms_ids = recv_worms_ids();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_ids);
+            Command command(code[0], match_id[0], maps_available, number_of_players, worms_ids);
             return command;
         }
         case CASE_LIST: {
@@ -323,22 +323,22 @@ std::map<uint, std::string> ProtocolClient::recv_list() {
     return matches_availables;
 }
 
-std::vector<uint8_t> ProtocolClient::recv_worm_ids() {
+std::vector<uint8_t> ProtocolClient::recv_worms_ids() {
     uint8_t num_of_worms_ids[1];
     socket.recvall(num_of_worms_ids, 1, &was_closed);
     if (was_closed) {
         // throw
     }
-    std::vector<uint8_t> worm_ids;
+    std::vector<uint8_t> worms_ids;
     for (int i = 0; i < num_of_worms_ids[0]; i++) {
         uint8_t worm_id[1];
         socket.recvall(worm_id, 1, &was_closed);
         if (was_closed) {
             // throw
         }
-        worm_ids.push_back(worm_id[0]);
+        worms_ids.push_back(worm_id[0]);
     }
-    return worm_ids;
+    return worms_ids;
 }
 
 std::vector<std::string> ProtocolClient::recv_map_names() {

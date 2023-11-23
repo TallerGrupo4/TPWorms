@@ -60,6 +60,8 @@ public:
     }
 
     void move_player(int id, int direction) {
+        std::cout << "Player trying to move: " << id << std::endl;
+        std::cout << "Player turn: " << current_turn_player_id << std::endl;
         if (current_turn_player_id != id) return;
         std::shared_ptr<Worm> player = players.at(id);
         player->move(direction);

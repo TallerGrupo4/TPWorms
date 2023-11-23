@@ -31,7 +31,7 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
-                for (uint8_t worm_id : worm_ids) {
+                for (uint8_t worm_id : worms_ids) {
                     std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(worm_id);
                     queue_match->push(exit_command);
                 }
@@ -92,8 +92,8 @@ void User::handle_starting_match() {
 
 void User::handle_match() {
     while (protocol.is_connected()) {
-        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worm_ids);
-        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worm_ids[0]);
+        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids);
+        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids[0]);
         queue_match->push(game_command);
     }
 }
@@ -117,10 +117,10 @@ bool User::interpretate_command_in_lobby(Command& command) {
         case CASE_CREATE: {
             try {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.get_match_id(), worm_ids, command.get_worm_ids().size(), map_names);
-                number_of_players = command.get_worm_ids().size();
+                command.get_match_id(), worms_ids, command.get_worms_ids().size(), map_names);
+                number_of_players = command.get_worms_ids().size();
                 // queue_match = monitor_matches.create_match(sender->get_queue(),
-                // command.get_match_id(), worm_ids[0], map_names);
+                // command.get_match_id(), worms_ids[0], map_names);
                 number_of_players = 1;
                 in_match = true;
                 is_creator = true;
@@ -130,14 +130,15 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, map_names, number_of_players, worm_ids);
+            Command command_to_send(code, match_id, map_names, number_of_players, worms_ids);
             protocol.send_command(command_to_send);
             break;
         }
         case CASE_JOIN: {
             try {
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids, command.get_worm_ids().size(), map_names, number_of_players);
-                // queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_ids[0], map_names, number_of_players);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worms_ids, command.get_worms_ids().size(), map_names, number_of_players);
+                std::cout << "Worm_id[0]: " << +worms_ids[0] << std::endl;
+                // queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worms_ids[0], map_names, number_of_players);
                 in_match = true;
                 code = CASE_JOIN;
                 std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
@@ -151,7 +152,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_STARTED;
                 std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, map_names, number_of_players, worm_ids);
+            Command command_to_send(code, match_id, map_names, number_of_players, worms_ids);
             protocol.send_command(command_to_send);
             break;
         }

@@ -106,7 +106,7 @@ TEST(ProtocolHappyCasesLobbyServer, Create) {
     ASSERT_EQ(command_received.get_map_names().at(0), "1");
     ASSERT_NE(command_received.get_map_names().at(1), "3");
     ASSERT_EQ(command_received.get_number_of_players(), 10);
-    ASSERT_EQ(command_received.get_worm_ids().size(), 1);
+    ASSERT_EQ(command_received.get_worms_ids().size(), 1);
 }
 
 TEST(ProtocolHappyCasesLobbyServer, Join) {
@@ -126,7 +126,7 @@ TEST(ProtocolHappyCasesLobbyServer, Join) {
     ASSERT_EQ(command_received.get_map_names().at(1), "2");
     ASSERT_NE(command_received.get_map_names().at(2), "4");
     ASSERT_EQ(command_received.get_number_of_players(), 100);
-    ASSERT_EQ(command_received.get_worm_ids()[0], 1);
+    ASSERT_EQ(command_received.get_worms_ids()[0], 1);
 }
 
 TEST(ProtocolHappyCasesLobbyServer, List_1_Match) {
