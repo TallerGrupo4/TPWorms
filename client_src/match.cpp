@@ -5,6 +5,9 @@ Match::Match() {}
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
     // std::cout << "Antes de crear el background" << std::endl;
     bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
+    worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
+    std::cout << "worm_turn : " << worm_turn << std::endl;
+    turn_time = snpsht.turn_time_and_worm_turn.turn_time;
     // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
         // std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
@@ -25,19 +28,17 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 
 void Match::update_from_snapshot(Snapshot& snpsht) {
     // Now you can access the turn_time and worm_turn by doing: snpsht.turn_time_and_worm_turn.turn_time and snpsht.turn_time_and_worm_turn.worm_turn
-    for (auto& worm_snpsht : snpsht.worms) {
+    turn_time = snpsht.turn_time_and_worm_turn.turn_time;
+    for (auto& worm_snpsht : snpsht.worms) { 
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }
-    update_camera();
-    
-    // for (Worm worm : this->worms) { // {w1 , w2 , w3} for each w.update()
-    //     for (WormSnapshot worm_snpsht : snpsht.worms) {
-    //         if(worm.is_same_id(worm_snpsht.id)) {
-    //             worm.update(worm_snpsht, iter);
-    //             break;
-    //         }
-    //     }        
-    // }
+    if (worm_turn != snpsht.turn_time_and_worm_turn.worm_turn) {
+        worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
+        update_camera(1,1,true);
+    } else {
+        worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
+        update_camera();
+    }
 }
 
 bool Match::get_next_target(Target& new_target) {
@@ -76,19 +77,30 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_
     }
     case NoneType:
     case PlayerType:
-        if(get_next_target(new_target)) {
-            camera.update(new_target);
-            break;
-        }
-        if (((camera_offset_x != 0) and (camera_offset_y != 0)) or center_camera) {
+        if (center_camera) {
             new_target = {
                 PlayerType,
                 -1,
                 -1,
-                camera_offset_x,
-                camera_offset_y
+                get_turn_worm_x()*RESOLUTION_MULTIPLIER,
+                get_turn_worm_y()*RESOLUTION_MULTIPLIER
             };
             camera.update(new_target);
+        } else {
+            if(get_next_target(new_target)) {
+                camera.update(new_target);
+                break;
+            }
+            if ((camera_offset_x != 0) and (camera_offset_y != 0)) {
+                new_target = {
+                    PlayerType,
+                    -1,
+                    -1,
+                    camera_offset_x + get_turn_worm_x()*RESOLUTION_MULTIPLIER,
+                    camera_offset_y + get_turn_worm_y()*RESOLUTION_MULTIPLIER
+                };
+                camera.update(new_target);
+            }
         }
         break;
     case ProjectileType:
@@ -113,4 +125,16 @@ void Match::render(SDL2pp::Renderer& renderer) {
     // for (std::shared_ptr<Worm> worm : worms_map) {
     //     worm.render(renderer);    
     // }
+}
+
+int Match::get_turn_worm_x() {
+    return worms_map.at(worm_turn)->get_worm_x();
+}
+
+int Match::get_turn_worm_y() {
+    return worms_map.at(worm_turn)->get_worm_y();
+}
+ 
+bool Match::turn_worm_facing_left() {
+    return worms_map.at(worm_turn)->worm_facing_left();
 }

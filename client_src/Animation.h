@@ -16,7 +16,7 @@ class Area;
 
 class Animation {
 public:
-    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal);
+    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal = false);
     ~Animation();
     void update_once();
     void update(int iter);
