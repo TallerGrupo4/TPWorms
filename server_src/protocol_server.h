@@ -52,7 +52,7 @@ public:
 
     // Match
     int send_snapshot(Snapshot& snapshot);
-    std::shared_ptr<GameCommand> recv_game_command(uint8_t& worm_id);
+    std::shared_ptr<GameCommand> recv_game_command(std::vector<uint8_t>& worm_ids);
     bool is_connected() { return !was_closed;}
 
 

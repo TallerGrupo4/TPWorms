@@ -92,8 +92,10 @@ void User::handle_starting_match() {
 
 void User::handle_match() {
     while (protocol.is_connected()) {
-        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids);
-        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids[0]);
+        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids);
+
+        // CHANGE THIS TO ^^^^!!!!! 
+        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids[0]);
         queue_match->push(game_command);
     }
 }

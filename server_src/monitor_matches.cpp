@@ -20,21 +20,14 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
 
-    // HARDCODEO PORQUE NO ESTA IMPLEMENTADO LA ELECCION DEL MAPA
     std::cout << "Creating match with id: " << match_id << std::endl;
-    // if (maps.find((uint)1) == maps.end()) {
-    //     throw MapNotFound();
-    // }
-    // The map should be passed in the start() method
     matches[match_id] = std::make_unique<Match>();
-    // matches[match_id] = std::make_unique<Match>();
+    // if (quantity_of_worms > MAX_PLAYERS)
+    //     throw TooManyWorms();
     for (int i = 0; i < quantity_of_worms; i++) {
         uint8_t worm_id = matches[match_id]->add_player(queue);
         worms_ids.push_back(worm_id);
-        // worms_ids.push_back(matches[match_id]->add_player(queue));
     }
-    // worm_id = matches[match_id]->add_player(queue);
-    // Copy in map names the ids of the maps
     for (auto& map: maps) {
         map_names.push_back(std::to_string(map.first));
     }
@@ -77,6 +70,8 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
+    // if ((quantity_of_worms + matches[match_id]->get_number_of_players()) > MAX_PLAYERS)
+    //     throw TooManyWorms();
     for (int i = 0; i < quantity_of_worms; i++) {
         uint8_t worm_id = matches[match_id]->add_player(queue);
         worms_ids.push_back(worm_id);

@@ -117,7 +117,16 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
     return 1;
 }
 
-std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(uint8_t& worm_id) {
+std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(std::vector<uint8_t>& worm_ids) {
+    uint8_t worm_id[1];
+    socket.recvall(worm_id, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    // if (std::find(worm_ids.begin(), worm_ids.end(), worm_id[0]) == worm_ids.end()) {
+    //     // throw corrupted client error
+    //     std::cout << "This worm_id is not in the list of worm_ids (protocol_server::recv_game_command)" << std::endl;
+    // }
     char code[1];
     socket.recvall(code, 1, &was_closed);
     if (was_closed) {
@@ -125,10 +134,14 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command(uint8_t& worm_id)
     }
     switch (code[0]) {
         case MOV: {
-            return recv_mov(worm_id);
+            // return recv_mov(worm_id[0]);
+            // IT IS HARDCODED TO worm_ids[0] BECAUSE THE CLIENT DOESN'T SEND THE WORM_ID YET
+            return recv_mov(worm_ids[0]);
         }
         case JUMP: {
-            return recv_jump(worm_id);
+            // return recv_jump(worm_id[0]);
+            // IT IS HARDCODED TO worm_ids[0] BECAUSE THE CLIENT DOESN'T SEND THE WORM_ID YET
+            return recv_jump(worm_ids[0]);
         }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).

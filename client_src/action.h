@@ -45,14 +45,14 @@ public:
 class ActionMov : public Action {
 public:
     int send(Socket& socket, bool& was_closed) override {
+        uint8_t worm_id[1] = {this->worm_id};
+        int ret = socket.sendall(worm_id, 1, &was_closed);
+        if (was_closed) return WAS_CLOSED;
         char code[1] = {type};
-        int ret = socket.sendall(code, 1, &was_closed);
+        ret = socket.sendall(code, 1, &was_closed);
         if (was_closed) return WAS_CLOSED;
         char movement_x[1] = {this->movement_x};
         ret = socket.sendall(movement_x, 1, &was_closed);
-        if (was_closed) return WAS_CLOSED;
-        uint8_t worm_id[1] = {this->worm_id};
-        ret = socket.sendall(worm_id, 1, &was_closed);
         if (was_closed) return WAS_CLOSED;
         return ret;
     }

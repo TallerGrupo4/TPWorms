@@ -261,8 +261,8 @@ TEST(ProtocolHappyCasesMatch, Send_action_mov_right_and_recv_gameCommand_mov_rig
     ProtocolServer protocol_server = protocols.second;
     std::shared_ptr<ActionMov> action = std::make_shared<ActionMovRight>();
     protocol_client.send_action(action);
-    uint8_t worm_id = 1;
-    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_id);
+    std::vector<uint8_t> worm_ids = {1};
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_ids);
     MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
     ASSERT_NE(moveCommand, nullptr);
     ASSERT_EQ(moveCommand->get_direction(), RIGHT);
@@ -277,8 +277,8 @@ TEST(ProtocolHappyCasesMatch, Send_action_jump_right_and_recv_gameCommand_jump_r
     ProtocolServer protocol_server = protocols.second;
     std::shared_ptr<ActionMov> action = std::make_shared<ActionJumpRight>();
     protocol_client.send_action(action);
-    uint8_t worm_id = 1;
-    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_id);
+    std::vector<uint8_t> worm_ids = {1};
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command(worm_ids);
     JumpCommand* jumpCommand = dynamic_cast<JumpCommand*>(game_command.get());
     ASSERT_NE(jumpCommand, nullptr);
     ASSERT_EQ(jumpCommand->get_direction(), RIGHT);
