@@ -14,8 +14,8 @@ struct MapDimensions {
 } typedef MapDimensions_t;
 
 struct TurnTimeAndWormTurn {
-    int turn_time = DEFAULT;
-    int worm_turn = DEFAULT;
+    uint turn_time = DEFAULT;
+    char worm_turn = DEFAULT;
 } typedef TurnTimeAndWormTurn_t;
 
 enum BeamType : char {
