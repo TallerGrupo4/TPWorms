@@ -34,10 +34,10 @@ bool MatchRenderer::handleEvents(Match& match) {
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE: {
                         camera_activated = camera_activated ? false : true;
-                        SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2 - mouse_motion_x,window.GetHeight()/2 - mouse_motion_y);
+                        SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
+                        match.update_camera(mouse_motion_x, mouse_motion_y, true);
                         mouse_motion_x = 0;
                         mouse_motion_y = 0;
-                        match.update_camera(mouse_motion_x, mouse_motion_y, true);
                         break;
                         // return false;
                     }
@@ -64,6 +64,16 @@ bool MatchRenderer::handleEvents(Match& match) {
                         }
                         //client.push_game_command(game_command);
                         //player.moveRigth();
+                        break;
+                    }
+                    case SDLK_RETURN: {
+                        action = std::make_shared<ActionJumpRight>();
+                        client.send_action(action);
+                        break;
+                    }
+                    case SDLK_BACKSPACE: {
+                        action = std::make_shared<ActionJumpLeft>();
+                        client.send_action(action);
                         break;
                     }
                 }

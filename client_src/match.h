@@ -18,6 +18,8 @@ private:
     std::shared_ptr<Background> bkgrnd;
     std::map<char, std::shared_ptr<Worm>> worms_map;
     Camera camera;
+    int worm_turn;
+    int turn_time;
 
     bool get_next_target(Target& new_target);
 
@@ -28,6 +30,9 @@ public:
     void update_from_iter(int iter);
     void update_camera(int camera_offset_x = 0, int camera_offset_y = 0, bool center_camera = false);
     void render(SDL2pp::Renderer& renderer);
+    int get_turn_worm_x();
+    int get_turn_worm_y();
+    bool turn_worm_facing_left();
 };
 
 #endif  // MATCH_H

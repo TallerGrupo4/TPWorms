@@ -46,17 +46,27 @@
 
 //Common worm States
 enum WormStates : char {
-    STILL,
-    MOVING,
-    JUMPING,
-    BACKFLIPPING,
-    FALLING, 
-    CLIMBING, 
-    SLIDING, 
-    AIMING,
-    DAMAGED, 
-    DEAD
+    StillState,
+    MovingState,
+    JumpingState,
+    BackflippingState,
+    FallingState, 
+    ClimbingState, 
+    SlidingState, 
+    AimingState,
+    DamagedState, 
+    DeadState
 };
+
+#define STILL 0
+#define MOVING 1
+#define JUMPING 2
+#define BACKFLIPPING 3
+#define FALLING 4
+#define CLIMBING 5
+#define SLIDING 6
+#define DAMAGED 7
+#define DEAD 8
 
 // Codes for game actions
 #define MOV 0x01

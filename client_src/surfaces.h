@@ -9,6 +9,9 @@ using namespace SDL2pp;
 class MatchSurfaces {
 public:    
     Surface background1;
+    Surface still_0_worm;
+    Surface still_0_up_worm;
+    Surface still_0_down_worm;
     Surface still_1_worm;
     Surface walking_worm;
     Surface walking_up_worm;
@@ -17,6 +20,10 @@ public:
     Surface jump_worm;
     Surface jump_up_worm;
     Surface jump_down_worm;
+    Surface fall_worm;
+    Surface slide_worm;
+    Surface slide_up_worm;
+    Surface slide_down_worm;
     Surface large_beam_vertical;
     Surface large_beam_65;
     Surface large_beam_45;

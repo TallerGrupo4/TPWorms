@@ -1,13 +1,14 @@
 #ifndef WORM_H
 #define WORM_H
 
-#include <chrono>
 #include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
+#include "constantes_cliente.h"
+#include "worm_animations.h"
 #include "surfaces.h"
 #include "Animation.h"
 #include "background.h"
@@ -26,16 +27,10 @@ public:
     int get_worm_state();
     int get_worm_x();
     int get_worm_y();
+    bool worm_facing_left();
 private:
     std::shared_ptr<Background> bkgrnd;
-    Animation still_1_an;
-    Animation walking_an;
-    Animation walking_up_an;
-    Animation walking_down_an;
-    Animation backflip_an;
-    Animation jump_an;
-    Animation jump_up_an;
-    Animation jump_down_an;
+    WormAnimations worm_an;
     bool facing_left;
     bool moving;
     float angle;
