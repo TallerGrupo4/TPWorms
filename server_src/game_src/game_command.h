@@ -35,7 +35,8 @@ public:
     int get_direction() { return direction; }
     MoveCommand(char id, int direction): GameCommand(id, direction) {}
     ~MoveCommand() {}
-    void execute(Game& game) override { game.move_player(id_worm, direction); }
+    void execute(Game& game) override { 
+        game.move_player(id_worm, direction); }
 };
 
 class JumpCommand: public GameCommand {
@@ -48,10 +49,11 @@ class JumpCommand: public GameCommand {
 };
 
 class ExitCommand: public GameCommand {
+    char army_id;
 public:
-    ExitCommand(char id) : GameCommand(id) {}
+    ExitCommand(char army_id) : GameCommand(), army_id(army_id) {}
     ~ExitCommand() {}
-    void execute(Game& game) override { game.remove_player(id_worm); }
+    void execute(Game& game) override { game.remove_player(army_id); }
 };
 
 

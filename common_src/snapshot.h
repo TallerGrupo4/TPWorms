@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <map>
 #include "constants.h"
 
 
@@ -11,6 +12,7 @@ struct MapDimensions {
     float width = DEFAULT;
     float worm_width = WORM_WIDTH;
     float worm_height = WORM_HEIGHT;
+    int amount_of_worms = DEFAULT;
 } typedef MapDimensions_t;
 
 struct TurnTimeAndWormTurn {
@@ -62,10 +64,11 @@ public:
     char direction;
     int weapon;
     int state;
+    char team_id;
 
 
     WormSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health, char direction, int weapon,
-                 int state):
+                 int state, char team_id):
             id(id),
             pos_x(pos_x),
             pos_y(pos_y),
@@ -74,7 +77,8 @@ public:
             health(health),
             direction(direction),
             weapon(weapon),
-            state(state){};
+            state(state), 
+            team_id(team_id) {};
     ~WormSnapshot(){};
 };
 
@@ -98,6 +102,7 @@ public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
     // std::vector<ProjectileSnapshot> projectiles;
+    std::map<char, std::vector<char>> my_army;
     MapDimensions_t map_dimensions;
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
@@ -107,11 +112,12 @@ public:
     Snapshot() {};
     ~Snapshot() {};
 
-    void set_dimensions(float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT) {
+    void set_dimensions(float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT, int amount_of_worms = 0) {
         map_dimensions.height = height;
         map_dimensions.width = width;
         map_dimensions.worm_width = worm_width;
         map_dimensions.worm_height = worm_height;
+        map_dimensions.amount_of_worms = amount_of_worms;
     }
     void set_turn_time_and_worm_turn(int turn_time = 0, int worm_turn = 0) {
         turn_time_and_worm_turn.turn_time = turn_time;

@@ -21,7 +21,8 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, MatchSurfa
     x(worm_snpsht.pos_x),
     y(worm_snpsht.pos_y),
     width(worm_width),
-    height(worm_height) {}
+    height(worm_height),
+    team_id(worm_snpsht.team_id) {}
 
 
 // Worm::Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal):

@@ -17,8 +17,8 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         // std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
         // std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
         std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, surfaces, renderer, bkgrnd);
-        std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
         this->worms_map[worm_snpsht.id] = worm;
+        std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
         // this->worms.push_back(worm);
     }
 }

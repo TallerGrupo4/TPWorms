@@ -29,15 +29,14 @@ private:
     void send_list(const std::map<uint, std::string>& matches_availables);
     void send_map_name(const std::string map_name);
     void send_map_names(const std::vector<std::string>& map_names);
-    void send_worms_ids(const std::vector<uint8_t> worm_id);
     const Command recv_create(const char* code);
     const Command recv_join(const char* code);
-    std::vector<uint8_t> recv_worms_ids();
     const uint recv_match_id();
     const std::string recv_map_name();
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
-    int send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height);
+    int send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height, const int& _amount_of_worms);
+    void send_army(std::map<char, std::vector<char>>& army);
     int send_time_and_worm_turn(const int& _turn_time, const int& _worm_turn);
     int send_worms(std::vector<WormSnapshot>& worms);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
@@ -52,7 +51,7 @@ public:
 
     // Match
     int send_snapshot(Snapshot& snapshot);
-    std::shared_ptr<GameCommand> recv_game_command(std::vector<uint8_t>& worm_ids);
+    std::shared_ptr<GameCommand> recv_game_command();
     bool is_connected() { return !was_closed;}
 
 

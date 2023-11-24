@@ -28,7 +28,7 @@ private:
     bool _is_dead = false;
     uint match_id = 0;
     bool is_creator = false;
-    std::vector<uint8_t> worms_ids = {};
+    uint8_t my_army_id = 0;
     bool interpretate_command_in_lobby(Command& command);
     void interpretate_command_in_match(GameCommand& game_command);
     void handle_lobby();

@@ -78,7 +78,8 @@ class MapReader : public Reader {
             YAML::Node dimensions = node["dimensions"];
             int height = dimensions[0]["height"].as<int>();
             int width = dimensions[0]["width"].as<int>();
-            map_snap.set_dimensions(width, height);
+            int amount_of_worms = dimensions[0]["amount_of_worms"].as<int>();
+            map_snap.set_dimensions(width, height, WORM_WIDTH, WORM_HEIGHT, amount_of_worms);
             return map_snap;
         }
 

@@ -60,8 +60,21 @@ void Match::push_all_players(Snapshot snapshot) {
 }
 
 void Match::send_initial_data() {
-    Snapshot start_snap = game.start_and_send(map , id_counter);
-    push_all_players(start_snap);
+    std::map<char, std::vector<char>> teams;
+    Snapshot start_snap = game.start_and_send(map , id_counter, teams);
+    // For each player, send the initial data
+    int i = 0;
+    for (auto& player_queue: players_queues) {
+        start_snap.my_army.clear();
+        start_snap.my_army[i] = teams[i];
+        try {
+            player_queue->push(start_snap);
+        } catch (const ClosedQueue& err) {
+            continue;
+        } 
+        i++;
+    }
+    // push_all_players(start_snap);
 }
 
 void Match::run(){

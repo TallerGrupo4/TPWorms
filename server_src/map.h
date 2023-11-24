@@ -9,6 +9,7 @@ class Map {
     public:
     int width;
     int height;
+    int amount_of_worms;
     std::vector<PlatformSnapshot> platforms;
 
     Map(std::string map_route) {
@@ -16,6 +17,7 @@ class Map {
         Snapshot snapshot = map_reader.read_map();
         width = snapshot.map_dimensions.width;
         height = snapshot.map_dimensions.height;
+        amount_of_worms = snapshot.map_dimensions.amount_of_worms;
         platforms = snapshot.platforms;
     }
 

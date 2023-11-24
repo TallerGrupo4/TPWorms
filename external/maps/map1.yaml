@@ -125,4 +125,4 @@ platforms:
 dimensions:
 - height: 100
   width: 100
-
+  amount_of_worms: 8

@@ -28,9 +28,10 @@ class WormData{
     float last_y;
     int number_contacts;
     int type;
+    char team_id;
     // std::unordered_map<int, int> weapons;
     
-    WormData(char id): id(id), life(START_LIFE), state(STILL), curr_weapon(NO_WEAPON) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM)  {
+    WormData(char id, int team_id): id(id), life(START_LIFE), state(STILL), curr_weapon(NO_WEAPON) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM), team_id(team_id)  {
         //TODO insert weapons with their respective starting ammo
     }
 
@@ -96,8 +97,8 @@ class Worm {
 
 
 public:
-    Worm(b2Body* body, char id):
-        body(body), data(id) {
+    Worm(b2Body* body, char id, char team_id):
+        body(body), data(id, team_id) {
             body->GetUserData().pointer = (uintptr_t) &data;
         }
 
@@ -182,7 +183,7 @@ public:
             pos_y = body->GetPosition().y;
             angle = get_angle();
         }
-        WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_weapon, data.state);
+        WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_weapon, data.state, data.team_id);
         return snapshot;
     }
 

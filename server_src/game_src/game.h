@@ -28,6 +28,7 @@ class Game {
     MyListener listener;
     MyFilter filter;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
+    std::map<uint8_t, std::vector<char>> teams;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     int current_turn_player_id;
     int turn_time;
@@ -41,22 +42,43 @@ public:
         world.SetContactFilter(&filter);
     }
 
-    Snapshot start_and_send(Map& map, int number_of_players) {
+    Snapshot start_and_send(Map& map, int number_of_players, std::map<char, std::vector<char>>& match_teams) {
         Snapshot snapshot({}, map.platforms);
-        snapshot.set_dimensions(map.height, map.width);
+        snapshot.set_dimensions(map.height, map.width, WORM_WIDTH, WORM_HEIGHT, map.amount_of_worms);
         builder.create_map(snapshot);
+        // Assign teams
         std::vector <WormSnapshot> wormsSnapshots;
-        for (int i = 0; i < number_of_players; i++) {
-            add_player(i);
-            wormsSnapshots.push_back(players[i]->get_snapshot());
+        // We should assign worms to each team (client) until there is no more worms to assign.
+        // Now we are assigning all the amount_of_worms to each team (client).
+        int current_id = 0;
+        int amount_of_worms_per_team = map.amount_of_worms / number_of_players;
+        int remainder = map.amount_of_worms % number_of_players;
+        int got_remainder = remainder ? 1 : 0;
+        for (int team_id = 0; team_id < number_of_players; team_id++) {
+            // if it is the last team_id, set got_remainder = 0
+            if (team_id == number_of_players - 1) got_remainder = 0;
+            for (int i = 0; i < amount_of_worms_per_team + got_remainder; i++) {
+                add_player(current_id, team_id);
+                wormsSnapshots.push_back(players[current_id]->get_snapshot());
+                teams[team_id].push_back(current_id);
+                match_teams[team_id].push_back(current_id);
+                current_id++;
+            }
+        }
+        int amount_of_teams_with_less_worms = number_of_players - remainder;
+        if (amount_of_teams_with_less_worms != number_of_players) {
+            for (int i = 0; i < amount_of_teams_with_less_worms; i++) {
+                std::cout << "Add health to team: " << remainder + i << std::endl;
+                // add_health_to_team(teams[remainder + i]);
+            }
         }
         snapshot.worms = wormsSnapshots;
         return snapshot;
     }
 
-    void add_player(int current_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
+    void add_player(int current_id, int team_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
         b2Body* player = builder.create_worm(0, -5);
-        players[current_id] = std::make_shared<Worm>(player, current_id);
+        players[current_id] = std::make_shared<Worm>(player, current_id, team_id);
     }
 
     void move_player(int id, int direction) {
@@ -81,8 +103,8 @@ public:
     //     weapon->shoot(projectile , angle , potency);
     // }
 
-    void remove_player(char id){
-        //TODO
+    void remove_player(char army_id){
+        //TODO: Remove all players from that army
         return ;
     }
 
@@ -185,31 +207,35 @@ public:
         world.Step(time_simulate, 8, 3);
 
         manage_turn(it);
-        // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
-        /*
-        float time_simulate = (float) it / FPS;
-        world.Step(1.0f / 60.0f, 8, 3);
-        turn_manager.update(it);
-        for (auto each_obj : obj) {
-            // each_obj knows how to step
-            each_obj->step(time_simulate);
-        }
-        */
-        // !!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!
     }
 
-     void manage_turn(int it) {
+    void manage_turn(int it) {
         // Perform any necessary actions at the end of the turn
         // For example, switch to the next player's turn, reset the timer, etc.
 
         // Check if the turn time is over
         turn_time -= it;
         if (turn_time > 0 || players.size() == 1) return;
-        // Switch to the next player's turn
-        current_turn_player_id = (current_turn_player_id + 1) % players.size();
-        while (players[current_turn_player_id]->get_state() == DEAD){
-            current_turn_player_id = (current_turn_player_id + 1) % players.size();
+        if (teams.size() == 1) {
+            do {
+                current_turn_player_id = (current_turn_player_id + 1) % (players.size());
+            } while (players[current_turn_player_id]->get_state() == DEAD);
+        } else {
+            // Switch to the next player's turn from another team
+            do {
+                if (current_turn_player_id + teams[0].size() == players.size() + teams[0].size() - 1) {
+                    // Start a new round
+                    current_turn_player_id = 0;
+                } else if (current_turn_player_id + teams[0].size() >= players.size()) {
+                    current_turn_player_id = (current_turn_player_id + teams[0].size()) % (players.size()) + 1;
+                } else {
+                    current_turn_player_id = (current_turn_player_id + teams[0].size()) % (players.size());
+
+                }
+                std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
+            } while (players[current_turn_player_id]->get_state() == DEAD);
         }
+        // if (current_turn_player_id == 0) // Start new round
         // Reset the turn timer for the next player
         turn_time = TURN_TIME;
     }

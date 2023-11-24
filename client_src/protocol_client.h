@@ -32,12 +32,11 @@ private:
     std::map<uint, std::string> recv_list();
     void recv_dimensions(Snapshot& snapshot);
     void recv_platforms(Snapshot& snapshot);
+    void recv_army(Snapshot& snapshot);
     void recv_time_and_worm_turn(Snapshot& snapshot);
     void recv_worms(Snapshot& snapshot);
-    std::vector<uint8_t> recv_worms_ids();
     void send_match_id(const uint match_id);
     void send_map_name(const std::string map_name);
-    void send_quantity_of_worms(const uint8_t quantity_of_worms);
 
     // PARSER!!!!
     int calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width) {

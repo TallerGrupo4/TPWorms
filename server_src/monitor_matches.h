@@ -23,16 +23,12 @@ private:
 
 public:
     MonitorMatches(std::vector<std::string> routes);
-
-    // std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> create_match(std::shared_ptr<Queue<Snapshot>> queue,
-    //                                                   uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names);
+    
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> create_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, std::vector<uint8_t>& worm_id, int quantity_of_worms, std::vector<std::string>& map_names);
+                                                      uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id);
 
-    // std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> join_match(std::shared_ptr<Queue<Snapshot>> queue,
-    //                                                 uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names, uint8_t& number_of_players);
     std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> join_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, std::vector<uint8_t>& worms_ids, int quantity_of_worms, std::vector<std::string>& map_names, uint8_t& number_of_players);
+                                                      uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id);
 
 
     std::map<uint, std::string> list_matches();

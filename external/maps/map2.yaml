@@ -48,4 +48,4 @@ platforms:
 dimensions:
 - height: 50
   width: 50
-
+  amount_of_worms: 4

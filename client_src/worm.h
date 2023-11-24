@@ -48,6 +48,7 @@ private:
     int y;
     int width;
     int height;
+    char team_id;
 };
 
 #endif  // WORM_H
