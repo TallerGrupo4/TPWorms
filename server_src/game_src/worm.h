@@ -127,7 +127,7 @@ public:
     }
 
     void jump (int dir){
-        if (data.state != STILL && !in_contact()) {return;}
+        if (!in_contact() || data.state != STILL) {return;}
         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
         float m = body->GetMass();
         if (dir == FOWARD) {

@@ -22,11 +22,12 @@
 #define GAME_H
 
 class Game {
-    int water_level;
+    float water_level;
     b2World world;
     GameBuilder builder;
     MyListener listener;
     MyFilter filter;
+    std::vector<b2Vec2> spawn_points;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
     std::map<uint8_t, std::vector<char>> teams;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
@@ -35,21 +36,23 @@ class Game {
 
 
 public:
-    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME) {
-        listener = MyListener();
-        filter = MyFilter();
+    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME) {
         world.SetContactListener(&listener);
         world.SetContactFilter(&filter);
     }
 
+
     Snapshot start_and_send(Map& map, int number_of_players, std::map<char, std::vector<char>>& match_teams) {
-        Snapshot snapshot({}, map.platforms);
-        snapshot.set_dimensions(map.height, map.width, WORM_WIDTH, WORM_HEIGHT, map.amount_of_worms);
+        Snapshot snapshot = map.get_snapshot();
         builder.create_map(snapshot);
+        water_level = map.water_level;
+
         // Assign teams
         std::vector <WormSnapshot> wormsSnapshots;
         // We should assign worms to each team (client) until there is no more worms to assign.
         // Now we are assigning all the amount_of_worms to each team (client).
+        spawn_points = map.spawn_points;
+        std::vector<b2Vec2> current_spawn_points = map.spawn_points;
         int current_id = 0;
         int amount_of_worms_per_team = map.amount_of_worms / number_of_players;
         int remainder = map.amount_of_worms % number_of_players;
@@ -58,7 +61,7 @@ public:
             // if it is the last team_id, set got_remainder = 0
             if (team_id == number_of_players - 1) got_remainder = 0;
             for (int i = 0; i < amount_of_worms_per_team + got_remainder; i++) {
-                add_player(current_id, team_id);
+                add_player(current_id, team_id, current_spawn_points);
                 wormsSnapshots.push_back(players[current_id]->get_snapshot());
                 teams[team_id].push_back(current_id);
                 match_teams[team_id].push_back(current_id);
@@ -76,14 +79,16 @@ public:
         return snapshot;
     }
 
-    void add_player(int current_id, int team_id) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
-        b2Body* player = builder.create_worm(0, -5);
+
+    void add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_points) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
+        int rand = std::rand() % spawn_points.size();
+        b2Vec2 spawn_point = spawn_points[rand];
+        b2Body* player = builder.create_worm(spawn_point.x , spawn_point.y);
         players[current_id] = std::make_shared<Worm>(player, current_id, team_id);
+        spawn_points.erase(spawn_points.begin() + rand);
     }
 
     void move_player(int id, int direction) {
-        std::cout << "Player trying to move: " << id << std::endl;
-        std::cout << "Player turn: " << current_turn_player_id << std::endl;
         if (current_turn_player_id != id) return;
         std::shared_ptr<Worm> player = players.at(id);
         player->move(direction);
@@ -133,7 +138,16 @@ public:
 
     void check_states(Worm& w){
         if (w.get_state() == DAMAGED){
-            turn_time = 0;
+            if (players.at(current_turn_player_id).get() == &w) {
+                turn_time = 0;
+                return;
+            }
+        }
+        if (w.body->GetPosition().y <= water_level){
+            w.set_state(DEAD);
+            if (players.at(current_turn_player_id).get() == &w){
+                turn_time = 0;
+            }
             return;
         }
         if (w.body->GetContactList()) {
@@ -196,26 +210,45 @@ public:
                 worm->body = nullptr;
             }
         }
+        if (turn_time <= 0 && turn_clean_up() == true){
+                manage_turn();
+        }
     }
+
+
 
 // Check parameter..
     void step(int it) {
         float time_simulate = (float) it / FPS;
         // reap_dead();
-        worm_comprobations();
-
         world.Step(time_simulate, 8, 3);
 
-        manage_turn(it);
+        worm_comprobations();
+
+
+        turn_time -= it;
     }
 
-    void manage_turn(int it) {
+
+    bool turn_clean_up(){
+        for (auto& pair: players) {
+            std::shared_ptr<Worm> worm = pair.second;
+            if (worm->get_state () == DEAD) {continue;}
+            if (worm -> get_state() != STILL){
+                return false;
+            }
+        }
+        // if (projectiles.size() != 0){ return NOT_DONE;}
+        return true;
+    }
+
+    void manage_turn() {
         // Perform any necessary actions at the end of the turn
         // For example, switch to the next player's turn, reset the timer, etc.
 
         // Check if the turn time is over
-        turn_time -= it;
-        if (turn_time > 0 || players.size() == 1) return;
+        // printf("Turn time: %d\n", turn_time);
+        // turn_time -= it;
         if (teams.size() == 1) {
             do {
                 current_turn_player_id = (current_turn_player_id + 1) % (players.size());
@@ -232,7 +265,7 @@ public:
                     current_turn_player_id = (current_turn_player_id + teams[0].size()) % (players.size());
 
                 }
-                std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
+                // std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
             } while (players[current_turn_player_id]->get_state() == DEAD);
         }
         // if (current_turn_player_id == 0) // Start new round
