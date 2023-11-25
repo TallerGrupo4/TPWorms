@@ -10,8 +10,6 @@
 //Movement constants 
 #define IZQ -1
 #define DER 1
-#define FOWARD 1
-#define BACKWARD -1
 
 // defines for physics of game
 #define WORM_SPEED 2

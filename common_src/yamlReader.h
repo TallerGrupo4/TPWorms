@@ -3,9 +3,9 @@
 #include "snapshot.h"
 #include <iostream> 
 
+
 #ifndef YAML_READER_H
 #define YAML_READER_H
-
 
 
 // Para facilitar el uso de los beams en los YAMLs
@@ -56,34 +56,7 @@ class Reader {
         }
 };
 
-class MapReader : public Reader {
 
-    public:
-        MapReader(std::string route): Reader(route) {}
-        Snapshot read_map () {
-            std::vector<PlatformSnapshot> platforms_snap;
-            YAML::Node platforms = node["platforms"];
-            for (YAML::const_iterator it = platforms.begin(); it != platforms.end(); ++it) {
-
-                // Has type , x , y
-                YAML::Node platform = *it;
-                BeamType type =platform["type"].as<BeamType>();
-                float x = platform["x"].as<float>();
-                float y = platform["y"].as<float>();
-                float width = platform["width"].as<float>();
-                float height = platform["height"].as<float>();
-                platforms_snap.push_back(PlatformSnapshot(type, x, y, width, height));
-            }
-            Snapshot map_snap({}, platforms_snap);
-            YAML::Node dimensions = node["dimensions"];
-            int height = dimensions[0]["height"].as<int>();
-            int width = dimensions[0]["width"].as<int>();
-            int amount_of_worms = dimensions[0]["amount_of_worms"].as<int>();
-            map_snap.set_dimensions(width, height, WORM_WIDTH, WORM_HEIGHT, amount_of_worms);
-            return map_snap;
-        }
-
-};
 
 //TODO
 class SettingsReader: public Reader {

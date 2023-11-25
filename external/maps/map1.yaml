@@ -122,7 +122,30 @@ platforms:
   width: 3
   height: 0.8
 
+spawn_points:
+- x: 0
+  y: -9
+- x: 6
+  y: -9
+- x: -6
+  y: -9
+- x: 11.54
+  y: -10.23
+- x: -11.54
+  y: -10.23
+- x: 3
+  y: 6
+- x: -16
+  y: -1
+- x: 16
+  y: 1
+- x: -12
+  y: 13
+- x: 20
+  y: 16
+
 dimensions:
 - height: 100
   width: 100
-  amount_of_worms: 8
+  amount_of_worms: 10
+  water_level: -25
