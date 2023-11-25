@@ -15,6 +15,7 @@
 #include "worm.h"
 #include "listeners.h"
 #include "filter.h"
+#include "team.h"
 // #include "weapons.h"
 #include <iostream>
 
@@ -28,14 +29,16 @@ class Game {
     MyListener listener;
     MyFilter filter;
     std::unordered_map<char,std::shared_ptr<Worm>> players;
-    std::map<uint8_t, std::vector<char>> teams;
+    std::map<uint8_t, Team> teams;
     // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     int current_turn_player_id;
     int turn_time;
+    int team_turn;
+
 
 
 public:
-    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME) {
+    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0) {
         listener = MyListener();
         filter = MyFilter();
         world.SetContactListener(&listener);
@@ -46,16 +49,12 @@ public:
         Snapshot snapshot({}, map.platforms);
         snapshot.set_dimensions(map.height, map.width, WORM_WIDTH, WORM_HEIGHT, map.amount_of_worms);
         builder.create_map(snapshot);
-        // Assign teams
         std::vector <WormSnapshot> wormsSnapshots;
-        // We should assign worms to each team (client) until there is no more worms to assign.
-        // Now we are assigning all the amount_of_worms to each team (client).
         int current_id = 0;
         int amount_of_worms_per_team = map.amount_of_worms / number_of_players;
         int remainder = map.amount_of_worms % number_of_players;
         int got_remainder = remainder ? 1 : 0;
         for (int team_id = 0; team_id < number_of_players; team_id++) {
-            // if it is the last team_id, set got_remainder = 0
             if (team_id == number_of_players - 1) got_remainder = 0;
             for (int i = 0; i < amount_of_worms_per_team + got_remainder; i++) {
                 add_player(current_id, team_id);
@@ -72,6 +71,7 @@ public:
                 // add_health_to_team(teams[remainder + i]);
             }
         }
+        current_turn_player_id = teams[0].get_next_player();
         snapshot.worms = wormsSnapshots;
         return snapshot;
     }
@@ -216,26 +216,31 @@ public:
         // Check if the turn time is over
         turn_time -= it;
         if (turn_time > 0 || players.size() == 1) return;
-        if (teams.size() == 1) {
-            do {
-                current_turn_player_id = (current_turn_player_id + 1) % (players.size());
-            } while (players[current_turn_player_id]->get_state() == DEAD);
-        } else {
             // Switch to the next player's turn from another team
-            do {
-                if (current_turn_player_id + teams[0].size() == players.size() + teams[0].size() - 1) {
-                    // Start a new round
-                    current_turn_player_id = 0;
-                } else if (current_turn_player_id + teams[0].size() >= players.size()) {
-                    current_turn_player_id = (current_turn_player_id + teams[0].size()) % (players.size()) + 1;
-                } else {
-                    current_turn_player_id = (current_turn_player_id + teams[0].size()) % (players.size());
-
+        do {
+            while (teams[++team_turn].finished_turn()) {
+                team_turn++;
+                if (team_turn > ((int) teams.size() - 1)) team_turn = -1;
+                bool all_finished = true;
+                for (auto& team: teams) {
+                    if (!team.second.finished_turn()) {
+                        all_finished = false;
+                    }
                 }
-                std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
-            } while (players[current_turn_player_id]->get_state() == DEAD);
-        }
-        // if (current_turn_player_id == 0) // Start new round
+                if (all_finished) {
+                    for (auto& team: teams) {
+                        team.second.reset();
+                    }
+                    team_turn = 0;
+                    std::cout << "Reset Team turn: " << team_turn << std::endl;
+                    break;
+                }
+            }
+            current_turn_player_id = teams[team_turn].get_next_player();
+            if (team_turn == ((int) teams.size() - 1)) team_turn = -1;
+            std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
+            std::cout << "Team turn: " << team_turn << std::endl;
+        } while (players[current_turn_player_id]->get_state() == DEAD);
         // Reset the turn timer for the next player
         turn_time = TURN_TIME;
     }

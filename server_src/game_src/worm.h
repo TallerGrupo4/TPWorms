@@ -30,6 +30,7 @@ class WormData{
     int type;
     char team_id;
     // std::unordered_map<int, int> weapons;
+    // int actual_weapon;
     
     WormData(char id, int team_id): id(id), life(START_LIFE), state(STILL), curr_weapon(NO_WEAPON) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM), team_id(team_id)  {
         //TODO insert weapons with their respective starting ammo
