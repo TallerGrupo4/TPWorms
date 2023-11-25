@@ -250,7 +250,6 @@ public:
         // For example, switch to the next player's turn, reset the timer, etc.
 
         // Check if the turn time is over
-        turn_time -= it;
         if (turn_time > 0 || players.size() == 1) return;
             // Switch to the next player's turn from another team
         do {
