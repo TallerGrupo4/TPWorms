@@ -4,11 +4,15 @@
 #include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
+#include "mapReader.h"
+
 
 MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
     uint map_id = 1;
+
     for (auto& route: routes) {
-        maps[map_id++] = Map(route);
+        MapReader reader(route);
+        maps[map_id++] = reader.read_map();
     }
 }
 
