@@ -72,16 +72,16 @@ public:
     ~ActionMovRight() = default;
 };
 
-class ActionJumpRight : public ActionMov {
+class ActionJump : public ActionMov {
 public:
-    ActionJumpRight(uint8_t worm_id = 0) : ActionMov(JUMP, RIGHT, worm_id) {};
-    ~ActionJumpRight() = default;
+    ActionJump(uint8_t worm_id = 0) : ActionMov(JUMP, FOWARD, worm_id) {};
+    ~ActionJump() = default;
 };
 
-class ActionJumpLeft : public ActionMov {
+class ActionBackflip: public ActionMov {
 public:
-    ActionJumpLeft(uint8_t worm_id = 0) : ActionMov(JUMP, LEFT, worm_id) {};
-    ~ActionJumpLeft() = default;
+    ActionBackflip(uint8_t worm_id = 0) : ActionMov(JUMP, BACKWARD, worm_id) {};
+    ~ActionBackflip() = default;
 };
 
 #endif // ACTION_H

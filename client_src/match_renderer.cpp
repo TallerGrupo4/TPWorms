@@ -67,12 +67,12 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_RETURN: {
-                        action = std::make_shared<ActionJumpRight>();
+                        action = std::make_shared<ActionJump>(worm_turn_id);
                         client.send_action(action);
                         break;
                     }
                     case SDLK_BACKSPACE: {
-                        action = std::make_shared<ActionJumpLeft>();
+                        action = std::make_shared<ActionBackflip>(worm_turn_id);
                         client.send_action(action);
                         break;
                     }

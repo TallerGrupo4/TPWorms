@@ -5,13 +5,11 @@
 #define NO_WEAPON 0
 #define NULL_STATE 0
 #define INITIAL_WORMS_TURN 0
-#define TURN_TIME 3 * FPS  // SET to 60 seconds!!! 
+#define TURN_TIME 60 * FPS  // SET to 60 seconds!!! 
 
 //Movement constants 
 #define IZQ -1
 #define DER 1
-#define FOWARD 1
-#define BACKWARD -1
 
 // defines for physics of game
 #define WORM_SPEED 2
