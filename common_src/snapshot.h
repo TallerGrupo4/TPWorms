@@ -45,8 +45,8 @@ class ProjectileSnapshot {
     public:
     float pos_x;
     float pos_y;
-    float angle; // Remove this, I think it is never been used (it is setted in the server but in the client it's never used)
-    int type;
+    float angle;
+    char type;
 
     ProjectileSnapshot(int type, float pos_x, float pos_y, float angle):
             pos_x(pos_x), pos_y(pos_y), angle(angle), type(type) {};
@@ -101,12 +101,12 @@ class Snapshot {
 public:
     std::vector<WormSnapshot> worms;
     std::vector<PlatformSnapshot> platforms;
-    // std::vector<ProjectileSnapshot> projectiles;
+    std::vector<ProjectileSnapshot> projectiles;
     std::map<char, std::vector<char>> my_army;
     MapDimensions_t map_dimensions;
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
-    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms):
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms, std::vector<ProjectileSnapshot> projectiles):
             worms(worms), platforms(platforms), map_dimensions() {};
     
     Snapshot() {};

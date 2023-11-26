@@ -1,5 +1,6 @@
 #include "protocol_server.h"
 
+#include <cstdint>
 #include <iostream>
 #include <memory>
 #include <vector>
@@ -115,6 +116,9 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
     if (send_worms(snapshot.worms) < 0) {
         return SOCKET_FAILED;
     }
+
+    send_projectiles(snapshot.projectiles);
+
     return 1;
 }
 
@@ -311,6 +315,25 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
     }
     return 1;
 }
+
+void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectiles) {
+    uint8_t num_of_projectiles[1] = {static_cast<uint8_t>(projectiles.size())};
+    socket.sendall(num_of_projectiles, 1, &was_closed);
+    for (auto& projectile : projectiles) {
+        int pos_x[1] = {static_cast<int>(projectile.pos_x * MULTIPLIER)};
+        pos_x[0] = htonl(pos_x[0]);
+        socket.sendall(pos_x, 4, &was_closed);
+        int pos_y[1] = {static_cast<int>(projectile.pos_y * MULTIPLIER)};
+        pos_y[0] = htonl(pos_y[0]);
+        socket.sendall(pos_y, 4, &was_closed);
+        int angle[1] = {static_cast<int>(projectile.angle * RADTODEG * MULTIPLIER)};
+        angle[0] = htonl(angle[0]);
+        socket.sendall(angle, 4, &was_closed);
+        char type[1] = {projectile.type};
+        socket.sendall(type, 1, &was_closed);
+    }
+}
+
 
 const Command ProtocolServer::recv_create(const char* code) {
     const uint match_id = recv_match_id();

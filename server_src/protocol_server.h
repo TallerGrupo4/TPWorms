@@ -39,6 +39,7 @@ private:
     void send_army(std::map<char, std::vector<char>>& army);
     int send_time_and_worm_turn(const int& _turn_time, const int& _worm_turn);
     int send_worms(std::vector<WormSnapshot>& worms);
+    void send_projectiles(std::vector<ProjectileSnapshot>& projectiles);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_jump(uint8_t& worm_id);
 

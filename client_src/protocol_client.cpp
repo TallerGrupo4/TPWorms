@@ -108,6 +108,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_army(snapshot);
     recv_time_and_worm_turn(snapshot);
     recv_worms(snapshot);
+    recv_projectiles(snapshot);
     return snapshot;
 }
 
@@ -217,6 +218,29 @@ void ProtocolClient::recv_army(Snapshot& snapshot) {
     }
 }
 
+void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
+    uint8_t num_of_projectiles[1];
+    socket.recvall(num_of_projectiles, 1, &was_closed);
+    for (int i = 0; i < num_of_projectiles[0]; i++) {
+        int pos_x[1];
+        int pos_y[1];
+        int angle[1];
+        char type[1];
+        socket.recvall(pos_x, 4, &was_closed);
+        socket.recvall(pos_y, 4, &was_closed);
+        socket.recvall(angle, 4, &was_closed);
+        socket.recvall(type, 1, &was_closed);
+        pos_x[0] = ntohl(pos_x[0]);
+        pos_y[0] = ntohl(pos_y[0]);
+        angle[0] = ntohl(angle[0]);
+        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
+        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
+        angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
+        ProjectileSnapshot projectile(pos_x[0], pos_y[0], angle[0], type[0]);
+        snapshot.projectiles.push_back(projectile);
+    }
+}
+
 void ProtocolClient::recv_time_and_worm_turn(Snapshot& snapshot) {
     int turn_time[1];
     int worm_turn[1];
@@ -280,7 +304,6 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         snapshot.worms.push_back(worm);
     }
 }
-
 
 void ProtocolClient::recv_match_id(uint* match_id) {
     int ret = socket.recvall(match_id, 4, &was_closed);

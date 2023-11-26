@@ -342,7 +342,10 @@ public:
             }
             // worms.push_back(pair.second->get_snapshot());
         }
-        Snapshot snapshot(worms, {});
+        /*
+        SET std::vector<Projectiles> projectiles in snapshot!!!!!!!!!!!!!!!!!!!!!!!
+        */
+        Snapshot snapshot(worms, {}, {});
         snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
         return snapshot;
     }

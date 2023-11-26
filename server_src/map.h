@@ -24,7 +24,7 @@ class Map {
     }
 
     Snapshot get_snapshot(){
-        Snapshot snapshot({}, platforms);
+        Snapshot snapshot({}, platforms, {});
         snapshot.set_dimensions(height, width, WORM_WIDTH, WORM_HEIGHT, amount_of_worms);
         return snapshot;
     }
