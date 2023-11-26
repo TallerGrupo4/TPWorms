@@ -153,14 +153,6 @@ public:
         return ;
     }
 
-    // void reap_dead(){
-    //     for (auto& projectile : projectiles){
-    //         if (!projectile->data.alive){
-    //             world.DestroyBody(projectile->body);
-    //             projectiles.erase(projectile);
-    //         }
-    //     }
-    // }
 
     void check_angles(Worm& w){
         if (w.get_state() == STILL){
@@ -246,7 +238,14 @@ public:
         // std::cout << "Worm " << current_turn_player_id << " state: " << worm->get_state() << std::endl;
     }
 
-    void worm_clean_up(){
+    void game_post_cleanup(){
+        for (auto& projectile : projectiles){
+            if (projectile->get_state() == EXPLODED){
+                world.DestroyBody(projectile->get_body());
+                projectiles.erase(projectile);
+            }
+        }
+
         for (auto& team: teams) {
             std::vector<char> dead_worms_ids;
             for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
@@ -265,6 +264,7 @@ public:
                 team.second.remove_player(id);
             }
         }
+        
     }
 
 
@@ -274,6 +274,7 @@ void projectiles_comprobations(int it){
             projectile->decresease_timer(it);
             if (projectile->get_timer() <= 0){
                 projectile->explode();
+                projectile->set_state(EXPLODED);
             }
         }
     }

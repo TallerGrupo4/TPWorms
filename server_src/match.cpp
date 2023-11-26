@@ -89,10 +89,9 @@ void Match::execute_and_step(int iter) {
             game_command->execute(game);
         }
         game.step(iter);
-        game.print_current_state();
         Snapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);
-        game.worm_clean_up();
+        game.game_post_cleanup();
         // If the game has ended, we should stop the match
         // if (game.has_ended()) {
         //     stop();

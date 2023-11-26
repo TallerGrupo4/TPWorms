@@ -78,6 +78,10 @@ class Projectile {
             return data.get_state();
         }
 
+        void set_state(char state) {
+            data.set_state(state);
+        }
+
         void decresease_timer(int tick) {
             if (data.timer > 0){
                 data.timer -= tick;
