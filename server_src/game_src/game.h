@@ -17,6 +17,7 @@
 #include "listeners.h"
 #include "filter.h"
 #include "team.h"
+#include "projectile.h"
 // #include "weapons.h"
 #include <iostream>
 
@@ -31,7 +32,7 @@ class Game {
     MyFilter filter;
     std::vector<b2Vec2> spawn_points;
     std::map<uint8_t, Team> teams;
-    // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
+    std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     int current_turn_player_id;
     int turn_time;
     int team_turn;
@@ -120,6 +121,25 @@ public:
         }
     }
 
+    void player_use_tool(int id, int potency, float pos_x , float pos_y) {
+        if (current_turn_player_id != id || turn_cleaning) return;
+        std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
+        worm->use_tool(potency, pos_x, pos_y, projectiles);
+        turn_time = 3 * FPS;
+    }
+
+    void player_aim(int id, int angle, int direction) {
+        if (current_turn_player_id != id || turn_cleaning) return;
+        std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
+        worm->aim(angle, direction);
+    }
+
+    void player_change_tool(int id, int direction) {
+        if (current_turn_player_id != id || turn_cleaning) return;
+        std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
+        worm->change_tool(direction);
+    }
+
     // void shoot_player(int id , int angle , int potency , std::shared_ptr<Weapon> weapon){
     //     std::shared_ptr<Worm> player = teams[team_turn].get_worm(id);
     //     b2Body* body = player->body;
@@ -155,8 +175,8 @@ public:
     }
 
 
-
     void check_states(Worm& w){
+        if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
         if (w.get_state() == DAMAGED){
             if (teams[team_turn].get_worm(current_turn_player_id).get() == &w) {
                 turn_time = 0;
@@ -230,7 +250,7 @@ public:
         for (auto& team: teams) {
             std::vector<char> dead_worms_ids;
             for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-                if (worm->get_state() == DAMAGED){
+                if (worm->get_state() == DAMAGED || worm->get_state() == SHOOTED){
                     worm->set_state(STILL);
                 }
                 if (worm->get_state() == DEAD && worm->body != nullptr) {
@@ -248,7 +268,16 @@ public:
     }
 
 
-
+void projectiles_comprobations(int it){
+    for (auto& projectile : projectiles){
+        if (projectile->get_state() == ALIVE){
+            projectile->decresease_timer(it);
+            if (projectile->get_timer() <= 0){
+                Explosion explosion = projectile->explode();
+            }
+        }
+    }
+}
 
 
 // Check parameter..
@@ -257,6 +286,7 @@ public:
         // reap_dead();
         world.Step(time_simulate, 8, 3);
         worm_comprobations();
+        projectiles_comprobations(it);
 
         if (turn_time > 0){
             turn_time -= it;
@@ -281,6 +311,7 @@ public:
             for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
                 // I think this if DEAD is not necessary anymore
                 if (worm->get_state() == DEAD) {continue;}
+                worm->set_used_tool(false);
                 if (worm ->get_state() != STILL){
                     cleaning_time = 1 * FPS;
                     return;

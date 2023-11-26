@@ -2,7 +2,6 @@
 #define GAME_CONSTANTS_H
 
 #define START_LIFE 100
-#define NO_WEAPON 0
 #define NULL_STATE 0
 #define INITIAL_WORMS_TURN 0
 #define TURN_TIME 10 * FPS  // SET to 60 seconds!!! 
@@ -25,6 +24,8 @@
 #define ANG_THRESHOLD 50
 #define FALL_DAMAGE_THRESHOLD 25
 #define FALL_DISTANCE_THRESHOLD 2
+#define MAX_AIMING_ANGLE 90
+#define MIN_AIMING_ANGLE -90
 
 
 
@@ -42,8 +43,10 @@ enum BODY_TYPES{
 };
 
 
+
 //BUILDER CONSTANTS
-#define OFFSET 1.5
+#define OFFSET 2
+
 
 
 //--WEAPONS--//

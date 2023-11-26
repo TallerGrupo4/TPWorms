@@ -98,6 +98,18 @@ bool MatchRenderer::handleEvents(Match& match) {
             }
             case SDL_MOUSEBUTTONDOWN: {
                 SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
+                switch (mouseButtonEvent.button) {
+                case SDL_BUTTON_LEFT:
+                    //action = match.handle_left_button_click(mouseButtonEvent.x, mouseButtonEvent.y);
+                    //client.send_action(action);
+                    break;
+                case SDL_BUTTON_RIGHT:
+                    //action = match.handle_right_button_click(mouseButtonEvent.x, mouseButtonEvent.y);
+                    //client.send_action(action);
+                    break;
+                default:
+                    break;
+                }
                 std::cout << "x:" << mouseButtonEvent.x << " y: " << mouseButtonEvent.y << std::endl;
                 break;
             }

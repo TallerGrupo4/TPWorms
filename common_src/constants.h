@@ -46,9 +46,9 @@
 
 //Common worm States
 enum WormStates : char {
-    StillState,
-    MovingState,
-    JumpingState,
+    STILL,
+    MOVING,
+    JUMPI,
     BackflippingState,
     FallingState, 
     ClimbingState, 
@@ -56,6 +56,28 @@ enum WormStates : char {
     AimingState,
     DamagedState, 
     DeadState
+};
+
+
+
+enum ProjectileStates : char {
+    ALIVE,
+    EXPLODING,
+    EXPLODED,
+};
+
+enum TOOLS : uint8_t {
+    BAZOOKA,
+    MORTAR,
+    GREEN_GRENADE,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    RED_GRENADE,
+    BANANA,
+    AIRSTRIKE,
+    TELEPORTATION,
+    NO_TOOL,
 };
 
 #define STILL 0
@@ -67,6 +89,8 @@ enum WormStates : char {
 #define SLIDING 6
 #define DAMAGED 7
 #define DEAD 8
+#define AIMING 9
+#define SHOOTED 10
 
 // Codes for game actions
 #define MOV 0x01
