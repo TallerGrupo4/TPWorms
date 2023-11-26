@@ -32,32 +32,12 @@
 #define CREATE "Create"
 #define JOIN "Join"
 #define EXIT "Exit"
-#define _START "Start"
 
-// Server codes
-// Remember that if a a client exited the server, it will not send to the server a msg,
-// but instead, the socket will fail and the server will detect it, removing it from the
-// list of clients, match, etc. (Whatever is needed) 
+// Queue codes DO NOT CHANGE
+#define QUEUE_MAX_SIZE 10000
 
-#define QUEUE_MAX_SIZE 1000
 
-//Common Weapon states
-#define NO_WEAPON 0
-
-//Common worm States
-enum WormStates : char {
-    StillState,
-    MovingState,
-    JumpingState,
-    BackflippingState,
-    FallingState, 
-    ClimbingState, 
-    SlidingState, 
-    AimingState,
-    DamagedState, 
-    DeadState
-};
-
+// Common codes
 #define STILL 0
 #define MOVING 1
 #define JUMPING 2
@@ -68,7 +48,8 @@ enum WormStates : char {
 #define DAMAGED 7
 #define DEAD 8
 
-// Codes for game actions
+
+// Codes for game actions common to client and server
 #define MOV 0x01
 #define LEFT -0x01
 #define RIGHT 0x01
@@ -77,6 +58,8 @@ enum WormStates : char {
 #define FOWARD 0x01
 #define BACKWARD -0x01
 #define SHOOT 0x05
+
+// START OF YAML -------------------------
 
 // Platforms codes
 #define PLAT_SMALL 3
@@ -89,22 +72,30 @@ enum WormStates : char {
 #define WORM_HEIGHT 1.5f
 #define WORM_FRICTION 1
 
-// Code for protocol
+// END OF YAML ----------------------------
+
+
+
+// Codes for protocol
 #define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places
 #define MAP 0x01
 #define WORMS 0x02
-#define ACTION_EXIT 0x03
 
 
 //Consts for render
 #define PIX_PER_METER 6.0f
 
+
+// START OF YAML -------------------------
+
 // Consts for game loop
 #define FPS 30.0f
 #define FRAME_TIME 1.0f / FPS
+// END OF YAML --------------------------------
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 #define PI 3.14159265358979323846f
+
 
 
 #endif  // _CONSTANTS_H_
