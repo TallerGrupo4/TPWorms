@@ -1,7 +1,8 @@
-#include <box2d/box2d.h>
-
 #ifndef EXPLOSION_CALLBACK_H
 #define EXPLOSION_CALLBACK_H
+
+#include <box2d/box2d.h>
+
 
 
 class b2RayCastExplosionCallback : public b2RayCastCallback {

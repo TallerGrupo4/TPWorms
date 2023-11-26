@@ -1,8 +1,9 @@
+#ifndef PROJECTILE_H
+#define PROJECTILE_H
+
 #include <box2d/box2d.h>
 #include "explosion.h"
 
-#ifndef PROJECTILE_H
-#define PROJECTILE_H
 
 class ProjectileData {
     friend class Projectile;
@@ -27,7 +28,7 @@ class ProjectileData {
         return explosion_type;
     }
 
-    int set_state(char state) {
+    void set_state(char state) {
         this->state = state;
     }
 
@@ -83,9 +84,13 @@ class Projectile {
             }
         }
 
+        int get_timer() {
+            return data.get_timer();
+        }
+
         void explode() {
             data.set_state(EXPLODED);
-            Explosion ex(data.get_explosion_type(), data.get_fragments(), data.get_fragment_damage(), data.get_radius(), data.get_damage(), 0);
+            Explosion ex(data.get_explosion_type(), data.get_fragments(), data.get_fragment_damage(), data.get_radius(), data.get_damage());
             ex.explode(body);
         }
 

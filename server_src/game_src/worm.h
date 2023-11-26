@@ -1,3 +1,6 @@
+#ifndef WORM_H
+#define WORM_H
+
 #include <vector>
 #include <unordered_map>
 #include <box2d/box2d.h>
@@ -10,8 +13,6 @@
 //INCLUDES DE ARMAS
 #include "weapon_bazooka.h"
 
-#ifndef WORM_H
-#define WORM_H
 
 class WormNotFound: public std::exception {
     const char* what() const noexcept override {
@@ -169,11 +170,12 @@ public:
         if (data.state != STILL || has_used_tool) {return;}
         tools[data.curr_tool]->use(body , data.act_dir , data.aiming_angle * DEGTORAD, data.time_for_curr_tool, power, x, y, projectiles);
         has_used_tool = true;
+        data.aiming_angle = 0 ;
         data.state = SHOOTED;
     }
 
     void aim(int angle_inc, int direction){
-        if (data.state != STILL) {return;}
+        if (data.state != STILL || !tools[data.curr_tool]->can_aim()) {return;}
         int new_angle = data.aiming_angle + angle_inc;
         if (new_angle > MAX_AIMING_ANGLE) {
             new_angle = MAX_AIMING_ANGLE;
@@ -219,22 +221,6 @@ public:
     }
 
 
-    // void jump(int direction){
-    //     if (data.state != STILL) {return;}
-    //     if (direction == FOWARD){
-    //         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
-    //         float vel_x = data.act_dir * WORM_JUMP_HOR_SPEED ;
-    //         float vel_y = WORM_JUMP_SPEED;
-    //         body->SetLinearVelocity( b2Vec2( vel_x, vel_y ) );
-    //         data.state = JUMPING;
-
-    //     } else {
-    //         float vel_x = -1 * data.act_dir * WORM_BACKFLIP_SPEED ;
-    //         float vel_y = WORM_BACKFLIP_HEIGHT;
-    //         body->SetLinearVelocity( b2Vec2( vel_x, vel_y ) );
-    //         data.state = BACKFLIPPING;
-    //     }
-    // }
 
     WormSnapshot get_snapshot() {
         float pos_x ; float pos_y ; int angle;
@@ -247,7 +233,7 @@ public:
             pos_y = body->GetPosition().y;
             angle = get_angle();
         }
-        WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_tool, data.state, data.team_id);
+        WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_tool, data.state, data.team_id, data.aiming_angle);
         return snapshot;
     }
 

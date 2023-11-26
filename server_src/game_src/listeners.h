@@ -1,3 +1,6 @@
+#ifndef LISTENERS_H
+#define LISTENERS_H
+
 #include <box2d/box2d.h>
 #include <memory>
 #include <unordered_set>
@@ -7,10 +10,8 @@
 #include "worm.h"
 // #include "projectiles.h"
 
-#ifndef LISTENERS_H
-#define LISTENERS_H
-
-
+class ProjectileData;
+class WormData;
 
 class MyListener : public b2ContactListener{
 
@@ -19,7 +20,7 @@ class MyListener : public b2ContactListener{
         if (pB && pB->get_type() == PROJECITLE){
             if (pB->get_explosion_type() == EXPLOSIVE){
                 pB->set_state(EXPLODED);
-                Explosion explosion(pB->get_explosion_type(), pB->get_fragments(), pB->get_fragment_damage(), pB->get_radius(), pB->get_damage(), 0);
+                Explosion explosion(pB->get_explosion_type(), pB->get_fragments(), pB->get_fragment_damage(), pB->get_radius(), pB->get_damage());
                 explosion.explode(bodyB);
             }
             // if (pB->get_explosion_type() == EXPLOSIVE_FRAGMENTS_IMPACT){

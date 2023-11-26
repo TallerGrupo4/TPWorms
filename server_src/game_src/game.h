@@ -273,7 +273,7 @@ void projectiles_comprobations(int it){
         if (projectile->get_state() == ALIVE){
             projectile->decresease_timer(it);
             if (projectile->get_timer() <= 0){
-                Explosion explosion = projectile->explode();
+                projectile->explode();
             }
         }
     }

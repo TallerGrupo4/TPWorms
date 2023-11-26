@@ -48,6 +48,7 @@ enum BODY_TYPES{
 #define OFFSET 2
 
 
+#define EXPLOSION_POWER 2
 
 //--WEAPONS--//
 // 1) Bazooka
