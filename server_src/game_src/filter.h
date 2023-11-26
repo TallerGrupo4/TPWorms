@@ -1,9 +1,9 @@
-#include <box2d/box2d.h>
-#include "game_constants.h"
-#include "worm.h"
-
 #ifndef FILTER_H
 #define FILTER_H
+
+#include <box2d/box2d.h>
+#include "worm.h"
+
 
 class MyFilter : public b2ContactFilter {
     bool ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) override {

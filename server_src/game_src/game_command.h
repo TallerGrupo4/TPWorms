@@ -57,22 +57,6 @@ public:
 };
 
 
-// class ShootCommand: public GameCommand {
-// Attributes must be GameCommand attributes because a GameCommand is what it is being used in the server
-//     private:
-//     float angle;
-//     int potency;
-//     std::shared_ptr<Weapon> weapon;
-
-//     public:
-//     ShootCommand(char id , float angle , int potency, int weapon_type) : GameCommand(id) , angle(angle) , potency(potency)  {
-//         weapon = std::shared_ptr<Weapon> (Weapon::Create_Weapon(weapon_type));
-//     }
-//     ~ShootCommand() {}
-
-//     void execute(Game& game) override { game.shoot_player(id_worm , angle , potency , weapon); }
-
-// };
 
 
 inline std::shared_ptr<GameCommand> GameCommand::createCommand(int id, MoveCommandAttributes move , ShootCommandAttributes shoot , int type) {

@@ -37,7 +37,45 @@
 #define QUEUE_MAX_SIZE 10000
 
 
-// Common codes
+//Common Weapon states
+#define NO_WEAPON 0
+
+//Common worm States
+enum WormStates : char {
+    STILL,
+    MOVING,
+    JUMPI,
+    BackflippingState,
+    FallingState, 
+    ClimbingState, 
+    SlidingState, 
+    AimingState,
+    DamagedState, 
+    DeadState
+};
+
+
+
+enum ProjectileStates : char {
+    ALIVE,
+    EXPLODING,
+    EXPLODED,
+};
+
+enum TOOLS : uint8_t {
+    BAZOOKA,
+    MORTAR,
+    GREEN_GRENADE,
+    HOLY_GRENADE,
+    DYNAMITE,
+    BASEBALL_BAT,
+    RED_GRENADE,
+    BANANA,
+    AIRSTRIKE,
+    TELEPORTATION,
+    NO_TOOL,
+};
+
 #define STILL 0
 #define MOVING 1
 #define JUMPING 2
@@ -47,6 +85,8 @@
 #define SLIDING 6
 #define DAMAGED 7
 #define DEAD 8
+#define AIMING 9
+#define SHOOTED 10
 
 
 // Codes for game actions common to client and server

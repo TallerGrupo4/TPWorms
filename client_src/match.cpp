@@ -10,6 +10,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
     worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
     std::cout << "worm_turn_id : " << +worm_turn_id << std::endl;
     turn_time = snpsht.turn_time_and_worm_turn.turn_time;
+    camera.update_turn_time_text(turn_time);
     // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
         SDL_Color worm_color;
@@ -40,6 +41,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 void Match::update_from_snapshot(Snapshot& snpsht) {
     // Now you can access the turn_time and worm_turn by doing: snpsht.turn_time_and_worm_turn.turn_time and snpsht.turn_time_and_worm_turn.worm_turn
     turn_time = snpsht.turn_time_and_worm_turn.turn_time;
+    camera.update_turn_time_text(turn_time);
     for (auto& worm_snpsht : snpsht.worms) { 
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }
