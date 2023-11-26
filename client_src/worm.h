@@ -10,13 +10,14 @@
 #include "constantes_cliente.h"
 #include "worm_animations.h"
 #include "surfaces.h"
+#include "worm_texts.h"
 #include "Animation.h"
 #include "background.h"
 
 class Worm {
 public:
     //Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal);
-    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
+    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, SDL_Color worm_color, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);
@@ -28,6 +29,7 @@ public:
     int get_worm_x();
     int get_worm_y();
     bool worm_facing_left();
+    char get_army_id();
 private:
     std::shared_ptr<Background> bkgrnd;
     WormAnimations worm_an;
@@ -43,7 +45,8 @@ private:
     int y;
     int width;
     int height;
-    char team_id;
+    char army_id;
+    WormSpecificTexts worm_texts;
 };
 
 #endif  // WORM_H

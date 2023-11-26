@@ -5,24 +5,34 @@ Match::Match() {}
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
     // std::cout << "Antes de crear el background" << std::endl;
     bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
-    worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
-    std::cout << "worm_turn : " << worm_turn << std::endl;
+    my_army_id = snpsht.my_army.begin()->first;
+    std::cout << "my_army_id : " << +my_army_id << std::endl;
+    worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+    std::cout << "worm_turn_id : " << +worm_turn_id << std::endl;
     turn_time = snpsht.turn_time_and_worm_turn.turn_time;
     // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
-        // std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
-        // std::cout << "Direccion del gusano: " << (int)worm_snpsht.direction << std::endl;
-        // std::cout << "Vida del gusano: " << worm_snpsht.health << std::endl;
-        // std::cout << "ID del gusano: " << (int)worm_snpsht.id << std::endl;
-        // std::cout << "Vida Max del gusano: " << worm_snpsht.max_health << std::endl;
-        // std::cout << "Pos X del gusano: " << worm_snpsht.pos_x << std::endl;
-        // std::cout << "Pos Y del gusano: " << worm_snpsht.pos_y << std::endl;
-        // std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
-        // std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
-        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, surfaces, renderer, bkgrnd);
+        SDL_Color worm_color;
+        switch (worm_snpsht.team_id) {
+            case 0 :
+            worm_color = BLUE;
+            break;
+            case 1 :
+            worm_color = RED;
+            break;
+            case 2 :
+            worm_color = YELLOW;
+            break;
+            case 3 :
+            worm_color = GREEN;
+            break;
+            default:
+            worm_color = ORANGE;
+            break;
+        }
+        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, worm_color, surfaces, renderer, bkgrnd);
         this->worms_map[worm_snpsht.id] = worm;
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
-        // this->worms.push_back(worm);
     }
 }
 
@@ -32,11 +42,11 @@ void Match::update_from_snapshot(Snapshot& snpsht) {
     for (auto& worm_snpsht : snpsht.worms) { 
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }
-    if (worm_turn != snpsht.turn_time_and_worm_turn.worm_turn) {
-        worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
+    if (worm_turn_id != snpsht.turn_time_and_worm_turn.worm_turn) {
+        worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
         update_camera(1,1,true);
     } else {
-        worm_turn = snpsht.turn_time_and_worm_turn.worm_turn;
+        worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
         update_camera();
     }
 }
@@ -57,7 +67,15 @@ bool Match::get_next_target(Target& new_target) {
     return false;
 }
 
-void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_camera) { 
+void Match::update_camera(int camera_offset_x, int camera_offset_y,
+                         bool center_camera, bool player_activated,
+                         bool need_to_be_player_activated) { 
+    if(!camera.is_player_activated() and need_to_be_player_activated) {
+        return;
+    } else if (player_activated) {
+        camera.toogle_player_activated();
+    }
+    
     TargetType target_type = this->camera.has_target();
     Target new_target;
     switch (target_type) {
@@ -79,8 +97,8 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_
     case PlayerType:
         if (center_camera) {
             new_target = {
-                PlayerType,
-                -1,
+                WormType,
+                get_turn_worm_id(),
                 -1,
                 get_turn_worm_x()*RESOLUTION_MULTIPLIER,
                 get_turn_worm_y()*RESOLUTION_MULTIPLIER
@@ -121,20 +139,25 @@ void Match::render(SDL2pp::Renderer& renderer) {
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
         it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
-    
-    // for (std::shared_ptr<Worm> worm : worms_map) {
-    //     worm.render(renderer);    
-    // }
+    this->camera.render(renderer);
 }
 
 int Match::get_turn_worm_x() {
-    return worms_map.at(worm_turn)->get_worm_x();
+    return worms_map.at(worm_turn_id)->get_worm_x();
 }
 
 int Match::get_turn_worm_y() {
-    return worms_map.at(worm_turn)->get_worm_y();
+    return worms_map.at(worm_turn_id)->get_worm_y();
 }
  
 bool Match::turn_worm_facing_left() {
-    return worms_map.at(worm_turn)->worm_facing_left();
+    return worms_map.at(worm_turn_id)->worm_facing_left();
+}
+
+char Match::get_turn_worm_id() {
+    return worm_turn_id;
+}
+
+bool Match::is_turn_worm_in_my_army() {
+    return worms_map.at(worm_turn_id)->get_army_id() == my_army_id;
 }

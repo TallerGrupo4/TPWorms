@@ -18,6 +18,20 @@ struct Target {
 
 #define RESOLUTION_MULTIPLIER 6
 
+#define WORMS_FONT_PATH FONTS_PATH "/unispace bold.ttf"
+
+#define WORM_FONT_SIZE 10
+
+#define RED {255, 0, 0}
+
+#define BLUE {71, 83, 255}
+
+#define YELLOW {255, 187, 15}
+
+#define GREEN {36, 159, 63}
+
+#define ORANGE {255, 102, 25}
+
 #define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"
 
 #define WORM_STILL_0_SPRITES_PATH WORMS_SPRITES_PATH "/wdefault.png"

@@ -6,21 +6,13 @@
 
 using namespace SDL2pp;
 
-MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO),
+MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO), ttf(),
                 window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
         // std::cout << "match height: " << map_received.map_dimensions.height << "\n match width: " << map_received.map_dimensions.width << std::endl;
         match = Match(map_received,surfaces,renderer);
-        my_army = map_received.my_army;
-        // iterate my_army and print the worms id
-        for (auto& team : my_army) {
-            std::cout << "team id: " << +team.first << std::endl;
-            for (auto& worm_id : team.second) {
-                std::cout << "worm id: " << +worm_id << std::endl;
-            }
-        }
         this->render(renderer,match);
 }
 
@@ -33,9 +25,9 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE: {
-                        camera_activated = camera_activated ? false : true;
+                        //camera_activated = camera_activated ? false : true;
                         SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
-                        match.update_camera(mouse_motion_x, mouse_motion_y, true);
+                        match.update_camera(mouse_motion_x, mouse_motion_y, true, true);
                         mouse_motion_x = 0;
                         mouse_motion_y = 0;
                         break;
@@ -44,11 +36,9 @@ bool MatchRenderer::handleEvents(Match& match) {
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT: {
-                        for (auto& team : my_army) {
-                            if(std::find(team.second.begin(), team.second.end(), worm_turn_id) != team.second.end()) {
-                                action = std::make_shared<ActionMovLeft>(worm_turn_id);
-                                client.send_action(action);
-                            }
+                        if (match.is_turn_worm_in_my_army()) {
+                            action = std::make_shared<ActionMovLeft>(match.get_turn_worm_id());
+                            client.send_action(action);
                         }
                         // action->get_type() = 0;
                         //client.push_game_command(game_command);
@@ -56,24 +46,26 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_RIGHT: {
-                        for (auto& team : my_army) {
-                            if(std::find(team.second.begin(), team.second.end(), worm_turn_id) != team.second.end()) {
-                                action = std::make_shared<ActionMovRight>(worm_turn_id);
-                                client.send_action(action);
-                            }
+                        if (match.is_turn_worm_in_my_army()) {
+                            action = std::make_shared<ActionMovRight>(match.get_turn_worm_id());
+                            client.send_action(action);
                         }
                         //client.push_game_command(game_command);
                         //player.moveRigth();
                         break;
                     }
                     case SDLK_RETURN: {
-                        action = std::make_shared<ActionJump>(worm_turn_id);
-                        client.send_action(action);
+                        if (match.is_turn_worm_in_my_army()) {
+                            action = std::make_shared<ActionJump>(match.get_turn_worm_id());
+                            client.send_action(action);
+                        }
                         break;
                     }
                     case SDLK_BACKSPACE: {
-                        action = std::make_shared<ActionBackflip>(worm_turn_id);
-                        client.send_action(action);
+                        if (match.is_turn_worm_in_my_army()) {
+                            action = std::make_shared<ActionBackflip>(match.get_turn_worm_id());
+                            client.send_action(action);
+                        }
                         break;
                     }
                 }
@@ -96,14 +88,12 @@ bool MatchRenderer::handleEvents(Match& match) {
             // }  // Fin KEY_UP
             // break;
             case SDL_MOUSEMOTION: {
-                if(camera_activated) {
-                    //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
-                    SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
-                    mouse_motion_x += mouseMotionEvent.xrel;
-                    mouse_motion_y += mouseMotionEvent.yrel;
-                    //std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
-                    match.update_camera(mouse_motion_x,mouse_motion_y);
-                }
+                //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
+                SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
+                mouse_motion_x += mouseMotionEvent.xrel;
+                mouse_motion_y += mouseMotionEvent.yrel;
+                //std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
+                match.update_camera(mouse_motion_x, mouse_motion_y, false, false, true);
                 break;
             }
             case SDL_MOUSEBUTTONDOWN: {
@@ -135,8 +125,6 @@ void MatchRenderer::execute_and_update(int iter) {
         Snapshot snapshot;
         while (client.recv_snapshot(snapshot)) {
             match.update_from_snapshot(snapshot);
-            worm_turn_id = snapshot.turn_time_and_worm_turn.worm_turn;
-            // turn_time = snapshot.turn_time_and_worm_turn.turn_time;
         }
         
             //while
