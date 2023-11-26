@@ -69,6 +69,8 @@ struct Target {
 
 #define WORM_SLIDE_UP_SPRITES_PATH WORMS_SPRITES_PATH "/wslideu.png"
 
+#define WORM_DEAD_SPRITES_PATH MISC_SPRITES_PATH "/grave1.png"
+
 #define BEAM_LARGE_VERTICAL WEAPONS_SPRITES_PATH "/grdl0.png"
 
 #define BEAM_LARGE_65 WEAPONS_SPRITES_PATH "/grdl1.png"

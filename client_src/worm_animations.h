@@ -37,6 +37,7 @@ private:
     Animation slide_an;
     Animation slide_up_an;
     Animation slide_down_an;
+    Animation dead_an;
 };
 
 #endif  // WORM_ANIMATIONS_H

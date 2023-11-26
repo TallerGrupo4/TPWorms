@@ -96,6 +96,7 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
                         WORM_WALK_RIGHT_OFFSET,
                         WORM_WALK_ABOVE_OFFSET,
                         WORM_WALK_BELLOW_OFFSET);
-    
-    worm_texts.render(renderer, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+    if(state != DEAD) {
+        worm_texts.render(renderer, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+    }
 }

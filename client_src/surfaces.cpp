@@ -18,6 +18,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                  slide_worm(WORM_SLIDE_SPRITES_PATH),
                                  slide_up_worm(WORM_SLIDE_UP_SPRITES_PATH),
                                  slide_down_worm(WORM_SLIDE_DOWN_SPRITES_PATH),
+                                 dead_worm(WORM_DEAD_SPRITES_PATH),
                                  large_beam_vertical(BEAM_LARGE_VERTICAL),
                                  large_beam_65(BEAM_LARGE_65),
                                  large_beam_45(BEAM_LARGE_45),
@@ -51,6 +52,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     slide_worm.SetColorKey(true, 0);
     slide_up_worm.SetColorKey(true, 0);
     slide_down_worm.SetColorKey(true, 0);
+    dead_worm.SetColorKey(true, 0);
     large_beam_vertical.SetColorKey(true, 0);
     large_beam_65.SetColorKey(true, 0);
     large_beam_45.SetColorKey(true, 0);

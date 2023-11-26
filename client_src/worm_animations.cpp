@@ -15,7 +15,8 @@ WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfac
                                 fall_an(renderer, surfaces.fall_worm),
                                 slide_an(renderer, surfaces.slide_worm),
                                 slide_up_an(renderer, surfaces.slide_up_worm),
-                                slide_down_an(renderer, surfaces.slide_down_worm) {
+                                slide_down_an(renderer, surfaces.slide_down_worm),
+                                dead_an(renderer, surfaces.dead_worm) {
 
 }
     
@@ -33,6 +34,14 @@ void WormAnimations::render(int state, float angle, SDL2pp::Renderer& renderer, 
                         left_offset,
                         right_offset,
                         above_offset,
+                        bellow_offset);
+        break;
+    case DEAD:
+        dead_an.render(renderer, dst,
+                        flip,
+                        left_offset,
+                        right_offset-5,
+                        above_offset-12,
                         bellow_offset);
         break;
     case STILL:
@@ -302,7 +311,9 @@ void WormAnimations::update_from_iter(int state, float angle, bool facing_left) 
             still_0_an.update_once();
         }
         break;
-    
+    case DEAD:
+        dead_an.update_once();
+        break;
     default:
         break;
     }

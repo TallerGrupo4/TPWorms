@@ -24,6 +24,7 @@ public:
     Surface slide_worm;
     Surface slide_up_worm;
     Surface slide_down_worm;
+    Surface dead_worm;
     Surface large_beam_vertical;
     Surface large_beam_65;
     Surface large_beam_45;

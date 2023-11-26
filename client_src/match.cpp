@@ -34,6 +34,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         this->worms_map[worm_snpsht.id] = worm;
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
+    update_camera(1,1,true);
 }
 
 void Match::update_from_snapshot(Snapshot& snpsht) {
@@ -53,7 +54,7 @@ void Match::update_from_snapshot(Snapshot& snpsht) {
 
 bool Match::get_next_target(Target& new_target) {
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
-        if(it->second->get_worm_state() != STILL) {
+        if((it->second->get_worm_state() != STILL) and (it->second->get_worm_state() != DEAD)) {
             new_target = {
                 WormType,
                 it->first,
@@ -81,7 +82,7 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
     switch (target_type) {
     case WormType: {
         auto target_worm = worms_map.at(camera.get_target_worm_id());
-        if(target_worm->get_worm_state() != STILL) {
+        if((target_worm->get_worm_state() != STILL) and (target_worm->get_worm_state() != DEAD)) {
             new_target = {
                 WormType,
                 camera.get_target_worm_id(),
