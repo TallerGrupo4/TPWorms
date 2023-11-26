@@ -55,7 +55,7 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     facing_left = (worm_snpsht.direction == LEFT ? true : false);
     health_points = worm_snpsht.health;
     state = worm_snpsht.state;
-    std::cout << "worm " << worm_snpsht.id << " state: " << state << std::endl;
+    // std::cout << "worm " << worm_snpsht.id << " state: " << state << std::endl;
     //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
     //std::cout << "update_from_snapshot nueva pos_x snap: " << worm_snpsht.pos_x << std::endl;
     y = (-1)*worm_snpsht.pos_y;

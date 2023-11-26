@@ -86,16 +86,13 @@ void Match::execute_and_step(int iter) {
     try {
         std::shared_ptr<GameCommand> game_command;
         while (queue->try_pop(game_command)) {
-            // The game_command should notify the game if it is a end_turn game_command
             game_command->execute(game);
         }
-        // Iter is the number of times you should advance frames, not the time
-        game.step(iter);// Check if turn ended (sum ticks, etc)
+        game.step(iter);
         game.print_current_state();
         Snapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);
         game.worm_clean_up();
-
         // If the game has ended, we should stop the match
         // if (game.has_ended()) {
         //     stop();

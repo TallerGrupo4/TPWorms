@@ -38,6 +38,9 @@ class WormData{
 
     public:
 
+    int get_id() {
+        return id;
+    }
 
     int get_type(){
         return type;
@@ -102,6 +105,11 @@ public:
         body(body), data(id, team_id) {
             body->GetUserData().pointer = (uintptr_t) &data;
         }
+    
+    int get_id() {
+        return data.get_id();
+    }
+
 
     int get_angle(){
         if (body == nullptr){throw WormNotFound();}
