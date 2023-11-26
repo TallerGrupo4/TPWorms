@@ -35,11 +35,13 @@ class Game {
     int current_turn_player_id;
     int turn_time;
     int team_turn;
+    bool turn_cleaning;
+    int cleaning_time;
 
 
 
 public:
-    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0) {
+    Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false) {
         world.SetContactListener(&listener);
         world.SetContactFilter(&filter);
     }
@@ -98,7 +100,7 @@ public:
 
     void move_player(int id, int direction) {
         try {
-            if (current_turn_player_id != id) return;
+            if (current_turn_player_id != id || turn_cleaning) return;
 
             std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
             worm->move(direction);
@@ -110,7 +112,7 @@ public:
 
     void jump_player(int id , int direction){
         try {
-            if (current_turn_player_id != id) return;
+            if (current_turn_player_id != id || turn_cleaning) return;
             std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
             worm->jump(direction);
         }   catch (const std::exception& err) {
@@ -243,10 +245,9 @@ public:
                 team.second.remove_player(id);
             }
         }
-        if (turn_time <= 0 && turn_clean_up() == true){
-                manage_turn();
-        }
     }
+
+
 
 
 
@@ -255,21 +256,34 @@ public:
         float time_simulate = (float) it / FPS;
         // reap_dead();
         world.Step(time_simulate, 8, 3);
-
         worm_comprobations();
 
+        if (turn_time > 0){
+            turn_time -= it;
+        } else {
+            if (!turn_cleaning ){
+                cleaning_time = 1 * FPS;
+            }
+            turn_cleaning = true;
+            turn_clean_up();
+            if (!turn_cleaning){
+                manage_turn();
+            }
+        }
 
-        turn_time -= it;
+        printf("turn time: %d\n", turn_time);
     }
 
 
-    bool turn_clean_up(){
+    void turn_clean_up(){
+        printf("cleaning time: %d\n" , cleaning_time);
         for (auto& team: teams) {
             for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
                 // I think this if DEAD is not necessary anymore
                 if (worm->get_state() == DEAD) {continue;}
                 if (worm ->get_state() != STILL){
-                    return false;
+                    cleaning_time = 1 * FPS;
+                    return;
                 }
             }
             // std::shared_ptr<Worm> worm = pair.second;
@@ -279,7 +293,11 @@ public:
             // }
         }
         // if (projectiles.size() != 0){ return NOT_DONE;}
-        return true;
+        if (cleaning_time > 0){
+            cleaning_time--;
+        } else {
+            turn_cleaning = false;
+        }
     }
 
     void manage_turn() {
