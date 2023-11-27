@@ -320,5 +320,5 @@ Snapshot Game::get_game_snapshot() {
     return snapshot;
 }
 
-Game::~Game(){}
+Game::~Game() {}
 
