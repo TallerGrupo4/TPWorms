@@ -1,6 +1,6 @@
 #include <memory>
 #include <sys/types.h>
-#include "game_src/game_command.h"
+#include "game_src/command_include.h"
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
 #include "../common_src/command.h"

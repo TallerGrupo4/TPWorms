@@ -9,23 +9,7 @@ void Bazooka::use(b2Body* worm, int direction, float angle , int time,  int powe
     projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
 }
 
-b2Body* Bazooka::create_projectile_body(b2World* world, float angle , float x , float y) {
-    b2BodyDef projectile_def;
-    projectile_def.type = b2_dynamicBody;
-    projectile_def.bullet = true;
-    projectile_def.position.Set(x, y);
-    projectile_def.angle = angle;
-    b2Body* projectile = world->CreateBody(&projectile_def);
 
-    b2CircleShape projectile_shape;
-    projectile_shape.m_radius = 0.2;
-
-    b2FixtureDef projectile_fixture;
-    projectile_fixture.shape = &projectile_shape;
-    projectile_fixture.density = 1;
-    projectile->CreateFixture(&projectile_fixture);
-    return projectile;
-}
 
 Projectile* Bazooka::create_projectile(b2Body* worm, int direction, float angle , int power){
     float pos_x = worm->GetPosition().x + direction * cos(angle) * OFFSET;

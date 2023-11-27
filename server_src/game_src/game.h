@@ -21,6 +21,8 @@
 // #include "weapons.h"
 #include <iostream>
 
+
+
 #ifndef GAME_H
 #define GAME_H
 
@@ -128,10 +130,10 @@ public:
         turn_time = 3 * FPS;
     }
 
-    void player_aim(int id, int angle, int direction) {
+    void player_aim(int id, int increment, int direction) {
         if (current_turn_player_id != id || turn_cleaning) return;
         std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-        worm->aim(angle, direction);
+        worm->aim(increment, direction);
     }
 
     void player_change_tool(int id, int direction) {
