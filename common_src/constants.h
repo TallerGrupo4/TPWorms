@@ -37,9 +37,9 @@
 
 //Common worm States
 enum WormStates : char {
-    STILL,
-    MOVING,
-    JUMPI,
+    StillState,
+    MovingState,
+    JumpingState,
     BackflippingState,
     FallingState, 
     ClimbingState, 

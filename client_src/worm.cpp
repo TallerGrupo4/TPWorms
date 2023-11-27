@@ -10,7 +10,8 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, SDL_Color 
     health_points(worm_snpsht.health),
     max_health(worm_snpsht.max_health),
     state(worm_snpsht.state),
-    weapon(worm_snpsht.weapon),
+    weapon(static_cast<TOOLS>(worm_snpsht.weapon)),
+    aiming_angle(worm_snpsht.aiming_angle),
     x(worm_snpsht.pos_x),
     y((-1)*worm_snpsht.pos_y),
     width(worm_width),
@@ -61,16 +62,19 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     health_points = worm_snpsht.health;
     worm_texts.update_health(health_points, max_health);
     state = worm_snpsht.state;
+    aiming_angle = worm_snpsht.aiming_angle;
+    TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
+    if (weapon != new_weapon) {
+        worm_an.update_changing_weapons(weapon,new_weapon, angle, facing_left);
+        weapon = new_weapon;
+    }
+    
     //std::cout << "worm " << +worm_snpsht.id << " state: " << state << std::endl;
     //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
     //std::cout << "update_from_snapshot nueva pos_x snap: " << worm_snpsht.pos_x << std::endl;
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
     worm_an.update_from_snapshot(state, angle, facing_left);
-
-    // if (state == MOVING) {
-    //     walking_an.update_once();
-    // }
 }
 
 void Worm::update_from_iter(int iter) {

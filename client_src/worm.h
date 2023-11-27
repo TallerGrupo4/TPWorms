@@ -35,12 +35,13 @@ private:
     WormAnimations worm_an;
     bool facing_left;
     bool moving;
-    float angle;
+    int angle;
     char id;
     int health_points;
     int max_health;
     int state;
-    int weapon;
+    TOOLS weapon;
+    int aiming_angle;
     int x;
     int y;
     int width;

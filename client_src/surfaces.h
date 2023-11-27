@@ -8,7 +8,9 @@
 using namespace SDL2pp;
 class MatchSurfaces {
 public:    
+    /*BACKGROUND*/
     Surface background1;
+    /*WORM MOVEMENTS*/
     Surface still_0_worm;
     Surface still_0_up_worm;
     Surface still_0_down_worm;
@@ -25,6 +27,18 @@ public:
     Surface slide_up_worm;
     Surface slide_down_worm;
     Surface dead_worm;
+    /*WORM CHANGING WEAPONS*/
+    Surface get_baz_worm;
+    Surface get_baz_up_worm;
+    Surface get_baz_down_worm;
+    Surface drop_baz_worm;
+    Surface drop_baz_up_worm;
+    Surface drop_baz_down_worm;
+    /*WORM AIMING WEAPONS*/
+    Surface aim_baz_worm;
+    Surface aim_baz_up_worm;
+    Surface aim_baz_down_worm;
+    /*BEAMS*/
     Surface large_beam_vertical;
     Surface large_beam_65;
     Surface large_beam_45;
