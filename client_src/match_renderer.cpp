@@ -25,45 +25,34 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE: {
-                        //camera_activated = camera_activated ? false : true;
                         SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
                         match.update_camera(mouse_motion_x, mouse_motion_y, true, true);
                         mouse_motion_x = 0;
                         mouse_motion_y = 0;
                         break;
-                        // return false;
                     }
                     case SDLK_q:
                         return false;
                     case SDLK_LEFT: {
-                        if (match.is_turn_worm_in_my_army()) {
-                            action = std::make_shared<ActionMovLeft>(match.get_turn_worm_id());
+                        if (match.handle_left_button(action)) {
                             client.send_action(action);
                         }
-                        // action->get_type() = 0;
-                        //client.push_game_command(game_command);
-                        //player.moveLeft();
                         break;
                     }
                     case SDLK_RIGHT: {
-                        if (match.is_turn_worm_in_my_army()) {
-                            action = std::make_shared<ActionMovRight>(match.get_turn_worm_id());
+                        if (match.handle_right_button(action)) {
                             client.send_action(action);
                         }
-                        //client.push_game_command(game_command);
-                        //player.moveRigth();
                         break;
                     }
                     case SDLK_RETURN: {
-                        if (match.is_turn_worm_in_my_army()) {
-                            action = std::make_shared<ActionJump>(match.get_turn_worm_id());
+                        if (match.handle_enter_button(action)) {
                             client.send_action(action);
                         }
                         break;
                     }
                     case SDLK_BACKSPACE: {
-                        if (match.is_turn_worm_in_my_army()) {
-                            action = std::make_shared<ActionBackflip>(match.get_turn_worm_id());
+                        if (match.handle_backspace_button(action)) {
                             client.send_action(action);
                         }
                         break;
@@ -100,12 +89,14 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
                 switch (mouseButtonEvent.button) {
                 case SDL_BUTTON_LEFT:
-                    //action = match.handle_left_button_click(mouseButtonEvent.x, mouseButtonEvent.y);
-                    //client.send_action(action);
+                    if (match.handle_mouse_left_click(action)) {
+                        client.send_action(action);
+                    }
                     break;
                 case SDL_BUTTON_RIGHT:
-                    //action = match.handle_right_button_click(mouseButtonEvent.x, mouseButtonEvent.y);
-                    //client.send_action(action);
+                    if (match.handle_mouse_right_click(action)) {
+                        client.send_action(action);
+                    }
                     break;
                 default:
                     break;

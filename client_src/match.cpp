@@ -145,6 +145,87 @@ void Match::render(SDL2pp::Renderer& renderer) {
     this->camera.render(renderer);
 }
 
+bool Match::handle_left_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionAim>(worm_turn_id, CENTER, LEFT);
+        } else {
+            action = std::make_shared<ActionMovLeft>(worm_turn_id);
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Match::handle_right_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionAim>(worm_turn_id, CENTER, RIGHT);
+        } else {
+            action = std::make_shared<ActionMovRight>(worm_turn_id);
+        }
+        return true;
+    }
+    return false;
+}
+
+bool Match::handle_up_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionAim>(worm_turn_id, UP, turn_worm_facing_left() ? LEFT : RIGHT);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_down_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionAim>(worm_turn_id, DOWN, turn_worm_facing_left() ? LEFT : RIGHT);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_left_click(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            //action = std::make_shared<ActionShoot>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_right_click(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionAim>(worm_turn_id, CENTER, turn_worm_facing_left() ? LEFT : RIGHT);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_enter_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(!is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionJump>(worm_turn_id);
+            return true;
+        }
+    }
+}
+bool Match::handle_backspace_button(std::shared_ptr<Action> action) {
+    if(is_turn_worm_in_my_army()) {
+        if(!is_turn_worm_aiming_weapon()) {
+            action = std::make_shared<ActionBackflip>(worm_turn_id);
+            return true;
+        }
+    }
+}
+
 int Match::get_turn_worm_x() {
     return worms_map.at(worm_turn_id)->get_worm_x();
 }
@@ -163,4 +244,8 @@ char Match::get_turn_worm_id() {
 
 bool Match::is_turn_worm_in_my_army() {
     return worms_map.at(worm_turn_id)->get_army_id() == my_army_id;
+}
+
+bool Match::is_turn_worm_aiming_weapon() {
+    return worms_map.at(worm_turn_id)->get_worm_state() == AIMING;
 }
