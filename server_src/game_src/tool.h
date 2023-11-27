@@ -13,19 +13,14 @@ class Tool {
     int ammo;
     bool has_scope;
     
-    Tool(uint8_t type, int ammo, bool can_aim) :
-        type(type), ammo(ammo), has_scope(can_aim) {}
+    Tool(uint8_t type, int ammo, bool can_aim);
 
     public:
     virtual void use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles) = 0;
 
-    uint8_t get_type(){
-        return type;
-    }
+    uint8_t get_type();
 
-    int can_aim(){
-        return has_scope;
-    }
+    bool can_aim();
 };
 
 #endif // TOOL_H

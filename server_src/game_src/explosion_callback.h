@@ -3,8 +3,6 @@
 
 #include <box2d/box2d.h>
 
-
-
 class b2RayCastExplosionCallback : public b2RayCastCallback {
     friend class Explosion;
     b2Body* body;
@@ -14,8 +12,6 @@ class b2RayCastExplosionCallback : public b2RayCastCallback {
         return fraction;
     }
 };
-
-
 
 
 #endif // EXPLOSION_CALLBACK_H
