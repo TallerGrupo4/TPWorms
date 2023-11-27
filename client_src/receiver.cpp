@@ -24,7 +24,8 @@ void ClientReceiver::run() {
             queue_match->push(snapshot);
         }
     } catch (const LibError& e) {
-        std::cout << "ClientReceiver has finished because LibError: " << e.what() << std::endl;
+        // It is an expected error, it means that the socket has been closed.
+        // std::cout << "ClientReceiver has finished because LibError: " << e.what() << std::endl;
     } catch (const ClosedQueue& e) {
         // It is an expected error, it means that the queue has been closed.
         // std::cout << "ClientReceiver has finished because ClosedQueue: " << e.what() <<

@@ -116,3 +116,9 @@ For running the project normally once again you will need to run the cmake scrip
 rm CMakeCache.txt && cmake ..
 ```
 And then run the makefile as explained before.
+
+### Configuration
+
+The configuration file is located in the external/config folder of the project and is called config.yaml.
+There you can change the game settings such as the worm's health, max players, etc.
+

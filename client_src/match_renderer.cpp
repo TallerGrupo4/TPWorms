@@ -105,7 +105,6 @@ bool MatchRenderer::handleEvents(Match& match) {
                 break;
             }
             case SDL_QUIT: {
-                std::cout << "Quit :(" << std::endl;
                 return false;
             }
         }  // fin switch(event)
@@ -130,33 +129,8 @@ void MatchRenderer::execute_and_update(int iter) {
             match.update_from_snapshot(snapshot);
         }
         
-            //while
-                // Snapshot snpsht = client.recv_snapshot();
-                // match.update(snpsht,elapsed_time);
-                // //update(match, elapsed_time);
-            // Snapshot snapsht;
-            // client.recv_snapshot(snapshot);
-            // match.update(snpsht,elapsed_time); // iter / FPS
-            match.update_from_iter(iter); // iter
-            render(renderer, match);
-
-            //Snapshot snapshot;
-
-            // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
-            /*
-            while (client.recv_snapshot(snapshot)) {
-                update(snapshot);
-            }
-            update(FRAME_RATE); // Animations will advance now
-            render(); // Render the game
-            sleep(FRAME_RATE);
-            */
-            // !!!!!!!!!!!!!!!!!!!!MATEO!!!!!!!!!!!!!!!!!!!!
-
-            // THIS CODE IS WRONG -----
-            // Snapshot snapshot = client.pop_snapshot();
-            // render(renderer, player);
-            // THIS CODE IS WRONG -----
+        match.update_from_iter(iter); // iter
+        render(renderer, match);
     } catch (std::exception& e) {
 
         // If case of error, print it and exit with error
@@ -168,4 +142,7 @@ void MatchRenderer::start() {
     client.start();
     Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
     clock.tick();
+    // std::cout << "MatchRenderer::start() finished" << std::endl;
+    client.exit();
+    // std::cout << "MatchRenderer::start() client.exit() finished" << std::endl;
 }
