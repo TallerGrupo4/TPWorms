@@ -85,6 +85,19 @@ bool MatchRenderer::handleEvents(Match& match) {
                 match.update_camera(mouse_motion_x, mouse_motion_y, false, false, true);
                 break;
             }
+            case SDL_MOUSEWHEEL: {
+                SDL_MouseWheelEvent& MouseWheelEvent = (SDL_MouseWheelEvent&)event;
+                if (MouseWheelEvent.y > 0) {
+                    if (match.handle_mouse_scroll_up(action)) {
+                        client.send_action(action);
+                    }
+                } else if (MouseWheelEvent.y < 0) {
+                    if (match.handle_mouse_scroll_down(action)) {
+                        client.send_action(action);
+                    }
+                }
+                break;
+            }
             case SDL_MOUSEBUTTONDOWN: {
                 SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
                 switch (mouseButtonEvent.button) {

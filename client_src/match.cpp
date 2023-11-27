@@ -151,7 +151,7 @@ bool Match::handle_left_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
             action = std::make_shared<ActionAim>(LEFT, CENTER, worm_turn_id);
-        } else {
+        } else if (!turn_worm_has_weapon()) {
             action = std::make_shared<ActionMovLeft>(worm_turn_id);
         }
         return true;
@@ -163,7 +163,7 @@ bool Match::handle_right_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
             action = std::make_shared<ActionAim>(RIGHT, CENTER, worm_turn_id);
-        } else {
+        } else if (!turn_worm_has_weapon()) {
             action = std::make_shared<ActionMovRight>(worm_turn_id);
         }
         return true;
@@ -203,8 +203,28 @@ bool Match::handle_mouse_left_click(std::shared_ptr<Action>& action) {
 
 bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_aiming_weapon()) {
+        if(is_turn_worm_still() and turn_worm_has_weapon()) {
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_scroll_up(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            //action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_scroll_down(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            //action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
             return true;
         }
     }
@@ -213,7 +233,7 @@ bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
 
 bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(!is_turn_worm_aiming_weapon()) {
+        if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
             action = std::make_shared<ActionJump>(worm_turn_id);
             return true;
         }
@@ -222,7 +242,7 @@ bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
 }
 bool Match::handle_backspace_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(!is_turn_worm_aiming_weapon()) {
+        if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
             action = std::make_shared<ActionBackflip>(worm_turn_id);
             return true;
         }
@@ -248,6 +268,14 @@ char Match::get_turn_worm_id() {
 
 bool Match::is_turn_worm_in_my_army() {
     return worms_map.at(worm_turn_id)->get_army_id() == my_army_id;
+}
+
+bool Match::is_turn_worm_still() {
+    return worms_map.at(worm_turn_id)->get_worm_state() == STILL;
+}
+
+bool Match::turn_worm_has_weapon() {
+    return worms_map.at(worm_turn_id)->get_worm_weapon() != NO_TOOL;
 }
 
 bool Match::is_turn_worm_aiming_weapon() {

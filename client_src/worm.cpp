@@ -44,6 +44,10 @@ int Worm::get_worm_y() {
     return this->y;
 }
 
+TOOLS Worm::get_worm_weapon() {
+    return this->weapon;
+}
+
 bool Worm::worm_facing_left() {
     return this->facing_left;
 }

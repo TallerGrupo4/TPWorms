@@ -16,6 +16,12 @@ struct Target {
     int y_offset = 0;
 };
 
+#define DOWN -0x01
+#define CENTER 0x00
+#define UP 0x01
+#define SCROLL_UP 0x01
+#define SCROLL_DOWN -0x01
+
 #define RESOLUTION_MULTIPLIER 6
 
 #define WORMS_FONT_PATH FONTS_PATH "/unispace bold.ttf"
