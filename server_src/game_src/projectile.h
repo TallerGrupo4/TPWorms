@@ -7,6 +7,7 @@
 #include "unordered_set"
 #include "game_constants.h"
 #include "../../common_src/constants.h"
+#include "../../common_src/snapshot.h"
 
 
 class Projectile {
@@ -38,6 +39,10 @@ class Projectile {
 
         int get_type();
 
+        int get_direction();
+
+        float get_angle();
+
         int get_explosion_type();
 
         int get_timer();
@@ -45,6 +50,8 @@ class Projectile {
         int get_fragments();
 
         int get_fragment_damage();
+
+        ProjectileSnapshot get_snapshot();
 
 };
 

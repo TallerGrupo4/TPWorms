@@ -51,4 +51,25 @@ int Projectile::get_fragment_damage() {
     return fragment_damage;
 }
 
+float Projectile::get_angle(){
+    float angle = body->GetAngle() ;
+    float normalized_angle = fmod(angle, PI);
+    int degree = round(normalized_angle * RADTODEG);
+    return degree;
+}
+
+int Projectile::get_direction(){
+    float speed_x = body->GetLinearVelocity().x;
+    if (speed_x >= 0){
+        return DER;
+    }
+    return IZQ;
+}
+
+ProjectileSnapshot Projectile::get_snapshot() {
+    float pos_x = body->GetPosition().x;
+    float pos_y = body->GetPosition().y;
+    return ProjectileSnapshot(type, pos_x, pos_y, get_angle());
+}
+
 

@@ -311,7 +311,11 @@ Snapshot Game::get_game_snapshot() {
         }
         // worms.push_back(pair.second->get_snapshot());
     }
-    Snapshot snapshot(worms, {});
+    std::vector<ProjectileSnapshot> projectiles_snaps;
+    for (auto& projectile : projectiles){
+        projectiles_snaps.push_back(projectile->get_snapshot());
+    }
+    Snapshot snapshot(worms, projectiles_snaps , {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     return snapshot;
 }
