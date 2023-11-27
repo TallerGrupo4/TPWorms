@@ -148,11 +148,11 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     worm_width[0] = ntohl(worm_width[0]);
     worm_height[0] = ntohl(worm_height[0]);
     amount_of_worms[0] = ntohl(amount_of_worms[0]);
-    // Move this to  a 'Parser'
-    float _width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
-    float _height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
-    float _worm_width = std::round((static_cast<float>(worm_width[0] * PIX_PER_METER)) / MULTIPLIER);
-    float _worm_height = std::round((static_cast<float>(worm_height[0] * PIX_PER_METER)) / MULTIPLIER);
+    float _width = static_cast<float>(width[0]);
+    float _height = static_cast<float>(height[0]);
+    float _worm_width = static_cast<float>(worm_width[0]);
+    float _worm_height = static_cast<float>(worm_height[0]);
+    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height);
     int _amount_of_worms = amount_of_worms[0];
     snapshot.set_dimensions(_height, _width, _worm_width, _worm_height, _amount_of_worms);
 
@@ -183,21 +183,23 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         pos_y[0] = ntohl(pos_y[0]);
         width[0] = ntohl(width[0]);
         height[0] = ntohl(height[0]);
-        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
-        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
-        width[0] = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
-        height[0] = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        float _width = static_cast<float>(width[0]);
+        float _height = static_cast<float>(height[0]);
+        parser.parse_platform_mesures(_pos_x, _pos_y, _width, _height);
         
-        // PARSER!!!!
         int degree = 0;
-        if (get_degree_of_beam_type(type[0], degree)) {
-            int height_recieved = height[0];
-            int width_recieved = width[0];
-            height[0] = calculate_beam_height(degree, height_recieved, width_recieved);
-            width[0] = calculate_beam_width(degree, height_recieved, width_recieved);
+        int __height = static_cast<int>(_height);
+        int __width = static_cast<int>(_width);
+        if (parser.get_degree_of_beam_type(type[0], degree)) {
+            int height_recieved =  static_cast<int>(_height);
+            int width_recieved = static_cast<int>(_width);
+            __height = parser.calculate_beam_height(degree, height_recieved, width_recieved);
+            __width = parser.calculate_beam_width(degree, height_recieved, width_recieved);
         }
         
-        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
+        PlatformSnapshot platform( (BeamType(type[0])), _pos_x, _pos_y, __width, __height);
         snapshot.platforms.push_back(platform);
     }
 }
@@ -233,10 +235,11 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         angle[0] = ntohl(angle[0]);
-        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
-        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
-        angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
-        ProjectileSnapshot projectile(type[0], pos_x[0], pos_y[0], angle[0]);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        float _angle = static_cast<float>(angle[0]);
+        parser.parse_projectile_mesures(_pos_x, _pos_y, _angle);
+        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle);
         snapshot.projectiles.push_back(projectile);
     }
 }
@@ -292,15 +295,18 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
     // if (was_closed) throw WasClosed;
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
-        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
-        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        parser.parse_worm(_pos_x, _pos_y);
+        // pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
+        // pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
         angle[0] = ntohl(angle[0]);
         // angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
         max_health[0] = ntohl(max_health[0]);
         health[0] = ntohl(health[0]);
         weapon[0] = ntohl(weapon[0]);
         state[0] = ntohl(state[0]);
-        WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0]);
+        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0]);
         snapshot.worms.push_back(worm);
     }
 }

@@ -240,11 +240,11 @@ void Game::step(int it) {
         }
     }
 
-    printf("turn time: %d\n", turn_time);
+    // printf("turn time: %d\n", turn_time);
 }
 
 void Game::turn_clean_up(){
-    printf("cleaning time: %d\n" , cleaning_time);
+    // printf("cleaning time: %d\n" , cleaning_time);
     for (auto& team: teams) {
         for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
             // I think this if DEAD is not necessary anymore

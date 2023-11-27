@@ -14,15 +14,13 @@ void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projec
     std::unordered_set<b2Body*> bodies;
     for (int i = 0; i < 64; i++){
         float angle = (i/(float)64) * 360 * DEGTORAD;
-        std::cout << "body GetPosition_x: " << body->GetPosition().x << " body GetPosition_y " << body->GetPosition().y << std::endl;
+        // std::cout << "body GetPosition_x: " << body->GetPosition().x << " body GetPosition_y " << body->GetPosition().y << std::endl;
         b2Vec2 direction = b2Vec2(cos(angle), sin(angle));
-        std::cout << "direction: " << direction.x << " " << direction.y << std::endl;
+        // std::cout << "direction: " << direction.x << " " << direction.y << std::endl;
         b2Vec2 endPos = body->GetPosition() + radius * direction;
-        std::cout << "Explosion endPos: " << endPos.x << " " << endPos.y << std::endl;
-        printf("\n");
+        // std::cout << "Explosion endPos: " << endPos.x << " " << endPos.y << std::endl;
+        // printf("\n");
         b2RayCastExplosionCallback callback;
-        // continue;
-        std::cout << "IT BREAKS HERE IN EXPLOSION.CPP LINE 25!!!" << std::endl;
         body->GetWorld()->RayCast(&callback, body->GetPosition(), endPos);
         if (callback.body && bodies.find(callback.body) == bodies.end()){
             Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(callback.body->GetUserData().pointer));

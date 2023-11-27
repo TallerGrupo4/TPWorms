@@ -39,68 +39,6 @@ private:
     void send_match_id(const uint match_id);
     void send_map_name(const std::string map_name);
 
-    // PARSER!!!!
-    int calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width) {
-        return round(beam_actual_height*sin(degree*M_PI/180)+beam_actual_width*cos(degree*M_PI/180));
-    }
-    int calculate_beam_height(int degree, float beam_actual_height, float beam_actual_width) {
-        return round(beam_actual_height*cos(degree*M_PI/180)+beam_actual_width*sin(degree*M_PI/180));
-    }
-    bool get_degree_of_beam_type(BeamType type, int& degree) {
-        switch (type) {
-            case LargeVertical:
-                return false;
-            case Large65:
-                degree = 65;
-                return true;
-            case Large45:
-                degree = 45;
-                return true;
-            case Large25:
-                degree = 25;
-                return true;
-            case LargeHorizontal:
-                return false;
-            case LargeMinus25:
-                degree = 25; // -25?
-                return true;
-            case LargeMinus45:
-                degree = 45;
-                return true;
-            case LargeMinus65: 
-                degree = 65;
-                return true;
-            case LargeVerticalFlipped:
-                return false;
-            case ShortVertical:
-                return false;
-            case Short65:
-                degree = 65;
-                return true;
-            case Short45:
-                degree = 45;
-                return true;
-            case Short25:
-                degree = 25;
-                return true;
-            case ShortHorizontal:
-                return false;
-            case ShortMinus25:
-                degree = 25;
-                return true;
-            case ShortMinus45:
-                degree = 45;
-                return true;
-            case ShortMinus65:
-                degree = 65;
-                return true;
-            case ShortVerticalFlipped:
-                return false;
-            default:
-                return false;
-        }
-    };
-    // PARSER!!!!
 
 
 public:

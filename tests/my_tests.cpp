@@ -209,7 +209,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
     PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
     std::vector<WormSnapshot> worms = {worm_snapshot};
     std::vector<PlatformSnapshot> platforms = {platform_snapshot};
-    Snapshot snapshot_to_send(worms, platforms, {});
+    Snapshot snapshot_to_send(worms, {}, platforms);
     snapshot_to_send.my_army = {{1, {1}}};
     snapshot_to_send.set_dimensions(1, 1, WORM_WIDTH, WORM_HEIGHT, 1);
     protocol_server.send_snapshot(snapshot_to_send);
@@ -376,9 +376,9 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
     WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
-    ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4);
+    ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4 * RADTODEG);
     std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot};
-    Snapshot snapshot_to_send(worms, {}, projectiles);
+    Snapshot snapshot_to_send(worms, projectiles, {});
     snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
     snapshot_to_send.set_dimensions(100, 100, 100, 100);
     protocol_server.send_snapshot(snapshot_to_send);

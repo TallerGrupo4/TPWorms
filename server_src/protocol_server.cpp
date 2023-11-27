@@ -198,17 +198,18 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     return std::make_shared<UseToolCommand>(worm_id, potency[0], 0, 0);
 }
 
-int ProtocolServer::send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height, const int& _amount_of_worms) {
-    int width[1] = {static_cast<int>(std::round(_width * MULTIPLIER))};
-    int height[1] = {static_cast<int>(std::round(_height * MULTIPLIER))};
+int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms) {
+    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height);
+    int width[1] = {static_cast<int>(_width)};
+    int height[1] = {static_cast<int>(_height)};
+    int worm_width[1] = {static_cast<int>(_worm_width)};
+    int worm_height[1] = {static_cast<int>(_worm_height)};
     width[0] = htonl(width[0]);
     height[0] = htonl(height[0]);
-    socket.sendall(width, 4, &was_closed);
-    socket.sendall(height, 4, &was_closed);
-    int worm_width[1] = {static_cast<int>(std::round(_worm_width * MULTIPLIER))};
-    int worm_height[1] = {static_cast<int>(std::round(_worm_height * MULTIPLIER))};
     worm_width[0] = htonl(worm_width[0]);
     worm_height[0] = htonl(worm_height[0]);
+    socket.sendall(width, 4, &was_closed);
+    socket.sendall(height, 4, &was_closed);
     socket.sendall(worm_width, 4, &was_closed);
     socket.sendall(worm_height, 4, &was_closed);
     int amount_of_worms[1] = {_amount_of_worms};
@@ -223,26 +224,27 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         return SOCKET_FAILED;
     }
     for (auto& platform : platforms) {
+        parser.parse_platform_mesures(platform.pos_x, platform.pos_y, platform.width, platform.height);
         BeamType type[1] = {platform.type};
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_x[1] = {static_cast<int>(std::round(platform.pos_x * MULTIPLIER))};
+        int pos_x[1] = {static_cast<int>(platform.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
         if (socket.sendall(pos_x, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_y[1] = {static_cast<int>(std::round(platform.pos_y * MULTIPLIER))};
+        int pos_y[1] = {static_cast<int>(platform.pos_y)};
         pos_y[0] = htonl(pos_y[0]);
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int width[1] = {static_cast<int>(std::round(platform.width * MULTIPLIER))};
+        int width[1] = {static_cast<int>(platform.width )};
         width[0] = htonl(width[0]);
         if (socket.sendall(width, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int height[1] = {static_cast<int>(std::round(platform.height * MULTIPLIER))};
+        int height[1] = {static_cast<int>(platform.height)};
         height[0] = htonl(height[0]);
         if (socket.sendall(height, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -295,23 +297,23 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         return SOCKET_FAILED;
     }
     for (auto& worm : worms) {
+        parser.parse_worm_mesures(worm.pos_x, worm.pos_y);
         char id[1] = {worm.id};
         if (socket.sendall(id, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_x[1] = {static_cast<int>(worm.pos_x * MULTIPLIER)};
+        int pos_x[1] = {static_cast<int>(worm.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
         if (socket.sendall(pos_x, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int pos_y[1] = {static_cast<int>(worm.pos_y * MULTIPLIER)};
+        int pos_y[1] = {static_cast<int>(worm.pos_y)};
         pos_y[0] = htonl(pos_y[0]);
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        // int angle[1] = {static_cast<int>(worm.angle * RADTODEG * MULTIPLIER)};
-        // angle[0] = htonl(angle[0]);
         int angle[1] = {worm.angle};
+        angle[0] = htonl(angle[0]);
         if (socket.sendall(angle, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
@@ -351,19 +353,21 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
     uint8_t num_of_projectiles[1] = {static_cast<uint8_t>(projectiles.size())};
     socket.sendall(num_of_projectiles, 1, &was_closed);
     for (auto& projectile : projectiles) {
-        int pos_x[1] = {static_cast<int>(projectile.pos_x * MULTIPLIER)};
+        parser.parse_projectile_mesures(projectile.pos_x, projectile.pos_y, projectile.angle);
+        int pos_x[1] = {static_cast<int>(projectile.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
         socket.sendall(pos_x, 4, &was_closed);
-        int pos_y[1] = {static_cast<int>(projectile.pos_y * MULTIPLIER)};
+        int pos_y[1] = {static_cast<int>(projectile.pos_y)};
         pos_y[0] = htonl(pos_y[0]);
         socket.sendall(pos_y, 4, &was_closed);
-        int angle[1] = {static_cast<int>(projectile.angle * RADTODEG * MULTIPLIER)};
+        int angle[1] = {static_cast<int>(projectile.angle)};
         angle[0] = htonl(angle[0]);
         socket.sendall(angle, 4, &was_closed);
         char type[1] = {projectile.type};
         socket.sendall(type, 1, &was_closed);
     }
 }
+
 
 
 const Command ProtocolServer::recv_create(const char* code) {
