@@ -107,14 +107,14 @@ public:
 class Snapshot {
 public:
     std::vector<WormSnapshot> worms;
-    std::vector<PlatformSnapshot> platforms;
     std::vector<ProjectileSnapshot> projectiles;
+    std::vector<PlatformSnapshot> platforms;
     std::map<char, std::vector<char>> my_army;
     MapDimensions_t map_dimensions;
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
-    Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms, std::vector<ProjectileSnapshot> projectiles):
-            worms(worms), platforms(platforms), projectiles(projectiles), map_dimensions() {};
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<ProjectileSnapshot> projectiles, std::vector<PlatformSnapshot> platforms):
+            worms(worms), projectiles(projectiles) , platforms(platforms), map_dimensions() {};
     
     Snapshot() {};
     ~Snapshot() {};
