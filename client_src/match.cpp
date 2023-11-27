@@ -224,7 +224,7 @@ bool Match::handle_mouse_scroll_up(std::shared_ptr<Action>& action) {
 bool Match::handle_mouse_scroll_down(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still()) {
-            action = std::make_shared<ActionAim>(SCROLL_DOWN, worm_turn_id);
+            action = std::make_shared<ActionChangeWeapon>(SCROLL_DOWN, worm_turn_id);
             return true;
         }
     }

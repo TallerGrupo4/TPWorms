@@ -116,7 +116,9 @@ WormSnapshot Worm::get_snapshot() {
         pos_y = body->GetPosition().y;
         angle = get_angle();
     }
-    WormSnapshot snapshot(id, pos_x, pos_y, angle, START_LIFE, life, act_dir, curr_tool, state, team_id, aiming_angle);
+    int weapon_sending = curr_tool;
+    if (weapon_sending == tools.size() - 1) weapon_sending = NO_TOOL;
+    WormSnapshot snapshot(id, pos_x, pos_y, angle, START_LIFE, life, act_dir, weapon_sending, state, team_id, aiming_angle);
     return snapshot;
 }
 
