@@ -8,6 +8,9 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+#include "config.h"
+
+#define MAX_PLAYERS ConfigSingleton::getInstance().get_max_players()
 
 
 Match::Match():

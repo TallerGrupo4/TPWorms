@@ -1,4 +1,9 @@
 #include "weapon_bazooka.h"
+#include "../config.h"
+
+#define BAZOOKA_TYPE ConfigSingleton::getInstance().get_bazooka_type()
+#define BAZOOKA_DAMAGE ConfigSingleton::getInstance().get_bazooka_damage()
+#define BAZOOKA_RADIUS ConfigSingleton::getInstance().get_bazooka_radius()
 
 Bazooka::Bazooka() : Weapon(BAZOOKA_TYPE, 1 , BAZOOKA_DAMAGE, BAZOOKA_RADIUS, 0 , 0 , 0, true, true, true) {}
 

@@ -1,6 +1,10 @@
 #include "explosion.h"
 #include "worm.h"
 #include "explosion_callback.h"
+#include "../config.h"
+
+#define EXPLOSION_POWER ConfigSingleton::getInstance().get_explosion_power()
+
 
 
 Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, int damage) : type(type), fragments(fragments), fragment_damage(fragment_damage), radius(radius), damage(damage) {}

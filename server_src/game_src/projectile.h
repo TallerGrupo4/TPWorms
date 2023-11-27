@@ -3,6 +3,7 @@
 
 #include <box2d/box2d.h>
 #include "explosion.h"
+#include "game_constants.h"
 
 
 class ProjectileData {

@@ -4,8 +4,6 @@
 #ifndef _CONSTANTS_H_
 #define _CONSTANTS_H_
 
-#define MAX_PLAYERS 4
-
 // This DEFAULT macro is only used to initialize the Command struct
 #define DEFAULT 0x00
 
@@ -97,21 +95,6 @@ enum TOOLS : uint8_t {
 #define SHOOT 0x05
 #define AIM 0x06
 
-// START OF YAML -------------------------
-
-// Platforms codes
-#define PLAT_SMALL 3
-#define PLAT_BIG 6
-#define PLAT_HEIGHT 0.8
-#define PLAT_FRICTION 0.1
-
-// Worms codes
-#define WORM_WIDTH 1.5f
-#define WORM_HEIGHT 1.5f
-#define WORM_FRICTION 1
-
-// END OF YAML ----------------------------
-
 
 
 // Codes for protocol
@@ -124,12 +107,10 @@ enum TOOLS : uint8_t {
 #define PIX_PER_METER 6.0f
 
 
-// START OF YAML -------------------------
 
 // Consts for game loop
 #define FPS 30.0f
 #define FRAME_TIME 1.0f / FPS
-// END OF YAML --------------------------------
 #define DEGTORAD 0.0174532925199432957f
 #define RADTODEG 57.295779513082320876f
 #define PI 3.14159265358979323846f

@@ -1,11 +1,16 @@
+#ifndef SNAPSHOT_H
+#define SNAPSHOT_H
+
 #include <string>
 #include <vector>
 #include <map>
 #include "constants.h"
+#include "../server_src/config.h"
 
-
-#ifndef SNAPSHOT_H
-#define SNAPSHOT_H
+#define WORM_WIDTH ConfigSingleton::getInstance().get_worm_width()
+#define WORM_HEIGHT ConfigSingleton::getInstance().get_worm_height()
+#define PLAT_SMALL ConfigSingleton::getInstance().get_plat_small()
+#define PLAT_HEIGHT ConfigSingleton::getInstance().get_plat_height()
 
 struct MapDimensions {
     float height = DEFAULT;
