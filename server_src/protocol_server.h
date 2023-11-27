@@ -42,6 +42,7 @@ private:
     void send_projectiles(std::vector<ProjectileSnapshot>& projectiles);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_jump(uint8_t& worm_id);
+    std::shared_ptr<GameCommand> recv_aim(uint8_t& worm_id);
 
 public:
     explicit ProtocolServer(Socket& socket, ParserServer& parser);

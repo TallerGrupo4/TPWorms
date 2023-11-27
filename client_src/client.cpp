@@ -35,6 +35,7 @@ void Client::stop() {
     queue_receiver_lobby->close();
     queue_receiver_match->close();
     socket.shutdown(SHUT_RDWR);
+    socket.close();
     client_sender->join();
     client_receiver->join();
 }

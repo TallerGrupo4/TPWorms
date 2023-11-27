@@ -98,6 +98,7 @@ enum TOOLS : uint8_t {
 #define FOWARD 0x01
 #define BACKWARD -0x01
 #define SHOOT 0x05
+#define AIM 0x06
 
 // START OF YAML -------------------------
 

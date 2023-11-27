@@ -140,6 +140,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         case JUMP: {
             return recv_jump(worm_id[0]);
         }
+        case AIM: {
+            return recv_aim(worm_id[0]);
+        }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
             return std::make_shared<GameCommand>();
@@ -165,6 +168,21 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_jump(uint8_t& worm_id) {
         throw LibError(errno, "Socket was closed");
     }
     return std::make_shared<JumpCommand>(worm_id, movement_x[0]);
+}
+
+std::shared_ptr<GameCommand> ProtocolServer::recv_aim(uint8_t& worm_id) {
+    char look_direction_x[1];
+    socket.recvall(look_direction_x, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    char look_direction_y[1];
+    socket.recvall(look_direction_y, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+
+    return std::make_shared<AimCommand>(look_direction_x[0], look_direction_y[0], worm_id);
 }
 
 int ProtocolServer::send_map_dimensions(const float& _width, const float& _height, const float& _worm_width, const float& _worm_height, const int& _amount_of_worms) {
