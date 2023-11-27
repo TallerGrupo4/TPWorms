@@ -18,17 +18,6 @@ public:
     void virtual execute(Game& game) { return; };
 };
 
-class AimCommand : public GameCommand {
-    char look_direction_x;
-    char look_direction_y;
-
-    public:
-    AimCommand(char look_direction_x, char look_direction_y, char worm_id): GameCommand(worm_id), look_direction_x(look_direction_x), look_direction_y(look_direction_y) {};
-    ~AimCommand() {};
-    void execute(Game& game) override { game.player_aim(id_worm , look_direction_y, look_direction_x); }
-
-};
-
 
 
 

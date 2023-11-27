@@ -9,7 +9,7 @@ class AimCommand : public GameCommand {
 
     public:
     AimCommand(char look_direction_x, char look_direction_y, char worm_id);
-    ~AimCommand();
+    ~AimCommand() {};
     void execute(Game& game) override;
 
 };

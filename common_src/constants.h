@@ -37,9 +37,6 @@
 #define QUEUE_MAX_SIZE 10000
 
 
-//Common Weapon states
-#define NO_WEAPON 0
-
 //Common worm States
 enum WormStates : char {
     STILL,
