@@ -18,6 +18,10 @@ public:
         return id_worm;
     }
 
+    int get_direction() {
+        return direction;
+    }
+
     void virtual execute(Game& game) { return; };
 };
 

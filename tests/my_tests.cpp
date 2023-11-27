@@ -362,6 +362,24 @@ TEST(ProtocolHappyCasesMatch, Send_action_shoot_and_recv_gameCommand_shoot) {
     ASSERT_EQ(useToolCommand->get_pos_y(), 0); // This values are hardcoded in the ProtocoServer
 }
 
+TEST(ProtocolHappyCasesMatch, Send_action_change_tool_and_recv_gameCommand_change_tool) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionChangeWeapon>(1, 2);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    ChangeToolCommand* changeToolCommand = dynamic_cast<ChangeToolCommand*>(game_command.get());
+    ASSERT_NE(changeToolCommand, nullptr);
+    ASSERT_EQ(changeToolCommand->get_direction(), 1);
+    ASSERT_EQ(changeToolCommand->get_worm_id(), 2);
+}
+
 
 // SEND AND RECV SNAPSHOT
 

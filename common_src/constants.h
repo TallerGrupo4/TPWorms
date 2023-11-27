@@ -94,6 +94,7 @@ enum TOOLS : uint8_t {
 #define BACKWARD -0x01
 #define SHOOT 0x05
 #define AIM 0x06
+#define CHANGE_TOOL 0x07
 
 
 
