@@ -91,10 +91,6 @@ public:
         return bazooka_radius;
     }
 
-    int get_bazooka_type() const {
-        return bazooka_type;
-    }
-
     float get_bazooka_misile_restitution() const {
         return bazooka_misile_restitution;
     }
@@ -111,10 +107,6 @@ public:
         return mortar_radius;
     }
 
-    int get_mortar_type() const {
-        return mortar_type;
-    }
-
     int get_mortar_fragments() const {
         return mortar_fragments;
     }
@@ -127,20 +119,12 @@ public:
         return green_granade_radius;
     }
 
-    int get_green_granade_type() const {
-        return green_granade_type;
-    }
-
     int get_red_granade_damage() const {
         return red_granade_damage;
     }
 
     int get_red_granade_radius() const {
         return red_granade_radius;
-    }
-
-    int get_red_granade_type() const {
-        return red_granade_type;
     }
 
     int get_red_granade_fragments() const {
@@ -155,20 +139,12 @@ public:
         return banana_radius;
     }
 
-    int get_banana_type() const {
-        return banana_type;
-    }
-
     int get_holy_granade_damage() const {
         return holy_granade_damage;
     }
 
     int get_holy_granade_radius() const {
         return holy_granade_radius;
-    }
-
-    int get_holy_granade_type() const {
-        return holy_granade_type;
     }
 
     int get_airstrike_damage() const {
@@ -179,10 +155,6 @@ public:
         return airstrike_radius;
     }
 
-    int get_airstrike_type() const {
-        return airstrike_type;
-    }
-
     int get_dynamite_damage() const {
         return dynamite_damage;
     }
@@ -191,20 +163,12 @@ public:
         return dynamite_radius;
     }
 
-    int get_dynamite_type() const {
-        return dynamite_type;
-    }
-
     int get_baseball_bat_damage() const {
         return baseball_bat_damage;
     }
 
     int get_baseball_bat_radius() const {
         return baseball_bat_radius;
-    }
-
-    int get_baseball_bat_type() const {
-        return baseball_bat_type;
     }
 
     ~ConfigSingleton() {}
@@ -244,35 +208,26 @@ private:
             explosion_power = config["explosion_power"].as<int>();
             bazooka_damage = config["bazooka_damage"].as<int>();
             bazooka_radius = config["bazooka_radius"].as<int>();
-            bazooka_type = config["bazooka_type"].as<int>();
             bazooka_misile_restitution = config["bazooka_misile_restitution"].as<float>();
             bazooka_misile_density = config["bazooka_misile_density"].as<float>();
             mortar_damage = config["mortar_damage"].as<int>();
             mortar_radius = config["mortar_radius"].as<int>();
-            mortar_type = config["mortar_type"].as<int>();
             mortar_fragments = config["mortar_fragments"].as<int>();
             green_granade_damage = config["green_granade_damage"].as<int>();
             green_granade_radius = config["green_granade_radius"].as<int>();
-            green_granade_type = config["green_granade_type"].as<int>();
             red_granade_damage = config["red_granade_damage"].as<int>();
             red_granade_radius = config["red_granade_radius"].as<int>();
-            red_granade_type = config["red_granade_type"].as<int>();
             red_granade_fragments = config["red_granade_fragments"].as<int>();
             banana_damage = config["banana_damage"].as<int>();
             banana_radius = config["banana_radius"].as<int>();
-            banana_type = config["banana_type"].as<int>();
             holy_granade_damage = config["holy_granade_damage"].as<int>();
             holy_granade_radius = config["holy_granade_radius"].as<int>();
-            holy_granade_type = config["holy_granade_type"].as<int>();
             airstrike_damage = config["airstrike_damage"].as<int>();
             airstrike_radius = config["airstrike_radius"].as<int>();
-            airstrike_type = config["airstrike_type"].as<int>();
             dynamite_damage = config["dynamite_damage"].as<int>();
             dynamite_radius = config["dynamite_radius"].as<int>();
-            dynamite_type = config["dynamite_type"].as<int>();
             baseball_bat_damage = config["baseball_bat_damage"].as<int>();
             baseball_bat_radius = config["baseball_bat_radius"].as<int>();
-            baseball_bat_type = config["baseball_bat_type"].as<int>();
             std::cout << "Config file read successfully" << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
@@ -306,35 +261,26 @@ private:
     int explosion_power;
     int bazooka_damage;
     int bazooka_radius;
-    int bazooka_type;
     float bazooka_misile_restitution;
     float bazooka_misile_density;
     int mortar_damage;
     int mortar_radius;
-    int mortar_type;
     int mortar_fragments;
     int green_granade_damage;
     int green_granade_radius;
-    int green_granade_type;
     int red_granade_damage;
     int red_granade_radius;
-    int red_granade_type;
     int red_granade_fragments;
     int banana_damage;
     int banana_radius;
-    int banana_type;
     int holy_granade_damage;
     int holy_granade_radius;
-    int holy_granade_type;
     int airstrike_damage;
     int airstrike_radius;
-    int airstrike_type;
     int dynamite_damage;
     int dynamite_radius;
-    int dynamite_type;
     int baseball_bat_damage;
     int baseball_bat_radius;
-    int baseball_bat_type;
 
 
     // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
