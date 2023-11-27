@@ -40,14 +40,14 @@ public:
     char get_turn_worm_id();
     bool is_turn_worm_in_my_army();
     bool is_turn_worm_aiming_weapon();
-    bool handle_left_button(std::shared_ptr<Action> action);
-    bool handle_right_button(std::shared_ptr<Action> action);
-    bool handle_up_button(std::shared_ptr<Action> action);
-    bool handle_down_button(std::shared_ptr<Action> action);
-    bool handle_mouse_left_click(std::shared_ptr<Action> action);
-    bool handle_mouse_right_click(std::shared_ptr<Action> action);
-    bool handle_enter_button(std::shared_ptr<Action> action);
-    bool handle_backspace_button(std::shared_ptr<Action> action);
+    bool handle_left_button(std::shared_ptr<Action>& action);
+    bool handle_right_button(std::shared_ptr<Action>& action);
+    bool handle_up_button(std::shared_ptr<Action>& action);
+    bool handle_down_button(std::shared_ptr<Action>& action);
+    bool handle_mouse_left_click(std::shared_ptr<Action>& action);
+    bool handle_mouse_right_click(std::shared_ptr<Action>& action);
+    bool handle_enter_button(std::shared_ptr<Action>& action);
+    bool handle_backspace_button(std::shared_ptr<Action>& action);
 };
 
 #endif  // MATCH_H
