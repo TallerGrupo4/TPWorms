@@ -6,6 +6,7 @@ Worm::Worm(b2Body* body, char id, char team_id):
     body(body),id(id), life(START_LIFE), state(STILL), curr_tool(NO_TOOL) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM), team_id(team_id), aiming_angle(0), time_for_curr_tool(5*FPS) , has_used_tool(false) {
         body->GetUserData().pointer = (uintptr_t) this;
         tools.push_back(std::make_shared<Bazooka>());
+        tools.push_back(nullptr);
     }
 
 int Worm::get_id() {
@@ -40,7 +41,7 @@ void Worm::jump (int dir){
     if (!in_contact() || state != STILL) {return;}
     body->SetLinearVelocity( b2Vec2( 0, 0 ) );
     float m = body->GetMass();
-    if (dir == FOWARD) {
+    if (dir == FORWARD) {
         body->ApplyLinearImpulseToCenter( b2Vec2( m * WORM_JUMP_HOR_SPEED * act_dir, m * WORM_JUMP_SPEED), true );
         state = JUMPING;
 
@@ -52,7 +53,7 @@ void Worm::jump (int dir){
 }
 
 void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    if (state != STILL || has_used_tool) {return;}
+    if (state != STILL || tools[curr_tool] != nullptr || has_used_tool) {return;}
     tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time_for_curr_tool, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
@@ -60,7 +61,7 @@ void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_
 }
 
 void Worm::aim(int angle_inc, int direction){
-    if (state != STILL || !tools[curr_tool]->can_aim()) {return;}
+    if (state != STILL || tools[curr_tool] != nullptr || !tools[curr_tool]->can_aim()) {return;}
     int new_angle = aiming_angle + angle_inc;
     if (new_angle > MAX_AIMING_ANGLE) {
         new_angle = MAX_AIMING_ANGLE;
@@ -80,11 +81,12 @@ void Worm::change_tool(int scroll_direction){
     } else if (curr_tool >= (int) tools.size()) {
         curr_tool = 0;
     }
-    printf("Cambiando a herramienta: %d\n", tools[curr_tool]->get_type());
+    if (tools[curr_tool] != nullptr) printf("Cambiando a herramienta: %d\n", tools[curr_tool]->get_type());
 }
 
 void Worm::store_tool(){
-    curr_tool = NO_WEAPON;
+    // curr_tool = NO_TOOl;
+    curr_tool = tools.size() - 1;
 }
 
 bool Worm::in_contact(){
@@ -151,7 +153,8 @@ void Worm::set_curr_tool(int new_tool){
 }
 
 void Worm::apply_damage(int damage){
-    set_curr_tool(NO_TOOL);
+    // set_curr_tool(NO_TOOL);
+    set_curr_tool(tools.size() - 1);
     life -= damage;
     state = DAMAGED;
     if (life <= 0){
