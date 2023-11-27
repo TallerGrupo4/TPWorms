@@ -64,7 +64,7 @@ public:
 
     void player_change_tool(int id, int direction);
 
-    void remove_player(char army_id);
+    void remove_army(char army_id);
 
     void print_current_state();
 

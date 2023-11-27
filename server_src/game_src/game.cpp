@@ -104,9 +104,17 @@ void Game::player_change_tool(int id, int direction) {
     worm->change_tool(direction);
 }
 
-void Game::remove_player(char army_id){
-    //TODO: Remove all players from that army
-    return ;
+
+void Game::remove_army(char army_id){
+    for (auto& team: teams) {
+        if (team.first == army_id){
+            for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
+                worm->set_state(DEAD);
+            }
+            // teams.erase(team.first);
+            return;
+        }
+    }
 }
 
 void Game::check_angles(Worm& w){
@@ -198,8 +206,6 @@ void Game::game_post_cleanup(){
                 world.DestroyBody(worm->body);
                 worm->body = nullptr;
                 dead_worms_ids.push_back(worm->get_id());
-                std::cout << "Worm " << (int) worm->get_id() << " is dead" << std::endl;
-                std::cout << "There are still " << team.second.size() - 1 << " worms alive" << std::endl;
             }
         }
         for (char id: dead_worms_ids) {
