@@ -127,6 +127,10 @@ void MainWindow::joinMatch() {
                 exit_succesful = true;
                 this->close();
                 break;
+            case CASE_MATCH_ALREADY_STARTED:
+                ui->JoinMatchLineEdit->clear();
+                ui->JoinMatchLineEdit->setText("Error: Match already started");
+                break;
             }
             
         } else {
@@ -172,7 +176,6 @@ QString code_string = ui->CreateMatchLineEdit->text();
                     handle_pre_match(recv_cmd.get_map_names(), recv_cmd.get_number_of_players(), true);
                     break;
                 }
-            
         } else {
             ui->CreateMatchLineEdit->clear();
             ui->CreateMatchLineEdit->setText("Error: Code is not numerical");
