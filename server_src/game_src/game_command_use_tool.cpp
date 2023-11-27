@@ -7,3 +7,15 @@ UseToolCommand::~UseToolCommand() {}
 void UseToolCommand::execute(Game& game) {
     game.player_use_tool(id_worm, potency , pos_x , pos_y );
 }
+
+int UseToolCommand::get_potency() {
+    return potency;
+}
+
+float UseToolCommand::get_pos_x() {
+    return pos_x;
+}
+
+float UseToolCommand::get_pos_y() {
+    return pos_y;
+}

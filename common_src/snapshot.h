@@ -109,7 +109,7 @@ public:
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
     Snapshot(std::vector<WormSnapshot> worms, std::vector<PlatformSnapshot> platforms, std::vector<ProjectileSnapshot> projectiles):
-            worms(worms), platforms(platforms), map_dimensions() {};
+            worms(worms), platforms(platforms), projectiles(projectiles), map_dimensions() {};
     
     Snapshot() {};
     ~Snapshot() {};

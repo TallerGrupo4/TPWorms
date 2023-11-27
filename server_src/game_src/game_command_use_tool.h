@@ -13,6 +13,11 @@ class UseToolCommand: public GameCommand {
     ~UseToolCommand();
     void execute(Game& game) override;
 
+    int get_potency();
+
+    float get_pos_x();
+
+    float get_pos_y();
 };
 
 

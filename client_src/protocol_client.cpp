@@ -236,7 +236,7 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
         pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
         angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
-        ProjectileSnapshot projectile(pos_x[0], pos_y[0], angle[0], type[0]);
+        ProjectileSnapshot projectile(type[0], pos_x[0], pos_y[0], angle[0]);
         snapshot.projectiles.push_back(projectile);
     }
 }

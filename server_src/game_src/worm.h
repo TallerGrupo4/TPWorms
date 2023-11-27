@@ -156,7 +156,7 @@ public:
         if (!in_contact() || data.state != STILL) {return;}
         body->SetLinearVelocity( b2Vec2( 0, 0 ) );
         float m = body->GetMass();
-        if (dir == FOWARD) {
+        if (dir == FORWARD) {
             body->ApplyLinearImpulseToCenter( b2Vec2( m * WORM_JUMP_HOR_SPEED * data.act_dir, m * WORM_JUMP_SPEED), true );
             data.state = JUMPING;
 

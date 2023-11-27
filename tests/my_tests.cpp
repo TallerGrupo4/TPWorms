@@ -254,6 +254,10 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Number_of_players_1) {
 
 // MATCH
 
+
+
+// SEND ACTIONS AND RECV GAME COMMANDS
+
 TEST(ProtocolHappyCasesMatch, Send_action_mov_right_and_recv_gameCommand_mov_right) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
@@ -269,20 +273,97 @@ TEST(ProtocolHappyCasesMatch, Send_action_mov_right_and_recv_gameCommand_mov_rig
     ASSERT_EQ(moveCommand->get_direction(), RIGHT);
 }
 
-TEST(ProtocolHappyCasesMatch, Send_action_jump_right_and_recv_gameCommand_jump_right) {
+
+TEST(ProtocolHappyCasesMatch, Send_action_mov_left_and_recv_gameCommand_mov_left) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionMovLeft>();
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    MoveCommand* moveCommand = dynamic_cast<MoveCommand*>(game_command.get());
+    ASSERT_NE(moveCommand, nullptr);
+    ASSERT_EQ(moveCommand->get_direction(), LEFT);
+}
+
+
+TEST(ProtocolHappyCasesMatch, Send_action_jump_forward_and_recv_gameCommand_jump_forward) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    std::shared_ptr<ActionMov> action = std::make_shared<ActionJumpRight>();
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionJump>();
     protocol_client.send_action(action);
     std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
     JumpCommand* jumpCommand = dynamic_cast<JumpCommand*>(game_command.get());
     ASSERT_NE(jumpCommand, nullptr);
-    ASSERT_EQ(jumpCommand->get_direction(), RIGHT);
+    ASSERT_EQ(jumpCommand->get_direction(), FORWARD);
 }
+
+TEST(ProtocolHappyCasesMatch, Send_action_jump_backward_and_recv_gameCommand_jump_backward) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<ActionMov> action = std::make_shared<ActionBackflip>();
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    JumpCommand* jumpCommand = dynamic_cast<JumpCommand*>(game_command.get());
+    ASSERT_NE(jumpCommand, nullptr);
+    ASSERT_EQ(jumpCommand->get_direction(), BACKWARD);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_action_aim_and_recv_gameCommand_aim) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionAim>(1, 2, 3);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    AimCommand* aimCommand = dynamic_cast<AimCommand*>(game_command.get());
+    ASSERT_NE(aimCommand, nullptr);
+    ASSERT_EQ(aimCommand->get_worm_id(), 3);
+    ASSERT_EQ(aimCommand->get_look_direction_x(), 1);
+    ASSERT_EQ(aimCommand->get_look_direction_y(), 2);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_action_shoot_and_recv_gameCommand_shoot) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionShooting>(1, 2);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    UseToolCommand* useToolCommand = dynamic_cast<UseToolCommand*>(game_command.get());
+    ASSERT_NE(useToolCommand, nullptr);
+    ASSERT_EQ(useToolCommand->get_worm_id(), 2);
+    ASSERT_EQ(useToolCommand->get_potency(), 1);
+    ASSERT_EQ(useToolCommand->get_pos_x(), 0); // This values are hardcoded in the ProtocoServer
+    ASSERT_EQ(useToolCommand->get_pos_y(), 0); // This values are hardcoded in the ProtocoServer
+}
+
+
+// SEND AND RECV SNAPSHOT
 
 TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     // SEPARATE THIS TEST INTO MULTIPLE TESTS
@@ -295,7 +376,9 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
     WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
-    Snapshot snapshot_to_send(worms, {}, {});
+    ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4);
+    std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot};
+    Snapshot snapshot_to_send(worms, {}, projectiles);
     snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
     snapshot_to_send.set_dimensions(100, 100, 100, 100);
     protocol_server.send_snapshot(snapshot_to_send);
@@ -314,6 +397,11 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     ASSERT_EQ(snapshot_received.map_dimensions.worm_height, 100 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.turn_time_and_worm_turn.turn_time, 12);
     ASSERT_NE(snapshot_received.turn_time_and_worm_turn.worm_turn, 12);
+    ASSERT_EQ(snapshot_received.projectiles.size(), 1);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).type, EXPLOSIVE);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).pos_x, 2 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).pos_y, 3 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).angle, std::round(4 * RADTODEG));
 }
 
 // TEST(ProtocolHappyCases, ExitServer) {

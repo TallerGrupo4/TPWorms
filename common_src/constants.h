@@ -92,7 +92,7 @@ enum TOOLS : uint8_t {
 #define RIGHT 0x01
 #define JUMP 0x03
 #define BACKFLIP 0x04
-#define FOWARD 0x01
+#define FORWARD 0x01
 #define BACKWARD -0x01
 #define SHOOT 0x05
 #define AIM 0x06

@@ -75,7 +75,7 @@ public:
 
 class ActionJump : public ActionMov {
 public:
-    ActionJump(uint8_t worm_id = 0) : ActionMov(JUMP, FOWARD, worm_id) {};
+    ActionJump(uint8_t worm_id = 0) : ActionMov(JUMP, FORWARD, worm_id) {};
     ~ActionJump() = default;
 };
 

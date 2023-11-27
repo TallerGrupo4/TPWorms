@@ -8,3 +8,7 @@ MoveCommand::~MoveCommand() {}
 void MoveCommand::execute(Game& game) {
     game.move_player(id_worm, direction);
 }
+
+int MoveCommand::get_direction() {
+    return direction;
+}

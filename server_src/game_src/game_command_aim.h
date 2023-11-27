@@ -12,6 +12,10 @@ class AimCommand : public GameCommand {
     ~AimCommand() {};
     void execute(Game& game) override;
 
+    char get_look_direction_x();
+
+    char get_look_direction_y();
+
 };
 
 

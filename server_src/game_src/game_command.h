@@ -14,6 +14,9 @@ public:
     GameCommand(char id = -1, int direction = 0): id_worm(id), direction(direction) {};
     ~GameCommand() = default;
 
+    char get_worm_id() {
+        return id_worm;
+    }
 
     void virtual execute(Game& game) { return; };
 };
