@@ -15,6 +15,7 @@ class Projectile {
     int damage;
     int radius;
     int type;
+    int body_type;
     int explosion_type;
     int timer;
     int fragments;
