@@ -20,8 +20,6 @@ class WormNotFound: public std::exception {
     }
 };
 
-// Che dame el cuerpo que 
-
 
 class WormData{
     friend class Worm;
@@ -37,6 +35,7 @@ class WormData{
     char team_id;
     int aiming_angle;
     int time_for_curr_tool;
+    int no_tool_index = 0;
     
     
     WormData(char id, int team_id): id(id), life(START_LIFE), state(STILL), curr_tool(NO_TOOL) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM), team_id(team_id), aiming_angle(0), time_for_curr_tool(5*FPS)  {
@@ -82,7 +81,7 @@ class WormData{
     }
 
     void apply_damage(int damage){
-        set_curr_tool(NO_TOOL);
+        set_curr_tool(no_tool_index);
         life -= damage;
         state = DAMAGED;
         if (life <= 0){
@@ -120,6 +119,8 @@ public:
         body(body), data(id, team_id), has_used_tool(false) {
             body->GetUserData().pointer = (uintptr_t) &data;
             tools.push_back(std::make_shared<Bazooka>());
+            tools.push_back(nullptr);
+            data.no_tool_index = tools.size() - 1;
         }
     
     int get_id() {
@@ -167,7 +168,7 @@ public:
     }
 
     void use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-        if (data.state != STILL || has_used_tool) {return;}
+        if (data.state != STILL || tools[data.curr_tool] != nullptr || has_used_tool) {return;}
         tools[data.curr_tool]->use(body , data.act_dir , data.aiming_angle * DEGTORAD, data.time_for_curr_tool, power, x, y, projectiles);
         has_used_tool = true;
         data.aiming_angle = 0 ;
@@ -175,7 +176,7 @@ public:
     }
 
     void aim(int angle_inc, int direction){
-        if (data.state != STILL || !tools[data.curr_tool]->can_aim()) {return;}
+        if (data.state != STILL || tools[data.curr_tool] != nullptr || !tools[data.curr_tool]->can_aim()) {return;}
         int new_angle = data.aiming_angle + angle_inc;
         if (new_angle > MAX_AIMING_ANGLE) {
             new_angle = MAX_AIMING_ANGLE;
@@ -188,8 +189,6 @@ public:
         data.act_dir = direction;
     }
 
-    // 
-
     void change_tool(int scroll_direction){
         data.curr_tool += scroll_direction;
         if (data.curr_tool < 0)  {
@@ -197,11 +196,12 @@ public:
         } else if (data.curr_tool >= (int) tools.size()) {
             data.curr_tool = 0;
         }
-        printf("Cambiando a herramienta: %d\n", tools[data.curr_tool]->get_type());
+        if (tools[data.curr_tool] != nullptr) printf("Cambiando a herramienta: %d\n", tools[data.curr_tool]->get_type());
+        else printf("NO_TOOL\n");
     }
 
     void store_tool(){
-        data.curr_tool = NO_WEAPON;
+        data.curr_tool = tools.size() - 1;
     }
 
     bool in_contact(){
