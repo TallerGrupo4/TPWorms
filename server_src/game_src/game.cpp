@@ -303,6 +303,10 @@ void Game::turn_clean_up(){
                 cleaning_time = 1 * FPS;
                 return;
             }
+            if (worm->state == AIMING) {
+                worm->store_tool();
+                worm->set_state(STILL);
+            }
         }
         // std::shared_ptr<Worm> worm = pair.second;
         // if (worm->get_state () == DEAD) {continue;}
