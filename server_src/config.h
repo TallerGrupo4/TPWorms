@@ -79,8 +79,12 @@ public:
         return worm_backflip_hor_speed;
     }
 
-    int get_explosion_power() const {
+    float get_explosion_power() const {
         return explosion_power;
+    }
+
+    float get_projectile_potency() const {
+        return projectile_potency;
     }
 
     int get_bazooka_damage() const {
@@ -114,9 +118,21 @@ public:
     int get_mortar_type() const {
         return mortar_type;
     }
-
+    
     int get_mortar_fragments() const {
         return mortar_fragments;
+    }
+
+    float get_mortar_misile_restitution() const {
+        return mortar_misile_restitution;
+    }
+
+    float get_mortar_misile_density() const {
+        return mortar_misile_density;
+    }
+
+    float get_mortar_max_ammo() const {
+        return mortar_max_ammo;
     }
 
     int get_green_granade_damage() const {
@@ -129,6 +145,14 @@ public:
 
     int get_green_granade_type() const {
         return green_granade_type;
+    }
+
+    float get_green_granade_restitution() const {
+        return green_granade_restitution;
+    }
+
+    float get_green_granade_density() const {
+        return green_granade_density;
     }
 
     int get_red_granade_damage() const {
@@ -147,6 +171,18 @@ public:
         return red_granade_fragments;
     }
 
+    int get_red_granade_max_ammo() const {
+        return red_granade_max_ammo;
+    }
+
+    float get_red_granade_restitution() const {
+        return red_granade_restitution;
+    }
+
+    float get_red_granade_density() const {
+        return red_granade_density;
+    }
+
     int get_banana_damage() const {
         return banana_damage;
     }
@@ -157,6 +193,18 @@ public:
 
     int get_banana_type() const {
         return banana_type;
+    }
+
+    float get_banana_restitution() const {
+        return banana_restitution;
+    }
+
+    float get_banana_density() const {
+        return banana_density;
+    }
+
+    int get_banana_max_ammo() const {
+        return banana_max_ammo;
     }
 
     int get_holy_granade_damage() const {
@@ -171,16 +219,16 @@ public:
         return holy_granade_type;
     }
 
-    int get_airstrike_damage() const {
-        return airstrike_damage;
+    float get_holy_granade_restitution() const {
+        return holy_granade_restitution;
     }
 
-    int get_airstrike_radius() const {
-        return airstrike_radius;
+    float get_holy_granade_density() const {
+        return holy_granade_density;
     }
 
-    int get_airstrike_type() const {
-        return airstrike_type;
+    int get_holy_granade_max_ammo() const {
+        return holy_granade_max_ammo;
     }
 
     int get_dynamite_damage() const {
@@ -195,17 +243,42 @@ public:
         return dynamite_type;
     }
 
-    int get_baseball_bat_damage() const {
-        return baseball_bat_damage;
+    int get_dynamite_max_ammo() const {
+        return dynamite_max_ammo;
     }
 
-    int get_baseball_bat_radius() const {
-        return baseball_bat_radius;
+    int get_baseball_bat_damage() const {
+        return baseball_bat_damage;
     }
 
     int get_baseball_bat_type() const {
         return baseball_bat_type;
     }
+
+    int get_airstrike_damage() const {
+        return airstrike_damage;
+    }
+
+    int get_airstrike_radius() const {
+        return airstrike_radius;
+    }
+
+    int get_airstrike_type() const {
+        return airstrike_type;
+    }
+
+    int get_airstrike_max_ammo() const{
+        return airstrike_max_ammo;
+    }
+
+    int get_teleporter_type() const {
+        return teleporter_type;
+    }
+
+    int get_no_tool_type() const {
+        return no_tool_type;
+    }
+
 
     ~ConfigSingleton() {}
 
@@ -241,7 +314,8 @@ private:
             worm_jump_hor_speed = config["worm_jump_hor_speed"].as<float>();
             worm_backflip_speed = config["worm_backflip_speed"].as<float>();
             worm_backflip_hor_speed = config["worm_backflip_hor_speed"].as<float>();
-            explosion_power = config["explosion_power"].as<int>();
+            explosion_power = config["explosion_power"].as<float>();
+            projectile_potency = config["projectile_potency"].as<float>();
             bazooka_damage = config["bazooka_damage"].as<int>();
             bazooka_radius = config["bazooka_radius"].as<int>();
             bazooka_type = config["bazooka_type"].as<int>();
@@ -251,28 +325,45 @@ private:
             mortar_radius = config["mortar_radius"].as<int>();
             mortar_type = config["mortar_type"].as<int>();
             mortar_fragments = config["mortar_fragments"].as<int>();
+            mortar_misile_restitution = config["mortar_misile_restitution"].as<float>();
+            mortar_misile_density = config["mortar_misile_density"].as<float>();
+            mortar_max_ammo = config["mortar_max_ammo"].as<int>();
             green_granade_damage = config["green_granade_damage"].as<int>();
             green_granade_radius = config["green_granade_radius"].as<int>();
             green_granade_type = config["green_granade_type"].as<int>();
+            green_granade_restitution = config["green_granade_restitution"].as<float>();
+            green_granade_density = config["green_granade_density"].as<float>();
             red_granade_damage = config["red_granade_damage"].as<int>();
             red_granade_radius = config["red_granade_radius"].as<int>();
             red_granade_type = config["red_granade_type"].as<int>();
             red_granade_fragments = config["red_granade_fragments"].as<int>();
+            red_granade_max_ammo = config["red_granade_max_ammo"].as<int>();
+            red_granade_restitution = config["red_granade_restitution"].as<float>();
+            red_granade_density = config["red_granade_density"].as<float>();
             banana_damage = config["banana_damage"].as<int>();
             banana_radius = config["banana_radius"].as<int>();
             banana_type = config["banana_type"].as<int>();
+            banana_restitution = config["banana_restitution"].as<float>();
+            banana_density = config["banana_density"].as<float>();
+            banana_max_ammo = config["banana_max_ammo"].as<int>();
             holy_granade_damage = config["holy_granade_damage"].as<int>();
             holy_granade_radius = config["holy_granade_radius"].as<int>();
             holy_granade_type = config["holy_granade_type"].as<int>();
-            airstrike_damage = config["airstrike_damage"].as<int>();
-            airstrike_radius = config["airstrike_radius"].as<int>();
-            airstrike_type = config["airstrike_type"].as<int>();
+            holy_granade_restitution = config["holy_granade_restitution"].as<float>();
+            holy_granade_density = config["holy_granade_density"].as<float>();
+            holy_granade_max_ammo = config["holy_granade_max_ammo"].as<int>();
             dynamite_damage = config["dynamite_damage"].as<int>();
             dynamite_radius = config["dynamite_radius"].as<int>();
             dynamite_type = config["dynamite_type"].as<int>();
+            dynamite_max_ammo = config["dynamite_max_ammo"].as<int>();
             baseball_bat_damage = config["baseball_bat_damage"].as<int>();
-            baseball_bat_radius = config["baseball_bat_radius"].as<int>();
             baseball_bat_type = config["baseball_bat_type"].as<int>();
+            airstrike_damage = config["airstrike_damage"].as<int>();
+            airstrike_radius = config["airstrike_radius"].as<int>();
+            airstrike_type = config["airstrike_type"].as<int>();
+            airstrike_max_ammo = config["airstrike_max_ammo"].as<int>();
+            teleporter_type = config["teleporter_type"].as<int>();
+            no_tool_type = config["no_tool_type"].as<int>();
             std::cout << "Config file read successfully" << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
@@ -285,7 +376,7 @@ private:
                       << std::endl;
         }
     }
-
+// Game
     int max_players;
     int plat_small;
     int plat_big;
@@ -303,38 +394,72 @@ private:
     float worm_jump_hor_speed;
     float worm_backflip_speed;
     float worm_backflip_hor_speed;
-    int explosion_power;
+
+// Explosions
+
+    float explosion_power;
+    float projectile_potency;
+
+// Weapons
     int bazooka_damage;
     int bazooka_radius;
     int bazooka_type;
     float bazooka_misile_restitution;
     float bazooka_misile_density;
+
     int mortar_damage;
     int mortar_radius;
     int mortar_type;
     int mortar_fragments;
+    float mortar_misile_restitution;
+    float mortar_misile_density;
+    int mortar_max_ammo;
+
     int green_granade_damage;
     int green_granade_radius;
     int green_granade_type;
+    float green_granade_restitution;
+    float green_granade_density;
+
     int red_granade_damage;
     int red_granade_radius;
     int red_granade_type;
     int red_granade_fragments;
+    int red_granade_max_ammo;
+    float red_granade_restitution;
+    float red_granade_density;
+
     int banana_damage;
     int banana_radius;
     int banana_type;
+    float banana_restitution;
+    float banana_density;
+    int banana_max_ammo;
+
     int holy_granade_damage;
     int holy_granade_radius;
     int holy_granade_type;
-    int airstrike_damage;
-    int airstrike_radius;
-    int airstrike_type;
+    float holy_granade_restitution;
+    float holy_granade_density;
+    int holy_granade_max_ammo;
+
     int dynamite_damage;
     int dynamite_radius;
     int dynamite_type;
+    int dynamite_max_ammo;
+
     int baseball_bat_damage;
-    int baseball_bat_radius;
     int baseball_bat_type;
+
+    int airstrike_damage;
+    int airstrike_radius;
+    int airstrike_type;
+    int airstrike_max_ammo;
+
+    int teleporter_type;
+
+    int no_tool_type;
+
 
 
     // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
