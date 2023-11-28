@@ -63,7 +63,6 @@ enum TOOLS : uint8_t {
     GREEN_GRENADE,
     RED_GRENADE,
     BANANA,
-    BAT,
     HOLY_GRENADE,
     DYNAMITE,
     BASEBALL_BAT,
