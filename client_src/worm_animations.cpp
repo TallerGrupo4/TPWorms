@@ -797,7 +797,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_mortar_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case GREEN_GRENADE:
+        case GREEN_GRANADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_grn_up_an, new_aiming_angle, old_aiming_angle);
@@ -814,7 +814,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_grn_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case RED_GRENADE:
+        case RED_GRANADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_cls_up_an, new_aiming_angle, old_aiming_angle);
@@ -848,7 +848,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_ban_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case HOLY_GRENADE:
+        case HOLY_GRANADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_hgr_up_an, new_aiming_angle, old_aiming_angle);
