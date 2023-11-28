@@ -75,6 +75,8 @@ void MyListener::EndContact(b2Contact* contact){
     change_last_y(bodyB, bodyA);
 }
 
+MyListener::~MyListener() {}
+
 
 
 

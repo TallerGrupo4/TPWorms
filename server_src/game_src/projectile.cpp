@@ -3,6 +3,7 @@
 Projectile::Projectile(b2Body* body, int damage, int radius, int type, int explosion_type, int timer, int fragments, int fragment_damage, float angle) :
     body(body), damage(damage), radius(radius), type(type), body_type(PROJECITLE), explosion_type(explosion_type), timer(timer), fragments(fragments), fragment_damage(fragment_damage), angle(angle), state(state)  {
         body->GetUserData().pointer = (uintptr_t) this;
+        body->SetTransform(body->GetPosition(), angle);
     }
 
 Projectile::~Projectile() {}
