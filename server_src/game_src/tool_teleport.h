@@ -1,5 +1,7 @@
 #include "tool.h"
 
+#ifndef TELEPORTER_H
+#define TELEPORTER_H
 
 class Teleporter: public Tool {
     bool validate_teleport(float x , float y, b2World* world);
@@ -12,3 +14,5 @@ class Teleporter: public Tool {
     ~Teleporter();
 
 };
+
+#endif  // TELEPORTER_H

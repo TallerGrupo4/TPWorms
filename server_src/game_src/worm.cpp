@@ -6,6 +6,15 @@ Worm::Worm(b2Body* body, char id, char team_id):
     body(body),id(id), life(START_LIFE), state(STILL), curr_tool(NO_TOOL) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , type(WORM), team_id(team_id), aiming_angle(0), time_for_curr_tool(5*FPS) , has_used_tool(false) {
         body->GetUserData().pointer = (uintptr_t) this;
         tools.push_back(std::make_shared<Bazooka>());
+        tools.push_back(std::make_shared<Mortar>());
+        tools.push_back(std::make_shared<GreenGranade>());
+        tools.push_back(std::make_shared<RedGranade>());
+        tools.push_back(std::make_shared<Banana>());
+        tools.push_back(std::make_shared<HolyGranade>());
+        tools.push_back(std::make_shared<Dynamite>());
+        tools.push_back(std::make_shared<Bat>());
+        tools.push_back(std::make_shared<Airstrike>());
+        tools.push_back(std::make_shared<Teleporter>());
         tools.push_back(nullptr);
     }
 

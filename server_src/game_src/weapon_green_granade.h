@@ -1,22 +1,24 @@
+#ifndef GREEN_GRANADE_H
+#define GREEN_GRANADE_H
+
 #include "weapon.h"
 #include "projectile.h"
 #include <box2d/box2d.h>
 
-#ifndef BAZOOKA_H
-#define BAZOOKA_H
 
-
-class Bazooka : public Weapon {
+class GreenGranade : public Weapon {
 
     public:
-    Bazooka();
+    GreenGranade();
 
     void use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles) override;
 
     Projectile* create_projectile(b2Body* worm, int direction, float angle , int power);
 
-    ~Bazooka();
+    ~GreenGranade();
 
 };
 
-#endif // BAZOOKA_H
+
+
+#endif  // GREEN_GRANADE_H

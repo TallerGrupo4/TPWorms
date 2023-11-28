@@ -215,6 +215,14 @@ public:
         return dynamite_radius;
     }
 
+    int get_dynamite_restitution() const {
+        return dynamite_restitution;
+    }
+
+    int get_dynamite_density() const {
+        return dynamite_density;
+    }
+
     int get_dynamite_max_ammo() const {
         return dynamite_max_ammo;
     }
@@ -294,7 +302,6 @@ private:
             green_granade_restitution = config["green_granade_restitution"].as<float>();
             green_granade_density = config["green_granade_density"].as<float>();
             // Red Granade
-            std::cout << "Reading red granade" << std::endl;
             red_granade_damage = config["red_granade_damage"].as<int>();
             red_granade_radius = config["red_granade_radius"].as<int>();
             red_granade_fragments = config["red_granade_fragments"].as<int>();
@@ -317,6 +324,8 @@ private:
             dynamite_damage = config["dynamite_damage"].as<int>();
             dynamite_radius = config["dynamite_radius"].as<int>();
             dynamite_max_ammo = config["dynamite_max_ammo"].as<int>();
+            dynamite_restitution = config["dynamite_restitution"].as<float>();
+            dynamite_density = config["dynamite_density"].as<float>();
             // Baseball bat
             baseball_bat_damage = config["baseball_bat_damage"].as<int>();
             // Airstrike
@@ -409,6 +418,8 @@ private:
     int dynamite_damage;
     int dynamite_radius;
     int dynamite_max_ammo;
+    int dynamite_restitution;
+    int dynamite_density;
 
 // Baseball bat
     int baseball_bat_damage;

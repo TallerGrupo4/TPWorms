@@ -28,3 +28,5 @@ Projectile* Bazooka::create_projectile(b2Body* worm, int direction, float angle 
     return projectile;
 }
 
+Bazooka::~Bazooka(){}
+

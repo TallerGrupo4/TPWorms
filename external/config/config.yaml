@@ -69,6 +69,8 @@ holy_granade_max_ammo: 2
 dynamite_damage: 50
 dynamite_radius: 4
 dynamite_max_ammo: 5
+dynamite_restitution: 0.3
+dynamite_density: 1
 
 baseball_bat_damage: 30
 
