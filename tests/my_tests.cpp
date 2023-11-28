@@ -394,7 +394,7 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
     WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
-    ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4 * RADTODEG);
+    ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4 * RADTODEG, 5, 6, 0, EXPLOSIVE);
     std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot};
     Snapshot snapshot_to_send(worms, projectiles, {});
     snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
@@ -420,6 +420,9 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     ASSERT_EQ(snapshot_received.projectiles.at(0).pos_x, 2 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.projectiles.at(0).pos_y, 3 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.projectiles.at(0).angle, std::round(4 * RADTODEG));
+    ASSERT_EQ(snapshot_received.projectiles.at(0).state, 6);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).id, 0);
+    ASSERT_EQ(snapshot_received.projectiles.at(0).explosion_type, EXPLOSIVE);
 }
 
 // TEST(ProtocolHappyCases, ExitServer) {
