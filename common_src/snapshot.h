@@ -18,6 +18,7 @@ struct MapDimensions {
     float worm_width = WORM_WIDTH;
     float worm_height = WORM_HEIGHT;
     int amount_of_worms = DEFAULT;
+    int water_level = DEFAULT;
 } typedef MapDimensions_t;
 
 struct TurnTimeAndWormTurn {
@@ -124,12 +125,13 @@ public:
     Snapshot() {};
     ~Snapshot() {};
 
-    void set_dimensions(float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT, int amount_of_worms = 0) {
+    void set_dimensions(float height = 0, float width = 0, float worm_width = WORM_WIDTH, float worm_height = WORM_HEIGHT, int amount_of_worms = 0, int water_level = 0) {
         map_dimensions.height = height;
         map_dimensions.width = width;
         map_dimensions.worm_width = worm_width;
         map_dimensions.worm_height = worm_height;
         map_dimensions.amount_of_worms = amount_of_worms;
+        map_dimensions.water_level = water_level;
     }
     void set_turn_time_and_worm_turn(int turn_time = 0, int worm_turn = 0) {
         turn_time_and_worm_turn.turn_time = turn_time;
