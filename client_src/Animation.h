@@ -25,6 +25,7 @@ public:
     bool update_once();
     virtual void update_once_up() {return;}
     virtual void update_once_down() {return;}
+    virtual void update_up(int angle) {return;}
     void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest,
                 SDL_RendererFlip& flipType,
                 int left_offset = 0,

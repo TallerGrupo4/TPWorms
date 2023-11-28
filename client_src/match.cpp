@@ -3,15 +3,11 @@
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
-    // std::cout << "Antes de crear el background" << std::endl;
     bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
     my_army_id = snpsht.my_army.begin()->first;
-    std::cout << "my_army_id : " << +my_army_id << std::endl;
     worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
-    std::cout << "worm_turn_id : " << +worm_turn_id << std::endl;
     turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
     camera.update_turn_time_text(turn_time);
-    // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
     for (WormSnapshot worm_snpsht : snpsht.worms){
         SDL_Color worm_color;
         switch (worm_snpsht.team_id) {
@@ -35,15 +31,30 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         this->worms_map[worm_snpsht.id] = worm;
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
+    // for (ProjectileSnapshot projectile_snpsht : snpsht.projectiles){
+    //     std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
+    //     this->projectiles_map[projectile_snpsht.id] = projectile;
+    //     std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
+    // }
     update_camera(1,1,true);
 }
 
-void Match::update_from_snapshot(Snapshot& snpsht) {
-    // Now you can access the turn_time and worm_turn by doing: snpsht.turn_time_and_worm_turn.turn_time and snpsht.turn_time_and_worm_turn.worm_turn
+void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
     if (turn_time != (snpsht.turn_time_and_worm_turn.turn_time/FPS)) {
         turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
         camera.update_turn_time_text(turn_time);    
     }
+
+    // for (auto& projectile_snpsht : snpsht.projectiles) {
+    //     if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end()) {
+    //         std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
+    //         this->projectiles_map[projectile_snpsht.id] = projectile;
+    //         std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
+    //     } else {
+    //         projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
+    //     }
+    // }
+
     for (auto& worm_snpsht : snpsht.worms) { 
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }

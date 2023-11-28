@@ -228,18 +228,29 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         int pos_y[1];
         int angle[1];
         char type[1];
+        int direction[1];
+        int state[1];
+        char id[1];
+        int explosion_type[1];
         socket.recvall(pos_x, 4, &was_closed);
         socket.recvall(pos_y, 4, &was_closed);
         socket.recvall(angle, 4, &was_closed);
         socket.recvall(type, 1, &was_closed);
+        socket.recvall(direction, 4, &was_closed);
+        socket.recvall(state, 4, &was_closed);
+        socket.recvall(id, 1, &was_closed);
+        socket.recvall(explosion_type, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         angle[0] = ntohl(angle[0]);
+        direction[0] = ntohl(direction[0]);
+        state[0] = ntohl(state[0]);
+        explosion_type[0] = ntohl(explosion_type[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);
         float _angle = static_cast<float>(angle[0]);
         parser.parse_projectile_mesures(_pos_x, _pos_y, _angle);
-        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle);
+        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], state[0], id[0], explosion_type[0]);
         snapshot.projectiles.push_back(projectile);
     }
 }

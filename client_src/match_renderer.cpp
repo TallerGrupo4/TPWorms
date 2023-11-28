@@ -11,7 +11,6 @@ MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(cli
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
-        // std::cout << "match height: " << map_received.map_dimensions.height << "\n match width: " << map_received.map_dimensions.width << std::endl;
         match = Match(map_received,surfaces,renderer);
         this->render(renderer,match);
 }
@@ -151,10 +150,10 @@ void MatchRenderer::execute_and_update(int iter) {
         running = handleEvents(match);
         Snapshot snapshot;
         while (client.recv_snapshot(snapshot)) {
-            match.update_from_snapshot(snapshot);
+            match.update_from_snapshot(snapshot, surfaces, renderer);
         }
         
-        match.update_from_iter(iter); // iter
+        match.update_from_iter(iter);
         render(renderer, match);
     } catch (std::exception& e) {
 

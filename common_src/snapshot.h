@@ -48,13 +48,17 @@ enum BeamType : char {
 
 class ProjectileSnapshot {
     public:
+    char type;
     float pos_x;
     float pos_y;
     float angle;
-    char type;
+    int direction;
+    int state;
+    char id;
+    int explosion_type;
 
-    ProjectileSnapshot(int type, float pos_x, float pos_y, float angle):
-            pos_x(pos_x), pos_y(pos_y), angle(angle), type(type) {};
+    ProjectileSnapshot(int type, float pos_x, float pos_y, float angle, int direction, int state, char id, int explosion_type):
+            type(type), pos_x(pos_x), pos_y(pos_y), angle(angle), direction(direction), state(state), id(id), explosion_type(explosion_type) {};
 
 };
 

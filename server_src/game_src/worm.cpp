@@ -53,11 +53,12 @@ void Worm::jump (int dir){
 }
 
 void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    if (state != STILL || tools[curr_tool] != nullptr || has_used_tool) {return;}
+    if (state != AIMING || tools[curr_tool] != nullptr || has_used_tool) {return;}
     tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time_for_curr_tool, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
-    state = SHOOTED;
+    // state = SHOOTED;
+    state = STILL;
 }
 
 void Worm::aim(int angle_inc, int direction){
@@ -117,7 +118,6 @@ WormSnapshot Worm::get_snapshot() {
     }
     int weapon_sending = curr_tool;
     if (weapon_sending == tools.size() - 1) weapon_sending = NO_TOOL;
-    std::cout << "Aiming angle: " << aiming_angle << std::endl;
     WormSnapshot snapshot(id, pos_x, pos_y, angle, START_LIFE, life, act_dir, weapon_sending, state, team_id, aiming_angle);
     return snapshot;
 }

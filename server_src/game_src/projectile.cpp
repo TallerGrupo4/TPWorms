@@ -1,7 +1,7 @@
 #include "projectile.h"
 
 Projectile::Projectile(b2Body* body, int damage, int radius, int type, int explosion_type, int timer, int fragments, int fragment_damage, float angle) :
-    body(body), damage(damage), radius(radius), type(type), body_type(PROJECITLE), explosion_type(explosion_type), timer(timer), fragments(fragments), fragment_damage(fragment_damage), angle(angle)/*, state(state)*/  {
+    body(body), damage(damage), radius(radius), type(type), body_type(PROJECITLE), explosion_type(explosion_type), timer(timer), fragments(fragments), fragment_damage(fragment_damage), angle(angle), state(ALIVE)  {
         body->GetUserData().pointer = (uintptr_t) this;
     }
 
@@ -66,10 +66,14 @@ int Projectile::get_direction(){
     return IZQ;
 }
 
+void Projectile::set_id(char id) {
+    this->id = id;
+}
+
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
-    return ProjectileSnapshot(type, pos_x, pos_y, get_angle());
+    return ProjectileSnapshot(type, pos_x, pos_y, get_angle(), get_direction(), get_state(), id, get_explosion_type());
 }
 
 

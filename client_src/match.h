@@ -8,6 +8,7 @@
 
 #include "../common_src/snapshot.h"
 #include "worm.h"
+#include "projectile.h"
 #include "camera.h"
 #include "constantes_cliente.h"
 #include "action.h"
@@ -18,6 +19,7 @@ class Match {
 private:
     std::shared_ptr<Background> bkgrnd;
     std::map<char, std::shared_ptr<Worm>> worms_map;
+    //std::map<char, std::shared_ptr<Projectile>> projectiles_map;
     Camera camera;
     char my_army_id;
     char worm_turn_id;
@@ -28,7 +30,7 @@ private:
 public:
     explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     explicit Match();
-    void update_from_snapshot(Snapshot& snpsht);
+    void update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     void update_from_iter(int iter);
     void update_camera(int camera_offset_x = 0, int camera_offset_y = 0,
                        bool center_camera = false, bool player_activated = false,

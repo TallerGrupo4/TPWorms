@@ -318,7 +318,9 @@ Snapshot Game::get_game_snapshot() {
         // worms.push_back(pair.second->get_snapshot());
     }
     std::vector<ProjectileSnapshot> projectiles_snaps;
+    int projectile_id = 0;
     for (auto& projectile : projectiles){
+        projectile->set_id(projectile_id++);
         projectiles_snaps.push_back(projectile->get_snapshot());
     }
     Snapshot snapshot(worms, projectiles_snaps , {});

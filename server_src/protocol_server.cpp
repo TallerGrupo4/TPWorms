@@ -382,6 +382,18 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
         socket.sendall(angle, 4, &was_closed);
         char type[1] = {projectile.type};
         socket.sendall(type, 1, &was_closed);
+        int direction[1] = {projectile.direction};
+        direction[0] = htonl(direction[0]);
+        socket.sendall(direction, 4, &was_closed);
+        int state[1] = {projectile.state};
+        state[0] = htonl(state[0]);
+        socket.sendall(state, 4, &was_closed);
+        char id[1] = {projectile.id};
+        socket.sendall(id, 1, &was_closed);
+        int explosion_type[1] = {projectile.explosion_type};
+        explosion_type[0] = htonl(explosion_type[0]);
+        socket.sendall(explosion_type, 4, &was_closed);
+
     }
 }
 
