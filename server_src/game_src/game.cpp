@@ -121,7 +121,6 @@ void Game::check_angles(Worm& w){
     }
 }
 
-
 void Game::check_states(Worm& w){
     if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
     if (w.get_state() == DAMAGED){
@@ -181,11 +180,15 @@ void Game::worm_comprobations(){
 }
 
 void Game::game_post_cleanup(){
+    std::vector <std::shared_ptr<Projectile>> dead_projectiles;
     for (auto& projectile : projectiles){
         if (projectile->get_state() == EXPLODED){
-            world.DestroyBody(projectile->get_body());
-            projectiles.erase(projectile);
+            dead_projectiles.push_back(projectile);
         }
+    }
+    for (auto& projectile : dead_projectiles){
+        world.DestroyBody(projectile->get_body());
+        projectiles.erase(projectile);
     }
 
     for (auto& team: teams) {
