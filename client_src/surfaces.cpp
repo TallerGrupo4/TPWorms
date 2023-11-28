@@ -124,6 +124,27 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 aim_baz_worm(WORM_AIMING_BAZOOKA_SPRITES_PATH),
                                 aim_baz_up_worm(WORM_AIMING_BAZOOKA_UP_SPRITES_PATH),
                                 aim_baz_down_worm(WORM_AIMING_BAZOOKA_DOWN_SPRITES_PATH),
+                                aim_mortar_worm(WORM_AIMING_MORTAR_SPRITES_PATH),
+                                aim_mortar_up_worm(WORM_AIMING_MORTAR_UP_SPRITES_PATH),
+                                aim_mortar_down_worm(WORM_AIMING_MORTAR_DOWN_SPRITES_PATH),
+                                aim_thr_worm(WORM_AIMING_EMPTY_GRENADE_SPRITES_PATH),
+                                aim_thr_up_worm(WORM_AIMING_EMPTY_GRENADE_UP_SPRITES_PATH),
+                                aim_thr_down_worm(WORM_AIMING_EMPTY_GRENADE_DOWN_SPRITES_PATH),
+                                aim_grn_worm(WORM_AIMING_GREEN_GRENADE_SPRITES_PATH),
+                                aim_grn_up_worm(WORM_AIMING_GREEN_GRENADE_UP_SPRITES_PATH),
+                                aim_grn_down_worm(WORM_AIMING_GREEN_GRENADE_DOWN_SPRITES_PATH),
+                                aim_cls_worm(WORM_AIMING_RED_GRENADE_SPRITES_PATH),
+                                aim_cls_up_worm(WORM_AIMING_RED_GRENADE_UP_SPRITES_PATH),
+                                aim_cls_down_worm(WORM_AIMING_RED_GRENADE_DOWN_SPRITES_PATH),
+                                aim_ban_worm(WORM_AIMING_BANANA_SPRITES_PATH),
+                                aim_ban_up_worm(WORM_AIMING_BANANA_UP_SPRITES_PATH),
+                                aim_ban_down_worm(WORM_AIMING_BANANA_DOWN_SPRITES_PATH),
+                                aim_hgr_worm(WORM_AIMING_HOLY_GRENADE_SPRITES_PATH),
+                                aim_hgr_up_worm(WORM_AIMING_HOLY_GRENADE_UP_SPRITES_PATH),
+                                aim_hgr_down_worm(WORM_AIMING_HOLY_GRENADE_DOWN_SPRITES_PATH),
+                                aim_bsb_worm(WORM_AIMING_BASEBALL_BAT_SPRITES_PATH),
+                                aim_bsb_up_worm(WORM_AIMING_BASEBALL_BAT_UP_SPRITES_PATH),
+                                aim_bsb_down_worm(WORM_AIMING_BASEBALL_BAT_DOWN_SPRITES_PATH),
                                 /*BEAMS*/
                                 large_beam_vertical(BEAM_LARGE_VERTICAL),
                                 large_beam_65(BEAM_LARGE_65),
@@ -264,6 +285,27 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     aim_baz_worm.SetColorKey(true, 0);
     aim_baz_up_worm.SetColorKey(true, 0);
     aim_baz_down_worm.SetColorKey(true, 0);
+    aim_mortar_worm.SetColorKey(true, 0);
+    aim_mortar_up_worm.SetColorKey(true, 0);
+    aim_mortar_down_worm.SetColorKey(true, 0);
+    aim_thr_worm.SetColorKey(true, 0);
+    aim_thr_up_worm.SetColorKey(true, 0);
+    aim_thr_down_worm.SetColorKey(true, 0);
+    aim_grn_worm.SetColorKey(true, 0);
+    aim_grn_up_worm.SetColorKey(true, 0);
+    aim_grn_down_worm.SetColorKey(true, 0);
+    aim_cls_worm.SetColorKey(true, 0);
+    aim_cls_up_worm.SetColorKey(true, 0);
+    aim_cls_down_worm.SetColorKey(true, 0);
+    aim_ban_worm.SetColorKey(true, 0);
+    aim_ban_up_worm.SetColorKey(true, 0);
+    aim_ban_down_worm.SetColorKey(true, 0);
+    aim_hgr_worm.SetColorKey(true, 0);
+    aim_hgr_up_worm.SetColorKey(true, 0);
+    aim_hgr_down_worm.SetColorKey(true, 0);
+    aim_bsb_worm.SetColorKey(true, 0);
+    aim_bsb_up_worm.SetColorKey(true, 0);
+    aim_bsb_down_worm.SetColorKey(true, 0);
     /*BEAMS*/
     large_beam_vertical.SetColorKey(true, 0);
     large_beam_65.SetColorKey(true, 0);

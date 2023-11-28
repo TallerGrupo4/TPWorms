@@ -61,10 +61,13 @@ char Worm::get_army_id() {
  * Esto les va a resultar muy util.
  */
 void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
+    int old_angle = angle;
     angle = worm_snpsht.angle;
+    bool old_facing_left = facing_left;
     facing_left = (worm_snpsht.direction == LEFT ? true : false);
     health_points = worm_snpsht.health;
     worm_texts.update_health(health_points, max_health);
+    int old_state = state;
     state = worm_snpsht.state;
     int old_aiming_angle = aiming_angle;
     aiming_angle = worm_snpsht.aiming_angle;
@@ -75,7 +78,7 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     }
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
-    worm_an.update_from_snapshot(state, angle, facing_left, old_aiming_angle, aiming_angle);
+    worm_an.update_from_snapshot(state, old_state, angle, old_angle, facing_left, old_facing_left, weapon, old_aiming_angle, aiming_angle);
 }
 
 void Worm::update_from_iter(int iter) {

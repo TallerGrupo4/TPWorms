@@ -52,7 +52,7 @@ struct Target {
 
 #define WORM_STILL_1_SPRITES_PATH WORMS_SPRITES_PATH "/wbrth1.png"
 
-#define SECS_FOR_WALKING_SPRITES 1
+#define SECS_FOR_WALKING_SPRITES 0
 
 #define WORM_WALK_SPRITES_PATH WORMS_SPRITES_PATH "/wwalk.png"
 
@@ -69,7 +69,7 @@ struct Target {
 
 #define WORM_BACKFLIP_SPRITES_PATH WORMS_SPRITES_PATH "/wbackflp.png"
 
-#define SECS_FOR_JUMP_SPRITES 1
+#define SECS_FOR_JUMP_SPRITES 0
 
 #define WORM_JUMP_SPRITES_PATH WORMS_SPRITES_PATH "/wjump.png"
 
@@ -89,7 +89,7 @@ struct Target {
 
 #define WORM_SLIDE_UP_SPRITES_PATH WORMS_SPRITES_PATH "/wslideu.png"
 
-#define SECS_FOR_DEAD_SPRITES 2
+#define SECS_FOR_DEAD_SPRITES 1
 
 #define WORM_DEAD_SPRITES_PATH MISC_SPRITES_PATH "/grave1.png"
 
