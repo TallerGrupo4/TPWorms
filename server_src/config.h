@@ -252,18 +252,22 @@ private:
             std::cout << "Reading config file..." << std::endl;
             YAML::Node config = YAML::LoadFile("../external/config/config.yaml");
             max_players = config["max_players"].as<int>();
+            // Platforms
             plat_small = config["plat_small"].as<int>();
             plat_big = config["plat_big"].as<int>();
             plat_height = config["plat_height"].as<float>();
             plat_friction = config["plat_friction"].as<float>();
+            // Worms
             worm_width = config["worm_width"].as<float>();
             worm_height = config["worm_height"].as<float>();
             worm_friction = config["worm_friction"].as<float>();
+            // World
             start_life = config["start_life"].as<int>();
             null_state = config["null_state"].as<int>();
             initial_worms_turn = config["initial_worms_turn"].as<int>();
             turn_time = config["turn_time"].as<int>();
             turn_time = turn_time *  30; // 30 is the fps of the game
+            // Physics
             worm_speed = config["worm_speed"].as<float>();
             worm_jump_speed = config["worm_jump_speed"].as<float>();
             worm_jump_hor_speed = config["worm_jump_hor_speed"].as<float>();
@@ -271,43 +275,57 @@ private:
             worm_backflip_hor_speed = config["worm_backflip_hor_speed"].as<float>();
             explosion_power = config["explosion_power"].as<float>();
             projectile_potency = config["projectile_potency"].as<float>();
+            // Weapons
+            // Bazooka
             bazooka_damage = config["bazooka_damage"].as<int>();
             bazooka_radius = config["bazooka_radius"].as<int>();
             bazooka_misile_restitution = config["bazooka_misile_restitution"].as<float>();
             bazooka_misile_density = config["bazooka_misile_density"].as<float>();
+            // Mortar
             mortar_damage = config["mortar_damage"].as<int>();
             mortar_radius = config["mortar_radius"].as<int>();
             mortar_fragments = config["mortar_fragments"].as<int>();
             mortar_misile_restitution = config["mortar_misile_restitution"].as<float>();
             mortar_misile_density = config["mortar_misile_density"].as<float>();
             mortar_max_ammo = config["mortar_max_ammo"].as<int>();
+            // Green Granade
             green_granade_damage = config["green_granade_damage"].as<int>();
             green_granade_radius = config["green_granade_radius"].as<int>();
             green_granade_restitution = config["green_granade_restitution"].as<float>();
             green_granade_density = config["green_granade_density"].as<float>();
+            // Red Granade
+            std::cout << "Reading red granade" << std::endl;
             red_granade_damage = config["red_granade_damage"].as<int>();
             red_granade_radius = config["red_granade_radius"].as<int>();
             red_granade_fragments = config["red_granade_fragments"].as<int>();
             red_granade_max_ammo = config["red_granade_max_ammo"].as<int>();
             red_granade_restitution = config["red_granade_restitution"].as<float>();
             red_granade_density = config["red_granade_density"].as<float>();
+            // Banana
             banana_damage = config["banana_damage"].as<int>();
             banana_radius = config["banana_radius"].as<int>();
             banana_restitution = config["banana_restitution"].as<float>();
             banana_density = config["banana_density"].as<float>();
             banana_max_ammo = config["banana_max_ammo"].as<int>();
+            // Holy Granade
             holy_granade_damage = config["holy_granade_damage"].as<int>();
             holy_granade_radius = config["holy_granade_radius"].as<int>();
             holy_granade_restitution = config["holy_granade_restitution"].as<float>();
             holy_granade_density = config["holy_granade_density"].as<float>();
             holy_granade_max_ammo = config["holy_granade_max_ammo"].as<int>();
+            // Dynamite
             dynamite_damage = config["dynamite_damage"].as<int>();
             dynamite_radius = config["dynamite_radius"].as<int>();
             dynamite_max_ammo = config["dynamite_max_ammo"].as<int>();
+            // Baseball bat
             baseball_bat_damage = config["baseball_bat_damage"].as<int>();
+            // Airstrike
             airstrike_damage = config["airstrike_damage"].as<int>();
             airstrike_radius = config["airstrike_radius"].as<int>();
             airstrike_max_ammo = config["airstrike_max_ammo"].as<int>();
+            // Fragments
+            fragment_damage = config["fragment_damage"].as<int>();
+            fragment_radius = config["fragment_radius"].as<int>();
             std::cout << "Config file read successfully" << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
@@ -345,11 +363,13 @@ private:
     float projectile_potency;
 
 // Weapons
+// Bazooka
     int bazooka_damage;
     int bazooka_radius;
     float bazooka_misile_restitution;
     float bazooka_misile_density;
 
+// Mortar
     int mortar_damage;
     int mortar_radius;
     int mortar_fragments;
@@ -357,11 +377,13 @@ private:
     float mortar_misile_density;
     int mortar_max_ammo;
 
+// Green Granade
     int green_granade_damage;
     int green_granade_radius;
     float green_granade_restitution;
     float green_granade_density;
 
+// Red Granade
     int red_granade_damage;
     int red_granade_radius;
     int red_granade_fragments;
@@ -369,27 +391,36 @@ private:
     float red_granade_restitution;
     float red_granade_density;
 
+// Banana
     int banana_damage;
-    int banana_radius;
-    float banana_restitution;
-    float banana_density;
-    int banana_max_ammo;
+    int banana_radius = 0;
+    float banana_restitution = 0;
+    float banana_density = 0;
+    int banana_max_ammo = 0;
 
+// Holy Granade
     int holy_granade_damage;
     int holy_granade_radius;
     float holy_granade_restitution;
     float holy_granade_density;
     int holy_granade_max_ammo;
 
+// Dynamite
     int dynamite_damage;
     int dynamite_radius;
     int dynamite_max_ammo;
 
+// Baseball bat
     int baseball_bat_damage;
 
+// Airstrike
     int airstrike_damage;
     int airstrike_radius;
     int airstrike_max_ammo;
+
+// Fragments
+    int fragment_damage;
+    int fragment_radius;
 
     // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
 

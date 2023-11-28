@@ -2,7 +2,7 @@
 #include "weapon_airstrike_callback.h"
 
 
-Airstrike::Airstrike(): Weapon(AIRSTRIKE_TYPE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0 , 0 , 0, true, false, false) {}
+Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0 , 0 , 0, true, false, false) {}
 
 
 float Airstrike::get_roof_height(b2Body* body){

@@ -2,7 +2,6 @@
 #include "weapon.h"
 #include "../config.h"
 
-#define AIRSTRIKE_TYPE ConfigSingleton::getInstance().get_airstrike_type()
 #define AIRSTRIKE_DAMAGE ConfigSingleton::getInstance().get_airstrike_damage()
 #define AIRSTRIKE_RADIUS ConfigSingleton::getInstance().get_airstrike_radius()
 #define AIRSTRIKE_MAX_AMMO ConfigSingleton::getInstance().get_airstrike_max_ammo()

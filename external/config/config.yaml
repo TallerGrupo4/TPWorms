@@ -51,7 +51,7 @@ red_granade_damage: 30
 red_granade_radius: 2
 red_granade_fragments: 6
 red_granade_max_ammo: 10
-red_granade_restittuion: 0.3
+red_granade_restitution: 0.3
 red_granade_density: 1
 
 banana_damage: 70
