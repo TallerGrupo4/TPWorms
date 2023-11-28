@@ -21,10 +21,11 @@ public:
                        int right_offset = 0,
                        int above_offset = 0,
                        int bellow_offset = 0);
-    void update_from_snapshot(int state, int angle, bool facing_left, int old_aiming_angle, int new_aiming_angle);
+    void update_from_snapshot(int state, int old_state, int angle, int old_angle, bool facing_left, bool old_facing_left, TOOLS weapon, int old_aiming_angle, int new_aiming_angle);
     void update_from_iter(int state, int angle, bool facing_left);
     void update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int angle, const bool facing_left);
 private:
+    void reset_old_an(int old_state, int old_angle, bool old_facing_left);  
     bool is_action_state(int state);
     void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
     void render_angle_dependent_an(Animation& up_an, Animation& down_an,
@@ -162,6 +163,27 @@ private:
     AnimationScroll aim_baz_an;
     AnimationScroll aim_baz_up_an;
     AnimationScroll aim_baz_down_an;
+    AnimationScroll aim_mortar_an;
+    AnimationScroll aim_mortar_up_an;
+    AnimationScroll aim_mortar_down_an;
+    AnimationScroll aim_thr_an;
+    AnimationScroll aim_thr_up_an;
+    AnimationScroll aim_thr_down_an;
+    AnimationScroll aim_grn_an;
+    AnimationScroll aim_grn_up_an;
+    AnimationScroll aim_grn_down_an;
+    AnimationScroll aim_cls_an;
+    AnimationScroll aim_cls_up_an;
+    AnimationScroll aim_cls_down_an;
+    AnimationScroll aim_ban_an;
+    AnimationScroll aim_ban_up_an;
+    AnimationScroll aim_ban_down_an;
+    AnimationScroll aim_hgr_an;
+    AnimationScroll aim_hgr_up_an;
+    AnimationScroll aim_hgr_down_an;
+    AnimationScroll aim_bsb_an;
+    AnimationScroll aim_bsb_up_an;
+    AnimationScroll aim_bsb_down_an;
 };
 
 #endif  // WORM_ANIMATIONS_H

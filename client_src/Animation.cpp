@@ -68,5 +68,5 @@ bool Animation::advanceFrame() {
 
 void Animation::reset() {
     this->currentFrame = 0;
-    this->actual_time_between_frames = this->numFrames;
+    this->actual_time_between_frames = this->time_between_frames;
 }

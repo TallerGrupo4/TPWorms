@@ -132,6 +132,27 @@ public:
     Surface aim_baz_worm;
     Surface aim_baz_up_worm;
     Surface aim_baz_down_worm;
+    Surface aim_mortar_worm;
+    Surface aim_mortar_up_worm;
+    Surface aim_mortar_down_worm;
+    Surface aim_thr_worm;
+    Surface aim_thr_up_worm;
+    Surface aim_thr_down_worm;
+    Surface aim_grn_worm;
+    Surface aim_grn_up_worm;
+    Surface aim_grn_down_worm;
+    Surface aim_cls_worm;
+    Surface aim_cls_up_worm;
+    Surface aim_cls_down_worm;
+    Surface aim_ban_worm;
+    Surface aim_ban_up_worm;
+    Surface aim_ban_down_worm;
+    Surface aim_hgr_worm;
+    Surface aim_hgr_up_worm;
+    Surface aim_hgr_down_worm;
+    Surface aim_bsb_worm;
+    Surface aim_bsb_up_worm;
+    Surface aim_bsb_down_worm;
     /*BEAMS*/
     Surface large_beam_vertical;
     Surface large_beam_65;
