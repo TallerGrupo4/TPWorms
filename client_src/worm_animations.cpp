@@ -155,6 +155,9 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
         case TELEPORTATION:
             // lingering_animations.push_back();
             break;
+        case BAT:
+            // lingering_animations.push_back();
+            break;
         case NO_TOOL:
             if(angle == 0) {
                 still_0_an.render(renderer, dst,
@@ -286,6 +289,9 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
             // lingering_animations.push_back();
             break;
         case TELEPORTATION:
+            // lingering_animations.push_back();
+            break;
+        case BAT:
             // lingering_animations.push_back();
             break;
         case NO_TOOL:
@@ -480,6 +486,9 @@ void WormAnimations::push_drop_weapon_an(TOOLS weapon, int angle, const bool fac
         case TELEPORTATION:
             // lingering_animations.push_back();
             break;
+        case BAT:
+            // lingering_animations.push_back();
+            break;
         case NO_TOOL:
             break;
     }
@@ -515,6 +524,9 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int angle, const bool 
             // lingering_animations.push_back();
             break;
         case TELEPORTATION:
+            // lingering_animations.push_back();
+            break;
+        case BAT:
             // lingering_animations.push_back();
             break;
         case NO_TOOL:
