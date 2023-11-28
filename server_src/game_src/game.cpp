@@ -218,16 +218,25 @@ void Game::game_post_cleanup(){
     
 }
 
+void correct_angle_projectile(std::shared_ptr<Projectile> projectile){
+    b2Vec2 velocity = projectile->get_body()->GetLinearVelocity();
+    float angle = atan2(velocity.y, velocity.x);
+    projectile->get_body()->SetTransform(projectile->get_body()->GetPosition(), angle);
+}
+
 void Game::projectiles_comprobations(int it){
-for (auto& projectile : projectiles){
-    if (projectile->get_state() == ALIVE){
-        projectile->decresease_timer(it);
-        if (projectile->get_timer() <= 0){
-            projectile->explode(projectiles);
+    for (auto& projectile : projectiles){
+        if (projectile->get_state() == ALIVE){
+            correct_angle_projectile(projectile);
+            projectile->decresease_timer(it);
+            if (projectile->get_timer() == 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER){
+                projectile->explode(projectiles);
+            }
         }
     }
 }
-}
+
+
 
 void Game::step(int it) {
     float time_simulate = (float) it / FPS;
