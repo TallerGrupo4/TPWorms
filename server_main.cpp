@@ -2,6 +2,7 @@
 
 #include "server_src/server.h"
 #include "server_src/config.h"
+#include "map_routes.h"
 
 int main(int argc, char* argv[]) {
 
@@ -12,12 +13,8 @@ int main(int argc, char* argv[]) {
                       << "E.g.: ./server 8080 \n";
             return ret;
         }
-        // argv[2] == PATH
-        // Read folder from PATH 
-        std::vector<std::string> routes = {"../external/maps/map1.yaml", "../external/maps/map2.yaml"};
-        // Config config();
-        // std::vector<std::string> routes = config.get_routes();
-        // Initialize the configuration
+        MapRoutes map_routes;
+        std::vector<std::string> routes = map_routes.get_routes();
         ConfigSingleton::getInstance();
         Server server(argv[1], routes);
         server.start();
