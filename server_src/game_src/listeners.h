@@ -21,6 +21,8 @@ class MyListener : public b2ContactListener{
     void EndContact(b2Contact* contact) override;
 
     public: MyListener(std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+
+    ~MyListener();
 };
 
 
