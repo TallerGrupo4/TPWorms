@@ -150,11 +150,13 @@ void Match::render(SDL2pp::Renderer& renderer) {
 bool Match::handle_left_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA IZQ con el aim\n";
             action = std::make_shared<ActionAim>(LEFT, CENTER, worm_turn_id);
+            return true;
         } else if (!turn_worm_has_weapon()) {
             action = std::make_shared<ActionMovLeft>(worm_turn_id);
+            return true;
         }
-        return true;
     }
     return false;
 }
@@ -162,11 +164,13 @@ bool Match::handle_left_button(std::shared_ptr<Action>& action) {
 bool Match::handle_right_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA DER con el aim\n";
             action = std::make_shared<ActionAim>(RIGHT, CENTER, worm_turn_id);
+            return true;
         } else if (!turn_worm_has_weapon()) {
             action = std::make_shared<ActionMovRight>(worm_turn_id);
+            return true;
         }
-        return true;
     }
     return false;
 }
@@ -174,6 +178,7 @@ bool Match::handle_right_button(std::shared_ptr<Action>& action) {
 bool Match::handle_up_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ARRiba con el aim\n";
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, UP, worm_turn_id);
             return true;
         }
@@ -184,6 +189,7 @@ bool Match::handle_up_button(std::shared_ptr<Action>& action) {
 bool Match::handle_down_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ABAJO con el aim\n";
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, DOWN, worm_turn_id);
             return true;
         }

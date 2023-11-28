@@ -357,6 +357,11 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         if (socket.sendall(team_id, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
+        int aiming_angle[1] = {worm.aiming_angle};
+        aiming_angle[0] = htonl(aiming_angle[0]);
+        if (socket.sendall(aiming_angle, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
     }
     return 1;
 }

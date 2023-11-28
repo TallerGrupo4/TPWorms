@@ -6,8 +6,6 @@
 #ifndef __ANIMATION_H__
 #define __ANIMATION_H__
 
-#include "Animation.h"
-
 #include <algorithm>
 #include <cassert>
 #include <iostream>
@@ -25,6 +23,8 @@ public:
     Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration, bool one_loop = false, bool is_orientation_horizontal = false);
     ~Animation();
     bool update_once();
+    virtual void update_once_up() {return;}
+    virtual void update_once_down() {return;}
     void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest,
                 SDL_RendererFlip& flipType,
                 int left_offset = 0,
@@ -34,7 +34,7 @@ public:
     void reset();
 
 
-private:
+protected:
     bool advanceFrame();
     /** SDL texture of the raw image. */
     SDL2pp::Texture texture;
@@ -55,3 +55,4 @@ private:
 };
 
 #endif  //__ANIMATION_H__
+

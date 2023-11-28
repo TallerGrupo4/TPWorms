@@ -61,15 +61,14 @@ void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_
 }
 
 void Worm::aim(int angle_inc, int direction){
-    if (state != STILL || tools[curr_tool] != nullptr || !tools[curr_tool]->can_aim()) {return;}
+    if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim()) {return;}
     int new_angle = aiming_angle + angle_inc;
     if (new_angle > MAX_AIMING_ANGLE) {
         new_angle = MAX_AIMING_ANGLE;
     } else if (new_angle < MIN_AIMING_ANGLE) {
         new_angle = MIN_AIMING_ANGLE;
-    } else {
-        aiming_angle = new_angle;
     }
+    aiming_angle = new_angle;
     state = AIMING;
     act_dir = direction;
 }
@@ -118,6 +117,7 @@ WormSnapshot Worm::get_snapshot() {
     }
     int weapon_sending = curr_tool;
     if (weapon_sending == tools.size() - 1) weapon_sending = NO_TOOL;
+    std::cout << "Aiming angle: " << aiming_angle << std::endl;
     WormSnapshot snapshot(id, pos_x, pos_y, angle, START_LIFE, life, act_dir, weapon_sending, state, team_id, aiming_angle);
     return snapshot;
 }

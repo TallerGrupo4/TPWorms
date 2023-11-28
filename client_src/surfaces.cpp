@@ -19,6 +19,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 slide_up_worm(WORM_SLIDE_UP_SPRITES_PATH),
                                 slide_down_worm(WORM_SLIDE_DOWN_SPRITES_PATH),
                                 dead_worm(WORM_DEAD_SPRITES_PATH),
+                                still_baz_worm(WORM_STILL_BAZOOKA_SPRITES_PATH),
                                 get_baz_worm(WORM_GETTING_BAZOOKA_SPRITES_PATH),
                                 get_baz_up_worm(WORM_GETTING_BAZOOKA_UP_SPRITES_PATH),
                                 get_baz_down_worm(WORM_GETTING_BAZOOKA_DOWN_SPRITES_PATH),
@@ -62,6 +63,8 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     slide_up_worm.SetColorKey(true, 0);
     slide_down_worm.SetColorKey(true, 0);
     dead_worm.SetColorKey(true, 0);
+    /*WORM STILL STANCE WEAPONS*/
+    still_baz_worm.SetColorKey(true, 0);
     /*WORM CHANGING WEAPONS*/
     get_baz_worm.SetColorKey(true, 0);
     get_baz_up_worm.SetColorKey(true, 0);

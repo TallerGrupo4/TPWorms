@@ -66,28 +66,21 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     health_points = worm_snpsht.health;
     worm_texts.update_health(health_points, max_health);
     state = worm_snpsht.state;
+    int old_aiming_angle = aiming_angle;
     aiming_angle = worm_snpsht.aiming_angle;
     TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
     if (weapon != new_weapon) {
         worm_an.update_changing_weapons(weapon,new_weapon, angle, facing_left);
         weapon = new_weapon;
     }
-    
-    //std::cout << "worm " << +worm_snpsht.id << " state: " << state << std::endl;
-    //std::cout << "update_from_snapshot nueva pos_y snap: " << worm_snpsht.pos_y << std::endl;
-    //std::cout << "update_from_snapshot nueva pos_x snap: " << worm_snpsht.pos_x << std::endl;
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
-    worm_an.update_from_snapshot(state, angle, facing_left);
+    worm_an.update_from_snapshot(state, angle, facing_left, old_aiming_angle, aiming_angle);
 }
 
 void Worm::update_from_iter(int iter) {
     for (int i = 0; i < iter; i++) {
-
         worm_an.update_from_iter(state, angle, facing_left);
-        // if (this->state == STILL) {
-        //     still_1_an.update_once();
-        // }
     }
 }
 
@@ -97,7 +90,7 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
     int top_left_y = (y-height/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
     //std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
     
-    worm_an.render(state, angle, renderer, SDL2pp::Rect(top_left_x, top_left_y, width*RESOLUTION_MULTIPLIER,
+    worm_an.render(state, angle, weapon, renderer, SDL2pp::Rect(top_left_x, top_left_y, width*RESOLUTION_MULTIPLIER,
                         height*RESOLUTION_MULTIPLIER),
                         facing_left,
                         WORM_WALK_LEFT_OFFSET,

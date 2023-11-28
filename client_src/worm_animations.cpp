@@ -17,12 +17,13 @@ WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfac
                                 slide_up_an(renderer, surfaces.slide_up_worm, SECS_FOR_SLIDE_SPRITES),
                                 slide_down_an(renderer, surfaces.slide_down_worm, SECS_FOR_SLIDE_SPRITES),
                                 dead_an(renderer, surfaces.dead_worm, SECS_FOR_DEAD_SPRITES),
-                                get_baz_an(renderer, surfaces.get_baz_worm, SECS_FOR_STILL_SPRITES),
-                                get_baz_up_an(renderer, surfaces.get_baz_up_worm, SECS_FOR_STILL_SPRITES),
-                                get_baz_down_an(renderer, surfaces.get_baz_down_worm, SECS_FOR_STILL_SPRITES),
-                                drop_baz_an(renderer, surfaces.drop_baz_worm, SECS_FOR_STILL_SPRITES),
-                                drop_baz_up_an(renderer, surfaces.drop_baz_up_worm, SECS_FOR_STILL_SPRITES),
-                                drop_baz_down_an(renderer, surfaces.drop_baz_down_worm, SECS_FOR_STILL_SPRITES),
+                                still_baz_an(renderer, surfaces.still_baz_worm, SECS_FOR_STILL_SPRITES),
+                                get_baz_an(renderer, surfaces.get_baz_worm, SECS_FOR_STILL_SPRITES, true),
+                                get_baz_up_an(renderer, surfaces.get_baz_up_worm, SECS_FOR_STILL_SPRITES, true),
+                                get_baz_down_an(renderer, surfaces.get_baz_down_worm, SECS_FOR_STILL_SPRITES, true),
+                                drop_baz_an(renderer, surfaces.drop_baz_worm, SECS_FOR_STILL_SPRITES, true),
+                                drop_baz_up_an(renderer, surfaces.drop_baz_up_worm, SECS_FOR_STILL_SPRITES, true),
+                                drop_baz_down_an(renderer, surfaces.drop_baz_down_worm, SECS_FOR_STILL_SPRITES, true),
                                 aim_baz_an(renderer, surfaces.aim_baz_worm, SECS_FOR_STILL_SPRITES),
                                 aim_baz_up_an(renderer, surfaces.aim_baz_up_worm, SECS_FOR_STILL_SPRITES),
                                 aim_baz_down_an(renderer, surfaces.aim_baz_down_worm, SECS_FOR_STILL_SPRITES) {
@@ -72,7 +73,7 @@ void WormAnimations::render_angle_dependent_an(Animation& up_an, Animation& down
     }
 }
 
-void WormAnimations::render(int state, int angle, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                     const bool facing_left,
                     int left_offset,
                     int right_offset,
@@ -107,63 +108,73 @@ void WormAnimations::render(int state, int angle, SDL2pp::Renderer& renderer, co
                         bellow_offset);
         break;
     case STILL:
-        if(angle == 0) {
-            still_0_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        } else {
-            render_angle_dependent_an(still_0_up_an, still_0_down_an,
-                                    angle, facing_left,
-                                    renderer, dst,
-                                    flip,
-                                    left_offset,
-                                    right_offset,
-                                    above_offset,
-                                    bellow_offset);
+        switch (weapon) {
+        case BAZOOKA:
+            if(angle == 0) {
+                still_baz_an.render(renderer, dst,
+                            flip,
+                            left_offset,
+                            right_offset,
+                            above_offset,
+                            bellow_offset);
+            } else {
+                render_angle_dependent_an(still_0_up_an, still_0_down_an,
+                                        angle, facing_left,
+                                        renderer, dst,
+                                        flip,
+                                        left_offset,
+                                        right_offset,
+                                        above_offset,
+                                        bellow_offset);
+            }
+            break;
+        case MORTAR:
+            // lingering_animations.push_back();
+            break;
+        case GREEN_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case HOLY_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case DYNAMITE:
+            // lingering_animations.push_back();
+            break;
+        case BASEBALL_BAT:
+            // lingering_animations.push_back();
+            break;
+        case RED_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case BANANA:
+            // lingering_animations.push_back();
+            break;
+        case AIRSTRIKE:
+            // lingering_animations.push_back();
+            break;
+        case TELEPORTATION:
+            // lingering_animations.push_back();
+            break;
+        case NO_TOOL:
+            if(angle == 0) {
+                still_0_an.render(renderer, dst,
+                            flip,
+                            left_offset,
+                            right_offset,
+                            above_offset,
+                            bellow_offset);
+            } else {
+                render_angle_dependent_an(still_0_up_an, still_0_down_an,
+                                        angle, facing_left,
+                                        renderer, dst,
+                                        flip,
+                                        left_offset,
+                                        right_offset,
+                                        above_offset,
+                                        bellow_offset);
+            }
+            break;
         }
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         still_0_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         still_0_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         still_0_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         still_0_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else {
-        //     still_0_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        // }
         break;
     case CLIMBING:
         render_angle_dependent_an(walking_up_an, walking_down_an,
@@ -174,39 +185,6 @@ void WormAnimations::render(int state, int angle, SDL2pp::Renderer& renderer, co
                                     right_offset,
                                     above_offset,
                                     bellow_offset);
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         walking_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         walking_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         walking_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         walking_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // }
         break;
     case JUMPING:
         if(angle == 0) {
@@ -226,47 +204,6 @@ void WormAnimations::render(int state, int angle, SDL2pp::Renderer& renderer, co
                                     above_offset,
                                     bellow_offset);
         }
-
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         jump_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         jump_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         jump_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         jump_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else {
-        //     jump_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        // }
         break;
     case BACKFLIPPING:
         backflip_an.render(renderer, dst,
@@ -302,60 +239,71 @@ void WormAnimations::render(int state, int angle, SDL2pp::Renderer& renderer, co
                                     above_offset,
                                     bellow_offset);
         }
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         slide_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         slide_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         slide_down_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     } else {
-        //         slide_up_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        //     }
-        // } else {
-        //     slide_an.render(renderer, dst,
-        //                 flip,
-        //                 left_offset,
-        //                 right_offset,
-        //                 above_offset,
-        //                 bellow_offset);
-        // }
+        break;
+    case AIMING:
+        switch (weapon) {
+        case BAZOOKA:
+            if(angle == 0) {
+                aim_baz_an.render(renderer, dst,
+                            flip,
+                            left_offset,
+                            right_offset,
+                            above_offset,
+                            bellow_offset);
+            } else {
+                render_angle_dependent_an(aim_baz_up_an, aim_baz_down_an,
+                                        angle, facing_left,
+                                        renderer, dst,
+                                        flip,
+                                        left_offset,
+                                        right_offset,
+                                        above_offset,
+                                        bellow_offset);
+            }
+            break;
+        case MORTAR:
+            // lingering_animations.push_back();
+            break;
+        case GREEN_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case HOLY_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case DYNAMITE:
+            // lingering_animations.push_back();
+            break;
+        case BASEBALL_BAT:
+            // lingering_animations.push_back();
+            break;
+        case RED_GRENADE:
+            // lingering_animations.push_back();
+            break;
+        case BANANA:
+            // lingering_animations.push_back();
+            break;
+        case AIRSTRIKE:
+            // lingering_animations.push_back();
+            break;
+        case TELEPORTATION:
+            // lingering_animations.push_back();
+            break;
+        case NO_TOOL:
+            break;
+        }
         break;
     default:
         break;
     }
 }
 
-void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left) {
+void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left, int old_aiming_angle, int new_aiming_angle) {
     if((is_action_state(state)) and (!lingering_animations.empty())) {
         for (auto& an : lingering_animations) {
             an.get().reset();
         }
         lingering_animations.clear();
     }
-    
     switch (state) {
     case MOVING:
         walking_an.update_once();
@@ -416,8 +364,34 @@ void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left
             slide_an.update_once();
         }
         break;
+    case AIMING:
+        std::cout << "ENTRE al AIMING del update from snapshot, new_aiming_angle: " << new_aiming_angle << " old_aiming_angle: " << old_aiming_angle << std::endl;
+        if(angle > 0) {
+            if (!facing_left) {
+                check_aiming_angle(aim_baz_up_an, new_aiming_angle, old_aiming_angle);
+            } else {
+                check_aiming_angle(aim_baz_down_an, new_aiming_angle, old_aiming_angle);
+            }
+        } else if (angle < 0) {
+            if (!facing_left) {
+                check_aiming_angle(aim_baz_down_an, new_aiming_angle, old_aiming_angle);
+            } else {
+                check_aiming_angle(aim_baz_up_an, new_aiming_angle, old_aiming_angle);
+            }
+        } else {
+            check_aiming_angle(aim_baz_an, new_aiming_angle, old_aiming_angle);
+        }
+        break;
     default:
         break;
+    }
+}
+
+void WormAnimations::check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle) {
+    if(new_aiming_angle > old_aiming_angle) {
+        an.update_once_down();
+    } else if (new_aiming_angle < old_aiming_angle) {
+        an.update_once_up();
     }
 }
 

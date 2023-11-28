@@ -45,6 +45,18 @@ bool MatchRenderer::handleEvents(Match& match) {
                         }
                         break;
                     }
+                    case SDLK_UP: {
+                        if (match.handle_up_button(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                    case SDLK_DOWN: {
+                        if (match.handle_down_button(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
                     case SDLK_RETURN: {
                         if (match.handle_enter_button(action)) {
                             client.send_action(action);
