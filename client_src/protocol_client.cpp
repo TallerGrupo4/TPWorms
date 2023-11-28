@@ -21,7 +21,6 @@ void ProtocolClient::send_command(const Command& command) {
     }
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
         // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
-        // Send_match_id(command.get_match_id());
         send_match_id(command.get_match_id());
     } else if (code[0] == CASE_START) {
         send_match_id(command.get_match_id());
@@ -39,21 +38,17 @@ const Command ProtocolClient::recv_command() {
         case CASE_JOIN: {
             uint match_id[1];
             recv_match_id(match_id);
-            uint8_t worm_id = recv_worm_id();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
-            // Command command(code[0], match_id[0], worm_id);
+            Command command(code[0], match_id[0], maps_available, number_of_players);
             return command;
         }
         case CASE_CREATE: {
             uint match_id[1];
             recv_match_id(match_id);
-            uint8_t worm_id = recv_worm_id();
             std::vector<std::string> maps_available = recv_map_names();
             const uint8_t number_of_players = recv_number_of_players();
-            Command command(code[0], match_id[0], maps_available, number_of_players, worm_id);
-            // Command command(code[0], match_id[0], worm_id);
+            Command command(code[0], match_id[0], maps_available, number_of_players);
             return command;
         }
         case CASE_LIST: {
@@ -83,7 +78,7 @@ const Command ProtocolClient::recv_command() {
             recv_match_id(match_id);
             uint8_t number_of_players[1];
             recv_number_of_players(number_of_players);
-            return Command(code[0], match_id[0], {""},  number_of_players[0], DEFAULT);
+            return Command(code[0], match_id[0], {""},  number_of_players[0]);
         }
         case CASE_MATCH_ALREADY_STARTED: {
             uint match_id[1];
@@ -110,7 +105,10 @@ Snapshot ProtocolClient::recv_snapshot() {
     Snapshot snapshot;
     recv_dimensions(snapshot);
     recv_platforms(snapshot);
+    recv_army(snapshot);
+    recv_time_and_worm_turn(snapshot);
     recv_worms(snapshot);
+    recv_projectiles(snapshot);
     return snapshot;
 }
 
@@ -139,19 +137,25 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     int height[1];
     int worm_width[1];
     int worm_height[1];
+    int amount_of_worms[1];
     socket.recvall(width, 4, &was_closed);
     socket.recvall(height, 4, &was_closed);
     socket.recvall(worm_width, 4, &was_closed);
     socket.recvall(worm_height, 4, &was_closed);
+    socket.recvall(amount_of_worms, 4, &was_closed);
     width[0] = ntohl(width[0]);
     height[0] = ntohl(height[0]);
     worm_width[0] = ntohl(worm_width[0]);
     worm_height[0] = ntohl(worm_height[0]);
-    // Move this to  a 'Parser'
-    snapshot.width = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.height = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.worm_width = std::round((static_cast<float>(worm_width[0] * PIX_PER_METER)) / MULTIPLIER);
-    snapshot.worm_height = std::round((static_cast<float>(worm_height[0] * PIX_PER_METER)) / MULTIPLIER);
+    amount_of_worms[0] = ntohl(amount_of_worms[0]);
+    float _width = static_cast<float>(width[0]);
+    float _height = static_cast<float>(height[0]);
+    float _worm_width = static_cast<float>(worm_width[0]);
+    float _worm_height = static_cast<float>(worm_height[0]);
+    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height);
+    int _amount_of_worms = amount_of_worms[0];
+    snapshot.set_dimensions(_height, _width, _worm_width, _worm_height, _amount_of_worms);
+
 }
 
 void ProtocolClient::recv_platforms(Snapshot& snapshot) {
@@ -179,21 +183,89 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         pos_y[0] = ntohl(pos_y[0]);
         width[0] = ntohl(width[0]);
         height[0] = ntohl(height[0]);
-        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
-        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
-        width[0] = std::round((static_cast<float>(width[0] * PIX_PER_METER)) / MULTIPLIER);
-        height[0] = std::round((static_cast<float>(height[0] * PIX_PER_METER)) / MULTIPLIER);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        float _width = static_cast<float>(width[0]);
+        float _height = static_cast<float>(height[0]);
+        parser.parse_platform_mesures(_pos_x, _pos_y, _width, _height);
         
-        // PARSER!!!!
         int degree = 0;
-        if (get_degree_of_beam_type(type[0], degree)) {
-            height[0] = calculate_beam_height(degree, height[0], width[0]);
-            width[0] = calculate_beam_width(degree, height[0], width[0]);
+        int __height = static_cast<int>(_height);
+        int __width = static_cast<int>(_width);
+        if (parser.get_degree_of_beam_type(type[0], degree)) {
+            int height_recieved =  static_cast<int>(_height);
+            int width_recieved = static_cast<int>(_width);
+            __height = parser.calculate_beam_height(degree, height_recieved, width_recieved);
+            __width = parser.calculate_beam_width(degree, height_recieved, width_recieved);
         }
         
-        PlatformSnapshot platform( (BeamType(type[0])), pos_x[0], pos_y[0], width[0], height[0]);
+        PlatformSnapshot platform( (BeamType(type[0])), _pos_x, _pos_y, __width, __height);
         snapshot.platforms.push_back(platform);
     }
+}
+
+void ProtocolClient::recv_army(Snapshot& snapshot) {
+    char num_of_armies[1];
+    socket.recvall(num_of_armies, 1, &was_closed);
+    for (int i = 0; i < num_of_armies[0]; i++) {
+        char army_id[1];
+        socket.recvall(army_id, 1, &was_closed);
+        char num_of_worms[1];
+        socket.recvall(num_of_worms, 1, &was_closed);
+        for (int i = 0; i < num_of_worms[0]; i++) {
+            char worm_id[1];
+            socket.recvall(worm_id, 1, &was_closed);
+            snapshot.my_army[army_id[0]].push_back(worm_id[0]);
+        }
+    }
+}
+
+void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
+    uint8_t num_of_projectiles[1];
+    socket.recvall(num_of_projectiles, 1, &was_closed);
+    for (int i = 0; i < num_of_projectiles[0]; i++) {
+        int pos_x[1];
+        int pos_y[1];
+        int angle[1];
+        char type[1];
+        int direction[1];
+        int state[1];
+        char id[1];
+        int explosion_type[1];
+        socket.recvall(pos_x, 4, &was_closed);
+        socket.recvall(pos_y, 4, &was_closed);
+        socket.recvall(angle, 4, &was_closed);
+        socket.recvall(type, 1, &was_closed);
+        socket.recvall(direction, 4, &was_closed);
+        socket.recvall(state, 4, &was_closed);
+        socket.recvall(id, 1, &was_closed);
+        socket.recvall(explosion_type, 4, &was_closed);
+        pos_x[0] = ntohl(pos_x[0]);
+        pos_y[0] = ntohl(pos_y[0]);
+        angle[0] = ntohl(angle[0]);
+        direction[0] = ntohl(direction[0]);
+        state[0] = ntohl(state[0]);
+        explosion_type[0] = ntohl(explosion_type[0]);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        float _angle = static_cast<float>(angle[0]);
+        parser.parse_projectile_mesures(_pos_x, _pos_y, _angle);
+        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], state[0], id[0], explosion_type[0]);
+        snapshot.projectiles.push_back(projectile);
+    }
+}
+
+void ProtocolClient::recv_time_and_worm_turn(Snapshot& snapshot) {
+    int turn_time[1];
+    int worm_turn[1];
+    socket.recvall(turn_time, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+    socket.recvall(worm_turn, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
+    turn_time[0] = ntohl(turn_time[0]);
+    worm_turn[0] = ntohl(worm_turn[0]);
+    snapshot.turn_time_and_worm_turn.turn_time = turn_time[0];
+    snapshot.turn_time_and_worm_turn.worm_turn = worm_turn[0];
 }
 
 void ProtocolClient::recv_worms(Snapshot& snapshot) {
@@ -211,6 +283,8 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         char direction[1];
         int weapon[1];
         int state[1];
+        char team_id[1];
+        int aiming_angle[1];
         socket.recvall(id, 1, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_x, 4, &was_closed);
@@ -229,21 +303,25 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
     // if (was_closed) throw WasClosed;
         socket.recvall(state, 4, &was_closed);
     // if (was_closed) throw WasClosed;
+        socket.recvall(team_id, 1, &was_closed);
+    // if (was_closed) throw WasClosed;
+        socket.recvall(aiming_angle, 4, &was_closed);
+    // if (was_closed) throw WasClosed;
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
-        pos_x[0] = std::round((static_cast<float>(pos_x[0] * PIX_PER_METER)) / MULTIPLIER);
-        pos_y[0] = std::round((static_cast<float>(pos_y[0] * PIX_PER_METER)) / MULTIPLIER);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        parser.parse_worm(_pos_x, _pos_y);
         angle[0] = ntohl(angle[0]);
-        angle[0] = std::round(static_cast<float>(angle[0]) / MULTIPLIER);
         max_health[0] = ntohl(max_health[0]);
         health[0] = ntohl(health[0]);
         weapon[0] = ntohl(weapon[0]);
         state[0] = ntohl(state[0]);
-        WormSnapshot worm(id[0], pos_x[0], pos_y[0], angle[0], max_health[0], health[0], direction[0], weapon[0], state[0]);
+        aiming_angle[0] = ntohl(aiming_angle[0]);
+        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0]);
         snapshot.worms.push_back(worm);
     }
 }
-
 
 void ProtocolClient::recv_match_id(uint* match_id) {
     int ret = socket.recvall(match_id, 4, &was_closed);
@@ -309,15 +387,6 @@ std::map<uint, std::string> ProtocolClient::recv_list() {
     return matches_availables;
 }
 
-uint8_t ProtocolClient::recv_worm_id() {
-    uint8_t worm_id[1];
-    socket.recvall(worm_id, 1, &was_closed);
-    if (was_closed) {
-        // throw
-    }
-    return worm_id[0];
-}
-
 std::vector<std::string> ProtocolClient::recv_map_names() {
     uint16_t num_of_maps[1];
     socket.recvall(num_of_maps, 2, &was_closed);
@@ -352,4 +421,3 @@ uint8_t ProtocolClient::recv_number_of_players() {
     }
     return number_of_players[0];
 }
-

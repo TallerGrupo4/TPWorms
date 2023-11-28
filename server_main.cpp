@@ -1,6 +1,8 @@
 #include <box2d/box2d.h>
 
 #include "server_src/server.h"
+#include "server_src/config.h"
+#include "map_routes.h"
 
 int main(int argc, char* argv[]) {
 
@@ -11,9 +13,9 @@ int main(int argc, char* argv[]) {
                       << "E.g.: ./server 8080 \n";
             return ret;
         }
-        // argv[2] == PATH
-        // Read folder from PATH 
-        std::vector<std::string> routes = {"../external/maps/map1.yaml"};
+        MapRoutes map_routes;
+        std::vector<std::string> routes = map_routes.get_routes();
+        ConfigSingleton::getInstance();
         Server server(argv[1], routes);
         server.start();
         std::string line;

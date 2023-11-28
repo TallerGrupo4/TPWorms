@@ -1,5 +1,5 @@
 #include "../common_src/snapshot.h"
-#include "../common_src/yamlReader.h"
+#include <box2d/box2d.h>
 #include <vector>
 
 #ifndef MAP_H
@@ -9,18 +9,17 @@ class Map {
     public:
     int width;
     int height;
+    int amount_of_worms;
     std::vector<PlatformSnapshot> platforms;
+    std::vector<b2Vec2> spawn_points;
+    float water_level;
 
-    Map(std::string map_route) {
-        MapReader map_reader(map_route); 
-        Snapshot snapshot = map_reader.read_map();
-        width = snapshot.width;
-        height = snapshot.height;
-        platforms = snapshot.platforms;
-    }
+    Map(int width , int height , int amount_of_worms , std::vector<PlatformSnapshot> platforms , std::vector<b2Vec2> spawn_points, float water_level);
+
+    Snapshot get_snapshot();
 
     Map() {};
-    ~Map() {};
+    ~Map();
 
 };
 

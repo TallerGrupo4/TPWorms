@@ -1,24 +1,19 @@
 #ifndef GAME_CONSTANTS_H
 #define GAME_CONSTANTS_H
 
-#define START_LIFE 100
-#define NO_WEAPON 0
-#define NULL_STATE 0
-#define INITIAL_WORMS_TURN 0
-#define TURN_TIME 60 * FPS * 2  // SET to 60 seconds!!! 
-
 //Movement constants 
 #define IZQ -1
 #define DER 1
-#define FOWARD 1
-#define BACKWARD -1
 
-// defines for physics of game
-#define WORM_SPEED 0.8;
-#define WORM_JUMP_HEIGHT 1.0;
-#define WORM_JUMP_SPEED 1.5;
-#define WORM_BACKFLIP_SPEED 0.5;
-#define WORM_BACKFLIP_HEIGHT 2;
+//constants for thresholds
+#define VEL_THRESHOLD 0.05f
+#define ANG_VEL_THRESHOLD 0.5f
+#define LAST_ANG_THRESHOLD 30
+#define ANG_THRESHOLD 50
+#define FALL_DAMAGE_THRESHOLD 25
+#define FALL_DISTANCE_THRESHOLD 2
+#define MAX_AIMING_ANGLE 90
+#define MIN_AIMING_ANGLE -90
 
 
 enum PROJECTILE_TYPES{
@@ -35,33 +30,9 @@ enum BODY_TYPES{
 };
 
 
+
 //BUILDER CONSTANTS
-#define OFFSET 1.5
+#define OFFSET 2
 
-
-//--WEAPONS--//
-// 1) Bazooka
-#define BAZOOKA_DAMAGE 50
-#define BAZOOKA_RADIUS 2
-#define BAZOOKA_TYPE 1
-#define BAZOOKA_MISILE_RESTITUTION 0
-#define BAZOOKA_MISILE_DENSITY 0.5
-
-// 2) Mortar
-#define MORTAR_DAMAGE 50
-#define MORTAR_RADIUS 2
-#define MORTAR_TYPE 2
-#define MORTAR_FRAGMENTS 6
-
-//3) Green Grenade
-#define GREEN_GRENADE_DAMAGE 30
-#define GREEN_GRENADE_RADIUS 2
-#define GREEN_GRENADE_TYPE 3
-
-//4) Red Grenade
-#define RED_GRENADE_DAMAGE 30
-#define RED_GRENADE_RADIUS 2
-#define RED_GRENADE_TYPE 4
-#define RED_GRENADE_FRAGMENTS 6
 
 #endif // GAME_CONSTANTS_H

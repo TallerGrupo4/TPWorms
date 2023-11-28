@@ -4,43 +4,26 @@
  */
 #include "Animation.h"
 
-#include <algorithm>
-#include <cassert>
-#include <iostream>
-#include <string>
-
-#include <SDL2pp/SDL2pp.hh>
-
-Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal) :
+Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_seconds, bool one_loop, bool is_orientation_horizontal) :
         texture(SDL2pp::Texture(renderer,surface)),
         is_orientation_horizontal(is_orientation_horizontal),
+        one_loop(one_loop),
         currentFrame(0),
         numFrames(this->is_orientation_horizontal ?
                           (this->texture.GetWidth() / this->texture.GetHeight()) :
                           (this->texture.GetHeight() / this->texture.GetWidth())),
         size(this->is_orientation_horizontal ? this->texture.GetHeight() :
-                                               this->texture.GetWidth()) {
+                                               this->texture.GetWidth()),
+        time_between_frames(std::round(static_cast<float>(loop_duration_seconds * FPS) / numFrames)),
+        actual_time_between_frames(time_between_frames) {    
     assert(this->numFrames > 0);
     assert(this->size > 0);
 }
 
 Animation::~Animation() {}
 
-void Animation::update_once() {
-    this->advanceFrame();
-}
-
-void Animation::update(int iter) {
-    for (int i = 0; i < iter; i++) {
-        this->advanceFrame();
-    }
-    
-    // this->elapsed += dt;
-    // /* checks if the frame should be updated based on the time elapsed since the last update */
-    // while (this->elapsed > FRAME_DURATION) {
-    //     this->advanceFrame();
-    //     this->elapsed -= FRAME_DURATION;
-    // }
+bool Animation::update_once() {
+    return this->advanceFrame();
 }
 
 /**
@@ -67,7 +50,23 @@ void Animation::render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
             flipType);
 }
 
-void Animation::advanceFrame() {
-    this->currentFrame += 1;
-    this->currentFrame = this->currentFrame % this->numFrames;
+bool Animation::advanceFrame() {
+    if(this->one_loop) {
+        if (((this->currentFrame+1) == this->numFrames) and (this->actual_time_between_frames == 0)) {
+            return false;
+        }
+    }
+    if (this->actual_time_between_frames != 0) {
+        this->actual_time_between_frames -= 1;
+    } else {
+        this->currentFrame += 1;
+        this->currentFrame = this->currentFrame % this->numFrames;
+        this->actual_time_between_frames = this->time_between_frames;
+    }
+    return true;
+}
+
+void Animation::reset() {
+    this->currentFrame = 0;
+    this->actual_time_between_frames = this->numFrames;
 }

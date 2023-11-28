@@ -3,16 +3,6 @@
 #ifndef GAME_COMMAND_H
 #define GAME_COMMAND_H
 
-struct MoveCommandAttributes {
-    int direction;
-};
-
-struct ShootCommandAttributes {
-    char id;
-    float angle;
-    int potency;
-    int weapon_type;
-};
 
 class GameCommand {
 protected:
@@ -24,71 +14,18 @@ public:
     GameCommand(char id = -1, int direction = 0): id_worm(id), direction(direction) {};
     ~GameCommand() = default;
 
+    char get_worm_id() {
+        return id_worm;
+    }
+
+    int get_direction() {
+        return direction;
+    }
 
     void virtual execute(Game& game) { return; };
-    static std::shared_ptr<GameCommand> createCommand(int id, MoveCommandAttributes move , ShootCommandAttributes shoot , int type);
 };
 
 
-class MoveCommand: public GameCommand {
-public:
-    int get_direction() { return direction; }
-    MoveCommand(char id, int direction): GameCommand(id, direction) {}
-    ~MoveCommand() {}
-    void execute(Game& game) override { game.move_player(id_worm, direction); }
-};
-
-class JumpCommand: public GameCommand {
-    public:
-    JumpCommand(char id, int direction): GameCommand(id, direction) {}
-    ~JumpCommand() {}
-    void execute(Game& game) override { game.jump_player(id_worm, direction); }
-
-};
-
-class ExitCommand: public GameCommand {
-public:
-    ExitCommand(char id) : GameCommand(id) {}
-    ~ExitCommand() {}
-    void execute(Game& game) override { game.remove_player(id_worm); }
-};
-
-
-// class ShootCommand: public GameCommand {
-// Attributes must be GameCommand attributes because a GameCommand is what it is being used in the server
-//     private:
-//     float angle;
-//     int potency;
-//     std::shared_ptr<Weapon> weapon;
-
-//     public:
-//     ShootCommand(char id , float angle , int potency, int weapon_type) : GameCommand(id) , angle(angle) , potency(potency)  {
-//         weapon = std::shared_ptr<Weapon> (Weapon::Create_Weapon(weapon_type));
-//     }
-//     ~ShootCommand() {}
-
-//     void execute(Game& game) override { game.shoot_player(id_worm , angle , potency , weapon); }
-
-// };
-
-
-inline std::shared_ptr<GameCommand> GameCommand::createCommand(int id, MoveCommandAttributes move , ShootCommandAttributes shoot , int type) {
-    switch (type) {
-        case MOV:
-            return std::make_shared<MoveCommand>(id, move.direction);
-            break;
-        // case SHOOT:
-        //     return std::make_shared<ShootCommand>(id, shoot.angle, shoot.potency, shoot.weapon_type);
-        //     break;
-        case JUMP:
-            return std::make_shared<JumpCommand>(id, move.direction);
-            break;
-        case CASE_EXIT_SERVER:
-            return std::make_shared<ExitCommand>(id);
-            break;
-    }
-    return nullptr;
-}
 
 
 #endif  // GAME_COMMAND_H

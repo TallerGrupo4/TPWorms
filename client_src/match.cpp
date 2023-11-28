@@ -3,45 +3,73 @@
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
-    // std::cout << "Antes de crear el background" << std::endl;
-    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.width, snpsht.height, surfaces, renderer);
-    // std::cout << "Cant de gusanos: "<< (int)snpsht.worms.size() << std::endl;
+    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
+    my_army_id = snpsht.my_army.begin()->first;
+    worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+    turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
+    camera.update_turn_time_text(turn_time);
     for (WormSnapshot worm_snpsht : snpsht.worms){
-        // std::cout << "Angulo del gusano: " << worm_snpsht.angle << std::endl;
-        // std::cout << "Direccion del gusano: " << (int)worm_snpsht.direction << std::endl;
-        // std::cout << "Vida del gusano: " << worm_snpsht.health << std::endl;
-        // std::cout << "ID del gusano: " << (int)worm_snpsht.id << std::endl;
-        // std::cout << "Vida Max del gusano: " << worm_snpsht.max_health << std::endl;
-        // std::cout << "Pos X del gusano: " << worm_snpsht.pos_x << std::endl;
-        // std::cout << "Pos Y del gusano: " << worm_snpsht.pos_y << std::endl;
-        // std::cout << "Estado del gusano: " << worm_snpsht.state << std::endl;
-        // std::cout << "Arma del gusano: " << worm_snpsht.weapon << std::endl;
-        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.worm_width, snpsht.worm_height, surfaces, renderer, bkgrnd);
-        std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
+        SDL_Color worm_color;
+        switch (worm_snpsht.team_id) {
+            case 0 :
+            worm_color = BLUE;
+            break;
+            case 1 :
+            worm_color = RED;
+            break;
+            case 2 :
+            worm_color = YELLOW;
+            break;
+            case 3 :
+            worm_color = GREEN;
+            break;
+            default:
+            worm_color = ORANGE;
+            break;
+        }
+        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, worm_color, surfaces, renderer, bkgrnd);
         this->worms_map[worm_snpsht.id] = worm;
-        // this->worms.push_back(worm);
+        std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
+    // for (ProjectileSnapshot projectile_snpsht : snpsht.projectiles){
+    //     std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
+    //     this->projectiles_map[projectile_snpsht.id] = projectile;
+    //     std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
+    // }
+    update_camera(1,1,true);
 }
 
-void Match::update_from_snapshot(Snapshot& snpsht) {
-    for (auto& worm_snpsht : snpsht.worms) {
+void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+    if (turn_time != (snpsht.turn_time_and_worm_turn.turn_time/FPS)) {
+        turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
+        camera.update_turn_time_text(turn_time);    
+    }
+
+    // for (auto& projectile_snpsht : snpsht.projectiles) {
+    //     if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end()) {
+    //         std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
+    //         this->projectiles_map[projectile_snpsht.id] = projectile;
+    //         std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
+    //     } else {
+    //         projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
+    //     }
+    // }
+
+    for (auto& worm_snpsht : snpsht.worms) { 
         worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
     }
-    update_camera();
-    
-    // for (Worm worm : this->worms) { // {w1 , w2 , w3} for each w.update()
-    //     for (WormSnapshot worm_snpsht : snpsht.worms) {
-    //         if(worm.is_same_id(worm_snpsht.id)) {
-    //             worm.update(worm_snpsht, iter);
-    //             break;
-    //         }
-    //     }        
-    // }
+    if (worm_turn_id != snpsht.turn_time_and_worm_turn.worm_turn) {
+        worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+        update_camera(1,1,true);
+    } else {
+        worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+        update_camera();
+    }
 }
 
 bool Match::get_next_target(Target& new_target) {
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
-        if(it->second->get_worm_state() != STILL) {
+        if((it->second->get_worm_state() != STILL) and (it->second->get_worm_state() != DEAD)) {
             new_target = {
                 WormType,
                 it->first,
@@ -55,13 +83,21 @@ bool Match::get_next_target(Target& new_target) {
     return false;
 }
 
-void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_camera) { 
+void Match::update_camera(int camera_offset_x, int camera_offset_y,
+                         bool center_camera, bool player_activated,
+                         bool need_to_be_player_activated) { 
+    if(!camera.is_player_activated() and need_to_be_player_activated) {
+        return;
+    } else if (player_activated) {
+        camera.toogle_player_activated();
+    }
+    
     TargetType target_type = this->camera.has_target();
     Target new_target;
     switch (target_type) {
     case WormType: {
         auto target_worm = worms_map.at(camera.get_target_worm_id());
-        if(target_worm->get_worm_state() != STILL) {
+        if((target_worm->get_worm_state() != STILL) and (target_worm->get_worm_state() != DEAD)) {
             new_target = {
                 WormType,
                 camera.get_target_worm_id(),
@@ -75,19 +111,30 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_
     }
     case NoneType:
     case PlayerType:
-        if(get_next_target(new_target)) {
-            camera.update(new_target);
-            break;
-        }
-        if (((camera_offset_x != 0) and (camera_offset_y != 0)) or center_camera) {
+        if (center_camera) {
             new_target = {
-                PlayerType,
+                WormType,
+                get_turn_worm_id(),
                 -1,
-                -1,
-                camera_offset_x,
-                camera_offset_y
+                get_turn_worm_x()*RESOLUTION_MULTIPLIER,
+                get_turn_worm_y()*RESOLUTION_MULTIPLIER
             };
             camera.update(new_target);
+        } else {
+            if(get_next_target(new_target)) {
+                camera.update(new_target);
+                break;
+            }
+            if ((camera_offset_x != 0) and (camera_offset_y != 0)) {
+                new_target = {
+                    PlayerType,
+                    -1,
+                    -1,
+                    camera_offset_x + get_turn_worm_x()*RESOLUTION_MULTIPLIER,
+                    camera_offset_y + get_turn_worm_y()*RESOLUTION_MULTIPLIER
+                };
+                camera.update(new_target);
+            }
         }
         break;
     case ProjectileType:
@@ -96,15 +143,158 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y, bool center_
     }
 }
 
-void Match::update_from_iter(int iter) {}
+void Match::update_from_iter(int iter) {
+    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
+        it->second->update_from_iter(iter);
+    }
+    update_camera();
+}
 
 void Match::render(SDL2pp::Renderer& renderer) {
     bkgrnd->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
         it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
-    
-    // for (std::shared_ptr<Worm> worm : worms_map) {
-    //     worm.render(renderer);    
-    // }
+    this->camera.render(renderer);
+}
+
+bool Match::handle_left_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA IZQ con el aim\n";
+            action = std::make_shared<ActionAim>(LEFT, CENTER, worm_turn_id);
+            return true;
+        } else if (!turn_worm_has_weapon()) {
+            action = std::make_shared<ActionMovLeft>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_right_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA DER con el aim\n";
+            action = std::make_shared<ActionAim>(RIGHT, CENTER, worm_turn_id);
+            return true;
+        } else if (!turn_worm_has_weapon()) {
+            action = std::make_shared<ActionMovRight>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_up_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ARRiba con el aim\n";
+            action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, UP, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_down_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ABAJO con el aim\n";
+            action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, DOWN, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_left_click(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_aiming_weapon()) {
+            //action = std::make_shared<ActionShoot>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still() and turn_worm_has_weapon()) {
+            action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_scroll_up(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(SCROLL_UP, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_mouse_scroll_down(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(SCROLL_DOWN, worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
+            action = std::make_shared<ActionJump>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+bool Match::handle_backspace_button(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
+            action = std::make_shared<ActionBackflip>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+int Match::get_turn_worm_x() {
+    return worms_map.at(worm_turn_id)->get_worm_x();
+}
+
+int Match::get_turn_worm_y() {
+    return worms_map.at(worm_turn_id)->get_worm_y();
+}
+ 
+bool Match::turn_worm_facing_left() {
+    return worms_map.at(worm_turn_id)->worm_facing_left();
+}
+
+char Match::get_turn_worm_id() {
+    return worm_turn_id;
+}
+
+bool Match::is_turn_worm_in_my_army() {
+    return worms_map.at(worm_turn_id)->get_army_id() == my_army_id;
+}
+
+bool Match::is_turn_worm_still() {
+    return worms_map.at(worm_turn_id)->get_worm_state() == STILL;
+}
+
+bool Match::turn_worm_has_weapon() {
+    return worms_map.at(worm_turn_id)->get_worm_weapon() != NO_TOOL;
+}
+
+bool Match::is_turn_worm_aiming_weapon() {
+    return worms_map.at(worm_turn_id)->get_worm_state() == AIMING;
 }

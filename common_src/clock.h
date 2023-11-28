@@ -39,9 +39,7 @@ class Clock {
             std::this_thread::sleep_for(std::chrono::milliseconds(rest));
             t1 += std::chrono::milliseconds(rate);
             iter++;
-
         }
-
     }
 
     void stop_ticking(){

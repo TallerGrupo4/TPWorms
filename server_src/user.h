@@ -1,5 +1,6 @@
 #include <atomic>
 #include <memory>
+#include <vector>
 
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
@@ -27,7 +28,7 @@ private:
     bool _is_dead = false;
     uint match_id = 0;
     bool is_creator = false;
-    uint8_t worm_id;
+    uint8_t my_army_id = 0;
     bool interpretate_command_in_lobby(Command& command);
     void interpretate_command_in_match(GameCommand& game_command);
     void handle_lobby();

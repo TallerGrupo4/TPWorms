@@ -1,0 +1,81 @@
+# Game Settings
+max_players: 4
+
+# Platforms
+plat_small: 3
+plat_big: 6
+plat_height: 0.8
+plat_friction: 0.1
+
+# Worms
+worm_width: 1.5
+worm_height: 1.5
+worm_friction: 1
+
+# World
+start_life: 100
+null_state: 0
+initial_worms_turn: 0
+turn_time: 60
+
+# Physics Constants
+worm_speed: 2
+worm_jump_speed: 4
+worm_jump_hor_speed: 3
+worm_backflip_speed: 6
+worm_backflip_hor_speed: 1
+
+explosion_power: 2
+
+projectile_potency: 1
+
+# Weapons
+bazooka_damage: 50
+bazooka_radius: 2
+bazooka_misile_restitution: 0
+bazooka_misile_density: 1
+
+mortar_damage: 50
+mortar_radius: 2
+mortar_fragments: 6
+mortar_misile_restitution: 0
+mortar_misile_density: 1
+mortar_max_ammo: 10
+
+green_granade_damage: 30
+green_granade_radius: 2
+green_granade_restitution: 0.3
+green_granade_density: 1
+
+red_granade_damage: 30
+red_granade_radius: 2
+red_granade_fragments: 6
+red_granade_max_ammo: 10
+red_granade_restitution: 0.3
+red_granade_density: 1
+
+banana_damage: 70
+banana_radius: 2
+banana_restitution: 1
+banana_density: 0.8
+banana_max_ammo: 5
+
+holy_granade_damage: 110
+holy_granade_radius: 8
+holy_granade_restitution: 0.3
+holy_granade_density: 1
+holy_granade_max_ammo: 2
+
+dynamite_damage: 50
+dynamite_radius: 4
+dynamite_max_ammo: 5
+
+baseball_bat_damage: 30
+
+airstrike_damage: 40
+airstrike_radius: 2
+airstrike_max_ammo: 2
+
+
+fragment_damage: 10
+fragment_radius: 2

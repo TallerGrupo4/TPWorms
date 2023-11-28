@@ -1,3 +1,6 @@
+#ifndef WORM_H
+#define WORM_H
+
 #include <vector>
 #include <unordered_map>
 #include <box2d/box2d.h>
@@ -5,10 +8,28 @@
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
 #include "game_constants.h"
-// #include "weapons.h"
+#include "tool.h"
+#include "../config.h"
 
-#ifndef WORM_H
-#define WORM_H
+#define WORM_SPEED ConfigSingleton::getInstance().get_worm_speed()
+#define WORM_JUMP_SPEED ConfigSingleton::getInstance().get_worm_jump_speed()
+#define WORM_JUMP_HOR_SPEED ConfigSingleton::getInstance().get_worm_jump_hor_speed()
+#define WORM_BACKFLIP_SPEED ConfigSingleton::getInstance().get_worm_backflip_speed()
+#define WORM_BACKFLIP_HOR_SPEED ConfigSingleton::getInstance().get_worm_backflip_hor_speed()
+#define WORM_WIDTH ConfigSingleton::getInstance().get_worm_width()
+#define WORM_HEIGHT ConfigSingleton::getInstance().get_worm_height()
+#define WORM_FRICTION ConfigSingleton::getInstance().get_worm_friction()
+#define START_LIFE ConfigSingleton::getInstance().get_start_life()
+#define NULL_STATE ConfigSingleton::getInstance().get_null_state()
+#define INITIAL_WORMS_TURN ConfigSingleton::getInstance().get_initial_worms_turn()
+#define TURN_TIME ConfigSingleton::getInstance().get_turn_time()
+
+
+
+
+//INCLUDES DE ARMAS
+#include "weapon_bazooka.h"
+
 
 class WormNotFound: public std::exception {
     const char* what() const noexcept override {
@@ -17,93 +38,73 @@ class WormNotFound: public std::exception {
 };
 
 
-class WormData{
-    friend class Worm;
-    // friend class ProjectileListener;
-    // friend class JumpListener;
-    char id;
-    int life;
-    int state;
-    int curr_weapon = NO_WEAPON;
-    int act_dir = DER;
-    int type;
-    // std::unordered_map<int, int> weapons;
-    
-    WormData(char id): id(id), life(START_LIFE), state(STILL), type(WORM) {
-        //TODO insert weapons with their respective starting ammo
-    }
-
-    public:
-
-    int get_state(){
-        return state;
-    }
-
-    void set_state(int new_state){
-        state = new_state;
-    }
-
-    ~WormData(){}
-
-};
-
 class Worm {
     friend class Game;
     b2Body* body;
-    WormData data;
+    std::vector<std::shared_ptr<Tool>> tools;
+    char id;
+    int life;
+    int state;
+    int curr_tool;
+    int act_dir;
+    float last_still_angle;
+    float last_y;
+    int number_contacts;
+    int type;
+    char team_id;
+    int aiming_angle;
+    int time_for_curr_tool;
+    bool has_used_tool;
+
+
 
 
 public:
-    Worm(b2Body* body, char id):
-        body(body), data(id) {
-            body->GetUserData().pointer = (uintptr_t) &data;
-        }
+    Worm(b2Body* body, char id, char team_id);
+    
+    int get_id();
 
-    void move(int direction) {
-        if (data.state == MOVING || data.state == STILL){
-            data.act_dir = direction;
-            body->SetLinearVelocity( b2Vec2( 0, 0 ) );
-            float vel_x = direction * WORM_SPEED;
-            body->SetLinearVelocity( b2Vec2( vel_x, 0 ) );
-            data.state = MOVING;
-        }
-    }
+    int get_angle();
 
-    void jump(int direction){
-        if (data.state != STILL) {return;}
-        if (direction == FOWARD){
-            body->SetLinearVelocity( b2Vec2( 0, 0 ) );
-            float vel_x = data.act_dir * WORM_JUMP_SPEED ;
-            float vel_y = WORM_JUMP_HEIGHT;
-            body->SetLinearVelocity( b2Vec2( vel_x, vel_y ) );
-            data.state = JUMPING;
+    void move(int dir);
 
-        } else {
-            float vel_x = -1 * data.act_dir * WORM_BACKFLIP_SPEED ;
-            float vel_y = WORM_BACKFLIP_HEIGHT;
-            body->SetLinearVelocity( b2Vec2( vel_x, vel_y ) );
-            data.state = BACKFLIPPING;
-        }
-    }
+    void jump (int dir);
 
-    WormSnapshot get_snapshot() {
-        if (body == nullptr){throw WormNotFound();}
-        float pos_x = body->GetPosition().x;
-        float pos_y = body->GetPosition().y;
-        float angle = body->GetAngle();
-        WormSnapshot snapshot(data.id, pos_x, pos_y, angle, START_LIFE, data.life, data.act_dir, data.curr_weapon, data.state);
-        return snapshot;
-    }
+    void use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
 
-    int get_state(){
-        return data.state;
-    }
+    void aim(int angle_inc, int direction);
 
-    void set_state(int new_state){
-        data.state = new_state;
-    }
+    void change_tool(int scroll_direction);
 
+    void store_tool();
 
+    bool in_contact();
+
+    void add_contact();
+
+    void remove_contact();
+    
+    void set_used_tool(bool value);
+
+    WormSnapshot get_snapshot();
+
+    int get_state();
+
+    void set_state(int new_state);
+
+    void set_last_still_angle(float angle);
+
+    float last_angle();
+
+    int get_type();
+
+    float get_last_y();
+
+    void set_last_y(float y);
+
+    void set_curr_tool(int new_tool);
+
+    void apply_damage(int damage);
 };
 
 #endif  // WORM_H

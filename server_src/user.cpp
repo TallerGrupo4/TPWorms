@@ -31,7 +31,7 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
-                std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(worm_id);
+                std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(my_army_id);
                 queue_match->push(exit_command);
                 sender->stop();
                 sender->join();
@@ -82,7 +82,7 @@ void User::handle_starting_match() {
             }
         } else if (command.get_code() == CASE_NUMBER_OF_PLAYERS) {
             uint8_t number_of_players = monitor_matches.get_number_of_players(match_id);
-            Command command_to_send(CASE_NUMBER_OF_PLAYERS, match_id, {""}, number_of_players, DEFAULT);
+            Command command_to_send(CASE_NUMBER_OF_PLAYERS, match_id, {""}, number_of_players);
             protocol.send_command(command_to_send);
         }
     }
@@ -90,7 +90,10 @@ void User::handle_starting_match() {
 
 void User::handle_match() {
     while (protocol.is_connected()) {
-        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worm_id);
+        std::shared_ptr<GameCommand> game_command = protocol.recv_game_command();
+
+        // CHANGE THIS TO ^^^^!!!!! 
+        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids[0]);
         queue_match->push(game_command);
     }
 }
@@ -114,8 +117,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
         case CASE_CREATE: {
             try {
                 queue_match = monitor_matches.create_match(sender->get_queue(),
-                command.get_match_id(), worm_id, map_names);
-                number_of_players = 1;
+                command.get_match_id(), number_of_players, map_names, my_army_id);
                 in_match = true;
                 is_creator = true;
                 code = CASE_CREATE;
@@ -124,13 +126,13 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_EXISTS;
                 std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, map_names, number_of_players, worm_id);
+            Command command_to_send(code, match_id, map_names, number_of_players);
             protocol.send_command(command_to_send);
             break;
         }
         case CASE_JOIN: {
             try {
-                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), worm_id, map_names, number_of_players);
+                queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), number_of_players, map_names, my_army_id);
                 in_match = true;
                 code = CASE_JOIN;
                 std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
@@ -144,7 +146,7 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 code = CASE_MATCH_ALREADY_STARTED;
                 std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
             }
-            Command command_to_send(code, match_id, map_names, number_of_players, worm_id);
+            Command command_to_send(code, match_id, map_names, number_of_players);
             protocol.send_command(command_to_send);
             break;
         }

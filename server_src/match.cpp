@@ -8,6 +8,9 @@
 #include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/thread.h"
+#include "config.h"
+
+#define MAX_PLAYERS ConfigSingleton::getInstance().get_max_players()
 
 
 Match::Match():
@@ -60,8 +63,21 @@ void Match::push_all_players(Snapshot snapshot) {
 }
 
 void Match::send_initial_data() {
-    Snapshot start_snap = game.start_and_send(map , id_counter);
-    push_all_players(start_snap);
+    std::map<char, std::vector<char>> teams;
+    Snapshot start_snap = game.start_and_send(map , id_counter, teams);
+    // For each player, send the initial data
+    int i = 0;
+    for (auto& player_queue: players_queues) {
+        start_snap.my_army.clear();
+        start_snap.my_army[i] = teams[i];
+        try {
+            player_queue->push(start_snap);
+        } catch (const ClosedQueue& err) {
+            continue;
+        } 
+        i++;
+    }
+    // push_all_players(start_snap);
 }
 
 void Match::run(){
@@ -73,15 +89,12 @@ void Match::execute_and_step(int iter) {
     try {
         std::shared_ptr<GameCommand> game_command;
         while (queue->try_pop(game_command)) {
-            // The game_command should notify the game if it is a end_turn game_command
             game_command->execute(game);
         }
-        // Iter is the number of times you should advance frames, not the time
-        game.step(iter);// Check if turn ended (sum ticks, etc)
-        
+        game.step(iter);
         Snapshot snapshot = game.get_game_snapshot();
         push_all_players(snapshot);
-
+        game.game_post_cleanup();
         // If the game has ended, we should stop the match
         // if (game.has_ended()) {
         //     stop();

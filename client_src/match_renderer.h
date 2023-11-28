@@ -4,6 +4,8 @@
 #include <exception>
 #include <iostream>
 #include <chrono>
+#include <map>
+#include <vector>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <thread>
@@ -22,13 +24,15 @@ private:
     Client& client;
     MatchSurfaces surfaces;
     SDL2pp::SDL sdl;
+    SDL2pp::SDLTTF ttf;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     Match match;
     bool running = true;
     int mouse_motion_x = 0;
     int mouse_motion_y = 0;
-    bool camera_activated = false;
+    // std::map<char, std::vector<char>> my_army;
+    // uint8_t worm_turn_id = 0;
 
     bool handleEvents(Match& match);
 
