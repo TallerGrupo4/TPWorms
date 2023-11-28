@@ -44,6 +44,13 @@ class MapNotFound: public std::exception {
     }
 };
 
+class NoWormsLeft: public std::exception {
+public:
+    NoWormsLeft() {}
+    ~NoWormsLeft() {}
+    virtual const char* what() const noexcept { return "No worms left"; }
+};
+
 // class NonStopExecption: public std::exception{
 // public:
 //     NonStopExecption() {}

@@ -1,5 +1,5 @@
 #include "team.h"
-
+#include "../../common_src/custom_errors.h"
 
 Team::Team() {}
 
@@ -11,6 +11,9 @@ void Team::push_back(std::shared_ptr<Worm> worm) {
     worms.push_back(worm);
 }
 char Team::get_next_player_id() {
+    if (worms.empty()) {
+        throw NoWormsLeft();
+    }
     std::shared_ptr<Worm> worm = worms.front();
     worms.pop_front();
     worms.push_back(worm);

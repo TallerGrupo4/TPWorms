@@ -2,6 +2,7 @@
 #include <chrono>
 #include "../../common_src/yamlReader.h"
 #include "../../common_src/constants.h"
+#include "../../common_src/custom_errors.h"
 #include "game_constants.h"
 #include <iostream>
 
@@ -50,7 +51,12 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
             // add_health_to_team(teams[remainder + i]);
         }
     }
-    current_turn_player_id = teams[0].get_next_player_id();
+    try {
+        current_turn_player_id = teams[0].get_next_player_id();
+    } catch (const NoWormsLeft& err) {
+        // This should never happen, throw exception
+        std::cerr << err.what() << std::endl;
+    }
     snapshot.worms = wormsSnapshots;
     return snapshot;
 }
@@ -293,7 +299,12 @@ void Game::manage_turn() {
 
     // Check if the turn time is over
     if (teams.size() == 1) {
-        current_turn_player_id = teams[0].get_next_player_id();
+        try {
+            current_turn_player_id = teams[0].get_next_player_id();
+        } catch (const NoWormsLeft& err) {
+            std::cerr << err.what() << std::endl;
+            // End of the game
+        }
         std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
         turn_time = TURN_TIME;
         return;
@@ -312,7 +323,12 @@ void Game::manage_turn() {
             std::cout << "Team " << team_turn << " is empty" << std::endl;
             continue;
         }
-        current_turn_player_id = teams[team_turn].get_next_player_id();
+        try {
+            current_turn_player_id = teams[team_turn].get_next_player_id();
+        } catch (const NoWormsLeft& err) {
+            std::cerr << err.what() << std::endl;
+            continue;
+        }
         worm_is_dead = teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD;
         std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
         std::cout << "Team turn: " << team_turn << std::endl;
