@@ -30,6 +30,9 @@ class Game {
     int team_turn;
     bool turn_cleaning;
     int cleaning_time;
+    bool game_ended;
+    int winner_team_id;
+
 
     void check_angles(Worm& w);
 
@@ -44,7 +47,6 @@ class Game {
     void manage_turn();
 
     void turn_clean_up();
-
 
 
 public:
@@ -72,7 +74,11 @@ public:
 
     void step(int it);
 
+    bool check_end_game();
+
     Snapshot get_game_snapshot();
+
+    Snapshot get_end_game_snapshot();
 
     ~Game();
 };

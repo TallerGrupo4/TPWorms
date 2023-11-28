@@ -9,7 +9,7 @@
 // #include "weapons.h"
 
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener(projectiles) , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener(projectiles) , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -263,8 +263,33 @@ void Game::step(int it) {
             manage_turn();
         }
     }
-
     // printf("turn time: %d\n", turn_time);
+}
+
+bool Game::check_end_game() {
+    bool no_worms_left = true;
+    int alive_teams = 0;
+    for (auto& team: teams) {
+        if (team.second.size() > 0) {
+            no_worms_left = false;
+            for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
+                if (worm->get_state() != DEAD) {
+                    alive_teams++;
+                    winner_team_id = team.first;
+                    break;
+                }
+            }
+        }
+    }
+    if (no_worms_left) {
+        // End of the game because everyone left
+        game_ended = true;
+    } else if (alive_teams == 1) {
+        // End of the game because only one team is alive
+        game_ended = true;
+        // send winner team
+    }
+    return game_ended;
 }
 
 void Game::turn_clean_up(){
@@ -310,23 +335,20 @@ void Game::manage_turn() {
         return;
     }
     // Switch to the next player's turn from another team
-    std::cout << "turn_time " << turn_time << std::endl;
     bool worm_is_dead = false;
     do {
         team_turn++;
+        std::cout << "Team turn: " << team_turn << std::endl;
         if (team_turn > ((int) teams.size() - 1)) {
             // End of round
             std::cout << "End of round" << std::endl;
             team_turn = 0;
         }
-        if (teams[team_turn].is_empty()) {
-            std::cout << "Team " << team_turn << " is empty" << std::endl;
-            continue;
-        }
         try {
             current_turn_player_id = teams[team_turn].get_next_player_id();
         } catch (const NoWormsLeft& err) {
-            std::cerr << err.what() << std::endl;
+            std::cout << err.what() << std::endl;
+            worm_is_dead = true;
             continue;
         }
         worm_is_dead = teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD;
@@ -335,6 +357,22 @@ void Game::manage_turn() {
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
+}
+
+Snapshot Game::get_end_game_snapshot() {
+    std::vector<WormSnapshot> worms;
+    for (auto& team: teams) {
+        if (team.first != winner_team_id) continue;
+        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
+            worm->state = WINNER;
+            worms.push_back(worm->get_snapshot());
+        }
+        // worms.push_back(pair.second->get_snapshot());
+    }
+    Snapshot snapshot(worms, {} , {});
+    snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
+    snapshot.set_end_game();
+    return snapshot;
 }
 
 Snapshot Game::get_game_snapshot() {

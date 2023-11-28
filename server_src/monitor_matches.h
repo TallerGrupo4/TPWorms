@@ -21,6 +21,8 @@ private:
     std::map<uint, Map> maps;
     std::mutex m;
 
+    void kill_dead_matches();
+
 public:
     MonitorMatches(std::vector<std::string> routes);
     

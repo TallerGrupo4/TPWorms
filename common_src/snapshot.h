@@ -109,6 +109,7 @@ public:
  
 
 class Snapshot {
+    bool end_game = false;
 public:
     std::vector<WormSnapshot> worms;
     std::vector<ProjectileSnapshot> projectiles;
@@ -133,6 +134,14 @@ public:
     void set_turn_time_and_worm_turn(int turn_time = 0, int worm_turn = 0) {
         turn_time_and_worm_turn.turn_time = turn_time;
         turn_time_and_worm_turn.worm_turn = worm_turn;
+    }
+
+    void set_end_game() {
+        end_game = true;
+    }
+
+    bool get_end_game() {
+        return end_game;
     }
 };
 

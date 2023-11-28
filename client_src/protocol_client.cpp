@@ -109,6 +109,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_time_and_worm_turn(snapshot);
     recv_worms(snapshot);
     recv_projectiles(snapshot);
+    recv_end_game(snapshot);
     return snapshot;
 }
 
@@ -320,6 +321,17 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         aiming_angle[0] = ntohl(aiming_angle[0]);
         WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0]);
         snapshot.worms.push_back(worm);
+    }
+}
+
+void ProtocolClient::recv_end_game(Snapshot& snapshot) {
+    char end_game[1];
+    socket.recvall(end_game, 1, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    if (end_game[0] == 1 /*true*/) {
+        snapshot.set_end_game();
     }
 }
 

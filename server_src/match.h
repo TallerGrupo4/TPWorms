@@ -53,6 +53,8 @@ class Match: public Thread {
         void execute_and_step(int iter);
         void start_game(Map& map);
 
+        bool has_ended();
+
         std::string get_map_name();
 };
 

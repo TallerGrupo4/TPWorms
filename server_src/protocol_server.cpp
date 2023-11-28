@@ -119,6 +119,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_projectiles(snapshot.projectiles);
 
+    send_end_game(snapshot.get_end_game());
+
     return 1;
 }
 
@@ -488,3 +490,7 @@ void ProtocolServer::send_map_name(const std::string map_name) {
     socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
 }
 
+void ProtocolServer::send_end_game(bool end_game) {
+    char end_game_code[1] = {end_game};
+    socket.sendall(end_game_code, 1, &was_closed);
+}

@@ -83,6 +83,7 @@ void Match::send_initial_data() {
 void Match::run(){
     Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, keep_running);
     clock.tick();
+    std::cout << "Match ended " << keep_running << std::endl;
 }
 
 void Match::execute_and_step(int iter) {
@@ -96,9 +97,11 @@ void Match::execute_and_step(int iter) {
         push_all_players(snapshot);
         game.game_post_cleanup();
         // If the game has ended, we should stop the match
-        // if (game.has_ended()) {
-        //     stop();
-        // }
+        if (game.check_end_game()) {
+            Snapshot ending_snapshot = game.get_end_game_snapshot();
+            push_all_players(ending_snapshot);
+            stop();
+        }
     } catch (const ClosedQueue& err) {
           if (!keep_running) return;
             std::cerr << "Error: " << err.what() << std::endl;
@@ -117,6 +120,8 @@ bool Match::has_started() { return match_started; }
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> Match::get_queue() { return queue; }
 
 std::string Match::get_map_name() { return name; }
+
+bool Match::has_ended() { return !keep_running; }
 
 Match::~Match() {
     // Perhaps it would be better to close the queue here

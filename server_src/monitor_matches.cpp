@@ -1,5 +1,6 @@
 #include "monitor_matches.h"
 #include <cstdint>
+#include <sys/types.h>
 
 #include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
@@ -16,8 +17,6 @@ MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
     }
 }
 
-// std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(std::shared_ptr<Queue<Snapshot>> queue,
-//                                                     uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names) {
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(std::shared_ptr<Queue<Snapshot>> queue,
                                                       uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id) {
     std::unique_lock<std::mutex> lock(m);
@@ -26,29 +25,22 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
 
     std::cout << "Creating match with id: " << match_id << std::endl;
     matches[match_id] = std::make_unique<Match>();
-    // if (quantity_of_worms > MAX_PLAYERS)
-    //     throw TooManyWorms();
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
         map_names.push_back(std::to_string(map.first));
     }
+
+    kill_dead_matches();
+
     return matches[match_id]->get_queue();
 }
 
-// std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(std::shared_ptr<Queue<Snapshot>> queue,
-//                                                 uint match_id, uint8_t& worm_id, std::vector<std::string>& map_names, uint8_t& number_of_players) {
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(std::shared_ptr<Queue<Snapshot>> queue,
                                                       uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
-    // if ((quantity_of_worms + matches[match_id]->get_number_of_players()) > MAX_PLAYERS)
-    //     throw TooManyWorms();
-    // for (int i = 0; i < quantity_of_worms; i++) {
-    //     uint8_t worm_id = matches[match_id]->add_player(queue);
-    //     worms_ids.push_back(worm_id);
-    // }
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
@@ -94,6 +86,21 @@ uint8_t MonitorMatches::get_number_of_players(uint match_id) {
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
     return matches[match_id]->get_number_of_players();
+}
+
+void MonitorMatches::kill_dead_matches() {
+    std::vector<uint> matches_to_delete;
+    for (auto& match: matches) {
+        std::cout << "Checking match with id: " << match.first << std::endl;
+        if (match.second->has_ended()) {
+            match.second->join();
+            matches_to_delete.push_back(match.first);
+            std::cout << "Match with id: " << match.first << " has ended" << std::endl;
+        }
+    }
+    for (auto& match_id: matches_to_delete) {
+        matches.erase(match_id);
+    }
 }
 
 MonitorMatches::~MonitorMatches() {}

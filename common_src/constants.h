@@ -82,6 +82,7 @@ enum TOOLS : uint8_t {
 #define DEAD 8
 #define AIMING 9
 #define SHOOTED 10
+#define WINNER 11
 
 
 // Codes for game actions common to client and server
