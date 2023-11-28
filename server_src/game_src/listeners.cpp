@@ -27,6 +27,7 @@ void MyListener::execute_contact_jump(b2Body* bodyA , b2Body* bodyB){
         if (wA && wA->get_type() == WORM && bodyB->GetType() == b2_staticBody) {
             wA->add_contact();
             if (wA->get_state() == JUMPING || wA->get_state() == FALLING || wA->get_state() == BACKFLIPPING){
+                bodyA->SetLinearVelocity(b2Vec2_zero);
                 float y_diff = bodyA->GetPosition().y - wA->get_last_y();
                 if (y_diff < -FALL_DISTANCE_THRESHOLD){
                     int damage = abs(std::round(y_diff));
