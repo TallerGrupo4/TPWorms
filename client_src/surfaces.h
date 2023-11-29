@@ -153,6 +153,16 @@ public:
     Surface aim_bsb_worm;
     Surface aim_bsb_up_worm;
     Surface aim_bsb_down_worm;
+    /*PROJECTILES*/
+    Surface bazooka_missile;
+    Surface mortar_round;
+    Surface air_missile;
+    Surface banana;
+    Surface cluster_bomb;
+    Surface cluster_bomb_fragments;
+    Surface dynamite;
+    Surface grenade;
+    Surface holy_grenade;
     /*BEAMS*/
     Surface large_beam_vertical;
     Surface large_beam_65;

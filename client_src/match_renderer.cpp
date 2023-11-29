@@ -68,25 +68,37 @@ bool MatchRenderer::handleEvents(Match& match) {
                         }
                         break;
                     }
+                    case SDLK_SPACE: {
+                        if (match.handle_space_button_pressed(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
                 }
             }  // Fin KEY_DOWN
             break;
-            // case SDL_KEYUP: {
-            //     SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
-            //     switch (keyEvent.keysym.sym) {
-            //         case SDLK_LEFT:
-            //             action = std::make_shared<ActionMovLeft>();
-            //             client.send_action(action);
-            //             //player.stopMoving();
-            //             break;
-            //         case SDLK_RIGHT:
-            //             action = std::make_shared<ActionMovRight>();
-            //             client.send_action(action);
-            //             //player.stopMoving();
-            //             break;
-            //     }
-            // }  // Fin KEY_UP
-            // break;
+            case SDL_KEYUP: {
+                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+                switch (keyEvent.keysym.sym) {
+                    // case SDLK_LEFT:
+                    //     action = std::make_shared<ActionMovLeft>();
+                    //     client.send_action(action);
+                    //     //player.stopMoving();
+                    //     break;
+                    // case SDLK_RIGHT:
+                    //     action = std::make_shared<ActionMovRight>();
+                    //     client.send_action(action);
+                    //     //player.stopMoving();
+                    //     break;
+                    case SDLK_SPACE: {
+                        if (match.handle_space_button_release(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                }
+            }  // Fin KEY_UP
+            break;
             case SDL_MOUSEMOTION: {
                 //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
                 SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
@@ -113,9 +125,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
                 switch (mouseButtonEvent.button) {
                 case SDL_BUTTON_LEFT:
-                    if (match.handle_mouse_left_click(action)) {
-                        client.send_action(action);
-                    }
+                    match.handle_mouse_left_click(mouseButtonEvent.x, mouseButtonEvent.y);
                     break;
                 case SDL_BUTTON_RIGHT:
                     if (match.handle_mouse_right_click(action)) {

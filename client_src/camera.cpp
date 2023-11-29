@@ -23,7 +23,7 @@ int Camera::get_target_worm_id() {
     return this->target.worm_id;
 }
 
-int Camera::get_target_projectile_id() {
+int Camera::get_target_proj_id() {
     return this->target.projectile_id;
 }
 

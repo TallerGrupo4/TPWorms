@@ -145,6 +145,16 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 aim_bsb_worm(WORM_AIMING_BASEBALL_BAT_SPRITES_PATH),
                                 aim_bsb_up_worm(WORM_AIMING_BASEBALL_BAT_UP_SPRITES_PATH),
                                 aim_bsb_down_worm(WORM_AIMING_BASEBALL_BAT_DOWN_SPRITES_PATH),
+                                /*PROJECTILES*/
+                                bazooka_missile(BAZOOKA_PROJECTILE_SPRITES_PATH),
+                                mortar_round(MORTAR_PROJECTILE_SPRITES_PATH),
+                                air_missile(AIRSTRIKE_PROJECTILE_SPRITES_PATH),
+                                banana(BANANA_PROJECTILE_SPRITES_PATH),
+                                holy_grenade(HOLY_GRENADE_PROJECTILE_SPRITES_PATH),
+                                dynamite(DYNAMITE_PROJECTILE_SPRITES_PATH),
+                                grenade(GREEN_GRENADE_PROJECTILE_SPRITES_PATH),
+                                cluster_bomb(RED_GRENADE_PROJECTILE_SPRITES_PATH),
+                                cluster_bomb_fragments(RED_GRENADE_FRAGMENTS_PROJECTILE_SPRITES_PATH),
                                 /*BEAMS*/
                                 large_beam_vertical(BEAM_LARGE_VERTICAL),
                                 large_beam_65(BEAM_LARGE_65),
@@ -306,6 +316,16 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     aim_bsb_worm.SetColorKey(true, 0);
     aim_bsb_up_worm.SetColorKey(true, 0);
     aim_bsb_down_worm.SetColorKey(true, 0);
+    /*PROJECTILES*/
+    bazooka_missile.SetColorKey(true, 0);
+    mortar_round.SetColorKey(true, 0);
+    air_missile.SetColorKey(true, 0);
+    banana.SetColorKey(true, 0);
+    holy_grenade.SetColorKey(true, 0);
+    dynamite.SetColorKey(true, 0);
+    grenade.SetColorKey(true, 0);
+    cluster_bomb.SetColorKey(true, 0);
+    cluster_bomb_fragments.SetColorKey(true, 0);
     /*BEAMS*/
     large_beam_vertical.SetColorKey(true, 0);
     large_beam_65.SetColorKey(true, 0);
