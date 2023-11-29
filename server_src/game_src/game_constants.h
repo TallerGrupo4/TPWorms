@@ -26,7 +26,8 @@ enum ExplosionType{
 enum BodyType{
     WORM,
     PROJECITLE,
-    PLATFORM
+    PLATFORM,
+    PROVISION_BOX,
 };
 
 

@@ -2,6 +2,7 @@
 #include "game_constants.h"
 #include "worm.h"
 #include "explosion.h"
+#include "provisionBox.h"
 
 
 
@@ -14,6 +15,17 @@ void MyListener::execute_explosive(b2Body* bodyB){
         if (pB->get_explosion_type() == EXPLOSIVE){
             pB->explode(projectiles);
         }
+    }
+}
+
+void MyListener::execute_box_contact(b2Body* bodyA , b2Body* bodyB){
+    if (bodyA->GetType () == b2_staticBody || bodyB->GetType () == b2_staticBody){
+        return;
+    }
+    Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
+    ProvisionBox* pB = reinterpret_cast<ProvisionBox*>(bodyB->GetUserData().pointer);
+    if (wA && pB && wA->get_type() == WORM && pB->get_body_type() == PROVISION_BOX ){
+        pB->apply_effect(wA);
     }
 }
 
@@ -49,6 +61,9 @@ void MyListener::BeginContact(b2Contact* contact){
 
     execute_explosive(bodyA);
     execute_explosive(bodyB);
+
+    execute_box_contact(bodyA, bodyB);
+    execute_box_contact(bodyB, bodyA);
 }
 
 void MyListener::change_last_y(b2Body* bodyA , b2Body* bodyB){
