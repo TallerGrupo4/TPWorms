@@ -65,25 +65,31 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
         camera.update_turn_time_text(turn_time);    
     }
-
-    for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
-        std::cout << "Inside proj destroyer\n";
-        if (it->second->get_proj_state() == EXPLODED) {
-            it = projectiles_map.erase(it);
-        } else {
-            ++it;
+    try {
+        for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
+            std::cout << "Inside proj destroyer\n";
+            if (it->second->get_proj_state() == EXPLODED) {
+                std::cout << "Found proj exploded\n";
+                it = projectiles_map.erase(it);
+            } else {
+                ++it;
+            }
         }
+    } catch (const std::exception& e) {
+        std::cout << "Exception in proj snapshot: " << e.what() << "\n";
+    } catch (...) {
+        std::cout << "ERROR NOT FOUND\n";
     }
-
+    std::cout << "Before reading proj snapshot\n";
     for (auto& projectile_snpsht : snpsht.projectiles) {
-        std::cout << "inside proj snapshot";
-        if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end()) {
-            std::cout << "Not found proj from snapshot in map";
+        std::cout << "inside proj snapshot\n";
+        if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
+            std::cout << "Not found proj from snapshot in map\n";
             std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
             std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
-            std::cout << "Foun proj from snapshot in map";
+            std::cout << "Found proj from snapshot in map --> update\n";
             projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
         }
     }
@@ -328,7 +334,7 @@ bool Match::handle_down_button(std::shared_ptr<Action>& action) {
 bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon()) {
-            charge_for_weapon += 5;
+            charge_for_weapon += 1;
             if(charge_for_weapon == 100) {
                 std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
                 action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);

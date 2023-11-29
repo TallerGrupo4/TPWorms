@@ -10,15 +10,24 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, 
     x(proj_snpsht.pos_x),
     y((-1)*proj_snpsht.pos_y),
     explosion_type(proj_snpsht.explosion_type),
-    width(std::round(proj_snpsht.width)),
-    height(std::round(proj_snpsht.height)) {
-
+    width(std::round(proj_snpsht.width*5)),
+    height(std::round(proj_snpsht.height*5)) {
+        std::cout << "projectile " << +id << " type: " << +type << std::endl;
+        std::cout << "state: " << +state << std::endl;
+        std::cout << "explosion_type: " << explosion_type << std::endl;
+        std::cout << "x: " << x << std::endl;
+        std::cout << "y: " << y << std::endl;
+        std::cout << "width: " << width << std::endl;
+        std::cout << "height: " << height << std::endl;
+        std::cout << "angle: " << angle << std::endl;
+        std::cout << "facing_left: " << facing_left << std::endl;
 }
 
 void Projectile::update_from_snapshot(ProjectileSnapshot& proj_snpsht) {
     angle = proj_snpsht.angle;
     facing_left = proj_snpsht.direction == LEFT ? true : false;
     state = static_cast<ProjectileStates>(proj_snpsht.state);
+    std::cout << "state: " << +state << std::endl;
     x = proj_snpsht.pos_x;
     y = (-1)*proj_snpsht.pos_y;
     proj_an.update_from_snapshot(state, type);

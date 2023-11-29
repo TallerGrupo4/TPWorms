@@ -1,12 +1,12 @@
 #include "projectile_animations.h"
 
 ProjectileAnimations::ProjectileAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces) :
-                                ban_an(renderer, surfaces.still_0_worm, SECS_FOR_GRENADES_SPRITES),
-                                gr_an(renderer, surfaces.still_0_up_worm, SECS_FOR_GRENADES_SPRITES),
-                                cls_an(renderer, surfaces.still_0_down_worm, SECS_FOR_GRENADES_SPRITES),
-                                cls_fragment_an(renderer, surfaces.still_1_worm, SECS_FOR_FRAGMENTS_SPRITES),
-                                dyn_an(renderer, surfaces.walking_worm, SECS_FOR_DYNAMITE_SPRITES),
-                                holy_grenade_an(renderer, surfaces.walking_worm, SECS_FOR_GRENADES_SPRITES),
+                                ban_an(renderer, surfaces.banana, SECS_FOR_GRENADES_SPRITES),
+                                gr_an(renderer, surfaces.grenade, SECS_FOR_GRENADES_SPRITES),
+                                cls_an(renderer, surfaces.cluster_bomb, SECS_FOR_GRENADES_SPRITES),
+                                cls_fragment_an(renderer, surfaces.cluster_bomb_fragments, SECS_FOR_FRAGMENTS_SPRITES),
+                                dyn_an(renderer, surfaces.dynamite, SECS_FOR_DYNAMITE_SPRITES),
+                                holy_grenade_an(renderer, surfaces.holy_grenade, SECS_FOR_GRENADES_SPRITES),
                                 bazooka_missile_an(renderer, surfaces.bazooka_missile, 0),
                                 mortar_round_an(renderer, surfaces.mortar_round, 0),
                                 air_missile_an(renderer, surfaces.air_missile, 0) {
@@ -20,7 +20,7 @@ void ProjectileAnimations::render(ProjectileStates state, ProjectileTypes type, 
                        int above_offset,
                        int bellow_offset) {
 
-    SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+    SDL_RendererFlip flip = facing_left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     switch (state) {
     case ALIVE:
         switch (type) {

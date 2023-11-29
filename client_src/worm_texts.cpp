@@ -36,6 +36,7 @@ void WormSpecificTexts::render(SDL2pp::Renderer& renderer, int worm_state, bool 
     renderer.Copy(health_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(health_text_x, health_text_y, this->health_text.GetWidth(), this->health_text.GetHeight()));
     if (worm_state == AIMING) {
         SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        //std::cout << "crosshair angle: " << this->crosshair_angle << std::endl;
         int distance_from_worm_center_x = std::round(cos(std::abs(this->crosshair_angle)*M_PI/180)*CROSSHAIR_DISTANCE_FROM_WORM_CENTER);
         int distance_from_worm_center_y = std::round(sin(std::abs(this->crosshair_angle*M_PI/180))*CROSSHAIR_DISTANCE_FROM_WORM_CENTER);
         if(this->crosshair_angle > 0) {
