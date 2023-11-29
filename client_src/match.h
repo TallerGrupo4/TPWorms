@@ -2,6 +2,7 @@
 #define MATCH_H
 
 #include <map>
+#include <list>
 #include <chrono>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -25,6 +26,8 @@ private:
     char worm_turn_id;
     uint turn_time;
     uint charge_for_weapon;
+    std::list<ArmyColorDependentMisc> color_misc_list;
+    std::map<ArmyColors, std::reference_wrapper<ArmyColorDependentMisc>> color_map;
 
     bool get_next_target(Target& new_target);
 

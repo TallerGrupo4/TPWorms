@@ -33,7 +33,7 @@ public:
                 int above_offset = 0,
                 int bellow_offset = 0);
     void reset();
-
+    int get_frame_size();
 
 protected:
     bool advanceFrame();

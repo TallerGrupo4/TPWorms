@@ -9,27 +9,52 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
     turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
     charge_for_weapon = 0;
     camera.update_turn_time_text(turn_time);
+
+
+    SDL_Color blue_color = BLUE;
+    SDL_Color red_color = RED;
+    SDL_Color yellow_color = YELLOW;
+    SDL_Color green_color = GREEN;
+    SDL_Color orange_color = ORANGE;
+
     for (WormSnapshot worm_snpsht : snpsht.worms){
-        SDL_Color worm_color;
         switch (worm_snpsht.team_id) {
-            case 0 :
-            worm_color = BLUE;
+            case 0 : {
+            ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, surfaces.marker_blue, blue_color);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, blue_widgets, surfaces, renderer, bkgrnd);
+            this->worms_map[worm_snpsht.id] = worm;
+            }
             break;
-            case 1 :
-            worm_color = RED;
+            case 1 : {
+            ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, surfaces.marker_red, red_color);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, red_widgets, surfaces, renderer, bkgrnd);
+            this->worms_map[worm_snpsht.id] = worm;
+            }
             break;
-            case 2 :
-            worm_color = YELLOW;
+            case 2 : {
+            ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, surfaces.marker_yellow, yellow_color);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, yellow_widgets, surfaces, renderer, bkgrnd);
+            this->worms_map[worm_snpsht.id] = worm;
+            }
             break;
-            case 3 :
-            worm_color = GREEN;
+            case 3 : {
+            ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, surfaces.marker_green, green_color);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, green_widgets, surfaces, renderer, bkgrnd);
+            this->worms_map[worm_snpsht.id] = worm;
+            // worm_army_color = Green;
+            }
             break;
-            default:
-            worm_color = ORANGE;
+            default: {
+
+            }
+            ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, surfaces.marker_purple, orange_color);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, orange_widgets, surfaces, renderer, bkgrnd);
+            this->worms_map[worm_snpsht.id] = worm;
+            // worm_army_color = Orange;
             break;
         }
-        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, worm_color, surfaces, renderer, bkgrnd);
-        this->worms_map[worm_snpsht.id] = worm;
+        // std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, color_map, surfaces, renderer, bkgrnd);
+        // this->worms_map[worm_snpsht.id] = worm;
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
     update_camera(1,1,true);

@@ -1,11 +1,21 @@
 #ifndef CLIENTE_CONSTANTES_H
 #define CLIENTE_CONSTANTES_H
 
+#include "../common_src/constants.h"
+
 enum TargetType : char {
     PlayerType,
     WormType,
     ProjectileType,
     NoneType,
+};
+
+enum ArmyColors : char {
+    Blue,
+    Red,
+    Green,
+    Yellow,
+    Orange,
 };
 
 struct Target {
@@ -46,7 +56,31 @@ struct Target {
 
 #define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"
 
+/*CROSSHAIR/MARKER*/
 
+#define CROSSHAIR_DISTANCE_FROM_WORM_CENTER PIX_PER_METER*RESOLUTION_MULTIPLIER*2
+
+#define SECS_FOR_CROSSHAIR_SPRITES 1
+
+#define CROSSHAIR_BLUE_SPRITES_PATH MISC_SPRITES_PATH "/crshairb.png"
+
+#define CROSSHAIR_RED_SPRITES_PATH MISC_SPRITES_PATH "/crshairr.png"
+
+#define CROSSHAIR_GREEN_SPRITES_PATH MISC_SPRITES_PATH "/crshairg.png"
+
+#define CROSSHAIR_YELLOW_SPRITES_PATH MISC_SPRITES_PATH "/crshairy.png"
+
+#define CROSSHAIR_PURPLE_SPRITES_PATH MISC_SPRITES_PATH "/crshairp.png"
+
+#define MARKER_BLUE_SPRITES_PATH MISC_SPRITES_PATH "/markerb.png"
+
+#define MARKER_RED_SPRITES_PATH MISC_SPRITES_PATH "/markerr.png"
+
+#define MARKER_GREEN_SPRITES_PATH MISC_SPRITES_PATH "/markerg.png"
+
+#define MARKER_YELLOW_SPRITES_PATH MISC_SPRITES_PATH "/markery.png"
+
+#define MARKER_PURPLE_SPRITES_PATH MISC_SPRITES_PATH "/markerp.png"
 
 /*WORM ANIMATIONS*/
 

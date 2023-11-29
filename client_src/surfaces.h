@@ -10,6 +10,17 @@ class MatchSurfaces {
 public:    
     /*BACKGROUND*/
     Surface background1;
+    /*CROSSHAIR/MARKER*/
+    Surface crosshair_blue;
+    Surface crosshair_red;
+    Surface crosshair_green;
+    Surface crosshair_yellow;
+    Surface crossharir_purple;
+    Surface marker_blue;
+    Surface marker_red;
+    Surface marker_green;
+    Surface marker_yellow;
+    Surface marker_purple;
     /*WORM MOVEMENTS*/
     Surface still_0_worm;
     Surface still_0_up_worm;

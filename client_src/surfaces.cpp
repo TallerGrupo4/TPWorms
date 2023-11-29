@@ -3,6 +3,17 @@
 using namespace SDL2pp;
 
 MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
+                                /*CROSSHAIR/MARKER*/
+                                crosshair_blue(CROSSHAIR_BLUE_SPRITES_PATH),
+                                crosshair_red(CROSSHAIR_RED_SPRITES_PATH),
+                                crosshair_green(CROSSHAIR_GREEN_SPRITES_PATH),
+                                crosshair_yellow(CROSSHAIR_YELLOW_SPRITES_PATH),
+                                crossharir_purple(CROSSHAIR_PURPLE_SPRITES_PATH),
+                                marker_blue(MARKER_BLUE_SPRITES_PATH),
+                                marker_red(MARKER_RED_SPRITES_PATH),
+                                marker_green(MARKER_GREEN_SPRITES_PATH),
+                                marker_yellow(MARKER_YELLOW_SPRITES_PATH),
+                                marker_purple(MARKER_PURPLE_SPRITES_PATH),
                                 still_0_worm(WORM_STILL_0_SPRITES_PATH),
                                 still_0_up_worm(WORM_STILL_0_UP_SPRITES_PATH),
                                 still_0_down_worm(WORM_STILL_0_DOWN_SPRITES_PATH),
@@ -174,6 +185,16 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 short_beam_m_45(BEAM_SHORT_MINUS_45),
                                 short_beam_m_65(BEAM_SHORT_MINUS_65),
                                 short_beam_vertical_flipped(BEAM_SHORT_VERTICAL_FLIPPED) {
+    crosshair_blue.SetColorKey(true, 0);
+    crosshair_red.SetColorKey(true, 0);
+    crosshair_green.SetColorKey(true, 0);
+    crosshair_yellow.SetColorKey(true, 0);
+    crossharir_purple.SetColorKey(true, 0);
+    marker_blue.SetColorKey(true, 0);
+    marker_red.SetColorKey(true, 0);
+    marker_green.SetColorKey(true, 0);
+    marker_yellow.SetColorKey(true, 0);
+    marker_purple.SetColorKey(true, 0);
     still_0_worm.SetColorKey(true, 0);
     still_0_up_worm.SetColorKey(true, 0);
     still_0_down_worm.SetColorKey(true, 0);
