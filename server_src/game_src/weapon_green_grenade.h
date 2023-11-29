@@ -1,22 +1,22 @@
-#ifndef HOLY_GRANADE_H
-#define HOLY_GRANADE_H
+#ifndef GREEN_GRENADE_H
+#define GREEN_GRENADE_H
 
 #include "weapon.h"
 #include "projectile.h"
 #include <box2d/box2d.h>
 
 
-class HolyGranade : public Weapon {
+class GreenGrenade : public Weapon {
 
     public:
-    HolyGranade();
+    GreenGrenade();
 
     void use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles) override;
 
-    ~HolyGranade();
+    ~GreenGrenade();
 
 };
 
 
 
-#endif  // HOLY_GRANADE_H
+#endif  // GREEN_GRENADE_H

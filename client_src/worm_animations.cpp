@@ -264,7 +264,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset);
             }
             break;
-        case GREEN_GRANADE:
+        case GREEN_GRENADE:
             if(angle == 0) {
                 still_grn_an.render(renderer, dst,
                             flip,
@@ -283,7 +283,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset);
             }
             break;
-        case HOLY_GRANADE:
+        case HOLY_GRENADE:
             if(angle == 0) {
                 still_hgr_an.render(renderer, dst,
                             flip,
@@ -340,7 +340,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset);
             }
             break;
-        case RED_GRANADE:
+        case RED_GRENADE:
             if(angle == 0) {
                 still_cls_an.render(renderer, dst,
                             flip,
@@ -541,7 +541,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset);
             }
             break;
-        case GREEN_GRANADE:
+        case GREEN_GRENADE:
             if(angle == 0) {
                 aim_grn_an.render(renderer, dst,
                             flip,
@@ -560,7 +560,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset); 
             }
             break;
-        case HOLY_GRANADE:
+        case HOLY_GRENADE:
             if(angle == 0) {
                 aim_hgr_an.render(renderer, dst,
                             flip,
@@ -598,7 +598,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                                         bellow_offset); 
             }
             break;
-        case RED_GRANADE:
+        case RED_GRENADE:
             if(angle == 0) {
                 aim_cls_an.render(renderer, dst,
                             flip,
@@ -797,7 +797,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_mortar_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case GREEN_GRANADE:
+        case GREEN_GRENADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_grn_up_an, new_aiming_angle, old_aiming_angle);
@@ -814,7 +814,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_grn_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case RED_GRANADE:
+        case RED_GRENADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_cls_up_an, new_aiming_angle, old_aiming_angle);
@@ -848,7 +848,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
                 check_aiming_angle(aim_ban_an, new_aiming_angle, old_aiming_angle);
             }
             break;
-        case HOLY_GRANADE:
+        case HOLY_GRENADE:
             if(angle > 0) {
                 if (!facing_left) {
                     check_aiming_angle(aim_hgr_up_an, new_aiming_angle, old_aiming_angle);
@@ -960,10 +960,10 @@ void WormAnimations::push_drop_weapon_an(TOOLS weapon, int angle, const bool fac
         case MORTAR:
             push_back_with_angle(drop_mortar_an, drop_mortar_down_an, drop_mortar_up_an, angle, facing_left);
             break;
-        case GREEN_GRANADE:
+        case GREEN_GRENADE:
             push_back_with_angle(drop_grn_an, drop_grn_down_an, drop_grn_up_an, angle, facing_left);
             break;
-        case HOLY_GRANADE:
+        case HOLY_GRENADE:
             push_back_with_angle(drop_hgr_an, drop_hgr_down_an, drop_hgr_up_an, angle, facing_left);
             break;
         case DYNAMITE:
@@ -972,7 +972,7 @@ void WormAnimations::push_drop_weapon_an(TOOLS weapon, int angle, const bool fac
         case BASEBALL_BAT:
             push_back_with_angle(drop_bsb_an, drop_bsb_down_an, drop_bsb_up_an, angle, facing_left);
             break;
-        case RED_GRANADE:
+        case RED_GRENADE:
             push_back_with_angle(drop_cls_an, drop_cls_down_an, drop_cls_up_an, angle, facing_left);
             break;
         case BANANA:
@@ -997,10 +997,10 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int angle, const bool 
         case MORTAR:
             push_back_with_angle(get_mortar_an, get_mortar_down_an, get_mortar_up_an, angle, facing_left);
             break;
-        case GREEN_GRANADE:
+        case GREEN_GRENADE:
             push_back_with_angle(get_grn_an, get_grn_down_an, get_grn_up_an, angle, facing_left);
             break;
-        case HOLY_GRANADE:
+        case HOLY_GRENADE:
             push_back_with_angle(get_hgr_an, get_hgr_down_an, get_hgr_up_an, angle, facing_left);
             break;
         case DYNAMITE:
@@ -1009,7 +1009,7 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int angle, const bool 
         case BASEBALL_BAT:
             push_back_with_angle(get_bsb_an, get_bsb_down_an, get_bsb_up_an, angle, facing_left);
             break;
-        case RED_GRANADE:
+        case RED_GRENADE:
             push_back_with_angle(get_cls_an, get_cls_down_an, get_cls_up_an, angle, facing_left);
             break;
         case BANANA:

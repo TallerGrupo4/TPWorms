@@ -1,22 +1,24 @@
-#ifndef GREEN_GRANADE_H
-#define GREEN_GRANADE_H
+#ifndef RED_GRENADE_H
+#define RED_GRENADE_H
 
 #include "weapon.h"
 #include "projectile.h"
 #include <box2d/box2d.h>
 
 
-class GreenGranade : public Weapon {
+class RedGrenade : public Weapon {
 
     public:
-    GreenGranade();
+    RedGrenade();
+
+    // THIS WEAPON WILL ALSO HAVE FRAGMENTS!!!
 
     void use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles) override;
 
-    ~GreenGranade();
+    ~RedGrenade();
 
 };
 
 
 
-#endif  // GREEN_GRANADE_H
+#endif  // RED_GRENADE_H

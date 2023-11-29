@@ -7,10 +7,10 @@ Worm::Worm(b2Body* body, char id, char team_id):
         body->GetUserData().pointer = (uintptr_t) this;
         tools.push_back(std::make_shared<Bazooka>());
         tools.push_back(std::make_shared<Mortar>());
-        tools.push_back(std::make_shared<GreenGranade>());
-        tools.push_back(std::make_shared<RedGranade>());
+        tools.push_back(std::make_shared<GreenGrenade>());
+        tools.push_back(std::make_shared<RedGrenade>());
         tools.push_back(std::make_shared<Banana>());
-        tools.push_back(std::make_shared<HolyGranade>());
+        tools.push_back(std::make_shared<HolyGrenade>());
         tools.push_back(std::make_shared<Dynamite>());
         tools.push_back(std::make_shared<Bat>());
         tools.push_back(std::make_shared<Airstrike>());

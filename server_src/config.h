@@ -127,44 +127,44 @@ public:
         return mortar_max_ammo;
     }
 
-    int get_green_granade_damage() const {
-        return green_granade_damage;
+    int get_green_grenade_damage() const {
+        return green_grenade_damage;
     }
 
-    int get_green_granade_radius() const {
-        return green_granade_radius;
+    int get_green_grenade_radius() const {
+        return green_grenade_radius;
     }
 
-    float get_green_granade_restitution() const {
-        return green_granade_restitution;
+    float get_green_grenade_restitution() const {
+        return green_grenade_restitution;
     }
 
-    float get_green_granade_density() const {
-        return green_granade_density;
+    float get_green_grenade_density() const {
+        return green_grenade_density;
     }
 
-    int get_red_granade_damage() const {
-        return red_granade_damage;
+    int get_red_grenade_damage() const {
+        return red_grenade_damage;
     }
 
-    int get_red_granade_radius() const {
-        return red_granade_radius;
+    int get_red_grenade_radius() const {
+        return red_grenade_radius;
     }
 
-    int get_red_granade_fragments() const {
-        return red_granade_fragments;
+    int get_red_grenade_fragments() const {
+        return red_grenade_fragments;
     }
 
-    int get_red_granade_max_ammo() const {
-        return red_granade_max_ammo;
+    int get_red_grenade_max_ammo() const {
+        return red_grenade_max_ammo;
     }
 
-    float get_red_granade_restitution() const {
-        return red_granade_restitution;
+    float get_red_grenade_restitution() const {
+        return red_grenade_restitution;
     }
 
-    float get_red_granade_density() const {
-        return red_granade_density;
+    float get_red_grenade_density() const {
+        return red_grenade_density;
     }
 
     int get_banana_damage() const {
@@ -187,24 +187,24 @@ public:
         return banana_max_ammo;
     }
 
-    int get_holy_granade_damage() const {
-        return holy_granade_damage;
+    int get_holy_grenade_damage() const {
+        return holy_grenade_damage;
     }
 
-    int get_holy_granade_radius() const {
-        return holy_granade_radius;
+    int get_holy_grenade_radius() const {
+        return holy_grenade_radius;
     }
 
-    float get_holy_granade_restitution() const {
-        return holy_granade_restitution;
+    float get_holy_grenade_restitution() const {
+        return holy_grenade_restitution;
     }
 
-    float get_holy_granade_density() const {
-        return holy_granade_density;
+    float get_holy_grenade_density() const {
+        return holy_grenade_density;
     }
 
-    int get_holy_granade_max_ammo() const {
-        return holy_granade_max_ammo;
+    int get_holy_grenade_max_ammo() const {
+        return holy_grenade_max_ammo;
     }
 
     int get_dynamite_damage() const {
@@ -304,30 +304,30 @@ private:
             mortar_misile_restitution = config["mortar_misile_restitution"].as<float>();
             mortar_misile_density = config["mortar_misile_density"].as<float>();
             mortar_max_ammo = config["mortar_max_ammo"].as<int>();
-            // Green Granade
-            green_granade_damage = config["green_granade_damage"].as<int>();
-            green_granade_radius = config["green_granade_radius"].as<int>();
-            green_granade_restitution = config["green_granade_restitution"].as<float>();
-            green_granade_density = config["green_granade_density"].as<float>();
-            // Red Granade
-            red_granade_damage = config["red_granade_damage"].as<int>();
-            red_granade_radius = config["red_granade_radius"].as<int>();
-            red_granade_fragments = config["red_granade_fragments"].as<int>();
-            red_granade_max_ammo = config["red_granade_max_ammo"].as<int>();
-            red_granade_restitution = config["red_granade_restitution"].as<float>();
-            red_granade_density = config["red_granade_density"].as<float>();
+            // Green Grenade
+            green_grenade_damage = config["green_grenade_damage"].as<int>();
+            green_grenade_radius = config["green_grenade_radius"].as<int>();
+            green_grenade_restitution = config["green_grenade_restitution"].as<float>();
+            green_grenade_density = config["green_grenade_density"].as<float>();
+            // Red Grenade
+            red_grenade_damage = config["red_grenade_damage"].as<int>();
+            red_grenade_radius = config["red_grenade_radius"].as<int>();
+            red_grenade_fragments = config["red_grenade_fragments"].as<int>();
+            red_grenade_max_ammo = config["red_grenade_max_ammo"].as<int>();
+            red_grenade_restitution = config["red_grenade_restitution"].as<float>();
+            red_grenade_density = config["red_grenade_density"].as<float>();
             // Banana
             banana_damage = config["banana_damage"].as<int>();
             banana_radius = config["banana_radius"].as<int>();
             banana_restitution = config["banana_restitution"].as<float>();
             banana_density = config["banana_density"].as<float>();
             banana_max_ammo = config["banana_max_ammo"].as<int>();
-            // Holy Granade
-            holy_granade_damage = config["holy_granade_damage"].as<int>();
-            holy_granade_radius = config["holy_granade_radius"].as<int>();
-            holy_granade_restitution = config["holy_granade_restitution"].as<float>();
-            holy_granade_density = config["holy_granade_density"].as<float>();
-            holy_granade_max_ammo = config["holy_granade_max_ammo"].as<int>();
+            // Holy Grenade
+            holy_grenade_damage = config["holy_grenade_damage"].as<int>();
+            holy_grenade_radius = config["holy_grenade_radius"].as<int>();
+            holy_grenade_restitution = config["holy_grenade_restitution"].as<float>();
+            holy_grenade_density = config["holy_grenade_density"].as<float>();
+            holy_grenade_max_ammo = config["holy_grenade_max_ammo"].as<int>();
             // Dynamite
             dynamite_damage = config["dynamite_damage"].as<int>();
             dynamite_radius = config["dynamite_radius"].as<int>();
@@ -394,19 +394,19 @@ private:
     float mortar_misile_density;
     int mortar_max_ammo;
 
-// Green Granade
-    int green_granade_damage;
-    int green_granade_radius;
-    float green_granade_restitution;
-    float green_granade_density;
+// Green Grenade
+    int green_grenade_damage;
+    int green_grenade_radius;
+    float green_grenade_restitution;
+    float green_grenade_density;
 
-// Red Granade
-    int red_granade_damage;
-    int red_granade_radius;
-    int red_granade_fragments;
-    int red_granade_max_ammo;
-    float red_granade_restitution;
-    float red_granade_density;
+// Red Grenade
+    int red_grenade_damage;
+    int red_grenade_radius;
+    int red_grenade_fragments;
+    int red_grenade_max_ammo;
+    float red_grenade_restitution;
+    float red_grenade_density;
 
 // Banana
     int banana_damage;
@@ -415,12 +415,12 @@ private:
     float banana_density = 0;
     int banana_max_ammo = 0;
 
-// Holy Granade
-    int holy_granade_damage;
-    int holy_granade_radius;
-    float holy_granade_restitution;
-    float holy_granade_density;
-    int holy_granade_max_ammo;
+// Holy Grenade
+    int holy_grenade_damage;
+    int holy_grenade_radius;
+    float holy_grenade_restitution;
+    float holy_grenade_density;
+    int holy_grenade_max_ammo;
 
 // Dynamite
     int dynamite_damage;

@@ -64,10 +64,10 @@ enum ProjectileStates : char {
 enum TOOLS : uint8_t {
     BAZOOKA,
     MORTAR,
-    GREEN_GRANADE,
-    RED_GRANADE,
+    GREEN_GRENADE,
+    RED_GRENADE,
     BANANA,
-    HOLY_GRANADE,
+    HOLY_GRENADE,
     DYNAMITE,
     BASEBALL_BAT,
     AIRSTRIKE,

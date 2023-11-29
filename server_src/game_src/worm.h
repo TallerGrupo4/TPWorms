@@ -30,10 +30,10 @@
 //INCLUDES DE ARMAS
 #include "weapon_bazooka.h"
 #include "weapon_mortar.h"
-#include "weapon_green_granade.h"
-#include "weapon_red_granade.h"
+#include "weapon_green_grenade.h"
+#include "weapon_red_grenade.h"
 #include "weapon_banana.h"
-#include "weapon_holy_granade.h"
+#include "weapon_holy_grenade.h"
 #include "weapon_dynamite.h"
 #include "tool_bat.h"
 #include "weapon_airstrike.h"
