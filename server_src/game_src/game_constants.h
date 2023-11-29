@@ -16,14 +16,14 @@
 #define MIN_AIMING_ANGLE -90
 
 
-enum PROJECTILE_TYPES{
+enum ExplosionType{
     EXPLOSIVE,
     EXPLOSIVE_TIMER,
     EXPLOSIVE_FRAGMENTS,
     EXPLOSIVE_FRAGMENTS_TIMER,
 };
 
-enum BODY_TYPES{
+enum BodyType{
     WORM,
     PROJECITLE,
     PLATFORM

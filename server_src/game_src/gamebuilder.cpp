@@ -139,3 +139,45 @@ void GameBuilder::create_platform_type(float x , float y, BeamType type){
     }  
 }
 
+b2Body* GameBuilder::create_projectile_body(float angle , float x , float y, float restitution, float density){
+        b2BodyDef projectile_def;
+        projectile_def.type = b2_dynamicBody;
+        projectile_def.bullet = true;
+        projectile_def.position.Set(x, y);
+        projectile_def.angle = angle;
+        b2Body* projectile = world.CreateBody(&projectile_def);
+
+        b2CircleShape projectile_shape;
+        projectile_shape.m_radius = 0.2;
+
+        b2FixtureDef projectile_fixture;
+        projectile_fixture.shape = &projectile_shape;
+        projectile_fixture.density = density;
+        projectile_fixture.friction = restitution;
+        projectile->CreateFixture(&projectile_fixture);
+        return projectile;
+}
+
+b2Body* GameBuilder::create_fragment_body(b2Body* father_body , float angle){
+    b2Vec2 pos = father_body->GetPosition();
+
+    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.1f;
+    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.1f;
+
+    b2BodyDef fragment_def;
+    fragment_def.type = b2_dynamicBody;
+    fragment_def.bullet = true;
+    fragment_def.position.Set(pos.x + xOffset, pos.y + yOffset);
+    fragment_def.angle = angle;
+    b2Body* fragment = world.CreateBody(&fragment_def);
+
+    b2CircleShape fragment_shape;
+    fragment_shape.m_radius = 0.1;
+    b2FixtureDef fragment_fixture;
+    fragment_fixture.shape = &fragment_shape;
+    fragment_fixture.density = 1;
+    fragment_fixture.friction = 0;
+    fragment->CreateFixture(&fragment_fixture);
+
+    return fragment;
+}

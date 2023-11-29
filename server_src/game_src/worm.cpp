@@ -23,7 +23,6 @@ int Worm::get_id() {
 }
 
 int Worm::get_angle(){
-    if (body == nullptr){throw WormNotFound();}
     float angle = body->GetAngle() ;
     float normalized_angle = fmod(angle, PI);
     int degree = round(normalized_angle * RADTODEG);
@@ -66,8 +65,7 @@ void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_
     tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time_for_curr_tool, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
-    // state = SHOOTED;
-    state = STILL;
+    state = SHOOTED;
 }
 
 void Worm::aim(int angle_inc, int direction){

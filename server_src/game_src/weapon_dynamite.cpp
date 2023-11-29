@@ -6,29 +6,17 @@
 #define DYNAMITE_RADIUS ConfigSingleton::getInstance().get_dynamite_radius()
 #define DYNAMITE_RESTITUTION ConfigSingleton::getInstance().get_dynamite_restitution()
 #define DYNAMITE_DENSITY ConfigSingleton::getInstance().get_dynamite_density()
+#define DYNAMITE_MAX_AMMO ConfigSingleton::getInstance().get_dynamite_max_ammo()
 
-Dynamite::Dynamite() : Weapon(DYNAMITE, -1 , -1 , DYNAMITE_DAMAGE, DYNAMITE_RADIUS, 0 , 0 , 0, true, true, true) {}
+
+Dynamite::Dynamite() : Weapon(DYNAMITE, DYNAMITE_MAX_AMMO , DYNAMITE_MAX_AMMO , DYNAMITE_DAMAGE, DYNAMITE_RADIUS, 0 , EXPLOSIVE_TIMER, DYNAMITE_PROJECTILE, false, false, false) {}
 
 void Dynamite::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    std::shared_ptr<Projectile> projectile(create_projectile(worm, direction, angle, power));
+    std::shared_ptr<Projectile> projectile(create_projectile(worm, direction, 0, 0, time , DYNAMITE_RESTITUTION, DYNAMITE_DENSITY));
     projectiles.insert(projectile);
-
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
 }
 
 
-
-Projectile* Dynamite::create_projectile(b2Body* worm, int direction, float angle , int power){
-    float pos_x = worm->GetPosition().x + direction * cos(angle) * OFFSET;
-    float pos_y = worm->GetPosition().y + sin(angle) * OFFSET;
-
-    
-
-    b2Body* projectileBody = create_projectile_body(worm->GetWorld(), angle, pos_x, pos_y, DYNAMITE_RESTITUTION, DYNAMITE_DENSITY);
-    Projectile* projectile = new Projectile(projectileBody, damage, radius, type, EXPLOSIVE, 0, fragments, fragment_damage, angle);
-
-    return projectile;
-}
 
 Dynamite::~Dynamite(){}
 

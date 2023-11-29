@@ -1,8 +1,12 @@
 #include "weapon_airstrike.h"
 #include "weapon_airstrike_callback.h"
+#define AIRSTRIKE_DAMAGE ConfigSingleton::getInstance().get_airstrike_damage()
+#define AIRSTRIKE_RADIUS ConfigSingleton::getInstance().get_airstrike_radius()
+#define AIRSTRIKE_MAX_AMMO ConfigSingleton::getInstance().get_airstrike_max_ammo()
+#define AIRSTIKE_DENSTIY ConfigSingleton::getInstance().get_airstrike_density()
 
 
-Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0 , 0 , 0, true, false, false) {}
+Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0, EXPLOSIVE, AIRSTRIKE_PROJECTILE, true, false, false) {}
 
 
 float Airstrike::get_roof_height(b2Body* body){
@@ -41,8 +45,7 @@ Projectile* Airstrike::shoot_airstrike_projectile(b2Body* worm, float x, float y
     body->CreateFixture(&fixture);
 
     body->ApplyLinearImpulseToCenter(b2Vec2(0, -1), true);
-
-    return new Projectile(body, damage, radius, type, EXPLOSIVE, 0, fragments, fragment_damage, -90 * DEGTORAD);
+    return new Projectile(body, damage, radius, projectile_type, explosion_type, 0, fragments, -90 * DEGTORAD);
 }
 
 

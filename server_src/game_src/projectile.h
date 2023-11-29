@@ -14,9 +14,9 @@ class Projectile {
     b2Body* body;
     int damage;
     int radius;
-    int type;
-    int body_type;
-    int explosion_type;
+    BodyType body_type;
+    ProjectileType type;
+    ExplosionType explosion_type;
     int timer;
     int fragments;
     int fragment_damage;
@@ -25,7 +25,7 @@ class Projectile {
     char id = 0;
 
     public: 
-        Projectile(b2Body* body, int damage, int radius, int type, int explosion_type, int timer, int fragments, int fragment_damage, float angle);
+        Projectile(b2Body* body, int damage, int radius, ProjectileType type, ExplosionType explosion_type, int timer, int fragments, float angle);
 
         ~Projectile();
 

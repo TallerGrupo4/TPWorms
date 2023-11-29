@@ -14,10 +14,6 @@ void MyListener::execute_explosive(b2Body* bodyB){
         if (pB->get_explosion_type() == EXPLOSIVE){
             pB->explode(projectiles);
         }
-        // if (pB->get_explosion_type() == EXPLOSIVE_FRAGMENTS_IMPACT){
-        //     explode_fragments(bodyB, 4, pB->get_damage());
-        //     pB->set_state(DEAD);
-        // }
     }
 }
 

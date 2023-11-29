@@ -243,6 +243,14 @@ public:
         return airstrike_max_ammo;
     }
 
+    int get_fragment_damage() const {
+        return fragment_damage;
+    }
+
+    int get_fragment_radius() const {
+        return fragment_radius;
+    }
+
     ~ConfigSingleton() {}
 
     ConfigSingleton(ConfigSingleton const&) = delete;

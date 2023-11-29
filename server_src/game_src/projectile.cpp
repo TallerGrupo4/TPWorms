@@ -1,7 +1,8 @@
 #include "projectile.h"
 
-Projectile::Projectile(b2Body* body, int damage, int radius, int type, int explosion_type, int timer, int fragments, int fragment_damage, float angle) :
-    body(body), damage(damage), radius(radius), type(type), body_type(PROJECITLE), explosion_type(explosion_type), timer(timer), fragments(fragments), fragment_damage(fragment_damage), angle(angle), state(ALIVE)  {
+
+Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileType type, ExplosionType explosion_type, int timer, int fragments, float angle):
+    body(body), damage(damage), radius(radius), body_type(PROJECITLE), type(type), explosion_type(explosion_type), timer(timer), fragments(fragments), angle(angle), state(ALIVE)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }

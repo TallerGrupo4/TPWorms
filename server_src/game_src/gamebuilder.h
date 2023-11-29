@@ -38,6 +38,10 @@ public:
 
     b2Body* create_worm(float x, float y);
 
+    b2Body* create_projectile_body(float angle , float x , float y, float restitution, float density);
+
+    b2Body* create_fragment_body(b2Body* father_body, float angle);
+
     ~GameBuilder();
 
 };

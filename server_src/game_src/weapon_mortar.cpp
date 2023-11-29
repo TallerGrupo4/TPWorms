@@ -6,27 +6,21 @@
 #define MORTAR_RADIUS ConfigSingleton::getInstance().get_mortar_radius()
 #define MORTAR_RESTITUTION ConfigSingleton::getInstance().get_mortar_misile_restitution()
 #define MORTAR_DENSITY ConfigSingleton::getInstance().get_mortar_misile_density()
+#define MORTAR_MAX_AMMO ConfigSingleton::getInstance().get_mortar_max_ammo()
+#define MORTAR_FRAGMENTS ConfigSingleton::getInstance().get_mortar_fragments()
 
-Mortar::Mortar() : Weapon(MORTAR, -1 , -1 , MORTAR_DAMAGE, MORTAR_RADIUS, 0 , 0 , 0, true, true, true) {}
+Mortar::Mortar() : Weapon(MORTAR, MORTAR_MAX_AMMO , MORTAR_MAX_AMMO , MORTAR_DAMAGE, MORTAR_RADIUS , MORTAR_FRAGMENTS , EXPLOSIVE, MORTAR_PROJECTILE ,  true, true, true) {}
 
-void Mortar::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    std::shared_ptr<Projectile> projectile(create_projectile(worm, direction, angle, power));
-    projectiles.insert(projectile);
+void Mortar::use(b2Body* worm, int direction, float angle , int timer,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+    Projectile* projectile = create_projectile(worm, direction, angle, power, 0, MORTAR_RESTITUTION, MORTAR_DENSITY);
+    std::shared_ptr<Projectile> ptr(projectile);
+    projectiles.insert(ptr);
 
     projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
 }
 
 
 
-Projectile* Mortar::create_projectile(b2Body* worm, int direction, float angle , int power){
-    float pos_x = worm->GetPosition().x + direction * cos(angle) * OFFSET;
-    float pos_y = worm->GetPosition().y + sin(angle) * OFFSET;
-
-    b2Body* projectileBody = create_projectile_body(worm->GetWorld(), angle, pos_x, pos_y,MORTAR_RESTITUTION, MORTAR_DENSITY );
-    Projectile* projectile = new Projectile(projectileBody, damage, radius, type, EXPLOSIVE, 0, fragments, fragment_damage, angle);
-
-    return projectile;
-}
 
 Mortar::~Mortar(){}
 
