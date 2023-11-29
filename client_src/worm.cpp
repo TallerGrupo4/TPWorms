@@ -53,11 +53,13 @@ bool Worm::has_weapon_to_aim() {
     bool is_weapon_dynamite = (this->weapon == TOOLS::DYNAMITE);
     bool is_weapon_airstrike = (this->weapon == TOOLS::AIRSTRIKE);
     bool is_weapon_teleport = (this->weapon == TOOLS::TELEPORTATION);
-    return (!(dont_have_weapon and is_weapon_dynamite and is_weapon_airstrike and is_weapon_teleport));
+    return (!(dont_have_weapon or is_weapon_dynamite or is_weapon_airstrike or is_weapon_teleport));
 }
 
 bool Worm::has_charging_weapon() {
     bool is_weapon_baseball_bat = (this->weapon == TOOLS::BASEBALL_BAT);
+    std::cout << "is_weapon_baseball_bat: " << +is_weapon_baseball_bat << std::endl;
+    std::cout << "has_weapon_to_aim: " << +has_weapon_to_aim() << std::endl;
     return (has_weapon_to_aim() and (!is_weapon_baseball_bat));
 }
 
