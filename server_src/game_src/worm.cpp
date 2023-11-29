@@ -61,7 +61,7 @@ void Worm::jump (int dir){
 }
 
 void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    if (state != AIMING || tools[curr_tool] != nullptr || has_used_tool) {return;}
+    if (state != AIMING || tools[curr_tool] == nullptr || has_used_tool) {return;}
     tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time_for_curr_tool, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
