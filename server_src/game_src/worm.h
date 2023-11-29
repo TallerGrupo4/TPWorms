@@ -107,6 +107,8 @@ public:
 
     int get_type();
 
+    b2Body* get_body();
+
     float get_last_y();
 
     void set_last_y(float y);
@@ -114,6 +116,10 @@ public:
     void set_curr_tool(int new_tool);
 
     void apply_damage(int damage);
+
+    void add_ammo(int ammo , TOOLS tool);
+
+    void add_health(int health);
 };
 
 #endif  // WORM_H

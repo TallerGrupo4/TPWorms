@@ -149,6 +149,10 @@ int Worm::get_type(){
     return type;
 }
 
+b2Body* Worm::get_body(){
+    return body;
+}
+
 float Worm::get_last_y(){
     return last_y;
 }
@@ -170,6 +174,18 @@ void Worm::apply_damage(int damage){
         life = 0;
         state = DEAD;
     }
+}
+
+void Worm::add_ammo(int ammo , TOOLS tool){
+    if (tools[tool]->get_type() != tool){
+        throw std::runtime_error("Error: tool type does not match");
+        return;
+    }
+    tools[tool]->add_ammo(ammo);
+}
+
+void Worm::add_health(int health){
+    life += health;
 }
 
 

@@ -49,6 +49,10 @@ enum WormStates : char {
     DeadState
 };
 
+enum BoxState: char{
+    UNPICKED,
+    PICKED,
+};
 
 
 enum ProjectileStates : char {
@@ -81,6 +85,12 @@ enum ProjectileType: uint8_t {
     DYNAMITE_PROJECTILE,
     AIRSTRIKE_PROJECTILE,
     FRAGMENT_PROJECTILE
+};
+
+enum BoxType: uint8_t {
+    HEALTH_BOX,
+    AMMO_BOX,
+    TRAP_BOX
 };
 
 #define STILL 0

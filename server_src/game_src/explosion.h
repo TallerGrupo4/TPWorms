@@ -15,10 +15,16 @@ class Explosion {
     int radius;
     int damage;
 
+    void create_fragments(b2Body* body, std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    
     public:
     Explosion(int type, int fragments, int fragment_damage, int radius, int damage);
     
     void explode(b2Body* body, std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+
+    void apply_explosion(b2Body* body);
+
+
 
     ~Explosion() {}
 

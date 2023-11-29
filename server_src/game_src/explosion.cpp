@@ -12,8 +12,7 @@
 
 Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, int damage) : type(type), fragments(fragments), fragment_damage(fragment_damage), radius(radius), damage(damage) {}
 
-
-void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+void Explosion::apply_explosion(b2Body* body){
     std::unordered_set<b2Body*> bodies;
     for (int i = 0; i < 64; i++){
         float angle = (i/(float)64) * 360 * DEGTORAD;
@@ -32,6 +31,9 @@ void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projec
         }
     }
 
+}
+
+void Explosion::create_fragments(b2Body* body , std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     for (int i =0 ; i < fragments; i++){
         float angle = (i/(float)fragments) * 360 * DEGTORAD;
         GameBuilder builder(*body->GetWorld());
@@ -40,6 +42,14 @@ void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projec
         projectiles.insert(ptr);
         fragment->ApplyLinearImpulseToCenter(b2Vec2(cos(angle) * EXPLOSION_POWER, sin(angle) * EXPLOSION_POWER), true);
     }
+}
+
+void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+    apply_explosion(body);
+    if (fragments > 0){
+        create_fragments(body, projectiles);
+    }
+    
 }
 
 
