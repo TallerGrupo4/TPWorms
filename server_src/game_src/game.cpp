@@ -91,10 +91,11 @@ void Game::jump_player(int id , int direction){
     }
 }
 
-void Game::player_use_tool(int id, int potency, float pos_x , float pos_y) {
+void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int timer) {
     if (current_turn_player_id != id || turn_cleaning) return;
+    printf("timer: %d\n", timer);
     std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-    worm->use_tool(potency, pos_x, pos_y, projectiles);
+    worm->use_tool(potency, pos_x, pos_y, timer, projectiles );
     turn_time = 3 * FPS;
 }
 
@@ -109,6 +110,8 @@ void Game::player_change_tool(int id, int direction) {
     std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
     worm->change_tool(direction);
 }
+
+
 
 
 void Game::remove_army(char army_id){
@@ -235,10 +238,12 @@ void Game::projectiles_comprobations(int it){
         if (projectile->get_state() == ALIVE){
             correct_angle_projectile(projectile);
             projectile->decresease_timer(it);
-            if ( (projectile->get_timer() <= 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER) || projectile->get_state() == EXPLODED){
-                projectile->explode(projectiles);
-            }
         }
+        if ( (projectile->get_timer() <= 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER) || projectile->get_state() == EXPLODED){
+            printf("catched a projectile for detonation\n");
+            projectile->explode(projectiles);
+        }
+        
     }
 }
 
@@ -299,27 +304,27 @@ void Game::turn_clean_up(){
             // I think this if DEAD is not necessary anymore
             if (worm->get_state() == DEAD) {continue;}
             worm->set_used_tool(false);
+            if (worm->state == AIMING) {
+                worm->set_state(STILL);
+            }
+            worm->store_tool();
             if (worm->body->GetLinearVelocity() != b2Vec2_zero || worm->body->GetAngularVelocity() != 0){
                 cleaning_time = 1 * FPS;
                 return;
             }
-            if (worm->state == AIMING) {
-                worm->store_tool();
-                worm->set_state(STILL);
-            }
         }
-        // std::shared_ptr<Worm> worm = pair.second;
-        // if (worm->get_state () == DEAD) {continue;}
-        // if (worm -> get_state() != STILL){
-        //     return false;
-        // }
     }
-    // if (projectiles.size() != 0){ return NOT_DONE;}
+
+    if (projectiles.size() != 0){
+        cleaning_time = 1 * FPS;
+        return;
+    }
     if (cleaning_time > 0){
         cleaning_time--;
     } else {
         turn_cleaning = false;
     }
+    printf("projectiles size: %d\n", (int) projectiles.size());
 }
 
 void Game::manage_turn() {

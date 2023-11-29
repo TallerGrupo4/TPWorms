@@ -34,8 +34,10 @@ void Explosion::apply_explosion(b2Body* body){
             if (w) {
                 if (w->get_type() == WORM){
                     float explosion_distance = (body_call->GetPosition() - body->GetPosition()).Length();
-                    w->apply_damage(damage * ((explosion_distance) / radius));
-                    body_call -> ApplyLinearImpulseToCenter(EXPLOSION_POWER *(explosion_distance/radius) * direction, true);
+                    w->apply_damage(damage * ((explosion_distance) / float(radius)));
+                    float impulse = EXPLOSION_POWER * (explosion_distance/float(radius));
+                    printf("Impulse: %f\n", impulse);
+                    body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
                 }
             }
             bodies.insert(body_call);
@@ -51,7 +53,7 @@ void Explosion::create_fragments(b2Body* body , std::unordered_set<std::shared_p
         b2Body* fragment = builder.create_fragment_body(body , angle);
         std::shared_ptr<Projectile> ptr(new ProjectileFragment(fragment, angle));
         projectiles.insert(ptr);
-        fragment->ApplyLinearImpulseToCenter(b2Vec2(cos(angle) * EXPLOSION_POWER, sin(angle) * EXPLOSION_POWER), true);
+        fragment->ApplyLinearImpulseToCenter(b2Vec2(cos(angle) * 3, sin(angle) * 3), true);
     }
 }
 

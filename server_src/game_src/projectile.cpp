@@ -26,6 +26,7 @@ int Projectile::get_timer() {
 void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles) {
     set_state(EXPLODED);
     Explosion ex(explosion_type, fragments, fragment_damage, radius, damage);
+    printf("Projectile::explode\n");
     ex.explode(body, projectiles);
 }
 

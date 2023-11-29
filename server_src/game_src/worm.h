@@ -62,7 +62,6 @@ class Worm {
     int number_contacts;
     char team_id;
     float aiming_angle;
-    int time_for_curr_tool;
     bool has_used_tool;
 
 
@@ -79,7 +78,7 @@ public:
 
     void jump (int dir);
 
-    void use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    void use_tool(int power, float x, float y, int tool,std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
 
     void aim(int angle_inc, int direction);
 

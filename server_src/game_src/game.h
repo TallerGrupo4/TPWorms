@@ -60,7 +60,7 @@ public:
 
     void jump_player(int id , int direction);
 
-    void player_use_tool(int id, int potency, float pos_x , float pos_y);
+    void player_use_tool(int id, int potency, float pos_x , float pos_y, int timer);
 
     void player_aim(int id, int increment, int direction);
 

@@ -200,7 +200,7 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
         throw LibError(errno, "Socket was closed");
     }
     potency[0] = ntohl(potency[0]);
-    return std::make_shared<UseToolCommand>(worm_id, potency[0], 0, 0);
+    return std::make_shared<UseToolCommand>(worm_id, potency[0], 0, 0, 2 * FPS);
 }
 
 std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) {

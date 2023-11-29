@@ -3,7 +3,7 @@
 
 
 Worm::Worm(b2Body* body, char id, char team_id):
-     type(WORM), body(body),id(id), life(START_LIFE), state(STILL), curr_tool(NO_TOOL) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , team_id(team_id), aiming_angle(0), time_for_curr_tool(5*FPS) , has_used_tool(false) {
+     type(WORM), body(body),id(id), life(START_LIFE), state(STILL), curr_tool(NO_TOOL) , act_dir(DER) , last_still_angle(0), last_y(0), number_contacts(0) , team_id(team_id), aiming_angle(0) , has_used_tool(false) {
         body->GetUserData().pointer = (uintptr_t) this;
         tools.push_back(std::make_shared<Bazooka>());
         tools.push_back(std::make_shared<Mortar>());
@@ -60,9 +60,9 @@ void Worm::jump (int dir){
     }
 }
 
-void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+void Worm::use_tool(int power, float x, float y, int time ,std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     if (state != AIMING || tools[curr_tool] == nullptr || has_used_tool) {return;}
-    tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time_for_curr_tool, power, x, y, projectiles);
+    tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
     state = SHOOTED;
@@ -92,8 +92,7 @@ void Worm::change_tool(int scroll_direction){
 }
 
 void Worm::store_tool(){
-    // curr_tool = NO_TOOl;
-    curr_tool = tools.size() - 1;
+    curr_tool = NO_TOOL;
 }
 
 bool Worm::in_contact(){
