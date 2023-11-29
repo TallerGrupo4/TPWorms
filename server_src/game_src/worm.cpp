@@ -71,8 +71,10 @@ void Worm::use_tool(int power, float x, float y, std::unordered_set<std::shared_
 void Worm::aim(int angle_inc, int direction){
     if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim()) {return;}
     if (angle_inc == -1){
+        if (aiming_angle <= MIN_AIMING_ANGLE) {return;}
         aiming_angle -= 5.625f;
     } else if (angle_inc == 1){
+        if (aiming_angle >= MAX_AIMING_ANGLE) {return;}
         aiming_angle += 6.0f;
     }
     state = AIMING;
