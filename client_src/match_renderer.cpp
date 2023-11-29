@@ -69,6 +69,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_SPACE: {
+                        std::cout << "Entre al space pressed\n";
                         if (match.handle_space_button_pressed(action)) {
                             client.send_action(action);
                         }
@@ -91,6 +92,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     //     //player.stopMoving();
                     //     break;
                     case SDLK_SPACE: {
+                        std::cout << "Entre al space release\n";
                         if (match.handle_space_button_release(action)) {
                             client.send_action(action);
                         }

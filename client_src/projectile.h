@@ -16,7 +16,6 @@
 class Projectile {
 public:
     Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
-    ~Projectile();
     void update_from_snapshot(ProjectileSnapshot& proj_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);

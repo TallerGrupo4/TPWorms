@@ -10,8 +10,8 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, 
     x(proj_snpsht.pos_x),
     y((-1)*proj_snpsht.pos_y),
     explosion_type(proj_snpsht.explosion_type),
-    width(proj_snpsht.width),
-    height(proj_snpsht.height) {
+    width(std::round(proj_snpsht.radius*2)),
+    height(std::round(proj_snpsht.radius*2)) {
 
 }
 

@@ -42,6 +42,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
 
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
+        std::cout << "Inside proj destroyer\n";
         if (it->second->get_proj_state() == EXPLODED) {
             it = projectiles_map.erase(it);
         } else {
@@ -50,11 +51,14 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
 
     for (auto& projectile_snpsht : snpsht.projectiles) {
+        std::cout << "inside proj snapshot";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end()) {
+            std::cout << "Not found proj from snapshot in map";
             std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
             std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
+            std::cout << "Foun proj from snapshot in map";
             projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
         }
     }
@@ -296,11 +300,14 @@ bool Match::handle_down_button(std::shared_ptr<Action>& action) {
 bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon()) {
-            charge_for_weapon += 1;
+            charge_for_weapon += 5;
             if(charge_for_weapon == 100) {
+                std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
                 action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
+                charge_for_weapon = 0;
                 return true;
             }
+            std::cout << "Inside space pressed with charge: " << charge_for_weapon << std::endl;
         }
     }
     return false;
@@ -309,7 +316,9 @@ bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
 bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon()) {
+            std::cout << "Sending ActionShoot in space release with charge: " << charge_for_weapon << std::endl;
             action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
+            charge_for_weapon = 0;
             return true;
         }
         if(turn_worm_has_weapon()) {
@@ -411,7 +420,6 @@ bool Match::turn_worm_has_weapon_to_aim() {
 
 bool Match::turn_worm_has_charging_weapon() {
     return worms_map.at(worm_turn_id)->has_charging_weapon();
-
 }
 
 bool Match::is_turn_worm_aiming_weapon() {
