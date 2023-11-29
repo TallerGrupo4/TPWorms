@@ -19,17 +19,6 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, ArmyColorD
     army_id(worm_snpsht.team_id),
     worm_texts(renderer, army_id, widgets, id, health_points, max_health) {std::cout << "worm " << +id << " army_id: " << +army_id << std::endl;}
 
-
-// Worm::Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal):
-//         an(texture, orientation_horizontal),
-//         sprites_lookingleft(lookingleft),
-//         facingLeft(lookingleft),
-//         moving(false),
-//         x(300),
-//         y(300) {
-
-//         }
-
 Worm::~Worm() {}
 
 int Worm::get_worm_state() {
@@ -117,7 +106,16 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
                         WORM_WALK_RIGHT_OFFSET,
                         WORM_WALK_ABOVE_OFFSET,
                         WORM_WALK_BELLOW_OFFSET);
+    // if(state != DEAD) {
+    //     worm_texts.render(renderer, state, facing_left, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y + height*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+    // }
+}
+
+void Worm::render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
+    int center_x = x*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2) - camera_offset_x;
+    int top_y = (y-height/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
+    
     if(state != DEAD) {
-        worm_texts.render(renderer, state, facing_left, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y + height*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+        worm_texts.render(renderer, state, facing_left, center_x, top_y + height*RESOLUTION_MULTIPLIER/2, top_y, top_y + height*RESOLUTION_MULTIPLIER);
     }
 }

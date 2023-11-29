@@ -266,6 +266,9 @@ void Match::render(SDL2pp::Renderer& renderer) {
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
         it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
+    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
+        it->second->render_texts_and_widgets(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
+    }
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end(); it++) {
         it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }

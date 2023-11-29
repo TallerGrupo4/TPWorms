@@ -23,6 +23,7 @@ public:
     void update_from_snapshot(WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
+    void render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     void moveRigth();
     void moveLeft();
     void stopMoving();
