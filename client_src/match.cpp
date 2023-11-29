@@ -1,5 +1,6 @@
 #include "match.h"
 #include <iostream>
+#include "constantes_cliente.h"
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
@@ -70,6 +71,19 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
             std::cout << "Inside proj destroyer\n";
             if (it->second->get_proj_state() == EXPLODED) {
                 std::cout << "Found proj exploded\n";
+                Target new_target;
+                if (get_next_target(new_target)) {
+                    camera.update(new_target);
+                } else {
+                new_target = {
+                    PlayerType,
+                    -1,
+                    -1,
+                    it->second->get_proj_x() * RESOLUTION_MULTIPLIER,
+                    it->second->get_proj_y() * RESOLUTION_MULTIPLIER
+                };
+                camera.update(new_target);
+                }
                 it = projectiles_map.erase(it);
             } else {
                 ++it;
@@ -215,7 +229,9 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
         }
         break;
     case ProjectileType:
+        try {
         auto target_proj = projectiles_map.at(camera.get_target_proj_id());
+        
         if(target_proj->get_proj_state() != EXPLODED) {
             new_target = {
                 ProjectileType,
@@ -226,6 +242,11 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
             };
             camera.update(new_target);
             break;
+        }
+        } catch (const std::exception& e) {
+            std::cout << "Lo encontre putin: " << e.what() << "\n";
+        } catch (...) {
+            std::cout << "ERROR NOT FOUND\n";
         }
         break;
         if (center_camera) {
@@ -377,6 +398,7 @@ bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
             return true;
         }
+        std::cout << "no entre al aiming\n"
     }
     return false;
 }
