@@ -55,3 +55,5 @@ int Projectile::get_proj_y() {
 bool Projectile::proj_facing_left() {
     return this->facing_left;
 }
+
+Projectile::~Projectile() {}

@@ -24,7 +24,7 @@ public:
 
     bool get_degree_of_beam_type(BeamType type, int& degree);
 
-    void parse_projectile_mesures(float& x, float& y, float& angle);
+    void parse_projectile_mesures(float& x, float& y, float& angle, float& radius);
 
     void parse_worm(float& x, float& y);
 

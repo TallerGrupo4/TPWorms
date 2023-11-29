@@ -238,6 +238,7 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         int state[1];
         char id[1];
         int explosion_type[1];
+        int radius[1];
         socket.recvall(pos_x, 4, &was_closed);
         socket.recvall(pos_y, 4, &was_closed);
         socket.recvall(angle, 4, &was_closed);
@@ -246,18 +247,22 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         socket.recvall(state, 4, &was_closed);
         socket.recvall(id, 1, &was_closed);
         socket.recvall(explosion_type, 4, &was_closed);
+        socket.recvall(radius, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         angle[0] = ntohl(angle[0]);
         direction[0] = ntohl(direction[0]);
         state[0] = ntohl(state[0]);
         explosion_type[0] = ntohl(explosion_type[0]);
+        radius[0] = ntohl(radius[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);
         float _angle = static_cast<float>(angle[0]);
-        parser.parse_projectile_mesures(_pos_x, _pos_y, _angle);
-        // AVISO PONERLE EL RADIO AL PROYECTIL
-        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], 0.2f, state[0], id[0], explosion_type[0] );
+        float _radius = static_cast<float>(radius[0]);
+        parser.parse_projectile_mesures(_pos_x, _pos_y, _angle, _radius);
+        int height = std::round(_radius * 2);
+        int width = std::round(_radius * 2);
+        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], _radius, state[0], id[0], explosion_type[0], width, height);
         snapshot.projectiles.push_back(projectile);
     }
 }

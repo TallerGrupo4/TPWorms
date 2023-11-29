@@ -92,8 +92,9 @@ void ParserClient::parse_worm(float& x, float& y) {
     y = apply_pix_per_meter_and_multiplier(y);
 }
 
-void ParserClient::parse_projectile_mesures(float& x, float& y, float& angle) {
+void ParserClient::parse_projectile_mesures(float& x, float& y, float& angle, float& radius) {
     x = apply_pix_per_meter_and_multiplier(x);
     y = apply_pix_per_meter_and_multiplier(y);
     angle = std::round(angle / MULTIPLIER);
+    radius = apply_pix_per_meter_and_multiplier(radius);
 }

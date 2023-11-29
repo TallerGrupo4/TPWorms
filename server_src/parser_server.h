@@ -15,7 +15,7 @@ public:
 
     void parse_worm_mesures(float& x, float& y);
 
-    void parse_projectile_mesures(float& x, float& y, float& angle);
+    void parse_projectile_mesures(float& x, float& y, float& angle, float& radius);
 
     ~ParserServer() = default;
 };

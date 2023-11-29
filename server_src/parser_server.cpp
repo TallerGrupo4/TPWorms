@@ -30,10 +30,11 @@ void ParserServer::parse_worm_mesures(float& x, float& y) {
     y = apply_multiplier(y);
 }
 
-void ParserServer::parse_projectile_mesures(float& x, float& y, float& angle) {
+void ParserServer::parse_projectile_mesures(float& x, float& y, float& angle, float& radius) {
     x = apply_multiplier(x);
     y = apply_multiplier(y);
     angle = apply_multiplier(angle);
+    radius = apply_multiplier(radius);
 }
 
 

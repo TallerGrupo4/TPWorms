@@ -375,7 +375,7 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
     uint8_t num_of_projectiles[1] = {static_cast<uint8_t>(projectiles.size())};
     socket.sendall(num_of_projectiles, 1, &was_closed);
     for (auto& projectile : projectiles) {
-        parser.parse_projectile_mesures(projectile.pos_x, projectile.pos_y, projectile.angle);
+        parser.parse_projectile_mesures(projectile.pos_x, projectile.pos_y, projectile.angle, projectile.radius);
         int pos_x[1] = {static_cast<int>(projectile.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
         socket.sendall(pos_x, 4, &was_closed);
@@ -398,6 +398,9 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
         int explosion_type[1] = {projectile.explosion_type};
         explosion_type[0] = htonl(explosion_type[0]);
         socket.sendall(explosion_type, 4, &was_closed);
+        int radius[1] = {static_cast<int>(projectile.radius)};
+        radius[0] = htonl(radius[0]);
+        socket.sendall(radius, 4, &was_closed);
 
     }
 }
