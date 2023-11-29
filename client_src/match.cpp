@@ -66,44 +66,38 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
         camera.update_turn_time_text(turn_time);    
     }
-    try {
-        for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
-            std::cout << "Inside proj destroyer\n";
-            if (it->second->get_proj_state() == EXPLODED) {
-                std::cout << "Found proj exploded\n";
-                Target new_target;
-                if (get_next_target(new_target)) {
-                    camera.update(new_target);
-                } else {
-                new_target = {
-                    PlayerType,
-                    -1,
-                    -1,
-                    it->second->get_proj_x() * RESOLUTION_MULTIPLIER,
-                    it->second->get_proj_y() * RESOLUTION_MULTIPLIER
-                };
+    for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
+        //std::cout << "Inside proj destroyer\n";
+        if (it->second->get_proj_state() == EXPLODED) {
+            //std::cout << "Found proj exploded\n";
+            Target new_target;
+            if (get_next_target(new_target)) {
                 camera.update(new_target);
-                }
-                it = projectiles_map.erase(it);
             } else {
-                ++it;
+            new_target = {
+                PlayerType,
+                -1,
+                -1,
+                it->second->get_proj_x() * RESOLUTION_MULTIPLIER,
+                it->second->get_proj_y() * RESOLUTION_MULTIPLIER
+            };
+            camera.update(new_target);
             }
+            it = projectiles_map.erase(it);
+        } else {
+            ++it;
         }
-    } catch (const std::exception& e) {
-        std::cout << "Exception in proj snapshot: " << e.what() << "\n";
-    } catch (...) {
-        std::cout << "ERROR NOT FOUND\n";
     }
-    std::cout << "Before reading proj snapshot\n";
+    //std::cout << "Before reading proj snapshot\n";
     for (auto& projectile_snpsht : snpsht.projectiles) {
-        std::cout << "inside proj snapshot\n";
+        //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
-            std::cout << "Not found proj from snapshot in map\n";
+            //std::cout << "Not found proj from snapshot in map\n";
             std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
-            std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
+            //std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
-            std::cout << "Found proj from snapshot in map --> update\n";
+            //std::cout << "Found proj from snapshot in map --> update\n";
             projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
         }
     }
@@ -395,10 +389,11 @@ void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
 bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still() and turn_worm_has_weapon_to_aim()) {
+            std::cout << "entre al aiming\n";
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
             return true;
         }
-        std::cout << "no entre al aiming\n"
+        std::cout << "no entre al aiming\n";
     }
     return false;
 }
