@@ -70,3 +70,7 @@ void Animation::reset() {
     this->currentFrame = 0;
     this->actual_time_between_frames = this->time_between_frames;
 }
+
+int Animation::get_frame_size() {
+    return this->size;
+}

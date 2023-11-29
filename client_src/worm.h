@@ -2,12 +2,14 @@
 #define WORM_H
 
 #include <memory>
+#include <map>
 
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
 #include "constantes_cliente.h"
+#include "colordependentwidgets.h"
 #include "worm_animations.h"
 #include "surfaces.h"
 #include "worm_texts.h"
@@ -16,12 +18,12 @@
 
 class Worm {
 public:
-    //Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal);
-    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, SDL_Color worm_color, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
+    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd);
     ~Worm();
     void update_from_snapshot(WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
+    void render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     void moveRigth();
     void moveLeft();
     void stopMoving();

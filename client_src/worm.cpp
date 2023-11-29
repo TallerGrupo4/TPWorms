@@ -1,6 +1,6 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, SDL_Color worm_color, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
+Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
     bkgrnd(bkgrnd),
     worm_an(renderer, surfaces),
     facing_left(worm_snpsht.direction == LEFT ? true : false),
@@ -17,18 +17,7 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, SDL_Color 
     width(worm_width),
     height(worm_height),
     army_id(worm_snpsht.team_id),
-    worm_texts(renderer, army_id, worm_color, id, health_points, max_health) {std::cout << "worm " << +id << " army_id: " << +army_id << std::endl;}
-
-
-// Worm::Worm(SDL2pp::Texture& texture, bool lookingleft, bool orientation_horizontal):
-//         an(texture, orientation_horizontal),
-//         sprites_lookingleft(lookingleft),
-//         facingLeft(lookingleft),
-//         moving(false),
-//         x(300),
-//         y(300) {
-
-//         }
+    worm_texts(renderer, army_id, widgets, id, health_points, max_health) {std::cout << "worm " << +id << " army_id: " << +army_id << std::endl;}
 
 Worm::~Worm() {}
 
@@ -86,6 +75,8 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     state = worm_snpsht.state;
     int old_aiming_angle = aiming_angle;
     aiming_angle = worm_snpsht.aiming_angle;
+    //std::cout << "new angle: " << aiming_angle << std::endl;
+    worm_texts.update_crosshair(aiming_angle);
     TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
     if (weapon != new_weapon) {
         worm_an.update_changing_weapons(weapon,new_weapon, angle, facing_left);
@@ -115,7 +106,16 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
                         WORM_WALK_RIGHT_OFFSET,
                         WORM_WALK_ABOVE_OFFSET,
                         WORM_WALK_BELLOW_OFFSET);
+    // if(state != DEAD) {
+    //     worm_texts.render(renderer, state, facing_left, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y + height*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+    // }
+}
+
+void Worm::render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
+    int center_x = x*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2) - camera_offset_x;
+    int top_y = (y-height/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
+    
     if(state != DEAD) {
-        worm_texts.render(renderer, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
+        worm_texts.render(renderer, state, facing_left, center_x, top_y + height*RESOLUTION_MULTIPLIER/2, top_y, top_y + height*RESOLUTION_MULTIPLIER);
     }
 }
