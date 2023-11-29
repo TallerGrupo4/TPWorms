@@ -2,7 +2,7 @@
 
 
 Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileType type, ExplosionType explosion_type, int timer, int fragments, float angle):
-    body(body), damage(damage), radius(radius), body_type(PROJECITLE), type(type), explosion_type(explosion_type), timer(timer), fragments(fragments), angle(angle), state(ALIVE)  {
+    body(body), damage(damage), radius(radius), body_type(PROJECITLE), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }
@@ -75,7 +75,7 @@ void Projectile::set_id(char id) {
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
-    return ProjectileSnapshot(type, pos_x, pos_y, get_angle(), get_direction(), get_state(), id, get_explosion_type());
+    return ProjectileSnapshot(type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
 }
 
 

@@ -17,6 +17,7 @@ class Projectile {
     BodyType body_type;
     ProjectileType type;
     ExplosionType explosion_type;
+    float radius_body_size;
     int timer;
     int fragments;
     int fragment_damage;
