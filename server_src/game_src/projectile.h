@@ -11,10 +11,10 @@
 
 
 class Projectile {
+    int body_type;
     b2Body* body;
     int damage;
     int radius;
-    BodyType body_type;
     ProjectileTypes type;
     ExplosionType explosion_type;
     float radius_body_size;

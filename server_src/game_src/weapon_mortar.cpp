@@ -12,11 +12,10 @@
 Mortar::Mortar() : Weapon(MORTAR, MORTAR_MAX_AMMO , MORTAR_MAX_AMMO , MORTAR_DAMAGE, MORTAR_RADIUS , MORTAR_FRAGMENTS , EXPLOSIVE, MortarProj ,  true, true, true) {}
 
 void Mortar::use(b2Body* worm, int direction, float angle , int timer,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
-    Projectile* projectile = create_projectile(worm, direction, angle, power, 0, MORTAR_RESTITUTION, MORTAR_DENSITY);
-    std::shared_ptr<Projectile> ptr(projectile);
+    std::shared_ptr<Projectile> ptr = create_projectile(worm, direction, angle, power, 0, MORTAR_RESTITUTION, MORTAR_DENSITY);
     projectiles.insert(ptr);
 
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    ptr->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
 }
 
 

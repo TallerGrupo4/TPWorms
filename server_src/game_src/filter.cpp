@@ -6,6 +6,8 @@
         b2Body *bodyA = fixtureA->GetBody();
         b2Body *bodyB = fixtureB->GetBody();
 
+        if (bodyA->GetType() == b2_staticBody ||bodyB->GetType() == b2_staticBody){ return true; }
+
         Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
         Worm* wB = reinterpret_cast<Worm*>(bodyB->GetUserData().pointer);
 
@@ -14,4 +16,6 @@
         return true;
 
     }
+
+    MyFilter::~MyFilter(){}
 

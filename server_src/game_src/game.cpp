@@ -9,7 +9,7 @@
 // #include "weapons.h"
 
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener(projectiles) , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -235,7 +235,7 @@ void Game::projectiles_comprobations(int it){
         if (projectile->get_state() == ALIVE){
             correct_angle_projectile(projectile);
             projectile->decresease_timer(it);
-            if (projectile->get_timer() == 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER){
+            if ( (projectile->get_timer() <= 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER) || projectile->get_state() == EXPLODED){
                 projectile->explode(projectiles);
             }
         }

@@ -6,15 +6,15 @@
 
 
 
-MyListener::MyListener(std::unordered_set<std::shared_ptr<Projectile>>& projectiles) : b2ContactListener() , projectiles(projectiles) {}
-
+MyListener::MyListener(): b2ContactListener(){}
 
 void MyListener::execute_explosive(b2Body* bodyB){
+    if (bodyB->GetType () == b2_staticBody){
+        return;
+    }
     Projectile* pB = reinterpret_cast<Projectile*>(bodyB->GetUserData().pointer);
-    if (pB && pB->get_type() == PROJECITLE){
-        if (pB->get_explosion_type() == EXPLOSIVE){
-            pB->explode(projectiles);
-        }
+    if (pB && pB->get_type() == PROJECITLE && bodyB->GetType() == b2_dynamicBody){
+        pB->set_state(EXPLODED);
     }
 }
 
@@ -50,11 +50,24 @@ void MyListener::execute_contact_jump(b2Body* bodyA , b2Body* bodyB){
 
 void MyListener::BeginContact(b2Contact* contact){
 
+    if (contact->IsTouching() == false){
+        return;
+    }
+
     b2Fixture* fixtureA = contact->GetFixtureA();
     b2Fixture* fixtureB = contact->GetFixtureB();
 
     b2Body* bodyA = fixtureA->GetBody();
     b2Body* bodyB = fixtureB->GetBody();
+
+    if (bodyA == nullptr || bodyB == nullptr){
+        return;
+    }
+
+    if (bodyA->GetType () == b2_staticBody && bodyB->GetType () == b2_staticBody){
+        return;
+    }
+
 
     execute_explosive(bodyA);
     execute_explosive(bodyB);
