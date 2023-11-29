@@ -256,7 +256,8 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         float _pos_y = static_cast<float>(pos_y[0]);
         float _angle = static_cast<float>(angle[0]);
         parser.parse_projectile_mesures(_pos_x, _pos_y, _angle);
-        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], state[0], id[0], explosion_type[0]);
+        // AVISO PONERLE EL RADIO AL PROYECTIL
+        ProjectileSnapshot projectile(type[0], _pos_x, _pos_y, _angle, direction[0], 0.2f, state[0], id[0], explosion_type[0] );
         snapshot.projectiles.push_back(projectile);
     }
 }

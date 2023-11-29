@@ -75,16 +75,16 @@ enum TOOLS : uint8_t {
     NO_TOOL,
 };
 
-enum ProjectileType: uint8_t {
-    BAZOOKA_PROJECTILE,
-    MORTAR_PROJECTILE,
-    GREEN_GRANADE_PROJECTILE,
-    RED_GRANADE_PROJECTILE,
-    BANANA_PROJECTILE,
-    HOLY_GRANADE_PROJECTILE,
-    DYNAMITE_PROJECTILE,
-    AIRSTRIKE_PROJECTILE,
-    FRAGMENT_PROJECTILE
+enum ProjectileTypes: uint8_t {
+    BazookaProj,
+    MortarProj,
+    GreenGrenadeProj,
+    RedGrenadeProj,
+    BananaProj,
+    HolyGrenadeProj,
+    DynamiteProj,
+    AirStrikeProj,
+    FragmentProj
 };
 
 enum BoxType: uint8_t {

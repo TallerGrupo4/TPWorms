@@ -6,7 +6,7 @@
 #define AIRSTIKE_DENSTIY ConfigSingleton::getInstance().get_airstrike_density()
 
 
-Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0, EXPLOSIVE, AIRSTRIKE_PROJECTILE, true, false, false) {}
+Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0, EXPLOSIVE, AirStrikeProj, true, false, false) {}
 
 
 float Airstrike::get_roof_height(b2Body* body){

@@ -44,8 +44,21 @@ int Worm::get_worm_y() {
     return this->y;
 }
 
-TOOLS Worm::get_worm_weapon() {
-    return this->weapon;
+bool Worm::has_weapon() {
+    return this->weapon != TOOLS::NO_TOOL;
+}
+
+bool Worm::has_weapon_to_aim() {
+    bool dont_have_weapon = (this->weapon == TOOLS::NO_TOOL);
+    bool is_weapon_dynamite = (this->weapon == TOOLS::DYNAMITE);
+    bool is_weapon_airstrike = (this->weapon == TOOLS::AIRSTRIKE);
+    bool is_weapon_teleport = (this->weapon == TOOLS::TELEPORTATION);
+    return (!(dont_have_weapon and is_weapon_dynamite and is_weapon_airstrike and is_weapon_teleport));
+}
+
+bool Worm::has_charging_weapon() {
+    bool is_weapon_baseball_bat = (this->weapon == TOOLS::BASEBALL_BAT);
+    return (has_weapon_to_aim() and (!is_weapon_baseball_bat));
 }
 
 bool Worm::worm_facing_left() {

@@ -28,7 +28,9 @@ public:
     int get_worm_state();
     int get_worm_x();
     int get_worm_y();
-    TOOLS get_worm_weapon();
+    bool has_weapon();
+    bool has_weapon_to_aim();
+    bool has_charging_weapon();
     bool worm_facing_left();
     char get_army_id();
 private:
