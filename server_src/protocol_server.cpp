@@ -101,7 +101,7 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (send_map_dimensions(snapshot.map_dimensions.width, snapshot.map_dimensions.height, snapshot.map_dimensions.worm_width, snapshot.map_dimensions.worm_height, snapshot.map_dimensions.amount_of_worms) < 0) {
+    if (send_map_dimensions(snapshot.map_dimensions.width, snapshot.map_dimensions.height, snapshot.map_dimensions.worm_width, snapshot.map_dimensions.worm_height, snapshot.map_dimensions.amount_of_worms, snapshot.map_dimensions.water_level) < 0) {
         return SOCKET_FAILED;
     }
     if (send_platforms(snapshot.platforms) < 0) {
@@ -212,20 +212,23 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) 
     return std::make_shared<ChangeToolCommand>(worm_id, scroll_direction[0]);
 }
 
-int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms) {
-    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height);
+int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms, int& _water_level) {
+    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height, _water_level);
     int width[1] = {static_cast<int>(_width)};
     int height[1] = {static_cast<int>(_height)};
     int worm_width[1] = {static_cast<int>(_worm_width)};
     int worm_height[1] = {static_cast<int>(_worm_height)};
+    int water_level[1] = {_water_level};
     width[0] = htonl(width[0]);
     height[0] = htonl(height[0]);
     worm_width[0] = htonl(worm_width[0]);
     worm_height[0] = htonl(worm_height[0]);
+    water_level[0] = htonl(water_level[0]);
     socket.sendall(width, 4, &was_closed);
     socket.sendall(height, 4, &was_closed);
     socket.sendall(worm_width, 4, &was_closed);
     socket.sendall(worm_height, 4, &was_closed);
+    socket.sendall(water_level, 4, &was_closed);
     int amount_of_worms[1] = {_amount_of_worms};
     amount_of_worms[0] = htonl(amount_of_worms[0]);
     socket.sendall(amount_of_worms, 4, &was_closed);

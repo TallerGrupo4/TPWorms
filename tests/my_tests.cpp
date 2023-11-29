@@ -398,7 +398,7 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot};
     Snapshot snapshot_to_send(worms, projectiles, {});
     snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
-    snapshot_to_send.set_dimensions(100, 100, 100, 100);
+    snapshot_to_send.set_dimensions(100, 100, 100, 100, 2, 10);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
     ASSERT_EQ(snapshot_received.worms.size(), 2);
@@ -413,6 +413,8 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     ASSERT_NE(snapshot_received.map_dimensions.height, 10 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.map_dimensions.worm_width, 100 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.map_dimensions.worm_height, 100 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.map_dimensions.amount_of_worms, 2);
+    ASSERT_EQ(snapshot_received.map_dimensions.water_level, 10 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.turn_time_and_worm_turn.turn_time, 12);
     ASSERT_NE(snapshot_received.turn_time_and_worm_turn.worm_turn, 12);
     ASSERT_EQ(snapshot_received.projectiles.size(), 1);

@@ -138,24 +138,29 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     int height[1];
     int worm_width[1];
     int worm_height[1];
+    int water_level[1];
     int amount_of_worms[1];
     socket.recvall(width, 4, &was_closed);
     socket.recvall(height, 4, &was_closed);
     socket.recvall(worm_width, 4, &was_closed);
     socket.recvall(worm_height, 4, &was_closed);
+    socket.recvall(water_level, 4, &was_closed);
     socket.recvall(amount_of_worms, 4, &was_closed);
     width[0] = ntohl(width[0]);
     height[0] = ntohl(height[0]);
     worm_width[0] = ntohl(worm_width[0]);
     worm_height[0] = ntohl(worm_height[0]);
+    water_level[0] = ntohl(water_level[0]);
     amount_of_worms[0] = ntohl(amount_of_worms[0]);
     float _width = static_cast<float>(width[0]);
     float _height = static_cast<float>(height[0]);
     float _worm_width = static_cast<float>(worm_width[0]);
     float _worm_height = static_cast<float>(worm_height[0]);
-    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height);
+    int _water_level = water_level[0];
     int _amount_of_worms = amount_of_worms[0];
-    snapshot.set_dimensions(_height, _width, _worm_width, _worm_height, _amount_of_worms);
+    parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height, _water_level);
+    
+    snapshot.set_dimensions(_height, _width, _worm_width, _worm_height, _amount_of_worms, _water_level);
 
 }
 

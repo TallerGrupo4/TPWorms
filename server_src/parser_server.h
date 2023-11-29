@@ -9,7 +9,7 @@ private:
 public:
     ParserServer() = default;
 
-    void parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height);
+    void parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height, int& water_level);
 
     void parse_platform_mesures(float& x, float& y, float& width, float& height);
 

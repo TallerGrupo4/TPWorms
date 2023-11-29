@@ -17,6 +17,7 @@
 
 class MonitorMatches {
 private:
+    // This should be a list of maps
     std::map<uint, std::unique_ptr<Match>> matches;
     std::map<uint, Map> maps;
     std::mutex m;

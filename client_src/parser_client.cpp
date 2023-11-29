@@ -79,11 +79,12 @@ void ParserClient::parse_platform_mesures(float& x, float& y, float& width, floa
     height = apply_pix_per_meter_and_multiplier(height);
 }
 
-void ParserClient::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height) {
+void ParserClient::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height, int& water_level) {
     width = apply_pix_per_meter_and_multiplier(width);
     height = apply_pix_per_meter_and_multiplier(height);
     worm_width = apply_pix_per_meter_and_multiplier(worm_width);
     worm_height = apply_pix_per_meter_and_multiplier(worm_height);
+    water_level = (water_level * PIX_PER_METER) / MULTIPLIER;
 }
 
 void ParserClient::parse_worm(float& x, float& y) {

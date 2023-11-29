@@ -9,11 +9,12 @@ float ParserServer::apply_multiplier(float& x) {
     return std::round(x * MULTIPLIER);
 }
 
-void ParserServer::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height) {
+void ParserServer::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height, int& water_level) {
     width = apply_multiplier(width);
     height = apply_multiplier(height);
     worm_width = apply_multiplier(worm_width);
     worm_height = apply_multiplier(worm_height);
+    water_level = water_level * MULTIPLIER;
 }
 
 void ParserServer::parse_platform_mesures(float& x, float& y, float& width, float& height) {

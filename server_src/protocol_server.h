@@ -35,7 +35,7 @@ private:
     const std::string recv_map_name();
     const Command recv_list(const char* code);
     int send_platforms(std::vector<PlatformSnapshot>& platforms);
-    int send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms);
+    int send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms, int& _water_level);
     void send_army(std::map<char, std::vector<char>>& army);
     int send_time_and_worm_turn(const int& _turn_time, const int& _worm_turn);
     int send_worms(std::vector<WormSnapshot>& worms);

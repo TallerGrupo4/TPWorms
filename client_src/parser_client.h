@@ -16,7 +16,7 @@ public:
 
     void parse_platform_mesures(float& x, float& y, float& width, float& height);
 
-    void parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height);
+    void parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height , int& water_level);
 
     int calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width);
     
