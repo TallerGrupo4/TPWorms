@@ -8,7 +8,6 @@
 
 
 class MyListener : public b2ContactListener{
-    std::unordered_set<std::shared_ptr<Projectile>>& projectiles;
 
     void EndContact(b2Contact* contact) override;
 
@@ -22,7 +21,7 @@ class MyListener : public b2ContactListener{
 
     void execute_box_contact(b2Body* bodyA , b2Body* bodyB);
 
-    public: MyListener(std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    public: MyListener();
 
     ~MyListener();
 };

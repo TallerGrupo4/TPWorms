@@ -10,10 +10,10 @@
 
 class Beam {
     public: 
-    b2Body* body;
     int type;
+    b2Body* body;
 
-    Beam(b2Body* body): body(body), type(BEAM) {
+    Beam(b2Body* body): type(BEAM), body(body)  {
         body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
     }
 

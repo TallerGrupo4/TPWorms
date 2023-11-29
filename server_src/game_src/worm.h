@@ -49,6 +49,7 @@ class WormNotFound: public std::exception {
 
 class Worm {
     friend class Game;
+    int type;
     b2Body* body;
     std::vector<std::shared_ptr<Tool>> tools;
     char id;
@@ -59,7 +60,6 @@ class Worm {
     float last_still_angle;
     float last_y;
     int number_contacts;
-    int type;
     char team_id;
     float aiming_angle;
     int time_for_curr_tool;

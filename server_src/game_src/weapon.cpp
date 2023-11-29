@@ -24,15 +24,16 @@
         return projectile;
     }
 
-    Projectile* Weapon::create_projectile(b2Body* worm, int direction, float angle , int power , int timer , float restitution , float density) {
+    std::shared_ptr<Projectile> Weapon::create_projectile(b2Body* worm, int direction, float angle , int power , int timer , float restitution , float density) {
         float pos_x = worm->GetPosition().x + direction * cos(angle) * OFFSET;
         float pos_y = worm->GetPosition().y + sin(angle) * OFFSET;
         b2Body* projectileBody = create_projectile_body(worm->GetWorld(), angle, pos_x, pos_y, restitution, density);
         // GameBuilder gamebuilder(*worm->GetWorld());
         // b2Body* projectileBody = gamebuilder.create_projectile_body(angle, pos_x, pos_y, restitution, density);
-        Projectile* projectile = new Projectile(projectileBody, damage, radius, projectile_type, explosion_type , timer, fragments, angle);
+        std::shared_ptr<Projectile> p = std::make_shared<Projectile>(projectileBody, damage, radius, projectile_type, explosion_type, timer, fragments, angle);
 
-        return projectile;
+        return p;
     }
+        // Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle);
 
 
