@@ -16,7 +16,7 @@ worm_friction: 1
 start_life: 100
 null_state: 0
 initial_worms_turn: 0
-turn_time: 10
+turn_time: 60
 
 # Physics Constants
 worm_speed: 2

@@ -23,7 +23,7 @@ class Projectile {
     int fragment_damage;
     float angle;
     char state;
-    char id = 0;
+    char id;
 
     public: 
         Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle);

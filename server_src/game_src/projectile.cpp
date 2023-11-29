@@ -2,7 +2,7 @@
 
 
 Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle):
-    body(body), damage(damage), radius(radius), body_type(PROJECITLE), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE)  {
+    body(body), damage(damage), radius(radius), body_type(PROJECITLE), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(0)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }
@@ -30,7 +30,7 @@ void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projec
 }
 
 int Projectile::get_type() {
-    return type;
+    return body_type;
 }
 
 int Projectile::get_explosion_type() {

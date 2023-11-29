@@ -5,6 +5,5 @@ float b2RayCastExplosionCallback::ReportFixture(b2Fixture* fixture , const b2Vec
     return fraction;
 }
 
-
 b2RayCastExplosionCallback::~b2RayCastExplosionCallback(){}
 

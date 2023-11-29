@@ -10,11 +10,13 @@
 Bazooka::Bazooka() : Weapon(BAZOOKA, -1 , -1 , BAZOOKA_DAMAGE, BAZOOKA_RADIUS, 0, EXPLOSIVE, BazookaProj, true, true, true) {}
 
 void Bazooka::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+    printf("Bazooka::use\n");
+    printf("power: %d\n", power);
     Projectile* projectile = create_projectile(worm, direction, angle, power, 0, BAZOOKA_RESTITUTION, BAZOOKA_DENSITY);
     std::shared_ptr<Projectile> ptr(projectile);
     projectiles.insert(ptr);
 
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * 1, sin(angle) * 1), true);
 }
 
 

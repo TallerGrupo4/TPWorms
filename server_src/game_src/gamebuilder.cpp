@@ -22,6 +22,8 @@ void GameBuilder::create_platform(float x, float y, float width, float height, f
     platform_fixture.shape = &platform_shape;
     platform_fixture.friction = calculate_plat_frict(angle);
     platform->CreateFixture(&platform_fixture);
+    Beam beam(platform);
+    beams.push_back(beam);
 }
 
 GameBuilder::GameBuilder(b2World& world): world(world) {}
@@ -48,6 +50,9 @@ void GameBuilder::create_wall(b2Vec2 coords , float width, float angle){
 
     wall_fixture.friction = 0.5;
     wall_body->CreateFixture(&wall_fixture);
+
+    Beam beam(wall_body);
+    beams.push_back(beam);
 }
 
 void GameBuilder::create_walls(b2Vec2 center_world,  float width , float height_world){

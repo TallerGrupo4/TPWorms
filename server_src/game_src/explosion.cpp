@@ -14,20 +14,31 @@ Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, i
 
 void Explosion::apply_explosion(b2Body* body){
     std::unordered_set<b2Body*> bodies;
-    for (int i = 0; i < 64; i++){
-        float angle = (i/(float)64) * 360 * DEGTORAD;
+    b2World* world = body->GetWorld();
+    for (int i = 0; i < 32; i++){
+        float angle = (i/(float)32) * 360 * DEGTORAD;
         b2Vec2 direction = b2Vec2(cos(angle), sin(angle));
         b2Vec2 endPos = body->GetPosition() + radius * direction;
         b2RayCastExplosionCallback callback;
-        body->GetWorld()->RayCast(&callback, body->GetPosition(), endPos);
-        if (callback.body && bodies.find(callback.body) == bodies.end()){
-            Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(callback.body->GetUserData().pointer));
-            if (w && w->get_type() == WORM){
-                float explosion_distance = (callback.body->GetPosition() - body->GetPosition()).Length();
-                w->apply_damage(damage * ((explosion_distance) / radius));
-                callback.body -> ApplyLinearImpulse(EXPLOSION_POWER *(explosion_distance/radius) * direction, callback.body->GetWorldCenter(), true);
+        world->RayCast(&callback, body->GetPosition(), endPos);
+        b2Body* body_call = callback.body;
+        if (body_call != nullptr){
+            if (!bodies.empty() && bodies.find(body_call) != bodies.end()){
+                continue;
             }
-            bodies.insert(callback.body);
+            if (body_call->GetType() == b2_staticBody){
+                bodies.insert(body_call);
+                continue;
+            }
+            Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(body_call->GetUserData().pointer));
+            if (w) {
+                if (w->get_type() == WORM){
+                    float explosion_distance = (body_call->GetPosition() - body->GetPosition()).Length();
+                    w->apply_damage(damage * ((explosion_distance) / radius));
+                    body_call -> ApplyLinearImpulseToCenter(EXPLOSION_POWER *(explosion_distance/radius) * direction, true);
+                }
+            }
+            bodies.insert(body_call);
         }
     }
 
@@ -52,4 +63,4 @@ void Explosion::explode(b2Body* body , std::unordered_set<std::shared_ptr<Projec
     
 }
 
-
+Explosion::~Explosion(){}

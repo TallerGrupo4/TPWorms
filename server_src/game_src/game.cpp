@@ -61,7 +61,7 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     return snapshot;
 }
 
-void Game::add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_points) {  // TODO: ADD ARMY INSTEAD OF PLAYERS
+void Game::add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_points) { 
     int rand = std::rand() % spawn_points.size();
     b2Vec2 spawn_point = spawn_points[rand];
     b2Body* player = builder.create_worm(spawn_point.x , spawn_point.y);

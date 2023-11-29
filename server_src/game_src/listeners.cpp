@@ -30,7 +30,7 @@ void MyListener::execute_box_contact(b2Body* bodyA , b2Body* bodyB){
 }
 
 void MyListener::execute_contact_jump(b2Body* bodyA , b2Body* bodyB){
-    if (bodyA && bodyB && bodyA->GetUserData().pointer){
+    if (bodyA && bodyB){
         Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
         if (wA && wA->get_type() == WORM && bodyB->GetType() == b2_staticBody) {
             wA->add_contact();
@@ -56,18 +56,18 @@ void MyListener::BeginContact(b2Contact* contact){
     b2Body* bodyA = fixtureA->GetBody();
     b2Body* bodyB = fixtureB->GetBody();
 
-    execute_contact_jump(bodyA, bodyB);
-    execute_contact_jump(bodyB, bodyA);
-
     execute_explosive(bodyA);
     execute_explosive(bodyB);
+
+    execute_contact_jump(bodyA, bodyB);
+    execute_contact_jump(bodyB, bodyA);
 
     execute_box_contact(bodyA, bodyB);
     execute_box_contact(bodyB, bodyA);
 }
 
 void MyListener::change_last_y(b2Body* bodyA , b2Body* bodyB){
-    if (bodyA && bodyB && bodyA->GetUserData().pointer){
+    if (bodyA && bodyB){
         Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
         if (wA && bodyB->GetType() == b2_staticBody && wA->get_type() == WORM) {
             wA->remove_contact();

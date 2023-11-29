@@ -61,7 +61,7 @@ class Worm {
     int number_contacts;
     int type;
     char team_id;
-    int aiming_angle;
+    float aiming_angle;
     int time_for_curr_tool;
     bool has_used_tool;
 

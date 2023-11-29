@@ -26,7 +26,7 @@ class Explosion {
 
 
 
-    ~Explosion() {}
+    ~Explosion();
 
 };
 

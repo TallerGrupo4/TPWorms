@@ -6,7 +6,7 @@
 #define WEAPON_H
 
 class Weapon: public Tool {
-    // b2Body* create_projectile_body(b2World* world, float angle , float x , float y, float restitution, float density);
+    b2Body* create_projectile_body(b2World* world, float angle , float x , float y, float restitution, float density);
 
     protected:
     int damage ;
