@@ -84,7 +84,6 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
             ++it;
         }
     }
-    std::cout << "proj_map_size: " << projectiles_map.size() << "\n";
     for (auto& projectile_snpsht : snpsht.projectiles) {
         //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
@@ -359,7 +358,7 @@ bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
     return false;
 }
 
-bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
+bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp::Renderer& renderer) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon() and is_turn_worm_aiming_weapon()) {
             std::cout << "Sending ActionShoot in space release with charge: " << charge_for_weapon << std::endl;
@@ -367,9 +366,10 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
             charge_for_weapon = 0;
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
-            //int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
-            //int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalWidth()/2);
-            action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
+            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalWidth()/2);
+            std::cout << "Target x: " << target_x << " Target y: " << target_y << "\n";
+            action = std::make_shared<ActionShooting>(0, worm_turn_id, target_x, target_y);
             camera.take_out_marker();
             return true;
         } else if(turn_worm_has_dynamite() or is_turn_worm_aiming_weapon()) {

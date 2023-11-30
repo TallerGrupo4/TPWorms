@@ -211,6 +211,8 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     float pos_x_float = static_cast<float>(pos_x[0]);
     float pos_y_float = static_cast<float>(pos_y[0]);
     parser.parse_position_form_shoot(pos_x_float, pos_y_float);
+    std::cout << "pos_x_float: " << pos_x_float * PIX_PER_METER << std::endl;
+    std::cout << "pos_y_float: " << pos_y_float * PIX_PER_METER << std::endl;
     return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, 2 * FPS);
 }
 
