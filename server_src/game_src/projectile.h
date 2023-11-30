@@ -56,6 +56,8 @@ class Projectile {
 
         void set_id(char id);
 
+        char get_id();
+
         ProjectileSnapshot get_snapshot();
 
 };

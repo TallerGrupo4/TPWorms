@@ -1,6 +1,9 @@
 #ifndef GAME_CONSTANTS_H
 #define GAME_CONSTANTS_H
 
+// Invalid values
+#define INVALID -1
+
 //Movement constants 
 #define IZQ -1
 #define DER 1
