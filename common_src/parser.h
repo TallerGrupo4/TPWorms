@@ -4,7 +4,7 @@
 #include "command.h"
 #include "snapshot.h"
 // #include "game_command.h"
-#include "../client_src/action.h"
+#include "../client_src/actions.h"
 // #include "../server_src/game_src/gameCommand.h"
 
 #ifndef PARSER_H

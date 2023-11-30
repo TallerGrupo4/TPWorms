@@ -12,7 +12,7 @@
 
 #include "../common_src/clock.h"
 
-#include "action.h"
+#include "actions.h"
 #include "worm.h"
 #include "match.h"
 #include "client.h"

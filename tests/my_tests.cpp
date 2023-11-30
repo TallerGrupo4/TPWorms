@@ -13,7 +13,7 @@
 #include "../common_src/dummy_socket.h"
 #include "../common_src/snapshot.h"
 #include "../server_src/game_src/game_command.h"
-#include "../client_src/action.h"
+#include "../client_src/actions.h"
 
 const char* serverPort = "8080";
 const char* ip = "localhost";
