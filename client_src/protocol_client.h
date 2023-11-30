@@ -37,6 +37,7 @@ private:
     void recv_projectiles(Snapshot& snapshot);
     void recv_worms(Snapshot& snapshot);
     void recv_end_game(Snapshot& snapshot);
+    void recv_provision_boxes(Snapshot& snapshot);
     void send_match_id(const uint match_id);
     void send_map_name(const std::string map_name);
 

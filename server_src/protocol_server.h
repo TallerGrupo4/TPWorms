@@ -41,6 +41,7 @@ private:
     int send_worms(std::vector<WormSnapshot>& worms);
     void send_projectiles(std::vector<ProjectileSnapshot>& projectiles);
     void send_end_game(bool end_game);
+    void send_provision_boxes(std::vector<ProvisionBoxSnapshot>& provision_boxes);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_jump(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_aim(uint8_t& worm_id);

@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 #include "constants.h"
+#include "provision_box_snapshot.h"
+#include "projectile_snapshot.h"
+#include "worm_snapshot.h"
+#include "platform_snapshot.h"
 #include "../server_src/config.h"
 
 #define WORM_WIDTH ConfigSingleton::getInstance().get_worm_width()
@@ -25,91 +29,6 @@ struct TurnTimeAndWormTurn {
     uint turn_time = DEFAULT;
     char worm_turn = DEFAULT;
 } typedef TurnTimeAndWormTurn_t;
-
-enum BeamType : char {
-    LargeVertical, // 0
-    Large65,
-    Large45,
-    Large25,
-    LargeHorizontal,
-    LargeMinus25,
-    LargeMinus45,
-    LargeMinus65,
-    LargeVerticalFlipped, // 8
-    ShortVertical,
-    Short65,
-    Short45,
-    Short25,
-    ShortHorizontal,
-    ShortMinus25,
-    ShortMinus45,
-    ShortMinus65,
-    ShortVerticalFlipped, // 17
-};
-
-class ProjectileSnapshot {
-    public:
-    char type;
-    float pos_x;
-    float pos_y;
-    float angle;
-    int direction;
-    int state;
-    char id;
-    int explosion_type;
-    float radius;
-    int width;
-    int height;
-
-    ProjectileSnapshot(int type, float pos_x, float pos_y, float angle, int direction, float radius , int state, char id, int explosion_type, int width = 0, int height = 0):
-            type(type), pos_x(pos_x), pos_y(pos_y), angle(angle), direction(direction), state(state), id(id), explosion_type(explosion_type), radius(radius), width(width), height(height) {};
-
-};
-
-class WormSnapshot {
-public:
-    char id;
-    float pos_x;
-    float pos_y;
-    int angle;
-    int max_health;
-    int health;
-    char direction;
-    int weapon;
-    int state;
-    char team_id;
-    int aiming_angle;
-
-
-    WormSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health, char direction, int weapon,
-                 int state, char team_id, int aiming_angle = 0):
-            id(id),
-            pos_x(pos_x),
-            pos_y(pos_y),
-            angle(angle),
-            max_health(max_health),
-            health(health),
-            direction(direction),
-            weapon(weapon),
-            state(state), 
-            team_id(team_id),
-            aiming_angle(aiming_angle) {};
-    ~WormSnapshot(){};
-};
-
-class PlatformSnapshot {
-public:
-    BeamType type;
-    float pos_x;
-    float pos_y;
-    float width;
-    float height;
-
-
-    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float width = PLAT_SMALL, float height = PLAT_HEIGHT):
-            type(type), pos_x(pos_x), pos_y(pos_y), width(width), height(height) {};
-    ~PlatformSnapshot(){};
-};
  
 
 class Snapshot {
@@ -118,12 +37,13 @@ public:
     std::vector<WormSnapshot> worms;
     std::vector<ProjectileSnapshot> projectiles;
     std::vector<PlatformSnapshot> platforms;
+    std::vector<ProvisionBoxSnapshot> provision_boxes;
     std::map<char, std::vector<char>> my_army;
     MapDimensions_t map_dimensions;
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
 
-    Snapshot(std::vector<WormSnapshot> worms, std::vector<ProjectileSnapshot> projectiles, std::vector<PlatformSnapshot> platforms):
-            worms(worms), projectiles(projectiles) , platforms(platforms), map_dimensions() {};
+    Snapshot(std::vector<WormSnapshot> worms, std::vector<ProjectileSnapshot> projectiles, std::vector<PlatformSnapshot> platforms, std::vector<ProvisionBoxSnapshot> provision_boxes):
+            worms(worms), projectiles(projectiles) , platforms(platforms), provision_boxes(provision_boxes), map_dimensions() {};
     
     Snapshot() {};
     ~Snapshot() {};

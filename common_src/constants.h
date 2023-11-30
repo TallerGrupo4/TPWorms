@@ -93,6 +93,27 @@ enum BoxType: uint8_t {
     TRAP_BOX
 };
 
+enum BeamType : char {
+    LargeVertical, // 0
+    Large65,
+    Large45,
+    Large25,
+    LargeHorizontal,
+    LargeMinus25,
+    LargeMinus45,
+    LargeMinus65,
+    LargeVerticalFlipped, // 8
+    ShortVertical,
+    Short65,
+    Short45,
+    Short25,
+    ShortHorizontal,
+    ShortMinus25,
+    ShortMinus45,
+    ShortMinus65,
+    ShortVerticalFlipped, // 17
+};
+
 #define STILL 0
 #define MOVING 1
 #define JUMPING 2

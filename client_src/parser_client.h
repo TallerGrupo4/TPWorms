@@ -28,6 +28,8 @@ public:
 
     void parse_worm(float& x, float& y);
 
+    void parse_provision_box_mesures(float& x, float& y);
+
     ~ParserClient() = default;
 };
 

@@ -98,3 +98,8 @@ void ParserClient::parse_projectile_mesures(float& x, float& y, float& angle, fl
     angle = std::round(angle / MULTIPLIER);
     radius = apply_pix_per_meter_and_multiplier(radius);
 }
+
+void ParserClient::parse_provision_box_mesures(float& x, float& y) {
+    x = apply_pix_per_meter_and_multiplier(x);
+    y = apply_pix_per_meter_and_multiplier(y);
+}

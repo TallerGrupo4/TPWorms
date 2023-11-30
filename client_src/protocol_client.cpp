@@ -110,6 +110,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_worms(snapshot);
     recv_projectiles(snapshot);
     recv_end_game(snapshot);
+    recv_provision_boxes(snapshot);
     return snapshot;
 }
 
@@ -345,6 +346,31 @@ void ProtocolClient::recv_end_game(Snapshot& snapshot) {
         snapshot.set_end_game();
     }
 }
+
+void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
+    uint8_t num_of_provision_boxes[1];
+    socket.recvall(num_of_provision_boxes, 1, &was_closed);
+    for (int i = 0; i < num_of_provision_boxes[0]; i++) {
+        char type[1];
+        int pos_x[1];
+        int pos_y[1];
+        char id[1];
+        BoxType state[1];
+        socket.recvall(type, 1, &was_closed);
+        socket.recvall(pos_x, 4, &was_closed);
+        socket.recvall(pos_y, 4, &was_closed);
+        socket.recvall(id, 1, &was_closed);
+        socket.recvall(state, 1, &was_closed);
+        pos_x[0] = ntohl(pos_x[0]);
+        pos_y[0] = ntohl(pos_y[0]);
+        float _pos_x = static_cast<float>(pos_x[0]);
+        float _pos_y = static_cast<float>(pos_y[0]);
+        parser.parse_provision_box_mesures(_pos_x, _pos_y);
+        ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0]);
+        snapshot.provision_boxes.push_back(provision_box);
+    }
+}
+
 
 void ProtocolClient::recv_match_id(uint* match_id) {
     int ret = socket.recvall(match_id, 4, &was_closed);

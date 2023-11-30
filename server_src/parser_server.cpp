@@ -37,32 +37,8 @@ void ParserServer::parse_projectile_mesures(float& x, float& y, float& angle, fl
     radius = apply_multiplier(radius);
 }
 
+void ParserServer::parse_provision_box_mesures(float& x, float& y) {
+    x = apply_multiplier(x);
+    y = apply_multiplier(y);
+}
 
-
-// void ParserServer::parse_sending_command(Command& command) {
-//     switch (command.code) {
-//         // This does not make any sense. It is for future parsing...?
-//         case CASE_JOIN: {
-//             command.code = CASE_JOIN;
-//             break;
-//         }
-//         case CASE_CREATE: {
-//             command.code = CASE_CREATE;
-//             break;
-//         }
-//         default:
-//             break;
-//     }
-// }
-
-// void ParserServer::parse_sending_snapshot(Snapshot& snapshot) {
-//     switch (command.code) {
-//         // This does not make any sense. It is for future parsing...?
-//         case CASE_CHAT: {
-//             command.code = CASE_CHAT;
-//             break;
-//         }
-//         default:
-//             break;
-//     }
-// }

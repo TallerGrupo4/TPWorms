@@ -121,6 +121,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_end_game(snapshot.get_end_game());
 
+    send_provision_boxes(snapshot.provision_boxes);
+
     return 1;
 }
 
@@ -405,6 +407,33 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
     }
 }
 
+void ProtocolServer::send_end_game(bool end_game) {
+    char end_game_code[1] = {end_game};
+    socket.sendall(end_game_code, 1, &was_closed);
+}
+
+void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& provision_boxes) {
+    uint8_t num_of_provision_boxes[1] = {static_cast<uint8_t>(provision_boxes.size())};
+    socket.sendall(num_of_provision_boxes, 1, &was_closed);
+    for (auto& provision_box : provision_boxes) {
+        parser.parse_provision_box_mesures(provision_box.pos_x, provision_box.pos_y);
+        char type[1] = {provision_box.type};
+        socket.sendall(type, 1, &was_closed);
+        int pos_x[1] = {static_cast<int>(provision_box.pos_x)};
+        pos_x[0] = htonl(pos_x[0]);
+        socket.sendall(pos_x, 4, &was_closed);
+        int pos_y[1] = {static_cast<int>(provision_box.pos_y)};
+        pos_y[0] = htonl(pos_y[0]);
+        socket.sendall(pos_y, 4, &was_closed);
+        // char body_type[1] = {provision_box.body_type};
+        // socket.sendall(body_type, 1, &was_closed);
+        char id[1] = {provision_box.id};
+        socket.sendall(id, 1, &was_closed);
+        BoxType state[1] = {provision_box.state};
+        socket.sendall(state, 1, &was_closed);
+    }
+}
+
 
 
 const Command ProtocolServer::recv_create(const char* code) {
@@ -496,7 +525,3 @@ void ProtocolServer::send_map_name(const std::string map_name) {
     socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
 }
 
-void ProtocolServer::send_end_game(bool end_game) {
-    char end_game_code[1] = {end_game};
-    socket.sendall(end_game_code, 1, &was_closed);
-}

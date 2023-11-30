@@ -11,7 +11,7 @@ Map::Map(int width , int height , int amount_of_worms , std::vector<PlatformSnap
 }
 
 Snapshot Map::get_snapshot(){
-    Snapshot snapshot({} , {}, platforms);
+    Snapshot snapshot({} , {}, platforms, {});
     snapshot.set_dimensions(height, width, WORM_WIDTH, WORM_HEIGHT, amount_of_worms, water_level);
     return snapshot;
 }
