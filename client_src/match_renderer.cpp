@@ -93,7 +93,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     //     break;
                     case SDLK_SPACE: {
                         std::cout << "Entre al space release\n";
-                        if (match.handle_space_button_release(action)) {
+                        if (match.handle_space_button_release(action, renderer)) {
                             client.send_action(action);
                         }
                         break;
