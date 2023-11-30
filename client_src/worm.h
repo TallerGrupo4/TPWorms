@@ -33,6 +33,7 @@ public:
     bool has_weapon();
     bool has_weapon_to_aim();
     bool has_charging_weapon();
+    bool has_guided_weapon();
     bool worm_facing_left();
     char get_army_id();
 private:

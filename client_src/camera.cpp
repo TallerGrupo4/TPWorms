@@ -7,6 +7,18 @@ void Camera::update(Target target) {
     this->hud.update_target(target);
 }
 
+void Camera::follow_mouse_with_marker(int mouse_x, int mouse_y) {
+    this->hud.follow_mouse_with_marker(mouse_x, mouse_y);
+}
+
+void Camera::set_marker_position(int x, int y) {
+    this->hud.set_marker_position(x, y);
+}
+
+void Camera::take_out_marker() {
+    this->hud.take_out_marker();
+}
+
 void Camera::update_turn_time_text(uint turn_time) {
     hud.update_turn_time_text(turn_time);
 }

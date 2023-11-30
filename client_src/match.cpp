@@ -21,25 +21,25 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
     for (WormSnapshot worm_snpsht : snpsht.worms){
         switch (worm_snpsht.team_id) {
             case 0 : {
-            ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, surfaces.marker_blue, blue_color);
+            ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, blue_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, blue_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 1 : {
-            ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, surfaces.marker_red, red_color);
+            ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, red_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, red_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 2 : {
-            ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, surfaces.marker_yellow, yellow_color);
+            ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, yellow_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, yellow_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 3 : {
-            ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, surfaces.marker_green, green_color);
+            ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, green_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, green_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Green;
@@ -48,7 +48,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
             default: {
 
             }
-            ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, surfaces.marker_purple, orange_color);
+            ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, orange_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Orange;
@@ -380,6 +380,9 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
 
 void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_guided_weapon()) {
+            camera.set_marker(mouse_x, mouse_y, this->my_army_id);
+        }
     //     if(is_turn_worm_aiming_weapon()) {
     //         //action = std::make_shared<ActionShoot>(worm_turn_id);
     //     }
@@ -471,6 +474,10 @@ bool Match::turn_worm_has_weapon_to_aim() {
 
 bool Match::turn_worm_has_charging_weapon() {
     return worms_map.at(worm_turn_id)->has_charging_weapon();
+}
+
+bool Match::turn_worm_has_guided_weapon() {
+    return worms_map.at(worm_turn_id)->has_guided_weapon();
 }
 
 bool Match::is_turn_worm_aiming_weapon() {

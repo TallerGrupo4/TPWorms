@@ -18,6 +18,9 @@ private:
 public:
     explicit Camera(uint turn_time = 0, int map_width = 0, int map_height = 0);
     void update(Target target);
+    void follow_mouse_with_marker(int mouse_x, int mouse_y);
+    void set_marker_position(int x, int y);
+    void take_out_marker();
     void update_turn_time_text(uint turn_time);
     void render(SDL2pp::Renderer& renderer);
     TargetType has_target();

@@ -49,6 +49,7 @@ public:
     bool turn_worm_has_weapon();
     bool turn_worm_has_weapon_to_aim();
     bool turn_worm_has_charging_weapon();
+    bool turn_worm_has_guided_weapon();
     bool is_turn_worm_aiming_weapon();
     bool handle_left_button(std::shared_ptr<Action>& action);
     bool handle_right_button(std::shared_ptr<Action>& action);

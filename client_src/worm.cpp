@@ -52,6 +52,12 @@ bool Worm::has_charging_weapon() {
     return (has_weapon_to_aim() and (!is_weapon_baseball_bat));
 }
 
+bool Worm::has_guided_weapon() {
+    bool is_weapon_airstrike = (this->weapon == TOOLS::AIRSTRIKE);
+    bool is_weapon_teleport = (this->weapon == TOOLS::TELEPORTATION);
+    return (is_weapon_airstrike or is_weapon_teleport);
+}
+
 bool Worm::worm_facing_left() {
     return this->facing_left;
 }
