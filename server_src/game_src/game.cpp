@@ -9,7 +9,7 @@
 // #include "weapons.h"
 
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -366,6 +366,7 @@ void Game::manage_turn() {
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
+    projectile_id = 0;
 }
 
 Snapshot Game::get_end_game_snapshot() {
@@ -393,7 +394,6 @@ Snapshot Game::get_game_snapshot() {
         // worms.push_back(pair.second->get_snapshot());
     }
     std::vector<ProjectileSnapshot> projectiles_snaps;
-    int projectile_id = 0;
     for (auto& projectile : projectiles){
         projectile->set_id(projectile_id++);
         projectiles_snaps.push_back(projectile->get_snapshot());

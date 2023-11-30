@@ -32,6 +32,7 @@ class Game {
     int cleaning_time;
     bool game_ended;
     int winner_team_id;
+    int projectile_id;
 
 
     void check_angles(Worm& w);
