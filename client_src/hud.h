@@ -24,6 +24,7 @@ public:
     explicit Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uint turn_time, char my_army_id);
     void update_target(Target target);
     void update_from_iter();
+    void update_marker(int x, int y);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_marker_position(int x, int y);
     void take_out_marker();
@@ -31,6 +32,8 @@ public:
     int get_marker_y();
     void update_turn_time_text(uint turn_time);
     void render(SDL2pp::Renderer& renderer);
+    bool is_marker_set();
+    bool is_marker_active();
 };
 
 #endif  // HUD_H

@@ -17,6 +17,10 @@ void Camera::update_hud() {
     this->hud.update_from_iter();
 }
 
+void Camera::update_marker(int x, int y) {
+    this->hud.update_marker(x, y);
+}
+
 void Camera::follow_mouse_with_marker(int mouse_x, int mouse_y) {
     this->hud.follow_mouse_with_marker(mouse_x, mouse_y);
 }
@@ -71,4 +75,12 @@ void Camera::toogle_player_activated() {
 
 bool Camera::is_player_activated() {
     return this->player_activated;
+}
+
+bool Camera::is_marker_set() {
+    return this->hud.is_marker_set();
+}
+
+bool Camera::is_marker_active() {
+    return this->hud.is_marker_active();
 }

@@ -70,26 +70,21 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
         //std::cout << "Inside proj destroyer\n";
         if (it->second->get_proj_state() == EXPLODED) {
-            //std::cout << "Found proj exploded\n";
-            Target new_target;
-            if (get_next_target(new_target)) {
-                camera.update(new_target);
-            } else {
-            new_target = {
-                PlayerType,
-                -1,
-                -1,
-                it->second->get_proj_x() * RESOLUTION_MULTIPLIER,
-                it->second->get_proj_y() * RESOLUTION_MULTIPLIER
-            };
+            std::cout << "Found proj exploded\n";
+            Target new_target = {
+                    PlayerType,
+                    -1,
+                    -1,
+                    camera.get_offset_x(),
+                    camera.get_offset_y()
+                };
             camera.update(new_target);
-            }
             it = projectiles_map.erase(it);
         } else {
             ++it;
         }
     }
-    //std::cout << "Before reading proj snapshot\n";
+    std::cout << "proj_map_size: " << projectiles_map.size() << "\n";
     for (auto& projectile_snpsht : snpsht.projectiles) {
         //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
@@ -280,19 +275,20 @@ void Match::update_from_iter(int iter) {
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end(); it++) {
         it->second->update_from_iter(iter);
     }
+    camera.update_hud();
     update_camera();
 }
 
 void Match::render(SDL2pp::Renderer& renderer) {
     bkgrnd->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
-    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
-        it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
+    for (std::map<char,std::shared_ptr<Worm>>::iterator worm_it = worms_map.begin(); worm_it != worms_map.end(); worm_it++) {
+        worm_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
-    for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
-        it->second->render_texts_and_widgets(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
+    for (std::map<char,std::shared_ptr<Worm>>::iterator worm_hud_it = worms_map.begin(); worm_hud_it != worms_map.end(); worm_hud_it++) {
+        worm_hud_it->second->render_texts_and_widgets(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
-    for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end(); it++) {
-        it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
+    for (std::map<char,std::shared_ptr<Projectile>>::iterator proj_it = projectiles_map.begin(); proj_it != projectiles_map.end(); proj_it++) {
+        proj_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
     this->camera.render(renderer);
 }
@@ -349,7 +345,7 @@ bool Match::handle_down_button(std::shared_ptr<Action>& action) {
 
 bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(turn_worm_has_charging_weapon()) {
+        if(turn_worm_has_charging_weapon() and is_turn_worm_aiming_weapon()) {
             charge_for_weapon += 1;
             if(charge_for_weapon == 100) {
                 std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
@@ -365,18 +361,18 @@ bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
 
 bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(turn_worm_has_charging_weapon()) {
+        if(turn_worm_has_charging_weapon() and is_turn_worm_aiming_weapon()) {
             std::cout << "Sending ActionShoot in space release with charge: " << charge_for_weapon << std::endl;
             action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
             charge_for_weapon = 0;
             return true;
-        } else if (turn_worm_has_guided_weapon()) {
-            int target_x = camera.get_marker_x();
-            int target_y = camera.get_marker_y();
+        } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
+            // int target_x = camera.get_marker_x();
+            // int target_y = camera.get_marker_y();
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
             camera.take_out_marker();
             return true;
-        } else if(turn_worm_has_weapon()) {
+        } else if(turn_worm_has_dynamite() or is_turn_worm_aiming_weapon()) {
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
             return true;
         }
@@ -411,7 +407,7 @@ bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_
 
 bool Match::handle_mouse_scroll_up(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
+        if((is_turn_worm_still() and !turn_worm_has_guided_weapon()) or (is_turn_worm_still() and turn_worm_has_guided_weapon() and !camera.is_marker_active())) {
             action = std::make_shared<ActionChangeWeapon>(SCROLL_UP, worm_turn_id);
             return true;
         }
@@ -421,12 +417,20 @@ bool Match::handle_mouse_scroll_up(std::shared_ptr<Action>& action) {
 
 bool Match::handle_mouse_scroll_down(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
+        if((is_turn_worm_still() and !turn_worm_has_guided_weapon()) or (is_turn_worm_still() and turn_worm_has_guided_weapon() and !camera.is_marker_active())) {
             action = std::make_shared<ActionChangeWeapon>(SCROLL_DOWN, worm_turn_id);
             return true;
         }
     }
     return false;
+}
+
+void Match::handle_mouse_motion(int mouse_x, int mouse_y) {
+    if(is_turn_worm_in_my_army()) {
+        if (is_turn_worm_still() and turn_worm_has_guided_weapon()) {
+            camera.update_marker(mouse_x, mouse_y);
+        }
+    }
 }
 
 bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
@@ -470,6 +474,10 @@ bool Match::is_turn_worm_in_my_army() {
 
 bool Match::is_turn_worm_still() {
     return worms_map.at(worm_turn_id)->get_worm_state() == STILL;
+}
+
+bool Match::turn_worm_has_dynamite() {
+    return worms_map.at(worm_turn_id)->has_dynamite();
 }
 
 bool Match::turn_worm_has_weapon() {

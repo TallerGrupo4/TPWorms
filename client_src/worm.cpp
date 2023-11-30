@@ -37,6 +37,10 @@ bool Worm::has_weapon() {
     return this->weapon != TOOLS::NO_TOOL;
 }
 
+bool Worm::has_dynamite() {
+    return this->weapon == TOOLS::DYNAMITE;
+}
+
 bool Worm::has_weapon_to_aim() {
     bool dont_have_weapon = (this->weapon == TOOLS::NO_TOOL);
     bool is_weapon_dynamite = (this->weapon == TOOLS::DYNAMITE);

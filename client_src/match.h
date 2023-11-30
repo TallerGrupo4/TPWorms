@@ -44,6 +44,7 @@ public:
     char get_turn_worm_id();
     bool is_turn_worm_in_my_army();
     bool is_turn_worm_still();
+    bool turn_worm_has_dynamite();
     bool turn_worm_has_weapon();
     bool turn_worm_has_weapon_to_aim();
     bool turn_worm_has_charging_weapon();
@@ -59,6 +60,7 @@ public:
     bool handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y);
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);
     bool handle_mouse_scroll_down(std::shared_ptr<Action>& action);
+    void handle_mouse_motion(int mouse_x, int mouse_y);
     bool handle_enter_button(std::shared_ptr<Action>& action);
     bool handle_backspace_button(std::shared_ptr<Action>& action);
 };

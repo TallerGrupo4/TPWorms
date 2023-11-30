@@ -21,6 +21,7 @@ public:
     explicit Camera(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, uint turn_time, char my_army_id, int map_width, int map_height);
     void update(Target target);
     void update_hud();
+    void update_marker(int x, int y);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_marker_position(int x, int y);
     void take_out_marker();
@@ -35,6 +36,8 @@ public:
     int get_offset_y();
     void toogle_player_activated();
     bool is_player_activated();
+    bool is_marker_set();
+    bool is_marker_active();
 };
 
 #endif  // CAMERA_H

@@ -31,6 +31,7 @@ public:
     int get_worm_x();
     int get_worm_y();
     bool has_weapon();
+    bool has_dynamite();
     bool has_weapon_to_aim();
     bool has_charging_weapon();
     bool has_guided_weapon();

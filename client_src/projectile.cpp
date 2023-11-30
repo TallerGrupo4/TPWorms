@@ -27,6 +27,8 @@ void Projectile::update_from_snapshot(ProjectileSnapshot& proj_snpsht) {
     angle = proj_snpsht.angle;
     facing_left = proj_snpsht.direction == LEFT ? true : false;
     state = static_cast<ProjectileStates>(proj_snpsht.state);
+    std::cout << "id: " << +id << std::endl;
+    std::cout << "type: " << +type << std::endl;
     std::cout << "state: " << +state << std::endl;
     x = proj_snpsht.pos_x;
     y = (-1)*proj_snpsht.pos_y;
@@ -34,6 +36,10 @@ void Projectile::update_from_snapshot(ProjectileSnapshot& proj_snpsht) {
 }
 
 void Projectile::update_from_iter(int iter) {
+    std::cout << "update_from_iter\n";
+    std::cout << "id: " << +id << std::endl;
+    std::cout << "type: " << +type << std::endl;
+    std::cout << "state: " << +state << std::endl;
     for (int i = 0; i < iter; i++) {
         proj_an.update_from_iter(state, type, angle);
     }
