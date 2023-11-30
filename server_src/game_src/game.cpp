@@ -9,7 +9,7 @@
 // #include "weapons.h"
 
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -18,12 +18,13 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     Snapshot snapshot = map.get_snapshot();
     builder.create_map(snapshot);
     water_level = map.water_level;
+    spawn_points = map.spawn_points;
+
 
     // Assign teams
     std::vector <WormSnapshot> wormsSnapshots;
     // We should assign worms to each team (client) until there is no more worms to assign.
     // Now we are assigning all the amount_of_worms to each team (client).
-    spawn_points = map.spawn_points;
     std::vector<b2Vec2> current_spawn_points = map.spawn_points;
     int current_id = 0;
     int amount_of_worms_per_team = std::floor(map.amount_of_worms / number_of_players);
@@ -69,48 +70,45 @@ void Game::add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_p
     spawn_points.erase(spawn_points.begin() + rand);
 }
 
-void Game::move_player(int id, int direction) {
-    try {
-        if (current_turn_player_id != id || turn_cleaning) return;
+std::shared_ptr<Worm> Game::get_worm_if_can_act(int id){
+    if (current_turn_player_id != id || turn_cleaning){return nullptr;}
+    std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
+    return worm;
+}
 
-        std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-        worm->move(direction);
-    } catch (const std::exception& err) {
-        std::cerr << "id is: " << id << std::endl;
-        std::cerr << "move_player failed with: " << err.what() << "\n";
-    }
+void Game::move_player(int id, int direction) {
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+            worm->move(direction);
+        }
 }
 
 void Game::jump_player(int id , int direction){
-    try {
-        if (current_turn_player_id != id || turn_cleaning) return;
-        std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
+    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
         worm->jump(direction);
-    }   catch (const std::exception& err) {
-        std::cerr << "jump_player failed with: " << err.what() << "\n";
     }
 }
 
 void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int timer) {
-    if (current_turn_player_id != id || turn_cleaning) return;
-    printf("timer: %d\n", timer);
-    std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-    if (worm->use_tool(potency, pos_x, pos_y, timer, projectiles )){
+    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)) {
+        if (worm->use_tool(potency, pos_x, pos_y, timer, projectile_manager.get_projectiles() )){
         turn_time = 3 * FPS;
+        }
     }
 }
 
 void Game::player_aim(int id, int increment, int direction) {
-    if (current_turn_player_id != id || turn_cleaning) return;
-    std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-    worm->aim(increment, direction);
+    if ( std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+        worm->aim(increment, direction);
+    }
 }
 
 void Game::player_change_tool(int id, int direction) {
-    if (current_turn_player_id != id || turn_cleaning) return;
-    std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-    worm->change_tool(direction);
+    if ( std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+        worm->change_tool(direction);
+    }
 }
+
+
 
 
 
@@ -128,11 +126,6 @@ void Game::remove_army(char army_id){
 }
 
 void Game::check_angles(Worm& w){
-    // if (w.get_state() == STILL){
-    //     if (abs ( w.get_angle() ) <= LAST_ANG_THRESHOLD){
-    //         w.set_last_still_angle(w.body->GetAngle());
-    //     }
-    // }
     if (abs (w.get_angle()) >= ANG_THRESHOLD){
         b2Body* body = w.body;
         body->SetTransform(body->GetPosition(), w.last_angle());
@@ -164,16 +157,6 @@ void Game::check_states(Worm& w){
             w.set_last_still_angle(body->GetAngle());
         }
     }
-    // if (w.body->GetContactList()) {
-    //     for (b2Contact* contact = world.GetContactList(); contact; contact = contact->GetNext()){
-    //         b2Body* body = w.body->GetContactList()->other;
-    //         if (body && body->GetType() == b2_staticBody){
-    //             if (body->GetFixtureList()->GetFriction() == 0){
-    //                 w.set_state(SLIDING);
-    //             }
-    //         }
-    //     }
-    // }
     float diff = w.body->GetPosition().y - w.get_last_y();
     if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
         w.set_state(FALLING);
@@ -208,16 +191,7 @@ void Game::worm_comprobations(){
 }
 
 void Game::game_post_cleanup(){
-    std::vector <std::shared_ptr<Projectile>> dead_projectiles;
-    for (auto& projectile : projectiles){
-        if (projectile->get_state() == EXPLODED){
-            dead_projectiles.push_back(projectile);
-        }
-    }
-    for (auto& projectile : dead_projectiles){
-        world.DestroyBody(projectile->get_body());
-        projectiles.erase(projectile);
-    }
+    projectile_manager.update_post_game(world);
 
     for (auto& team: teams) {
         std::vector<char> dead_worms_ids;
@@ -238,34 +212,12 @@ void Game::game_post_cleanup(){
     
 }
 
-void correct_angle_projectile(std::shared_ptr<Projectile> projectile){
-    b2Vec2 velocity = projectile->get_body()->GetLinearVelocity();
-    float angle = atan2(velocity.y, velocity.x);
-    projectile->get_body()->SetTransform(projectile->get_body()->GetPosition(), angle);
-}
-
-void Game::projectiles_comprobations(int it){
-    for (auto& projectile : projectiles){
-        if (projectile->get_state() == ALIVE){
-            correct_angle_projectile(projectile);
-            projectile->decresease_timer(it);
-        }
-        if ( (projectile->get_timer() <= 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER) || projectile->get_state() == EXPLODED){
-            printf("catched a projectile for detonation\n");
-            projectile->explode(projectiles);
-        }
-        
-    }
-}
-
-
-
 void Game::step(int it) {
     float time_simulate = (float) it / FPS;
-    // reap_dead();
     world.Step(time_simulate, 8, 3);
+
     worm_comprobations();
-    projectiles_comprobations(it);
+    projectile_manager.update_during_game(it);
 
     if (turn_time > 0){
         turn_time -= it;
@@ -326,16 +278,16 @@ void Game::turn_clean_up(){
         }
     }
 
-    if (projectiles.size() != 0){
+    if (projectile_manager.has_projectiles()){
         cleaning_time = 1 * FPS;
         return;
     }
+    
     if (cleaning_time > 0){
         cleaning_time--;
     } else {
         turn_cleaning = false;
     }
-    printf("projectiles size: %d\n", (int) projectiles.size());
 }
 
 void Game::manage_turn() {
@@ -404,14 +356,7 @@ Snapshot Game::get_game_snapshot() {
         }
         // worms.push_back(pair.second->get_snapshot());
     }
-    std::vector<ProjectileSnapshot> projectiles_snaps;
-    for (auto& projectile : projectiles){
-        char actual_projectile_id = projectile->get_id();
-        if (actual_projectile_id == INVALID) {
-            projectile->set_id(projectile_id++);
-        }
-        projectiles_snaps.push_back(projectile->get_snapshot());
-    }
+    std::vector<ProjectileSnapshot> projectiles_snaps = projectile_manager.get_projectiles_snapshot();
     Snapshot snapshot(worms, projectiles_snaps , {}, {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     return snapshot;

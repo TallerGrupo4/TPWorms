@@ -43,6 +43,8 @@ class Projectile: public Entity {
 
         int get_explosion_type();
 
+        void set_angle(float angle);
+
         int get_timer();
 
         int get_fragments();

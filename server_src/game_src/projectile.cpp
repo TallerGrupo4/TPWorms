@@ -25,7 +25,6 @@ int Projectile::get_timer() {
 void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles) {
     set_state(EXPLODED);
     Explosion ex(explosion_type, fragments, fragment_damage, radius, damage);
-    printf("Projectile::explode\n");
     ex.explode(body, projectiles);
 }
 
@@ -65,6 +64,10 @@ int Projectile::get_direction(){
     return IZQ;
 }
 
+void Projectile::set_angle(float angle) {
+    body->SetTransform(body->GetPosition(), angle);
+}
+
 void Projectile::set_id(char id) {
     this->id = id;
 }
@@ -76,6 +79,7 @@ char Projectile::get_id() {
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
+    printf("projectile sent angle: %f \n", get_angle());    
     return ProjectileSnapshot(type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
 }
 

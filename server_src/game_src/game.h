@@ -9,7 +9,7 @@
 #include "listeners.h"
 #include "filter.h"
 #include "team.h"
-#include "projectile.h"
+#include "projectile_manager.h"
 
 
 
@@ -24,7 +24,8 @@ class Game {
     MyFilter filter;
     std::vector<b2Vec2> spawn_points;
     std::map<uint8_t, Team> teams;
-    std::unordered_set<std::shared_ptr<Projectile>> projectiles;
+    // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
+    ProjectileManager projectile_manager;
     int current_turn_player_id;
     int turn_time;
     int team_turn;
@@ -62,6 +63,8 @@ public:
     void jump_player(int id , int direction);
 
     void player_use_tool(int id, int potency, float pos_x , float pos_y, int timer);
+
+    std::shared_ptr<Worm> get_worm_if_can_act(int id);
 
     void player_aim(int id, int increment, int direction);
 
