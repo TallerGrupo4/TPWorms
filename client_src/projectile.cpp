@@ -32,7 +32,7 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
     x = proj_snpsht.pos_x;
     y = (-1)*proj_snpsht.pos_y;
     proj_an.update_from_snapshot(state, type);
-    if(state == EXPLODING) {
+    if(state == EXPLODED) {
         if(type == FragmentProj) {
             effects_an->set_small_explosion_an(renderer, x, y);
         } else {
@@ -40,7 +40,7 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
         }
     } else if (state == ALIVE) {
         if((type == BazookaProj) or (type == MortarProj) or (type == AirStrikeProj)) {
-            if(exhaust_timer == 3) {
+            if(exhaust_timer == 1) {
                 effects_an->set_missile_exhaust_an(renderer, x, y);
                 exhaust_timer = 0;
             } else {

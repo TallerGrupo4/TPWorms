@@ -7,7 +7,7 @@
 using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO), ttf(),
-                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_RESIZABLE),
+                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
