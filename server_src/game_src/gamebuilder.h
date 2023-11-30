@@ -5,24 +5,8 @@
 #include "../../common_src/snapshot.h"
 #include "../../common_src/constants.h"
 #include "game_constants.h"
+#include "beam.h"
 #include "../config.h"
-
-
-class Beam {
-    public: 
-    int type;
-    b2Body* body;
-
-    Beam(b2Body* body): type(BEAM), body(body)  {
-        body->GetUserData().pointer = reinterpret_cast<uintptr_t>(this);
-    }
-
-    int get_type() {
-        return type;
-    }
-
-    ~Beam() {}
-};
 
 #define PLAT_FRICTION ConfigSingleton::getInstance().get_plat_friction()
 #define PLAT_SMALL ConfigSingleton::getInstance().get_plat_small()
@@ -33,7 +17,7 @@ class Beam {
 #define WORM_FRICTION ConfigSingleton::getInstance().get_worm_friction()
 
 class GameBuilder {
-    std::vector<Beam> beams;
+    std::vector<std::shared_ptr<Beam>> beams;
     b2World& world;
 
     float calculate_plat_frict(float angle);

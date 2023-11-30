@@ -2,10 +2,11 @@
 #include "worm.h"
 #include <box2d/box2d.h>
 
-class ProvisionBox {
-    b2Body* body; 
+#ifndef PROVISION_BOX_H
+#define PROVISION_BOX_H
+
+class ProvisionBox: public Entity {
     BoxType type;
-    BodyType body_type;
     char id;
     BoxState state;
 
@@ -15,8 +16,14 @@ class ProvisionBox {
 
     ~ProvisionBox();
 
-    BodyType get_body_type();
+    BoxType get_box_type();
+
+    BoxState get_state();
+
+    void set_state(BoxState state);
 
     virtual void apply_effect(Worm* worm) = 0;
 
 };
+
+#endif // PROVISION_BOX_H

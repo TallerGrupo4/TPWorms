@@ -9,7 +9,7 @@
 #define DER 1
 
 //constants for thresholds
-#define VEL_THRESHOLD 0.05f
+#define VEL_THRESHOLD 0.15f
 #define ANG_VEL_THRESHOLD 0.5f
 #define LAST_ANG_THRESHOLD 30
 #define ANG_THRESHOLD 50

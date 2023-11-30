@@ -8,11 +8,10 @@
 #include "game_constants.h"
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
+#include "entity.h"
 
 
-class Projectile {
-    int body_type;
-    b2Body* body;
+class Projectile: public Entity {
     int damage;
     int radius;
     ProjectileTypes type;
@@ -30,8 +29,6 @@ class Projectile {
 
         ~Projectile();
 
-        b2Body* get_body();
-
         int get_state();
 
         void set_state(char state);
@@ -39,8 +36,6 @@ class Projectile {
         void decresease_timer(int tick);
 
         void explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
-
-        int get_type();
 
         int get_direction();
 

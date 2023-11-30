@@ -13,6 +13,10 @@ class MyListener : public b2ContactListener{
 
     void BeginContact(b2Contact* contact) override;
 
+    void handle_begin_contact(b2Body* bodyA , b2Body* bodyB);
+
+    void handle_end_contact(b2Body* bodyA , b2Body* bodyB);
+
     void execute_explosive(b2Body* bodyB);
 
     void execute_contact_jump(b2Body* bodyA , b2Body* bodyB);

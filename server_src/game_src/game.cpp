@@ -95,8 +95,9 @@ void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int t
     if (current_turn_player_id != id || turn_cleaning) return;
     printf("timer: %d\n", timer);
     std::shared_ptr<Worm> worm = teams[team_turn].get_worm(id);
-    worm->use_tool(potency, pos_x, pos_y, timer, projectiles );
-    turn_time = 3 * FPS;
+    if (worm->use_tool(potency, pos_x, pos_y, timer, projectiles )){
+        turn_time = 3 * FPS;
+    }
 }
 
 void Game::player_aim(int id, int increment, int direction) {
@@ -127,11 +128,11 @@ void Game::remove_army(char army_id){
 }
 
 void Game::check_angles(Worm& w){
-    if (w.get_state() == STILL){
-        if (abs ( w.get_angle() ) <= LAST_ANG_THRESHOLD){
-            w.set_last_still_angle(w.body->GetAngle());
-        }
-    }
+    // if (w.get_state() == STILL){
+    //     if (abs ( w.get_angle() ) <= LAST_ANG_THRESHOLD){
+    //         w.set_last_still_angle(w.body->GetAngle());
+    //     }
+    // }
     if (abs (w.get_angle()) >= ANG_THRESHOLD){
         b2Body* body = w.body;
         body->SetTransform(body->GetPosition(), w.last_angle());
@@ -153,16 +154,26 @@ void Game::check_states(Worm& w){
         }
         return;
     }
-    if (w.body->GetContactList()) {
-        for (b2Contact* contact = world.GetContactList(); contact; contact = contact->GetNext()){
-            b2Body* body = w.body->GetContactList()->other;
-            if (body && body->GetType() == b2_staticBody){
-                if (body->GetFixtureList()->GetFriction() == 0){
-                    w.set_state(SLIDING);
-                }
+    if (w.get_number_contacts() == 1){
+        b2Body* body = w.body->GetContactList()->other;
+        if (body && body->GetType() == b2_staticBody){
+            if (body->GetFixtureList()->GetFriction() == 0){
+                w.set_state(SLIDING);
             }
+            w.body->SetTransform(w.body->GetPosition(), body->GetAngle());
+            w.set_last_still_angle(body->GetAngle());
         }
     }
+    // if (w.body->GetContactList()) {
+    //     for (b2Contact* contact = world.GetContactList(); contact; contact = contact->GetNext()){
+    //         b2Body* body = w.body->GetContactList()->other;
+    //         if (body && body->GetType() == b2_staticBody){
+    //             if (body->GetFixtureList()->GetFriction() == 0){
+    //                 w.set_state(SLIDING);
+    //             }
+    //         }
+    //     }
+    // }
     float diff = w.body->GetPosition().y - w.get_last_y();
     if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
         w.set_state(FALLING);

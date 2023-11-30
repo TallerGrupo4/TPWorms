@@ -3,16 +3,14 @@
 
 
 Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle):
-    body_type(PROJECITLE) , body(body), damage(damage), radius(radius), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID)  {
+ Entity(body, PROJECITLE), damage(damage), radius(radius), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }
 
 Projectile::~Projectile() {}
 
-b2Body* Projectile::get_body(){
-    return body;
-}
+
 
 void Projectile::decresease_timer(int tick) {
     if (timer > 0){
@@ -31,9 +29,6 @@ void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projec
     ex.explode(body, projectiles);
 }
 
-int Projectile::get_type() {
-    return body_type;
-}
 
 int Projectile::get_explosion_type() {
     return explosion_type;

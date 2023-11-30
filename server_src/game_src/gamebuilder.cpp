@@ -21,8 +21,9 @@ void GameBuilder::create_platform(float x, float y, float width, float height, f
     b2FixtureDef platform_fixture;
     platform_fixture.shape = &platform_shape;
     platform_fixture.friction = calculate_plat_frict(angle);
+    platform_fixture.restitution = 0;
     platform->CreateFixture(&platform_fixture);
-    Beam beam(platform);
+    std::shared_ptr<Beam> beam = std::make_shared<Beam>(platform);
     beams.push_back(beam);
 }
 
@@ -51,7 +52,7 @@ void GameBuilder::create_wall(b2Vec2 coords , float width, float angle){
     wall_fixture.friction = 0.5;
     wall_body->CreateFixture(&wall_fixture);
 
-    Beam beam(wall_body);
+    std::shared_ptr<Beam> beam = std::make_shared<Beam>(wall_body);
     beams.push_back(beam);
 }
 
@@ -74,12 +75,14 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     b2BodyDef worm_def;
     worm_def.type = b2_dynamicBody;
     worm_def.position.Set(x, y);
+    worm_def.linearDamping = 0.8f;
     b2Body* worm = world.CreateBody(&worm_def);
     b2PolygonShape worm_shape;
     worm_shape.SetAsBox(WORM_WIDTH / 2.0f, WORM_HEIGHT / 2.0f);
     b2FixtureDef worm_fixture;
     worm_fixture.density = 1;
     worm_fixture.shape = &worm_shape;
+    worm_fixture.restitution = 0.3f;
     worm_fixture.friction = WORM_FRICTION;
     worm->CreateFixture(&worm_fixture);
     return worm;
@@ -158,7 +161,7 @@ b2Body* GameBuilder::create_projectile_body(float angle , float x , float y, flo
         b2FixtureDef projectile_fixture;
         projectile_fixture.shape = &projectile_shape;
         projectile_fixture.density = density;
-        projectile_fixture.friction = restitution;
+        projectile_fixture.restitution = restitution;
         projectile->CreateFixture(&projectile_fixture);
         return projectile;
 }

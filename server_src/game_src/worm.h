@@ -10,6 +10,7 @@
 #include "game_constants.h"
 #include "tool.h"
 #include "../config.h"
+#include "entity.h"
 
 #define WORM_SPEED ConfigSingleton::getInstance().get_worm_speed()
 #define WORM_JUMP_SPEED ConfigSingleton::getInstance().get_worm_jump_speed()
@@ -47,10 +48,8 @@ class WormNotFound: public std::exception {
 };
 
 
-class Worm {
+class Worm: public Entity {
     friend class Game;
-    int type;
-    b2Body* body;
     std::vector<std::shared_ptr<Tool>> tools;
     char id;
     int life;
@@ -78,7 +77,7 @@ public:
 
     void jump (int dir);
 
-    void use_tool(int power, float x, float y, int tool,std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    bool use_tool(int power, float x, float y, int tool,std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
 
     void aim(int angle_inc, int direction);
 
@@ -87,6 +86,8 @@ public:
     void store_tool();
 
     bool in_contact();
+
+    int get_number_contacts();
 
     void add_contact();
 
@@ -103,10 +104,6 @@ public:
     void set_last_still_angle(float angle);
 
     float last_angle();
-
-    int get_type();
-
-    b2Body* get_body();
 
     float get_last_y();
 
