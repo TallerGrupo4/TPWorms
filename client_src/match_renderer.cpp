@@ -104,6 +104,9 @@ bool MatchRenderer::handleEvents(Match& match) {
             case SDL_MOUSEMOTION: {
                 //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
                 SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
+                std::cout << "x:" << mouseMotionEvent.x << " y: " << mouseMotionEvent.y << std::endl;
+                match.handle_mouse_motion(mouseMotionEvent.x , mouseMotionEvent.y);
+                //window.GetHeight()/2
                 mouse_motion_x += mouseMotionEvent.xrel;
                 mouse_motion_y += mouseMotionEvent.yrel;
                 //std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
