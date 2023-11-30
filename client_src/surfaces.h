@@ -174,6 +174,14 @@ public:
     Surface dynamite;
     Surface grenade;
     Surface holy_grenade;
+    /*EFFECTS (EXPLOSIONS/SMOKE/HITS)*/
+    Surface big_circle_explosion;
+    Surface small_circle_explosion;
+    Surface big_ring_explosion;
+    Surface small_ring_explosion;
+    Surface missile_exhaust;
+    Surface baseball_bat_hit;
+    Surface worm_hit;
     /*BEAMS*/
     Surface large_beam_vertical;
     Surface large_beam_65;

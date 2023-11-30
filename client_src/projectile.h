@@ -9,14 +9,15 @@
 #include "../common_src/constants.h"
 #include "constantes_cliente.h"
 #include "projectile_animations.h"
+#include "effects_animations.h"
 #include "surfaces.h"
 #include "Animation.h"
 #include "background.h"
 
 class Projectile {
 public:
-    Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
-    void update_from_snapshot(ProjectileSnapshot& proj_snpsht);
+    Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    void update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnapshot& proj_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     ProjectileStates get_proj_state();
@@ -25,6 +26,7 @@ public:
     bool proj_facing_left();
 private:
     ProjectileAnimations proj_an;
+    std::shared_ptr<EffectsAnimations> effects_an;
     bool facing_left;
     int angle;
     char id;
@@ -35,6 +37,7 @@ private:
     int explosion_type;
     int width;
     int height;
+    int exhaust_timer;
 };
 
 #endif  // PROJECTILE_H

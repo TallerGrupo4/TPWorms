@@ -166,6 +166,14 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 dynamite(DYNAMITE_PROJECTILE_SPRITES_PATH),
                                 grenade(GREEN_GRENADE_PROJECTILE_SPRITES_PATH),
                                 holy_grenade(HOLY_GRENADE_PROJECTILE_SPRITES_PATH),
+                                /*EFFECTS (EXPLOSIONS/SMOKE/HITS)*/
+                                big_circle_explosion(BIG_CIRCLE_EXPLOSION_SPRITES_PATH),
+                                small_circle_explosion(SMALL_CIRCLE_EXPLOSION_SPRITES_PATH),
+                                big_ring_explosion(BIG_RING_EXPLOSION_SPRITES_PATH),
+                                small_ring_explosion(SMALL_RING_EXPLOSION_SPRITES_PATH),
+                                missile_exhaust(MISSILE_EXHAUST_SPRITES_PATH),
+                                baseball_bat_hit(BASEBALL_BAT_HIT_SPRITES_PATH),
+                                worm_hit(WORM_HIT_SPRITES_PATH),
                                 /*BEAMS*/
                                 large_beam_vertical(BEAM_LARGE_VERTICAL),
                                 large_beam_65(BEAM_LARGE_65),
@@ -347,6 +355,14 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     grenade.SetColorKey(true, 0);
     cluster_bomb.SetColorKey(true, 0);
     cluster_bomb_fragments.SetColorKey(true, 0);
+    /*EFFECTS (EXPLOSIONS/SMOKE/HITS)*/
+    big_circle_explosion.SetColorKey(true, 0);
+    small_circle_explosion.SetColorKey(true, 0);
+    big_ring_explosion.SetColorKey(true, 0);
+    small_ring_explosion.SetColorKey(true, 0);
+    missile_exhaust.SetColorKey(true, 0);
+    baseball_bat_hit.SetColorKey(true, 0);
+    worm_hit.SetColorKey(true, 0);
     /*BEAMS*/
     large_beam_vertical.SetColorKey(true, 0);
     large_beam_65.SetColorKey(true, 0);

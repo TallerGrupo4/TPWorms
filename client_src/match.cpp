@@ -5,6 +5,7 @@ Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
             bkgrnd(std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer)),
+            effects_an(std::make_shared<EffectsAnimations>(renderer, surfaces)),
             my_army_id(snpsht.my_army.begin()->first),
             worm_turn_id(snpsht.turn_time_and_worm_turn.worm_turn),
             turn_time(snpsht.turn_time_and_worm_turn.turn_time/FPS),
@@ -24,32 +25,32 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         switch (worm_snpsht.team_id) {
             case 0 : {
             ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, blue_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, blue_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, blue_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 1 : {
             ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, red_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, red_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, red_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 2 : {
             ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, yellow_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, yellow_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, yellow_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 3 : {
             ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, green_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, green_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, green_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Green;
             }
             break;
             default: {
             ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, orange_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, orange_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Orange;
             }
@@ -88,17 +89,17 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
             //std::cout << "Not found proj from snapshot in map\n";
-            std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, surfaces, renderer);
+            std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, effects_an, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
             //std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
             //std::cout << "Found proj from snapshot in map --> update\n";
-            projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(projectile_snpsht);
+            projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(renderer, projectile_snpsht);
         }
     }
 
     for (auto& worm_snpsht : snpsht.worms) { 
-        worms_map.at(worm_snpsht.id)->update_from_snapshot(worm_snpsht);
+        worms_map.at(worm_snpsht.id)->update_from_snapshot(renderer, worm_snpsht);
     }
     if (worm_turn_id != snpsht.turn_time_and_worm_turn.worm_turn) {
         worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
@@ -275,6 +276,7 @@ void Match::update_from_iter(int iter) {
         it->second->update_from_iter(iter);
     }
     camera.update_hud();
+    effects_an->update_from_iter();
     update_camera();
 }
 
@@ -289,6 +291,7 @@ void Match::render(SDL2pp::Renderer& renderer) {
     for (std::map<char,std::shared_ptr<Projectile>>::iterator proj_it = projectiles_map.begin(); proj_it != projectiles_map.end(); proj_it++) {
         proj_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
+    this->effects_an->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     this->camera.render(renderer);
 }
 

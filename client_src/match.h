@@ -15,10 +15,12 @@
 #include "actions.h"
 #include "background.h"
 #include "surfaces.h"
+#include "effects_animations.h"
 
 class Match {
 private:
     std::shared_ptr<Background> bkgrnd;
+    std::shared_ptr<EffectsAnimations> effects_an;
     std::map<char, std::shared_ptr<Worm>> worms_map;
     std::map<char, std::shared_ptr<Projectile>> projectiles_map;
     char my_army_id;

@@ -1,7 +1,8 @@
 #include "projectile.h"
 
-Projectile::Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) :
+Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) :
     proj_an(renderer, surfaces),
+    effects_an(effects_an),
     facing_left(proj_snpsht.direction == LEFT ? true : false),
     angle(proj_snpsht.angle),
     id(proj_snpsht.id),
@@ -11,7 +12,8 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, 
     y((-1)*proj_snpsht.pos_y),
     explosion_type(proj_snpsht.explosion_type),
     width(std::round(proj_snpsht.width*5)),
-    height(std::round(proj_snpsht.height*5)) {
+    height(std::round(proj_snpsht.height*5)),
+    exhaust_timer(0) {
         std::cout << "projectile " << +id << " type: " << +type << std::endl;
         std::cout << "state: " << +state << std::endl;
         std::cout << "explosion_type: " << explosion_type << std::endl;
@@ -23,16 +25,29 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, MatchSurfaces& surfaces, 
         std::cout << "facing_left: " << facing_left << std::endl;
 }
 
-void Projectile::update_from_snapshot(ProjectileSnapshot& proj_snpsht) {
+void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnapshot& proj_snpsht) {
     angle = proj_snpsht.angle;
     facing_left = proj_snpsht.direction == LEFT ? true : false;
     state = static_cast<ProjectileStates>(proj_snpsht.state);
-    std::cout << "id: " << +id << std::endl;
-    std::cout << "type: " << +type << std::endl;
-    std::cout << "state: " << +state << std::endl;
     x = proj_snpsht.pos_x;
     y = (-1)*proj_snpsht.pos_y;
     proj_an.update_from_snapshot(state, type);
+    if(state == EXPLODING) {
+        if(type == FragmentProj) {
+            effects_an->set_small_explosion_an(renderer, x, y);
+        } else {
+            effects_an->set_big_explosion_an(renderer, x, y);
+        }
+    } else if (state == ALIVE) {
+        if((type == BazookaProj) or (type == MortarProj) or (type == AirStrikeProj)) {
+            if(exhaust_timer == 3) {
+                effects_an->set_missile_exhaust_an(renderer, x, y);
+                exhaust_timer = 0;
+            } else {
+                exhaust_timer++;
+            }
+        }
+    }
 }
 
 void Projectile::update_from_iter(int iter) {

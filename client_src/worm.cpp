@@ -1,7 +1,8 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background> bkgrnd) : 
+Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd) : 
     bkgrnd(bkgrnd),
+    effects_an(effects_an),
     worm_an(renderer, surfaces),
     facing_left(worm_snpsht.direction == LEFT ? true : false),
     moving(false),
@@ -70,11 +71,7 @@ char Worm::get_army_id() {
     return this->army_id;
 }
 
-/**
- * Notar que el manejo de eventos y la actualización de modelo ocurren en momentos distintos.
- * Esto les va a resultar muy util.
- */
-void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
+void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht) {
     int old_angle = angle;
     angle = worm_snpsht.angle;
     bool old_facing_left = facing_left;
@@ -87,13 +84,19 @@ void Worm::update_from_snapshot(WormSnapshot& worm_snpsht) {
     aiming_angle = worm_snpsht.aiming_angle;
     //std::cout << "new angle: " << aiming_angle << std::endl;
     worm_texts.update_crosshair(aiming_angle);
+    TOOLS old_weapon = weapon;
     TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
-    if (weapon != new_weapon) {
+    if (old_weapon != new_weapon) {
         worm_an.update_changing_weapons(weapon,new_weapon, angle, facing_left);
         weapon = new_weapon;
     }
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
+    if (state == DAMAGED) {
+        effects_an->set_worm_hit_an(renderer, x, y);
+    } else if(state == SHOOTED and old_weapon == TOOLS::BASEBALL_BAT) {
+        effects_an->set_baseball_bat_hit(renderer, x, y);
+    }
     worm_an.update_from_snapshot(state, old_state, angle, old_angle, facing_left, old_facing_left, weapon, old_aiming_angle, aiming_angle);
 }
 
