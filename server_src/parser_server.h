@@ -19,6 +19,8 @@ public:
 
     void parse_provision_box_mesures(float& x, float& y);
 
+    void parse_position_form_shoot(float& x, float& y);
+
     ~ParserServer() = default;
 };
 

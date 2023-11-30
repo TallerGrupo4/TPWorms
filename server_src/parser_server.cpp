@@ -42,3 +42,8 @@ void ParserServer::parse_provision_box_mesures(float& x, float& y) {
     y = apply_multiplier(y);
 }
 
+void ParserServer::parse_position_form_shoot(float& x, float& y) {
+    x = std::round((x * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
+    y = std::round((y * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
+}
+
