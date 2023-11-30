@@ -198,7 +198,33 @@ TEST(ProtocolHappyCasesPseudoLobbyClient, Number_of_players_1) {
     ASSERT_EQ(command_received.get_code(), CASE_NUMBER_OF_PLAYERS);
 }
 
-TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
+TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
+    Snapshot snapshot_to_send(worms, {}, {}, {});
+    snapshot_to_send.my_army = {{1, {1}}};
+    protocol_server.send_snapshot(snapshot_to_send);
+    Snapshot snapshot_received = protocol_client.recv_snapshot();
+    ASSERT_EQ(snapshot_received.worms.size(), 2);
+    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
+    ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
+    ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.worms.at(0).team_id, 1);
+    ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
+    ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
+    ASSERT_EQ(snapshot_received.worms.at(1).pos_x, 2 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.worms.at(1).team_id, 2);
+    ASSERT_EQ(snapshot_received.my_army.at(1).at(0), 1); 
+}
+
+TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_platforms_with_map_dimensions) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
@@ -207,31 +233,28 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map) {
     ProtocolServer protocol_server = protocols.second;
     WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
     PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
-    std::vector<WormSnapshot> worms = {worm_snapshot};
-    std::vector<PlatformSnapshot> platforms = {platform_snapshot};
-    Snapshot snapshot_to_send(worms, {}, platforms, {});
-    snapshot_to_send.my_army = {{1, {1}}};
+    PlatformSnapshot platform_snapshot2(LargeHorizontal, 2, 2, PLAT_BIG, PLAT_HEIGHT);
+    std::vector<PlatformSnapshot> platforms = {platform_snapshot, platform_snapshot2};
+    Snapshot snapshot_to_send({}, {}, platforms, {});
     snapshot_to_send.set_dimensions(1, 1, WORM_WIDTH, WORM_HEIGHT, 1);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
-    ASSERT_EQ(snapshot_received.worms.size(), 1);
-    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
-    ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
-    ASSERT_EQ(snapshot_received.platforms.size(), 1);
+    ASSERT_EQ(snapshot_received.platforms.size(), 2);
     ASSERT_EQ(snapshot_received.map_dimensions.height, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.map_dimensions.width, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.map_dimensions.worm_width, std::round(WORM_WIDTH * PIX_PER_METER));
     ASSERT_EQ(snapshot_received.map_dimensions.worm_height, std::round(WORM_HEIGHT * PIX_PER_METER));
     ASSERT_EQ(snapshot_received.map_dimensions.amount_of_worms, 1);
-    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
-    ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.platforms.at(0).type, LargeVertical);
     ASSERT_EQ(snapshot_received.platforms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.platforms.at(0).width, std::round(PLAT_BIG * PIX_PER_METER));
     ASSERT_EQ(snapshot_received.platforms.at(0).height, std::round(PLAT_HEIGHT * PIX_PER_METER));
-    ASSERT_EQ(snapshot_received.worms.at(0).team_id, 1);
-    ASSERT_EQ(snapshot_received.my_army.at(1).at(0), 1); 
+    ASSERT_EQ(snapshot_received.platforms.at(1).type, LargeHorizontal);
+    ASSERT_EQ(snapshot_received.platforms.at(1).pos_x, 2 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.platforms.at(1).width, std::round(PLAT_BIG * PIX_PER_METER));
+    ASSERT_EQ(snapshot_received.platforms.at(1).height, std::round(PLAT_HEIGHT * PIX_PER_METER));
 }
+
 
 TEST(ProtocolHappyCasesPseudoLobbyServer, Number_of_players_1) {
     Socket dummy_socket(serverPort);
@@ -381,45 +404,26 @@ TEST(ProtocolHappyCasesMatch, Send_action_change_tool_and_recv_gameCommand_chang
 }
 
 
-// SEND AND RECV SNAPSHOT
+// SEND AND RECV SNAPSHOT (WormSnapshot and PlatformSnapshot already tested in PseudoLobby)
 
-TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
-    // SEPARATE THIS TEST INTO MULTIPLE TESTS
+TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_projectiles_and_turn_time_and_worm_turn) {
     Socket dummy_socket(serverPort);
     ParserClient parser_client;
     ParserServer parser_server;
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
-    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
-    std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
     ProjectileSnapshot projectile_snapshot(EXPLOSIVE, 2, 3, 4 * RADTODEG, 5, 6, 7, 0, EXPLOSIVE, 12, 12);
-    std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot};
-    ProvisionBoxSnapshot provision_box_snapshot(1, 2, 3, 4, AMMO_BOX);
-    std::vector<ProvisionBoxSnapshot> provision_boxes = {provision_box_snapshot};
-    Snapshot snapshot_to_send(worms, projectiles, {}, provision_boxes);
+    ProjectileSnapshot projectile_snapshot2(EXPLOSIVE_FRAGMENTS_TIMER, 2, 3, 4 * RADTODEG, 5, 6, 7, 10, EXPLOSIVE_FRAGMENTS, 12, 12);
+    std::vector<ProjectileSnapshot> projectiles = {projectile_snapshot, projectile_snapshot2};
+    Snapshot snapshot_to_send({}, projectiles, {}, {});
     snapshot_to_send.set_turn_time_and_worm_turn(12, 21);
     snapshot_to_send.set_dimensions(100, 100, 100, 100, 2, 10);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
-    ASSERT_EQ(snapshot_received.worms.size(), 2);
-    ASSERT_EQ(snapshot_received.worms.at(0).id, '1');
-    ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
-    ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
-    ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
-    ASSERT_EQ(snapshot_received.worms.at(0).team_id, 1);
-    ASSERT_EQ(snapshot_received.worms.at(1).team_id, 2);
-    ASSERT_EQ(snapshot_received.platforms.size(), 0);
-    ASSERT_EQ(snapshot_received.map_dimensions.width, 100 * PIX_PER_METER);
-    ASSERT_NE(snapshot_received.map_dimensions.height, 10 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.map_dimensions.worm_width, 100 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.map_dimensions.worm_height, 100 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.map_dimensions.amount_of_worms, 2);
-    ASSERT_EQ(snapshot_received.map_dimensions.water_level, 10 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.turn_time_and_worm_turn.turn_time, 12);
     ASSERT_NE(snapshot_received.turn_time_and_worm_turn.worm_turn, 12);
-    ASSERT_EQ(snapshot_received.projectiles.size(), 1);
+    ASSERT_EQ(snapshot_received.projectiles.size(), 2);
     ASSERT_EQ(snapshot_received.projectiles.at(0).type, EXPLOSIVE);
     ASSERT_EQ(snapshot_received.projectiles.at(0).pos_x, 2 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.projectiles.at(0).pos_y, 3 * PIX_PER_METER);
@@ -430,21 +434,43 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot) {
     ASSERT_EQ(snapshot_received.projectiles.at(0).explosion_type, EXPLOSIVE);
     ASSERT_EQ(snapshot_received.projectiles.at(0).width, 12 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.projectiles.at(0).height, 12 * PIX_PER_METER);
-    ASSERT_EQ(snapshot_received.provision_boxes.size(), 1);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).type, EXPLOSIVE_FRAGMENTS_TIMER);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).pos_x, 2 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).pos_y, 3 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).angle, std::round(4 * RADTODEG));
+    ASSERT_EQ(snapshot_received.projectiles.at(1).radius, 6 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).state, 7);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).id, 10);
+    ASSERT_EQ(snapshot_received.projectiles.at(1).explosion_type, EXPLOSIVE_FRAGMENTS);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_provision_boxes) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    ProvisionBoxSnapshot provision_box_snapshot(1, 2, 3, 4, AMMO_BOX);
+    ProvisionBoxSnapshot provision_box_snapshot2(12, 12, 12, 12, HEALTH_BOX);
+    std::vector<ProvisionBoxSnapshot> provision_boxes = {provision_box_snapshot, provision_box_snapshot2};
+    Snapshot snapshot_to_send({}, {}, {}, provision_boxes);
+    protocol_server.send_snapshot(snapshot_to_send);
+    Snapshot snapshot_received = protocol_client.recv_snapshot();
+    ASSERT_EQ(snapshot_received.provision_boxes.size(), 2);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).state, AMMO_BOX);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).pos_x, 2 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).pos_y, 3 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(0).id, 4);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(0).type, 1);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).state, HEALTH_BOX);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).pos_x, 12 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).pos_y, 12 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).id, 12);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).type, 12);
 }
 
-// TEST(ProtocolHappyCases, ExitServer) {
-//     Socket dummy_socket(serverPort);
-//     ParserClient parser_client;
-//     ParserServer parser_server;
-//     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
-//     ProtocolClient protocol_client = protocols.first;
-//     ProtocolServer protocol_server = protocols.second;
-//     // Exit not implemented yet
-// }
+
 
 // ----------------------- SAD CASES -----------------------
 
