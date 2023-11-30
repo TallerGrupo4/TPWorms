@@ -4,6 +4,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "constantes_cliente.h"
+#include "surfaces.h"
 #include "hud.h"
 
 class Camera {
@@ -12,12 +13,14 @@ private:
     int map_width;
     int map_height;
     Hud hud;
-    bool player_activated = false;
+    bool player_activated;
 
 
 public:
-    explicit Camera(uint turn_time = 0, int map_width = 0, int map_height = 0);
+    explicit Camera();
+    explicit Camera(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, uint turn_time, char my_army_id, int map_width, int map_height);
     void update(Target target);
+    void update_hud();
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_marker_position(int x, int y);
     void take_out_marker();

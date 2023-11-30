@@ -21,13 +21,11 @@ private:
     std::shared_ptr<Background> bkgrnd;
     std::map<char, std::shared_ptr<Worm>> worms_map;
     std::map<char, std::shared_ptr<Projectile>> projectiles_map;
-    Camera camera;
     char my_army_id;
     char worm_turn_id;
     uint turn_time;
+    Camera camera;
     uint charge_for_weapon;
-    std::list<ArmyColorDependentMisc> color_misc_list;
-    std::map<ArmyColors, std::reference_wrapper<ArmyColorDependentMisc>> color_map;
 
     bool get_next_target(Target& new_target);
 

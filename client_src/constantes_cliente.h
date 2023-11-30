@@ -72,6 +72,8 @@ struct Target {
 
 #define CROSSHAIR_PURPLE_SPRITES_PATH MISC_SPRITES_PATH "/crshairp.png"
 
+#define SECS_FOR_MARKER_SPRITES 1
+
 #define MARKER_BLUE_SPRITES_PATH MISC_SPRITES_PATH "/markerb.png"
 
 #define MARKER_RED_SPRITES_PATH MISC_SPRITES_PATH "/markerr.png"

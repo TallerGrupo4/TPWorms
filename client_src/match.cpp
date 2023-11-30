@@ -3,12 +3,14 @@
 #include "constantes_cliente.h"
 Match::Match() {}
 
-Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
-    bkgrnd = std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer);
-    my_army_id = snpsht.my_army.begin()->first;
-    worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
-    turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
-    charge_for_weapon = 0;
+Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
+            bkgrnd(std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer)),
+            my_army_id(snpsht.my_army.begin()->first),
+            worm_turn_id(snpsht.turn_time_and_worm_turn.worm_turn),
+            turn_time(snpsht.turn_time_and_worm_turn.turn_time/FPS),
+            camera(renderer, surfaces, turn_time, my_army_id, snpsht.map_dimensions.width, snpsht.map_dimensions.height),
+            charge_for_weapon(0) {
+
     camera.update_turn_time_text(turn_time);
 
 
@@ -46,12 +48,11 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
             }
             break;
             default: {
-
-            }
             ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, orange_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Orange;
+            }
             break;
         }
         // std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, color_map, surfaces, renderer, bkgrnd);
@@ -369,9 +370,12 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
             action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
             charge_for_weapon = 0;
             return true;
-        }
-        if(turn_worm_has_weapon()) {
+        } else if (turn_worm_has_guided_weapon()) {
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            return true;
+        } else if(turn_worm_has_weapon()) {
+            action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            return true;
         }
     }
     return false;
@@ -381,7 +385,7 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
 void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_guided_weapon()) {
-            camera.set_marker(mouse_x, mouse_y, this->my_army_id);
+            camera.set_marker_position(mouse_x, mouse_y);
         }
     //     if(is_turn_worm_aiming_weapon()) {
     //         //action = std::make_shared<ActionShoot>(worm_turn_id);

@@ -1,10 +1,20 @@
 #include "camera.h"
 
-Camera::Camera(uint turn_time, int map_width, int map_height) : map_width(map_width), map_height(map_height), hud(target, turn_time) {}
+Camera::Camera() {}
+
+Camera::Camera(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, uint turn_time, char my_army_id, int map_width, int map_height) : 
+                map_width(map_width),
+                map_height(map_height),
+                hud(renderer, surfaces, target, turn_time, my_army_id),
+                player_activated(false) {}
 
 void Camera::update(Target target) {
     this->target = target;
     this->hud.update_target(target);
+}
+
+void Camera::update_hud() {
+    this->hud.update_from_iter();
 }
 
 void Camera::follow_mouse_with_marker(int mouse_x, int mouse_y) {
