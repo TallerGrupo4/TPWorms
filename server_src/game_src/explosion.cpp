@@ -53,7 +53,10 @@ void Explosion::create_fragments(b2Body* body , std::unordered_set<std::shared_p
         b2Body* fragment = builder.create_fragment_body(body , angle);
         std::shared_ptr<Projectile> ptr(new ProjectileFragment(fragment, angle));
         projectiles.insert(ptr);
-        fragment->ApplyLinearImpulseToCenter(b2Vec2(cos(angle) * 3, sin(angle) * 3), true);
+        float impulse_x = 0.5f * cos(angle);
+        float impulse_y = 0.5f * sin(angle);
+        printf("Impulse: %f %f\n", impulse_x, impulse_y);
+        fragment->ApplyLinearImpulseToCenter(b2Vec2(impulse_x , impulse_y), true);
     }
 }
 
