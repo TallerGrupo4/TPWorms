@@ -42,9 +42,15 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
 
 void Hud::render(SDL2pp::Renderer& renderer) {
 
-    if (marker_following_mouse or marker_set) {
+    if (marker_following_mouse) {
         SDL_RendererFlip flip = SDL_FLIP_NONE;
-        marker_an->render(renderer, SDL2pp::Rect(marker_x - this->target.x_offset , marker_y - this->target.y_offset, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
+        marker_an->render(renderer, SDL2pp::Rect(marker_x/* - this->target.x_offset*/ - marker_an->get_frame_size()/2, marker_y/* - this->target.y_offset*/ - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
+    } else if (marker_set) {
+        SDL_RendererFlip flip = SDL_FLIP_NONE;
+        std::cout << "marker_x: " << marker_x << std::endl;
+        std::cout << "marker_y: " << marker_y << std::endl;
+        // marker_an->render(renderer, SDL2pp::Rect(marker_x/* - this->target.x_offset*/ - marker_an->get_frame_size()/2, marker_y/* - this->target.y_offset*/ - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
+        marker_an->render(renderer, SDL2pp::Rect(marker_x - this->target.x_offset - marker_an->get_frame_size()/2, marker_y - this->target.y_offset - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
     }
     
     // switch (this->target.type_of_target) {
@@ -81,6 +87,7 @@ void Hud::update_marker(int x, int y) {
 
 void Hud::follow_mouse_with_marker(int mouse_x, int mouse_y) {
     this->marker_an->reset();
+    this->marker_set = false;
     this->marker_following_mouse = true;
     this->marker_x = mouse_x;
     this->marker_y = mouse_y;
@@ -91,10 +98,12 @@ void Hud::set_marker_position(int x, int y) {
         this->marker_an->reset();
         this->marker_following_mouse = false;
         this->marker_set = true;
-        this->marker_x = x;
-        this->marker_y = y;
+        this->marker_x = x + this->target.x_offset;
+        this->marker_y = y + this->target.y_offset;
     } else {
-        follow_mouse_with_marker(x, y);
+        this->marker_an->reset();
+        this->marker_x = x + this->target.x_offset;
+        this->marker_y = y + this->target.y_offset;
     }
 }
 
@@ -123,5 +132,5 @@ bool Hud::is_marker_set() {
 }
 
 bool Hud::is_marker_active() {
-    return (this->marker_set and this->marker_following_mouse);
+    return (this->marker_set or this->marker_following_mouse);
 }

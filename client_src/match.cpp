@@ -367,8 +367,8 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
             charge_for_weapon = 0;
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
-            // int target_x = camera.get_marker_x();
-            // int target_y = camera.get_marker_y();
+            //int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
+            //int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalWidth()/2);
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
             camera.take_out_marker();
             return true;
@@ -399,8 +399,7 @@ bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_
             return true;
         } else if (is_turn_worm_still() and turn_worm_has_guided_weapon()) {
             camera.follow_mouse_with_marker(mouse_x, mouse_y);
-        }
-        
+        }        
     }
     return false;
 }
@@ -427,7 +426,7 @@ bool Match::handle_mouse_scroll_down(std::shared_ptr<Action>& action) {
 
 void Match::handle_mouse_motion(int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
-        if (is_turn_worm_still() and turn_worm_has_guided_weapon()) {
+        if (is_turn_worm_still() and turn_worm_has_guided_weapon() and camera.is_marker_active() and (!camera.is_marker_set())) {
             camera.update_marker(mouse_x, mouse_y);
         }
     }
