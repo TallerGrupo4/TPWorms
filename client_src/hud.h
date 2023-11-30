@@ -27,6 +27,8 @@ public:
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_marker_position(int x, int y);
     void take_out_marker();
+    int get_marker_x();
+    int get_marker_y();
     void update_turn_time_text(uint turn_time);
     void render(SDL2pp::Renderer& renderer);
 };

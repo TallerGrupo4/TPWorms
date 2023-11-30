@@ -98,6 +98,14 @@ void Hud::take_out_marker() {
     this->marker_y = 0;
 }
 
+int Hud::get_marker_x(){
+    return this->marker_x;
+}
+
+int Hud::get_marker_y(){
+    return this->marker_y;
+}
+
 void Hud::update_turn_time_text(uint turn_time) {
     std::string turn_time_text_str = "Turn Time: " + std::to_string(turn_time);
     *this->turn_time_text = SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(turn_time_text_str, {255, 0, 0});

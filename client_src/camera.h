@@ -29,6 +29,8 @@ public:
     TargetType has_target();
     int get_target_worm_id();
     int get_target_proj_id();
+    int get_marker_x();
+    int get_marker_y();
     int get_offset_x();
     int get_offset_y();
     void toogle_player_activated();

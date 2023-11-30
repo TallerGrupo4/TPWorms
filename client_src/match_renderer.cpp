@@ -130,7 +130,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     match.handle_mouse_left_click(mouseButtonEvent.x, mouseButtonEvent.y);
                     break;
                 case SDL_BUTTON_RIGHT:
-                    if (match.handle_mouse_right_click(action)) {
+                    if (match.handle_mouse_right_click(action, mouseButtonEvent.x, mouseButtonEvent.y)) {
                         client.send_action(action);
                     }
                     break;

@@ -371,7 +371,10 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action) {
             charge_for_weapon = 0;
             return true;
         } else if (turn_worm_has_guided_weapon()) {
+            int target_x = camera.get_marker_x();
+            int target_y = camera.get_marker_y();
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            camera.take_out_marker();
             return true;
         } else if(turn_worm_has_weapon()) {
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
@@ -393,14 +396,15 @@ void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
     }
 }
 
-bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action) {
+bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still() and turn_worm_has_weapon_to_aim()) {
-            std::cout << "entre al aiming\n";
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
             return true;
+        } else if (is_turn_worm_still() and turn_worm_has_guided_weapon()) {
+            camera.follow_mouse_with_marker(mouse_x, mouse_y);
         }
-        std::cout << "no entre al aiming\n";
+        
     }
     return false;
 }

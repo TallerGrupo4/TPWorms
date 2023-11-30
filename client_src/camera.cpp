@@ -49,6 +49,14 @@ int Camera::get_target_proj_id() {
     return this->target.projectile_id;
 }
 
+int Camera::get_marker_x(){
+    return this->hud.get_marker_x();
+}
+
+int Camera::get_marker_y(){
+    return this->hud.get_marker_y();
+}
+
 int Camera::get_offset_x() {
     return this->target.x_offset;
 }

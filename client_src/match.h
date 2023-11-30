@@ -56,7 +56,7 @@ public:
     bool handle_space_button_pressed(std::shared_ptr<Action>& action);
     bool handle_space_button_release(std::shared_ptr<Action>& action);
     void handle_mouse_left_click(int mouse_x, int mouse_y);
-    bool handle_mouse_right_click(std::shared_ptr<Action>& action);
+    bool handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y);
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);
     bool handle_mouse_scroll_down(std::shared_ptr<Action>& action);
     bool handle_enter_button(std::shared_ptr<Action>& action);
