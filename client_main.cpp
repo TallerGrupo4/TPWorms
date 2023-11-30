@@ -18,6 +18,7 @@ int main(int argc, char* argv[]) { try {
     Client client(argv[1], argv[2]);
     LobbyRenderer lobby(client);
     if (!lobby.start(argc, argv)) {
+        client.exit();
         return EXIT_SUCCESS;
     }
     MatchRenderer match(client, lobby.get_received_map());
