@@ -72,7 +72,7 @@ dynamite_max_ammo: 5
 dynamite_restitution: 0.3
 dynamite_density: 1
 
-baseball_bat_damage: 30
+baseball_bat_damage: 10
 
 airstrike_damage: 40
 airstrike_radius: 2

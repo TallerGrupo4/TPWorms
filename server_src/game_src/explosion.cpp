@@ -33,10 +33,13 @@ void Explosion::apply_explosion(b2Body* body){
             Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(body_call->GetUserData().pointer));
             if (w) {
                 if (w->get_type() == WORM){
-                    float explosion_distance = (body_call->GetPosition() - body->GetPosition()).Length();
-                    w->apply_damage(damage * ((explosion_distance) / float(radius)));
-                    float impulse = EXPLOSION_POWER * (explosion_distance/float(radius));
-                    printf("Impulse: %f\n", impulse);
+                    float explosion_distance = ((body_call->GetPosition())- body->GetPosition()).Length() - WORM_HEIGHT/2.0f;
+                    printf("explosion_distance: %f\n", explosion_distance);
+                    float act_damage = damage - (damage * (explosion_distance/float(radius)));
+                    printf("act_damage: %f\n", act_damage);
+                    w->apply_damage(act_damage);
+                    float impulse = EXPLOSION_POWER - (EXPLOSION_POWER * (explosion_distance/float(radius)));
+                    
                     body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
                 }
             }
