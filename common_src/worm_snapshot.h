@@ -17,7 +17,7 @@ public:
 
 
     WormSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health, char direction, int weapon,
-                 int state, char team_id, int aiming_angle = 0):
+                 int state, char team_id, int aiming_angle):
             id(id),
             pos_x(pos_x),
             pos_y(pos_y),

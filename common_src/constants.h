@@ -57,7 +57,6 @@ enum BoxState: char{
 
 enum ProjectileStates : char {
     ALIVE,
-    EXPLODING,
     EXPLODED,
 };
 
