@@ -13,9 +13,9 @@ RedGrenade::RedGrenade() : Weapon(RED_GRENADE, RED_GRENADE_MAX_AMMO , RED_GRENAD
 
 void RedGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time, RED_GRENADE_RESTITUTION, RED_GRENADE_DENSITY);
-
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
     projectiles.insert(projectile);
+    shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
+
 }
 
 RedGrenade::~RedGrenade(){}

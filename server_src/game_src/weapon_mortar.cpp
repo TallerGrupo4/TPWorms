@@ -14,8 +14,7 @@ Mortar::Mortar() : Weapon(MORTAR, MORTAR_MAX_AMMO , MORTAR_MAX_AMMO , MORTAR_DAM
 void Mortar::use(b2Body* worm, int direction, float angle , int timer,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     std::shared_ptr<Projectile> ptr = create_projectile(worm, direction, angle, power, 0, MORTAR_RESTITUTION, MORTAR_DENSITY);
     projectiles.insert(ptr);
-
-    ptr->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    shoot (b2Vec2(direction * cos(angle), sin(angle)), power, ptr->get_body());
 }
 
 

@@ -19,6 +19,8 @@ class Weapon: public Tool {
 
     Weapon(uint8_t type , int ammo,int max_ammo, int damage , int radius , int fragments , ExplosionType explosion_type , ProjectileTypes projectile_type , bool is_afected_by_wind , bool can_aim , bool has_potency);
 
+    void shoot(b2Vec2 direction , int potency_percentage, b2Body* projectile);
+
 
     std::shared_ptr<Projectile> create_projectile(b2Body* worm, int direction, float angle , int power, int timer, float restitution , float density);
 

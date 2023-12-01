@@ -1,6 +1,7 @@
 #include "weapon.h"
 #include "gamebuilder.h"
 
+#define PROJECTILE_POTENCY ConfigSingleton::getInstance().get_projectile_potency()
 
    Weapon::Weapon(uint8_t type , int ammo,int max_ammo, int damage , int radius , int fragments , ExplosionType explosion_type , ProjectileTypes projectile_type , bool is_afected_by_wind , bool can_aim , bool has_potency) :
         Tool(type, ammo, can_aim, max_ammo), damage(damage), radius(radius), fragments(fragments), explosion_type(explosion_type), projectile_type(projectile_type), is_afected_by_wind(is_afected_by_wind), has_potency(has_potency) {}
@@ -34,6 +35,11 @@
 
         return p;
     }
-        // Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle);
+
+    void Weapon::shoot(b2Vec2 direction , int potency_percentage, b2Body* projectile){
+        float impulse_x = direction.x * PROJECTILE_POTENCY *potency_percentage * 0.01;
+        float impulse_y = direction.y * PROJECTILE_POTENCY* potency_percentage * 0.01;
+        projectile->ApplyLinearImpulseToCenter(b2Vec2(impulse_x , impulse_y), true);
+    }         
 
 

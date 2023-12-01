@@ -12,8 +12,7 @@ GreenGrenade::GreenGrenade() : Weapon(GREEN_GRENADE, -1 , -1 , GREEN_GRENADE_DAM
 void GreenGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time, GREEN_GRENADE_RESTITUTION, GREEN_GRENADE_DENSITY);
     projectiles.insert(projectile);
-
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
 }
 
 

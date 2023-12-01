@@ -14,7 +14,7 @@
 class Projectile: public Entity {
     int damage;
     int radius;
-    ProjectileTypes type;
+    ProjectileTypes projectile_type;
     ExplosionType explosion_type;
     float radius_body_size;
     int timer;
@@ -41,13 +41,15 @@ class Projectile: public Entity {
 
         float get_angle();
 
-        int get_explosion_type();
+        ExplosionType get_explosion_type();
 
         void set_angle(float angle);
 
         int get_timer();
 
         int get_fragments();
+
+        ProjectileTypes get_projectile_type();
 
         int get_fragment_damage();
 

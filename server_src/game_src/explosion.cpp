@@ -10,7 +10,7 @@
 
 
 
-Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, int damage) : type(type), fragments(fragments), fragment_damage(fragment_damage), radius(radius), damage(damage) {}
+Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, int damage, int explosion_power) : type(type), fragments(fragments), fragment_damage(fragment_damage), radius(radius), damage(damage), explosion_power(explosion_power) {}
 
 void Explosion::apply_explosion(b2Body* body){
     std::unordered_set<b2Body*> bodies;
@@ -34,9 +34,7 @@ void Explosion::apply_explosion(b2Body* body){
             if (w) {
                 if (w->get_type() == WORM){
                     float explosion_distance = ((body_call->GetPosition())- body->GetPosition()).Length() - WORM_HEIGHT/2.0f;
-                    printf("explosion_distance: %f\n", explosion_distance);
                     float act_damage = damage - (damage * (explosion_distance/float(radius)));
-                    printf("act_damage: %f\n", act_damage);
                     w->apply_damage(act_damage);
                     float impulse = EXPLOSION_POWER - (EXPLOSION_POWER * (explosion_distance/float(radius)));
                     
@@ -58,7 +56,6 @@ void Explosion::create_fragments(b2Body* body , std::unordered_set<std::shared_p
         projectiles.insert(ptr);
         float impulse_x = 0.5f * cos(angle);
         float impulse_y = 0.5f * sin(angle);
-        printf("Impulse: %f %f\n", impulse_x, impulse_y);
         fragment->ApplyLinearImpulseToCenter(b2Vec2(impulse_x , impulse_y), true);
     }
 }

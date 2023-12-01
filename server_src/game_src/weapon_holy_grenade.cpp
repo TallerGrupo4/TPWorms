@@ -13,8 +13,7 @@ HolyGrenade::HolyGrenade() : Weapon(HOLY_GRENADE, HOLY_GRENADE_MAX_AMMO , HOLY_G
 void HolyGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time , HOLY_GRENADE_RESTITUTION, HOLY_GRENADE_DENSITY);
     projectiles.insert(projectile);
-
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
 }
 
 

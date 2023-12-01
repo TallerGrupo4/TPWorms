@@ -82,6 +82,10 @@ public:
     float get_explosion_power() const {
         return explosion_power;
     }
+    
+    float get_explosion_fragment_power() const {
+        return explosion_fragment_power;
+    }
 
     float get_projectile_potency() const {
         return projectile_potency;
@@ -290,6 +294,7 @@ private:
             worm_backflip_speed = config["worm_backflip_speed"].as<float>();
             worm_backflip_hor_speed = config["worm_backflip_hor_speed"].as<float>();
             explosion_power = config["explosion_power"].as<float>();
+            explosion_fragment_power = config["explosion_fragment_power"].as<float>();
             projectile_potency = config["projectile_potency"].as<float>();
             // Weapons
             // Bazooka
@@ -377,6 +382,7 @@ private:
 // Explosions
 
     float explosion_power;
+    float explosion_fragment_power;
     float projectile_potency;
 
 // Weapons

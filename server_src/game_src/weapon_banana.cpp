@@ -13,8 +13,7 @@ Banana::Banana() : Weapon(BANANA, BANANA_MAX_AMMO , BANANA_MAX_AMMO , BANANA_DAM
 void Banana::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time , BANANA_RESTITUTION, BANANA_DENSITY);
     projectiles.insert(projectile);
-
-    projectile->get_body()->ApplyLinearImpulseToCenter(b2Vec2(direction *cos(angle) * power, sin(angle) * power), true);
+    shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
 }
 
 Banana::~Banana(){}

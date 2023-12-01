@@ -1,9 +1,12 @@
 #include "projectile.h"
 #include "game_constants.h"
 
+#define EXPLOSION_POWER ConfigSingleton::getInstance().get_explosion_power()
+#define EXPLOSION_FRAGMENT_POWER ConfigSingleton::getInstance().get_explosion_fragment_power()
+
 
 Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle):
- Entity(body, PROJECITLE), damage(damage), radius(radius), type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID)  {
+ Entity(body, PROJECITLE), damage(damage), radius(radius), projectile_type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }
@@ -24,12 +27,18 @@ int Projectile::get_timer() {
 
 void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles) {
     set_state(EXPLODED);
-    Explosion ex(explosion_type, fragments, fragment_damage, radius, damage);
-    ex.explode(body, projectiles);
+    if (projectile_type == FragmentProj){
+        Explosion ex(explosion_type, fragments, fragment_damage, radius, damage, EXPLOSION_FRAGMENT_POWER);
+        ex.explode(body, projectiles);
+
+    } else {
+        Explosion ex(explosion_type, fragments, fragment_damage, radius, damage, EXPLOSION_POWER);
+        ex.explode(body, projectiles);
+    }
 }
 
 
-int Projectile::get_explosion_type() {
+ExplosionType Projectile::get_explosion_type() {
     return explosion_type;
 }
 
@@ -39,6 +48,10 @@ void Projectile::set_state(char state) {
 
 int Projectile::get_state() {
     return state;
+}
+
+ProjectileTypes Projectile::get_projectile_type() {
+    return projectile_type;
 }
 
 int Projectile::get_fragments() {
@@ -79,8 +92,7 @@ char Projectile::get_id() {
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
-    printf("projectile sent angle: %f \n", get_angle());    
-    return ProjectileSnapshot(type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
+    return ProjectileSnapshot(projectile_type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
 }
 
 

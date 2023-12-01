@@ -302,7 +302,7 @@ void Game::manage_turn() {
             std::cerr << err.what() << std::endl;
             // End of the game
         }
-        std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
+        // std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
         turn_time = TURN_TIME;
         return;
     }
@@ -310,10 +310,10 @@ void Game::manage_turn() {
     bool worm_is_dead = false;
     do {
         team_turn++;
-        std::cout << "Team turn: " << team_turn << std::endl;
+        // std::cout << "Team turn: " << team_turn << std::endl;
         if (team_turn > ((int) teams.size() - 1)) {
             // End of round
-            std::cout << "End of round" << std::endl;
+            // std::cout << "End of round" << std::endl;
             team_turn = 0;
         }
         try {
@@ -324,8 +324,8 @@ void Game::manage_turn() {
             continue;
         }
         worm_is_dead = teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD;
-        std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
-        std::cout << "Team turn: " << team_turn << std::endl;
+        // std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
+        // std::cout << "Team turn: " << team_turn << std::endl;
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
