@@ -380,9 +380,9 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         if (socket.sendall(aiming_angle, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int ammo[1] = {worm.ammo};
-        ammo[0] = htonl(ammo[0]);
-        if (socket.sendall(ammo, 4, &was_closed) < 0) {
+        int current_ammo[1] = {worm.current_ammo};
+        current_ammo[0] = htonl(current_ammo[0]);
+        if (socket.sendall(current_ammo, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
     }

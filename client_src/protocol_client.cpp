@@ -299,7 +299,7 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         int state[1];
         char team_id[1];
         int aiming_angle[1];
-        int ammo[1];
+        int current_ammo[1];
         socket.recvall(id, 1, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_x, 4, &was_closed);
@@ -322,7 +322,7 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
     // if (was_closed) throw WasClosed;
         socket.recvall(aiming_angle, 4, &was_closed);
     // if (was_closed) throw WasClosed;
-        socket.recvall(ammo, 4, &was_closed);
+        socket.recvall(current_ammo, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
@@ -334,8 +334,8 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         weapon[0] = ntohl(weapon[0]);
         state[0] = ntohl(state[0]);
         aiming_angle[0] = ntohl(aiming_angle[0]);
-        ammo[0] = ntohl(ammo[0]);
-        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0], ammo[0]);
+        current_ammo[0] = ntohl(current_ammo[0]);
+        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0], current_ammo[0]);
         snapshot.worms.push_back(worm);
     }
 }
