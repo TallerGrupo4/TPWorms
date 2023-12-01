@@ -2,13 +2,36 @@
 
 Hud::Hud() : target(),
             marker_an(nullptr),
+            /*TEXTS*/
             turn_time_text(nullptr),
             timer_text(nullptr),
             charging_text(nullptr),
             turn_army_text(nullptr),
             end_game_text(nullptr),
+            /*WEAPON ICONS*/
+            bazooka_icon_on(nullptr),
+            bazooka_icon_off(nullptr),
+            mortar_icon_on(nullptr),
+            mortar_icon_off(nullptr),
+            green_grenade_icon_on(nullptr),
+            green_grenade_icon_off(nullptr),
+            red_grenade_icon_on(nullptr),
+            red_grenade_icon_off(nullptr),
+            banana_icon_on(nullptr),
+            banana_icon_off(nullptr),
+            holy_icon_on(nullptr),
+            holy_icon_off(nullptr),
+            air_strike_icon_on(nullptr),
+            air_strike_icon_off(nullptr),
+            dynamite_icon_on(nullptr),
+            dynamite_icon_off(nullptr),
+            teleport_icon_on(nullptr),
+            teleport_icon_off(nullptr),
+            baseball_bat_icon_on(nullptr),
+            baseball_bat_icon_off(nullptr),
             my_army_id(-1),
             my_army_color(WHITE),
+            turn_worm_weapon(TOOLS::NO_TOOL),
             marker_following_mouse(false),
             marker_set(false),
             is_end_game(false),
@@ -18,13 +41,36 @@ Hud::Hud() : target(),
 Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uint turn_time, char my_army_id) : 
      target(target),
      marker_an(nullptr),
+     /*TEXTS*/
      turn_time_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Turn Time: " + std::to_string(turn_time)), WHITE))),
      timer_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Grenade Timer: "), WHITE))),
      charging_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Weapon Charge: "), WHITE))),
      turn_army_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("PLACEHOLDER TEXT TURN ARMY"), WHITE))),
      end_game_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 64).RenderText_Blended(std::string("PLACEHOLDER TEXT END GAME"), WHITE))),
+     /*WEAPON ICONS*/
+     bazooka_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.bazooka_icon_on)),
+     bazooka_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.bazooka_icon_off)),
+     mortar_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.mortar_icon_on)),
+     mortar_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.mortar_icon_off)),
+     green_grenade_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.green_grenade_icon_on)),
+     green_grenade_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.green_grenade_icon_off)),
+     red_grenade_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.red_grenade_icon_on)),
+     red_grenade_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.red_grenade_icon_off)),
+     banana_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.banana_icon_on)),
+     banana_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.banana_icon_off)),
+     holy_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.holy_icon_on)),
+     holy_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.holy_icon_off)),
+     air_strike_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.air_strike_icon_on)),
+     air_strike_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.air_strike_icon_off)),
+     dynamite_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.dynamite_icon_on)),
+     dynamite_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.dynamite_icon_off)),
+     teleport_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.teleport_icon_on)),
+     teleport_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.teleport_icon_off)),
+     baseball_bat_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.baseball_bat_icon_on)),
+     baseball_bat_icon_off(std::make_shared<SDL2pp::Texture>(renderer, surfaces.baseball_bat_icon_off)),
      my_army_id(my_army_id),
      my_army_color(WHITE),
+     turn_worm_weapon(TOOLS::NO_TOOL),
      marker_following_mouse(false),
      marker_set(false),
      is_end_game(false),
@@ -55,6 +101,97 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
     }
 }
 
+void Hud::render_weapon_icons(SDL2pp::Renderer& renderer) {
+    int gap = 10;
+    int icons_pos_x = renderer.GetLogicalWidth() - gap - (*this->bazooka_icon_on).GetWidth(); 
+    int bazooka_pos_y = gap;
+    int mortar_pos_y = bazooka_pos_y + (*this->bazooka_icon_on).GetHeight() + gap;
+    int green_grenade_pos_y = mortar_pos_y + (*this->mortar_icon_on).GetHeight() + gap;
+    int red_grenade_pos_y = green_grenade_pos_y + (*this->green_grenade_icon_on).GetHeight() + gap;
+    int banana_pos_y = red_grenade_pos_y + (*this->red_grenade_icon_on).GetHeight() + gap;
+    int holy_pos_y = banana_pos_y + (*this->banana_icon_on).GetHeight() + gap;
+    int dynamite_pos_y = holy_pos_y + (*this->holy_icon_on).GetHeight() + gap;
+    int baseball_bat_pos_y = dynamite_pos_y + (*this->dynamite_icon_on).GetHeight() + gap;
+    int air_strike_pos_y = baseball_bat_pos_y + (*this->baseball_bat_icon_on).GetHeight() + gap;
+    int teleport_pos_y = air_strike_pos_y + (*this->air_strike_icon_on).GetHeight() + gap;
+    
+    renderer.Copy(*this->bazooka_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, bazooka_pos_y, (*this->bazooka_icon_off).GetWidth(), (*this->bazooka_icon_off).GetHeight()));
+    renderer.Copy(*this->mortar_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, mortar_pos_y, (*this->mortar_icon_off).GetWidth(), (*this->mortar_icon_off).GetHeight()));
+    renderer.Copy(*this->green_grenade_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, green_grenade_pos_y, (*this->green_grenade_icon_off).GetWidth(), (*this->green_grenade_icon_off).GetHeight()));
+    renderer.Copy(*this->red_grenade_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, red_grenade_pos_y, (*this->red_grenade_icon_off).GetWidth(), (*this->red_grenade_icon_off).GetHeight()));
+    renderer.Copy(*this->banana_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, banana_pos_y, (*this->banana_icon_off).GetWidth(), (*this->banana_icon_off).GetHeight()));
+    renderer.Copy(*this->holy_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, holy_pos_y, (*this->holy_icon_off).GetWidth(), (*this->holy_icon_off).GetHeight()));
+    renderer.Copy(*this->dynamite_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, dynamite_pos_y, (*this->dynamite_icon_off).GetWidth(), (*this->dynamite_icon_off).GetHeight()));
+    renderer.Copy(*this->baseball_bat_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, baseball_bat_pos_y, (*this->baseball_bat_icon_off).GetWidth(), (*this->baseball_bat_icon_off).GetHeight()));
+    renderer.Copy(*this->air_strike_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, air_strike_pos_y, (*this->air_strike_icon_off).GetWidth(), (*this->air_strike_icon_off).GetHeight()));
+    renderer.Copy(*this->teleport_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, teleport_pos_y, (*this->teleport_icon_off).GetWidth(), (*this->teleport_icon_off).GetHeight()));
+    
+    switch (this->turn_worm_weapon) {
+    case TOOLS::BAZOOKA:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), bazooka_pos_y-(gap/2), (*this->bazooka_icon_on).GetWidth() + gap, (*this->bazooka_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->bazooka_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, bazooka_pos_y, (*this->bazooka_icon_on).GetWidth(), (*this->bazooka_icon_on).GetHeight()));
+        break;
+    case TOOLS::MORTAR:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), mortar_pos_y-(gap/2), (*this->mortar_icon_on).GetWidth() + gap, (*this->mortar_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->mortar_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, mortar_pos_y, (*this->mortar_icon_on).GetWidth(), (*this->mortar_icon_on).GetHeight()));
+        break;
+    case TOOLS::GREEN_GRENADE:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), green_grenade_pos_y-(gap/2), (*this->green_grenade_icon_on).GetWidth() + gap, (*this->green_grenade_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->green_grenade_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, green_grenade_pos_y, (*this->green_grenade_icon_on).GetWidth(), (*this->green_grenade_icon_on).GetHeight()));
+        break;
+    case TOOLS::RED_GRENADE:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), red_grenade_pos_y-(gap/2), (*this->red_grenade_icon_on).GetWidth() + gap, (*this->red_grenade_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->red_grenade_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, red_grenade_pos_y, (*this->red_grenade_icon_on).GetWidth(), (*this->red_grenade_icon_on).GetHeight()));
+        break;
+    case TOOLS::BANANA:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), banana_pos_y-(gap/2), (*this->banana_icon_on).GetWidth() + gap, (*this->banana_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->banana_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, banana_pos_y, (*this->banana_icon_on).GetWidth(), (*this->banana_icon_on).GetHeight()));
+        break;
+    case TOOLS::HOLY_GRENADE:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), holy_pos_y-(gap/2), (*this->holy_icon_on).GetWidth() + gap, (*this->holy_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->holy_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, holy_pos_y, (*this->holy_icon_on).GetWidth(), (*this->holy_icon_on).GetHeight()));
+        break;
+    case TOOLS::DYNAMITE:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), dynamite_pos_y-(gap/2), (*this->dynamite_icon_on).GetWidth() + gap, (*this->dynamite_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->dynamite_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, dynamite_pos_y, (*this->dynamite_icon_on).GetWidth(), (*this->dynamite_icon_on).GetHeight()));
+        break;
+    case TOOLS::BASEBALL_BAT:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), baseball_bat_pos_y-(gap/2), (*this->baseball_bat_icon_on).GetWidth() + gap, (*this->baseball_bat_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->baseball_bat_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, baseball_bat_pos_y, (*this->baseball_bat_icon_on).GetWidth(), (*this->baseball_bat_icon_on).GetHeight()));
+        break;
+    case TOOLS::AIRSTRIKE:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), air_strike_pos_y-(gap/2), (*this->air_strike_icon_on).GetWidth() + gap, (*this->air_strike_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->air_strike_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, air_strike_pos_y, (*this->air_strike_icon_on).GetWidth(), (*this->air_strike_icon_on).GetHeight()));
+        break;
+    case TOOLS::TELEPORTATION:
+        renderer.SetDrawColor(BLUE);
+        renderer.FillRect(SDL2pp::Rect(icons_pos_x-(gap/2), teleport_pos_y-(gap/2), (*this->teleport_icon_on).GetWidth() + gap, (*this->teleport_icon_on).GetHeight() + gap));
+        renderer.SetDrawColor(WHITE);
+        renderer.Copy(*this->teleport_icon_on, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, teleport_pos_y, (*this->teleport_icon_on).GetWidth(), (*this->teleport_icon_on).GetHeight()));
+        break;
+    default:
+        break;
+    }
+}
+
 void Hud::render(SDL2pp::Renderer& renderer) {
     if (is_end_game) {
         SDL2pp::Texture end_game_text_texture(renderer, *this->end_game_text);
@@ -78,11 +215,16 @@ void Hud::render(SDL2pp::Renderer& renderer) {
         renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, renderer.GetLogicalHeight()-10 - (*this->timer_text).GetHeight(), (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
         SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
         renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, renderer.GetLogicalHeight() - (*this->timer_text).GetHeight() - 20 - (*this->charging_text).GetHeight(), (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
+        render_weapon_icons(renderer);
     }
 }
 
 void Hud::update_target(Target target) {
     this->target = target;
+}
+
+void Hud::update_turn_weapon(TOOLS turn_worm_weapon) {
+    this->turn_worm_weapon = turn_worm_weapon;
 }
 
 void Hud::update_from_iter() {

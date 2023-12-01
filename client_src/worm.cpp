@@ -34,6 +34,10 @@ int Worm::get_worm_y() {
     return this->y;
 }
 
+TOOLS Worm::get_weapon() {
+    return this->weapon;
+}
+
 bool Worm::has_weapon() {
     return this->weapon != TOOLS::NO_TOOL;
 }

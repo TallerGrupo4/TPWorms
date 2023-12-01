@@ -161,6 +161,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     break;
                 }
                 std::cout << "x:" << mouseButtonEvent.x << " y: " << mouseButtonEvent.y << std::endl;
+                std::cout << "x for server: " << mouseButtonEvent.x - (renderer.GetLogicalWidth()/2) << " y for server: " << mouseButtonEvent.y - (renderer.GetLogicalHeight()/2)  << std::endl;
                 break;
             }
             case SDL_QUIT: {

@@ -2,7 +2,7 @@ project(Worms)
 FILE(GLOB client_src_files "*.cpp")
 add_definitions(-DEFFECTS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Effects"
 -DMISC_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Misc"
--DWEAPONSICONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/'Weapon Icons'"
+-DWEAPONSICONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/WeaponIcons"
 -DWEAPONS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Weapons"
 -DWORMS_SPRITES_PATH="${PROJECT_SOURCE_DIR}/sprites/Worms"
 -DBACKGROUND_PATH="${PROJECT_SOURCE_DIR}/backgrounds"

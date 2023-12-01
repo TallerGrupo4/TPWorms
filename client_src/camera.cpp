@@ -21,6 +21,10 @@ void Camera::update_marker(int x, int y) {
     this->hud.update_marker(x, y);
 }
 
+void Camera::update_turn_weapon(TOOLS turn_worm_weapon) {
+    this->hud.update_turn_weapon(turn_worm_weapon);
+}
+
 void Camera::follow_mouse_with_marker(int mouse_x, int mouse_y) {
     this->hud.follow_mouse_with_marker(mouse_x, mouse_y);
 }

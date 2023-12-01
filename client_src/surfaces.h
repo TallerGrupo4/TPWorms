@@ -183,6 +183,27 @@ public:
     Surface missile_exhaust;
     Surface baseball_bat_hit;
     Surface worm_hit;
+    /*WEAPON ICONS*/
+    Surface bazooka_icon_on;
+    Surface bazooka_icon_off;
+    Surface mortar_icon_on;
+    Surface mortar_icon_off;
+    Surface green_grenade_icon_on;
+    Surface green_grenade_icon_off;
+    Surface red_grenade_icon_on;
+    Surface red_grenade_icon_off;
+    Surface banana_icon_on;
+    Surface banana_icon_off;
+    Surface holy_icon_on;
+    Surface holy_icon_off;
+    Surface dynamite_icon_on;
+    Surface dynamite_icon_off;
+    Surface baseball_bat_icon_on;
+    Surface baseball_bat_icon_off;
+    Surface air_strike_icon_on;
+    Surface air_strike_icon_off;
+    Surface teleport_icon_on;
+    Surface teleport_icon_off;
     /*BEAMS*/
     Surface large_beam_vertical;
     Surface large_beam_65;

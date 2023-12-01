@@ -110,13 +110,15 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
     if (worm_turn_id != snpsht.turn_time_and_worm_turn.worm_turn) {
         worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+        camera.take_out_marker();
         update_camera(1,1,true);
     } else {
         worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
-        char worm_turn_army_id = worms_map.at(worm_turn_id)->get_army_id();
-        camera.set_army_turn(worm_turn_army_id);
         update_camera();
     }
+    char worm_turn_army_id = worms_map.at(worm_turn_id)->get_army_id();
+    camera.update_turn_weapon(worms_map.at(worm_turn_id)->get_weapon());
+    camera.set_army_turn(worm_turn_army_id);
 }
 
 bool Match::get_next_target(Target& new_target) {
@@ -386,7 +388,7 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp:
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
             int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
-            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2);
+            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2) + 184;
             std::cout << "Target x: " << target_x << " Target y: " << target_y << "\n";
             action = std::make_shared<ActionShooting>(0, worm_turn_id, target_x, target_y);
             camera.take_out_marker();

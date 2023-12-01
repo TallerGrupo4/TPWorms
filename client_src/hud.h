@@ -12,22 +12,48 @@ class Hud {
 private:
     Target target;
     std::unique_ptr<Animation> marker_an;
+    /*TEXTS*/
     std::shared_ptr<SDL2pp::Surface> turn_time_text;
     std::shared_ptr<SDL2pp::Surface> timer_text;
     std::shared_ptr<SDL2pp::Surface> charging_text;
     std::shared_ptr<SDL2pp::Surface> turn_army_text;
     std::shared_ptr<SDL2pp::Surface> end_game_text;
+    /*WEAPON ICONS*/
+    std::shared_ptr<SDL2pp::Texture> bazooka_icon_on;
+    std::shared_ptr<SDL2pp::Texture> bazooka_icon_off;
+    std::shared_ptr<SDL2pp::Texture> mortar_icon_on;
+    std::shared_ptr<SDL2pp::Texture> mortar_icon_off;
+    std::shared_ptr<SDL2pp::Texture> green_grenade_icon_on;
+    std::shared_ptr<SDL2pp::Texture> green_grenade_icon_off;
+    std::shared_ptr<SDL2pp::Texture> red_grenade_icon_on;
+    std::shared_ptr<SDL2pp::Texture> red_grenade_icon_off;
+    std::shared_ptr<SDL2pp::Texture> banana_icon_on;
+    std::shared_ptr<SDL2pp::Texture> banana_icon_off;
+    std::shared_ptr<SDL2pp::Texture> holy_icon_on;
+    std::shared_ptr<SDL2pp::Texture> holy_icon_off;
+    std::shared_ptr<SDL2pp::Texture> air_strike_icon_on;
+    std::shared_ptr<SDL2pp::Texture> air_strike_icon_off;
+    std::shared_ptr<SDL2pp::Texture> dynamite_icon_on;
+    std::shared_ptr<SDL2pp::Texture> dynamite_icon_off;
+    std::shared_ptr<SDL2pp::Texture> teleport_icon_on;
+    std::shared_ptr<SDL2pp::Texture> teleport_icon_off;
+    std::shared_ptr<SDL2pp::Texture> baseball_bat_icon_on;
+    std::shared_ptr<SDL2pp::Texture> baseball_bat_icon_off;
     char my_army_id;
     SDL_Color my_army_color;
+    TOOLS turn_worm_weapon;
     bool marker_following_mouse;
     bool marker_set;
     bool is_end_game;
     int marker_x;
     int marker_y;
+
+    void render_weapon_icons(SDL2pp::Renderer& renderer);
 public:
     explicit Hud();
     explicit Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uint turn_time, char my_army_id);
     void update_target(Target target);
+    void update_turn_weapon(TOOLS turn_worm_weapon);
     void update_from_iter();
     void update_marker(int x, int y);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
