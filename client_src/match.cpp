@@ -10,7 +10,8 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
             worm_turn_id(snpsht.turn_time_and_worm_turn.worm_turn),
             turn_time(snpsht.turn_time_and_worm_turn.turn_time/FPS),
             camera(renderer, surfaces, turn_time, my_army_id, snpsht.map_dimensions.width, snpsht.map_dimensions.height),
-            charge_for_weapon(0) {
+            charge_for_weapon(0),
+            timer_for_weapon(0) {
 
     camera.update_turn_time_text(turn_time);
 
@@ -64,6 +65,12 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 }
 
 void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) {
+    if(snpsht.get_end_game()) {
+        if (!snpsht.worms.empty()) {
+            char winner_team_id = snpsht.worms.front().team_id;
+            camera.set_end_game(winner_team_id);
+        }
+    }
     if (turn_time != (snpsht.turn_time_and_worm_turn.turn_time/FPS)) {
         turn_time = snpsht.turn_time_and_worm_turn.turn_time/FPS;
         camera.update_turn_time_text(turn_time);    
@@ -106,6 +113,8 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         update_camera(1,1,true);
     } else {
         worm_turn_id = snpsht.turn_time_and_worm_turn.worm_turn;
+        char worm_turn_army_id = worms_map.at(worm_turn_id)->get_army_id();
+        camera.set_army_turn(worm_turn_army_id);
         update_camera();
     }
 }
@@ -353,8 +362,10 @@ bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
                 std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
                 action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
                 charge_for_weapon = 0;
+                camera.clear_charging_value();
                 return true;
             }
+            camera.set_charging_value(charge_for_weapon);
             std::cout << "Inside space pressed with charge: " << charge_for_weapon << std::endl;
         }
     }
@@ -367,20 +378,76 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp:
             std::cout << "Sending ActionShoot in space release with charge: " << charge_for_weapon << std::endl;
             action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
             charge_for_weapon = 0;
+            camera.clear_charging_value();
+            if(turn_worm_has_timer_weapon()) {
+                camera.clear_timer_value();
+                timer_for_weapon = 0;
+            }
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
             int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
-            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalWidth()/2);
+            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2);
             std::cout << "Target x: " << target_x << " Target y: " << target_y << "\n";
             action = std::make_shared<ActionShooting>(0, worm_turn_id, target_x, target_y);
             camera.take_out_marker();
             return true;
-        } else if(turn_worm_has_dynamite() or is_turn_worm_aiming_weapon()) {
+        } else if(turn_worm_has_dynamite()) {
+            action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            camera.clear_timer_value();
+            timer_for_weapon = 0;
+            return true;
+        } else if(is_turn_worm_aiming_weapon()) {
             action = std::make_shared<ActionShooting>(0, worm_turn_id);
             return true;
+        
         }
     }
     return false;
+}
+
+void Match::handle_1_button() {
+    if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_timer_weapon()) {
+            camera.set_timer(1);
+            timer_for_weapon = 1;
+        }
+    }
+}
+
+void Match::handle_2_button() {
+    if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_timer_weapon()) {
+            camera.set_timer(2);
+            timer_for_weapon = 2;
+        }
+    }
+}
+
+void Match::handle_3_button() {
+    if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_timer_weapon()) {
+            camera.set_timer(3);
+            timer_for_weapon = 3;
+        }
+    }
+}
+
+void Match::handle_4_button() {
+    if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_timer_weapon()) {
+            camera.set_timer(4);
+            timer_for_weapon = 4;
+        }
+    }
+}
+
+void Match::handle_5_button() {
+    if(is_turn_worm_in_my_army()) {
+        if(turn_worm_has_timer_weapon()) {
+            camera.set_timer(5);
+            timer_for_weapon = 5;
+        }
+    }
 }
 
 
@@ -398,11 +465,18 @@ void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
 bool Match::handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still() and turn_worm_has_weapon_to_aim()) {
+            if(turn_worm_has_timer_weapon()) {
+                camera.set_timer(5);
+                timer_for_weapon = 5;
+            }
             action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, CENTER, worm_turn_id);
             return true;
         } else if (is_turn_worm_still() and turn_worm_has_guided_weapon()) {
             camera.follow_mouse_with_marker(mouse_x, mouse_y);
-        }        
+        } else if (is_turn_worm_still() and turn_worm_has_timer_weapon()) {
+            camera.set_timer(5);
+            timer_for_weapon = 5;
+        }
     }
     return false;
 }
@@ -492,6 +566,10 @@ bool Match::turn_worm_has_weapon_to_aim() {
 
 bool Match::turn_worm_has_charging_weapon() {
     return worms_map.at(worm_turn_id)->has_charging_weapon();
+}
+
+bool Match::turn_worm_has_timer_weapon() {
+    return worms_map.at(worm_turn_id)->has_timer_weapon();
 }
 
 bool Match::turn_worm_has_guided_weapon() {

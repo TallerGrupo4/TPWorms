@@ -57,6 +57,16 @@ bool Worm::has_charging_weapon() {
     return (has_weapon_to_aim() and (!is_weapon_baseball_bat));
 }
 
+bool Worm::has_timer_weapon() {
+    bool dont_have_weapon = (this->weapon == TOOLS::NO_TOOL);
+    bool is_weapon_bazooka = (this->weapon == TOOLS::BAZOOKA);
+    bool is_weapon_mortar = (this->weapon == TOOLS::MORTAR);
+    bool is_weapon_baseball_bat = (this->weapon == TOOLS::BASEBALL_BAT);
+    bool is_weapon_airstrike = (this->weapon == TOOLS::AIRSTRIKE);
+    bool is_weapon_teleport = (this->weapon == TOOLS::TELEPORTATION);
+    return (!(dont_have_weapon or is_weapon_bazooka or is_weapon_mortar or is_weapon_baseball_bat or is_weapon_airstrike or is_weapon_teleport));
+}
+
 bool Worm::has_guided_weapon() {
     bool is_weapon_airstrike = (this->weapon == TOOLS::AIRSTRIKE);
     bool is_weapon_teleport = (this->weapon == TOOLS::TELEPORTATION);

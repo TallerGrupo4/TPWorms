@@ -38,6 +38,7 @@ public:
     Surface slide_up_worm;
     Surface slide_down_worm;
     Surface dead_worm;
+    Surface winner_worm;
     /*WORM STILL STANCE WEAPONS*/
     Surface still_baz_worm;
     Surface still_baz_up_worm;

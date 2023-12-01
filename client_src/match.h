@@ -28,6 +28,7 @@ private:
     uint turn_time;
     Camera camera;
     uint charge_for_weapon;
+    uint timer_for_weapon;
 
     bool get_next_target(Target& new_target);
 
@@ -50,6 +51,7 @@ public:
     bool turn_worm_has_weapon();
     bool turn_worm_has_weapon_to_aim();
     bool turn_worm_has_charging_weapon();
+    bool turn_worm_has_timer_weapon();
     bool turn_worm_has_guided_weapon();
     bool is_turn_worm_aiming_weapon();
     bool handle_left_button(std::shared_ptr<Action>& action);
@@ -58,6 +60,11 @@ public:
     bool handle_down_button(std::shared_ptr<Action>& action);
     bool handle_space_button_pressed(std::shared_ptr<Action>& action);
     bool handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp::Renderer& renderer);
+    void handle_1_button();
+    void handle_2_button();
+    void handle_3_button();
+    void handle_4_button();
+    void handle_5_button();
     void handle_mouse_left_click(int mouse_x, int mouse_y);
     bool handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y);
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);

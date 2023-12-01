@@ -23,7 +23,13 @@ public:
     void update_hud();
     void update_marker(int x, int y);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
+    void set_army_turn(char worm_turn_army_id);
     void set_marker_position(int x, int y);
+    void set_charging_value(int charge);
+    void clear_charging_value();
+    void set_timer(int timer);
+    void clear_timer_value();
+    void set_end_game(char winner_team_id);
     void take_out_marker();
     void update_turn_time_text(uint turn_time);
     void render(SDL2pp::Renderer& renderer);

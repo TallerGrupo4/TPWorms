@@ -25,8 +25,32 @@ void Camera::follow_mouse_with_marker(int mouse_x, int mouse_y) {
     this->hud.follow_mouse_with_marker(mouse_x, mouse_y);
 }
 
+void Camera::set_army_turn(char worm_turn_army_id) {
+    this->hud.set_army_turn(worm_turn_army_id);
+}
+
 void Camera::set_marker_position(int x, int y) {
     this->hud.set_marker_position(x, y);
+}
+
+void Camera::set_charging_value(int charge) {
+    this->hud.set_charging_value(charge);
+}
+
+void Camera::clear_charging_value() {
+    this->hud.clear_charging_value();
+}
+
+void Camera::set_timer(int timer) {
+    this->hud.set_timer(timer);
+}
+
+void Camera::clear_timer_value() {
+    this->hud.clear_timer_value();
+}
+
+void Camera::set_end_game(char winner_team_id) {
+    this->hud.set_end_game(winner_team_id);
 }
 
 void Camera::take_out_marker() {

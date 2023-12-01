@@ -52,6 +52,10 @@ struct Target {
 
 #define ORANGE {255, 102, 25}
 
+#define BLACK {0, 0, 0}
+
+#define WHITE {255, 255, 255}
+
 /*BACKGROUNDS*/
 
 #define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"
@@ -141,6 +145,12 @@ struct Target {
 #define SECS_FOR_DEAD_SPRITES 1
 
 #define WORM_DEAD_SPRITES_PATH MISC_SPRITES_PATH "/grave1.png"
+
+#define SECS_FOR_WIN_SPRITES 0
+
+#define WORM_WIN_SPRITES_PATH WORMS_SPRITES_PATH "/wwinner.png"
+
+
 
 
 /* DEFAULT WORM STILL WITH WEAPONS*/

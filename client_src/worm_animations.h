@@ -25,7 +25,7 @@ public:
     void update_from_iter(int state, int angle, bool facing_left);
     void update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int angle, const bool facing_left);
 private:
-    void reset_old_an(int old_state, int old_angle, bool old_facing_left);  
+    void reset_old_an(int old_state, int old_angle, bool old_facing_left, int old_aiming_angle);  
     bool is_action_state(int state);
     void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
     void render_angle_dependent_an(Animation& up_an, Animation& down_an,
@@ -41,6 +41,7 @@ private:
     void push_pick_up_weapon_an(TOOLS weapon, int angle, const bool facing_left);
 
     std::list<std::reference_wrapper<Animation>> lingering_animations;
+    TOOLS old_weapon;
     /*WORM MOVEMENTS*/
     Animation still_0_an;
     Animation still_0_up_an;
@@ -58,6 +59,7 @@ private:
     Animation slide_up_an;
     Animation slide_down_an;
     Animation dead_an;
+    Animation winner_an;
     /*WORM STILL STANCE WEAPONS*/
     Animation still_baz_an;
     Animation still_baz_up_an;

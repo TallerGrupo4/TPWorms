@@ -1,6 +1,7 @@
 #include "worm_animations.h"
 
 WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces) :
+                                old_weapon(TOOLS::NO_TOOL),
                                 /*WORM MOVEMENTS*/
                                 still_0_an(renderer, surfaces.still_0_worm, SECS_FOR_STILL_SPRITES),
                                 still_0_up_an(renderer, surfaces.still_0_up_worm, SECS_FOR_STILL_SPRITES),
@@ -18,6 +19,7 @@ WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfac
                                 slide_up_an(renderer, surfaces.slide_up_worm, SECS_FOR_SLIDE_SPRITES),
                                 slide_down_an(renderer, surfaces.slide_down_worm, SECS_FOR_SLIDE_SPRITES),
                                 dead_an(renderer, surfaces.dead_worm, SECS_FOR_DEAD_SPRITES),
+                                winner_an(renderer, surfaces.winner_worm, SECS_FOR_WIN_SPRITES),
                                 /*WORM STILL STANCE WEAPONS*/
                                 still_baz_an(renderer, surfaces.still_baz_worm, SECS_FOR_STILL_SPRITES),
                                 still_baz_up_an(renderer, surfaces.still_baz_up_worm, SECS_FOR_STILL_SPRITES),
@@ -221,6 +223,14 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                         flip,
                         left_offset,
                         right_offset-5,
+                        above_offset-12,
+                        bellow_offset+10);
+        break;
+    case WINNER:
+        winner_an.render(renderer, dst,
+                        flip,
+                        left_offset-7,
+                        right_offset,
                         above_offset-12,
                         bellow_offset);
         break;
@@ -645,7 +655,7 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
     }
 }
 
-void WormAnimations::reset_old_an(int old_state, int old_angle, bool old_facing_left) {
+void WormAnimations::reset_old_an(int old_state, int old_angle, bool old_facing_left, int old_aiming_angle) {
     switch (old_state) {
     case MOVING:
         walking_an.reset();
@@ -685,6 +695,131 @@ void WormAnimations::reset_old_an(int old_state, int old_angle, bool old_facing_
     case BACKFLIPPING:
         backflip_an.reset();
         break;
+    case AIMING:
+        switch (old_weapon) {
+            case BAZOOKA:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_baz_up_an.reset();
+                    } else {
+                        aim_baz_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_baz_down_an.reset();
+                    } else {
+                        aim_baz_up_an.reset();
+                    }
+                } else {
+                    aim_baz_an.reset();
+                }
+                break;
+            case MORTAR:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_mortar_up_an.reset();
+                    } else {
+                        aim_mortar_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_mortar_down_an.reset();
+                    } else {
+                        aim_mortar_up_an.reset();
+                    }
+                } else {
+                    aim_mortar_an.reset();
+                }
+                break;
+            case GREEN_GRENADE:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_grn_up_an.reset();
+                    } else {
+                        aim_grn_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_grn_down_an.reset();
+                    } else {
+                        aim_grn_up_an.reset();
+                    }
+                } else {
+                    aim_grn_an.reset();
+                }
+                break;
+            case RED_GRENADE:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_cls_up_an.reset();
+                    } else {
+                        aim_cls_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_cls_down_an.reset();
+                    } else {
+                        aim_cls_up_an.reset();
+                    }
+                } else {
+                    aim_cls_an.reset();
+                }
+                break;
+            case BANANA:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_ban_up_an.reset();
+                    } else {
+                        aim_ban_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_ban_down_an.reset();
+                    } else {
+                        aim_ban_up_an.reset();
+                    }
+                } else {
+                    aim_ban_an.reset();
+                }
+                break;
+            case HOLY_GRENADE:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_hgr_up_an.reset();
+                    } else {
+                        aim_hgr_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_hgr_down_an.reset();
+                    } else {
+                        aim_hgr_up_an.reset();
+                    }
+                } else {
+                    aim_hgr_an.reset();
+                }
+                break;
+            case BASEBALL_BAT:
+                if(old_angle > 0) {
+                    if (!old_facing_left) {
+                        aim_bsb_up_an.reset();
+                    } else {
+                        aim_bsb_down_an.reset();
+                    }
+                } else if (old_angle < 0) {
+                    if (!old_facing_left) {
+                        aim_bsb_down_an.reset();
+                    } else {
+                        aim_bsb_up_an.reset();
+                    }
+                } else {
+                    aim_bsb_an.reset();
+                }
+                break;
+            default:
+                break;
+        }
+        break;
     default:
         break;
     }
@@ -692,7 +827,7 @@ void WormAnimations::reset_old_an(int old_state, int old_angle, bool old_facing_
 
 void WormAnimations::update_from_snapshot(int state, int old_state, int angle, int old_angle, bool facing_left, bool old_facing_left, TOOLS weapon, int old_aiming_angle, int new_aiming_angle) {
     if(state != old_state) {
-        reset_old_an(old_state, old_angle, old_facing_left);
+        reset_old_an(old_state, old_angle, old_facing_left, old_aiming_angle);
     }
     if((is_action_state(state)) and (!lingering_animations.empty())) {
         for (auto& an : lingering_animations) {
@@ -779,6 +914,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_baz_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case MORTAR:
             if(angle > 0) {
@@ -796,6 +932,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_mortar_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case GREEN_GRENADE:
             if(angle > 0) {
@@ -813,6 +950,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_grn_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case RED_GRENADE:
             if(angle > 0) {
@@ -830,6 +968,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_cls_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case BANANA:
             if(angle > 0) {
@@ -847,6 +986,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_ban_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case HOLY_GRENADE:
             if(angle > 0) {
@@ -864,6 +1004,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_hgr_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         case BASEBALL_BAT:
             if(angle > 0) {
@@ -881,6 +1022,7 @@ void WormAnimations::update_from_snapshot(int state, int old_state, int angle, i
             } else {
                 check_aiming_angle(aim_bsb_an, new_aiming_angle, old_aiming_angle);
             }
+            old_weapon = weapon;
             break;
         default:
             break;
@@ -928,6 +1070,9 @@ void WormAnimations::update_from_iter(int state, int angle, bool facing_left) {
         break;
     case DEAD:
         dead_an.update_once();
+        break;
+    case WINNER:
+        winner_an.update_once();
         break;
     default:
         break;

@@ -16,4 +16,9 @@ void AnimationScroll::update_once_down() {
     }
 }
 
+void AnimationScroll::reset() {
+    this->currentFrame = 16;
+    this->actual_time_between_frames = this->time_between_frames;
+}
+
 AnimationScroll::~AnimationScroll() {}

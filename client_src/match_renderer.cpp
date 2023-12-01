@@ -75,6 +75,26 @@ bool MatchRenderer::handleEvents(Match& match) {
                         }
                         break;
                     }
+                    case SDLK_1: {
+                        match.handle_1_button();
+                        break;
+                    }
+                    case SDLK_2: {
+                        match.handle_2_button();
+                        break;
+                    }
+                    case SDLK_3: {
+                        match.handle_3_button();
+                        break;
+                    }
+                    case SDLK_4: {
+                        match.handle_4_button();
+                        break;
+                    }
+                    case SDLK_5: {
+                        match.handle_5_button();
+                        break;
+                    }
                 }
             }  // Fin KEY_DOWN
             break;
