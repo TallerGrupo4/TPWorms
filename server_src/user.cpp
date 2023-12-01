@@ -60,6 +60,7 @@ void User::handle_starting_match() {
                     // TODO: KILL THIS CORRUPTED CLIENT
                     continue;
                 }
+                std::cout << "Starting match with id: " << command.get_match_id() << std::endl;
                 monitor_matches.start_match(match_id, command.get_map_name());
                 std::cout << "Match started with id: " << match_id << std::endl;
                 return;

@@ -8,7 +8,7 @@
 
 class Map {
     public:
-    // std::string name;
+    std::string name;
     int width;
     int height;
     int amount_of_worms;
@@ -16,7 +16,7 @@ class Map {
     std::vector<b2Vec2> spawn_points;
     float water_level;
 
-    Map(int width , int height , int amount_of_worms , std::vector<PlatformSnapshot> platforms , std::vector<b2Vec2> spawn_points, float water_level/*, std::string name*/);
+    Map(int width , int height , int amount_of_worms , std::vector<PlatformSnapshot> platforms , std::vector<b2Vec2> spawn_points, float water_level, std::string name);
 
     Snapshot get_snapshot();
 

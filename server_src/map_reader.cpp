@@ -6,14 +6,14 @@ Map  MapReader::read_map () {
     std::vector<PlatformSnapshot> platforms_snap = read_platforms();
     std::vector<b2Vec2> spawn_points = read_spawn_points();
 
-    // std::string name = node["name"].as<std::string>();
+    std::string name = node["name"].as<std::string>();
     YAML::Node dimensions = node["dimensions"];
     int height = dimensions[0]["height"].as<int>();
     int width = dimensions[0]["width"].as<int>();
     int amount_of_worms = dimensions[0]["amount_of_worms"].as<int>();
     int water_level = dimensions[0]["water_level"].as<float>();
 
-    return Map(width, height, amount_of_worms, platforms_snap, spawn_points, water_level/*, name*/);
+    return Map(width, height, amount_of_worms, platforms_snap, spawn_points, water_level, name);
 }
 
 std::vector<PlatformSnapshot>  MapReader::read_platforms(){

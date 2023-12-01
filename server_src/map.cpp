@@ -1,8 +1,8 @@
 #include "map.h"
 
 
-Map::Map(int width , int height , int amount_of_worms , std::vector<PlatformSnapshot> platforms , std::vector<b2Vec2> spawn_points, float water_level/*, std::string name*/):
-    // name(name),
+Map::Map(int width , int height , int amount_of_worms , std::vector<PlatformSnapshot> platforms , std::vector<b2Vec2> spawn_points, float water_level, std::string name):
+    name(name),
     width(width),
     height(height),
     amount_of_worms(amount_of_worms),
@@ -17,7 +17,6 @@ Snapshot Map::get_snapshot(){
     return snapshot;
 }
 
-// Map() {};
 Map::~Map() {};
 
 

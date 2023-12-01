@@ -1,4 +1,4 @@
-name: map3_building_platforms
+name: map4_building_platforms
 
 platforms:
 - type: Short25
@@ -67,7 +67,12 @@ platforms:
   width: 6
   height: 0.8
 - type: ShortVertical
-  x: 15
+  x: 14
+  y: -14
+  width: 0.8
+  height: 3
+- type: ShortVertical
+  x: 7
   y: -14
   width: 0.8
   height: 3
@@ -91,6 +96,11 @@ platforms:
   y: -9
   width: 0.8
   height: 3
+- type: ShortVertical
+  x: -7
+  y: -9
+  width: 0.8
+  height: 3
 - type: LargeHorizontal
   x: -14
   y: -14
@@ -98,6 +108,11 @@ platforms:
   height: 0.8
 - type: ShortVertical
   x: -18
+  y: -13
+  width: 0.8
+  height: 3
+- type: ShortVertical
+  x: -9
   y: -13
   width: 0.8
   height: 3

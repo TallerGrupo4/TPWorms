@@ -116,7 +116,6 @@ void Game::remove_army(char army_id){
             for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
                 worm->set_state(DEAD);
             }
-            // teams.erase(team.first);
             return;
         }
     }
@@ -248,19 +247,13 @@ bool Game::check_end_game() {
             }
         }
     }
-    if (no_worms_left) {
-        // End of the game because everyone left
+    if (no_worms_left || alive_teams == 1) {
         game_ended = true;
-    } else if (alive_teams == 1) {
-        // End of the game because only one team is alive
-        game_ended = true;
-        // send winner team
     }
     return game_ended;
 }
 
 void Game::turn_clean_up(){
-    // printf("cleaning time: %d\n" , cleaning_time);
     for (auto& team: teams) {
         for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
             // I think this if DEAD is not necessary anymore
@@ -301,7 +294,6 @@ void Game::manage_turn() {
             std::cerr << err.what() << std::endl;
             // End of the game
         }
-        // std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
         turn_time = TURN_TIME;
         return;
     }
@@ -309,10 +301,8 @@ void Game::manage_turn() {
     bool worm_is_dead = false;
     do {
         team_turn++;
-        // std::cout << "Team turn: " << team_turn << std::endl;
         if (team_turn > ((int) teams.size() - 1)) {
             // End of round
-            // std::cout << "End of round" << std::endl;
             team_turn = 0;
         }
         try {
@@ -323,8 +313,6 @@ void Game::manage_turn() {
             continue;
         }
         worm_is_dead = teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD;
-        // std::cout << "Current turn player id: " << current_turn_player_id << std::endl;
-        // std::cout << "Team turn: " << team_turn << std::endl;
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
@@ -339,7 +327,6 @@ Snapshot Game::get_end_game_snapshot() {
             worm->state = WINNER;
             worms.push_back(worm->get_snapshot());
         }
-        // worms.push_back(pair.second->get_snapshot());
     }
     Snapshot snapshot(worms, {} , {}, {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
