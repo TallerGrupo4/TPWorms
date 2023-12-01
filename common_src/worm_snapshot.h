@@ -14,10 +14,11 @@ public:
     int state;
     char team_id;
     int aiming_angle;
+    int current_ammo;
 
 
     WormSnapshot(char id, float pos_x, float pos_y, int angle, int max_health, int health, char direction, int weapon,
-                 int state, char team_id, int aiming_angle):
+                 int state, char team_id, int aiming_angle, int current_ammo):
             id(id),
             pos_x(pos_x),
             pos_y(pos_y),
@@ -28,7 +29,8 @@ public:
             weapon(weapon),
             state(state), 
             team_id(team_id),
-            aiming_angle(aiming_angle) {};
+            aiming_angle(aiming_angle),
+            current_ammo(current_ammo) {};
     ~WormSnapshot(){};
 };
 
