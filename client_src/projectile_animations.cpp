@@ -20,7 +20,7 @@ void ProjectileAnimations::render(ProjectileStates state, ProjectileTypes type, 
                        int above_offset,
                        int bellow_offset) {
 
-    SDL_RendererFlip flip = facing_left ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
     switch (state) {
     case ALIVE:
         switch (type) {
