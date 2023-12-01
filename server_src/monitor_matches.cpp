@@ -29,6 +29,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
         map_names.push_back(std::to_string(map.first));
+        // map_names.push_back(map.second.name);
     }
 
     kill_dead_matches();
@@ -45,6 +46,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
         map_names.push_back(std::to_string(map.first));
+        // map_names.push_back(map.second.name);
     }
     return matches[match_id]->get_queue();
 }

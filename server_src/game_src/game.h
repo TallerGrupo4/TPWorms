@@ -24,7 +24,6 @@ class Game {
     MyFilter filter;
     std::vector<b2Vec2> spawn_points;
     std::map<uint8_t, Team> teams;
-    // std::unordered_set<std::shared_ptr<Projectile>> projectiles;
     ProjectileManager projectile_manager;
     int current_turn_player_id;
     int turn_time;
@@ -49,6 +48,8 @@ class Game {
     void manage_turn();
 
     void turn_clean_up();
+
+    std::vector<WormSnapshot> assign_worms_to_teams(Map& map, std::vector<b2Vec2>& current_spawn_points, std::map<char, std::vector<char>>& match_teams, int number_of_players);
 
 
 public:

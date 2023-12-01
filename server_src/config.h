@@ -11,6 +11,10 @@ public:
         return instance;
     }
 
+    int get_extra_health() const {
+        return extra_health;
+    }
+
     int get_max_players() const {
         return max_players;
     }
@@ -283,6 +287,7 @@ private:
             worm_friction = config["worm_friction"].as<float>();
             // World
             start_life = config["start_life"].as<int>();
+            extra_health = config["extra_health"].as<int>();
             null_state = config["null_state"].as<int>();
             initial_worms_turn = config["initial_worms_turn"].as<int>();
             turn_time = config["turn_time"].as<int>();
@@ -370,6 +375,7 @@ private:
     float worm_height;
     float worm_friction;
     int start_life;
+    int extra_health;
     int null_state;
     int initial_worms_turn;
     int turn_time;

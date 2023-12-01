@@ -8,6 +8,7 @@
 
 // #include "weapons.h"
 
+#define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
 Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
     world.SetContactListener(&listener);
@@ -20,47 +21,43 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     water_level = map.water_level;
     spawn_points = map.spawn_points;
 
-
-    // Assign teams
-    std::vector <WormSnapshot> wormsSnapshots;
-    // We should assign worms to each team (client) until there is no more worms to assign.
-    // Now we are assigning all the amount_of_worms to each team (client).
     std::vector<b2Vec2> current_spawn_points = map.spawn_points;
+    std::vector<WormSnapshot> worm_snaps =  assign_worms_to_teams(map, current_spawn_points, match_teams , number_of_players);
+
+    current_turn_player_id = teams[0].get_next_player_id();
+
+    snapshot.worms = worm_snaps;
+    return snapshot;
+}
+
+std::vector<WormSnapshot> Game::assign_worms_to_teams(Map& map, std::vector<b2Vec2>& current_spawn_points, std::map<char, std::vector<char>>& match_teams, int number_of_players) {
+    std::vector<WormSnapshot> wormsSnapshots;
     int current_id = 0;
+
     int amount_of_worms_per_team = std::floor(map.amount_of_worms / number_of_players);
     int remainder = map.amount_of_worms % number_of_players;
+    
     for (int team_id = 0; team_id < number_of_players; team_id++) {
         for (int i = 0; i < amount_of_worms_per_team; i++) {
             add_player(current_id, team_id, current_spawn_points);
             wormsSnapshots.push_back(teams[team_id].get_worm(current_id)->get_snapshot());
-            // teams[team_id].push_back(players[current_id]);
             match_teams[team_id].push_back(current_id);
             current_id++;
         }
     }
-    for (int i = 0; i < remainder; i++) {
-        add_player(current_id, i, current_spawn_points);
-        wormsSnapshots.push_back(teams[i].get_worm(current_id)->get_snapshot());
-        // teams[i].push_back(players[current_id]);
-        match_teams[i].push_back(current_id);
-        current_id++;
-    }
-    int amount_of_teams_with_less_worms = number_of_players - remainder;
-    if (amount_of_teams_with_less_worms != number_of_players) {
-        for (int i = 0; i < amount_of_teams_with_less_worms; i++) {
-            std::cout << "Add health to team: " << remainder + i << std::endl;
-            // add_health_to_team(teams[remainder + i]);
+    for ( int i = 0 ; i < number_of_players; i++) {
+        if (i >= remainder) {
+            teams[i].add_health_to_worms(EXTRA_HEALTH);
+        } else {
+            add_player(current_id, i, current_spawn_points);
+            wormsSnapshots.push_back(teams[i].get_worm(current_id)->get_snapshot());
+            match_teams[i].push_back(current_id);
+            current_id++;
         }
     }
-    try {
-        current_turn_player_id = teams[0].get_next_player_id();
-    } catch (const NoWormsLeft& err) {
-        // This should never happen, throw exception
-        std::cerr << err.what() << std::endl;
-    }
-    snapshot.worms = wormsSnapshots;
-    return snapshot;
+    return wormsSnapshots;
 }
+
 
 void Game::add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_points) { 
     int rand = std::rand() % spawn_points.size();

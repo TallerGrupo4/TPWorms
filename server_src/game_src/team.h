@@ -28,6 +28,8 @@ public:
     
     std::list<std::shared_ptr<Worm>>& get_worms();
 
+    void add_health_to_worms(int health);
+
     ~Team();
 };
 
