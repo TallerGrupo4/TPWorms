@@ -17,7 +17,7 @@ public:
 
     void parse_projectile_mesures(float& x, float& y, float& angle, float& radius);
 
-    void parse_provision_box_mesures(float& x, float& y);
+    void parse_provision_box_mesures(float& x, float& y, float& width, float& height);
 
     void parse_position_form_shoot(float& x, float& y);
 

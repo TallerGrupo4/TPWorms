@@ -299,6 +299,7 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         int state[1];
         char team_id[1];
         int aiming_angle[1];
+        int ammo[1];
         socket.recvall(id, 1, &was_closed);
     // if (was_closed) throw WasClosed;
         socket.recvall(pos_x, 4, &was_closed);
@@ -321,6 +322,7 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
     // if (was_closed) throw WasClosed;
         socket.recvall(aiming_angle, 4, &was_closed);
     // if (was_closed) throw WasClosed;
+        socket.recvall(ammo, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
@@ -332,7 +334,8 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         weapon[0] = ntohl(weapon[0]);
         state[0] = ntohl(state[0]);
         aiming_angle[0] = ntohl(aiming_angle[0]);
-        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0]);
+        ammo[0] = ntohl(ammo[0]);
+        WormSnapshot worm(id[0], _pos_x, _pos_y, angle[0], max_health[0], health[0], direction[0], weapon[0], state[0], team_id[0], aiming_angle[0], ammo[0]);
         snapshot.worms.push_back(worm);
     }
 }
@@ -352,22 +355,30 @@ void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
     uint8_t num_of_provision_boxes[1];
     socket.recvall(num_of_provision_boxes, 1, &was_closed);
     for (int i = 0; i < num_of_provision_boxes[0]; i++) {
-        char type[1];
+        BoxType type[1];
         int pos_x[1];
         int pos_y[1];
         char id[1];
-        BoxType state[1];
+        BoxState state[1];
+        int width[1];
+        int height[1];
         socket.recvall(type, 1, &was_closed);
         socket.recvall(pos_x, 4, &was_closed);
         socket.recvall(pos_y, 4, &was_closed);
         socket.recvall(id, 1, &was_closed);
         socket.recvall(state, 1, &was_closed);
+        socket.recvall(width, 4, &was_closed);
+        socket.recvall(height, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
+        width[0] = ntohl(width[0]);
+        height[0] = ntohl(height[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);
-        parser.parse_provision_box_mesures(_pos_x, _pos_y);
-        ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0]);
+        float _width = static_cast<float>(width[0]);
+        float _height = static_cast<float>(height[0]);
+        parser.parse_provision_box_mesures(_pos_x, _pos_y, _width, _height);
+        ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0], _width, _height);
         snapshot.provision_boxes.push_back(provision_box);
     }
 }

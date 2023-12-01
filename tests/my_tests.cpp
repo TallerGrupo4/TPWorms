@@ -205,8 +205,8 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
     Snapshot snapshot_to_send(worms, {}, {}, {});
     snapshot_to_send.my_army = {{1, {1}}};
@@ -217,6 +217,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
     ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
     ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.worms.at(0).team_id, 1);
+    ASSERT_EQ(snapshot_received.worms.at(0).ammo, 1);
     ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
     ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
     ASSERT_EQ(snapshot_received.worms.at(1).pos_x, 2 * PIX_PER_METER);
@@ -232,7 +233,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_platforms_with_ma
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
     PlatformSnapshot platform_snapshot2(LargeHorizontal, 2, 2, PLAT_BIG, PLAT_HEIGHT);
     std::vector<PlatformSnapshot> platforms = {platform_snapshot, platform_snapshot2};
@@ -452,23 +453,25 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_provision_boxes) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    ProvisionBoxSnapshot provision_box_snapshot(1, 2, 3, 4, AMMO_BOX);
-    ProvisionBoxSnapshot provision_box_snapshot2(12, 12, 12, 12, HEALTH_BOX);
+    ProvisionBoxSnapshot provision_box_snapshot(AMMO_BOX, 2, 3, 4, PICKED, 5, 6);
+    ProvisionBoxSnapshot provision_box_snapshot2(HEALTH_BOX, 12, 12, 12, UNPICKED, 12, 12);
     std::vector<ProvisionBoxSnapshot> provision_boxes = {provision_box_snapshot, provision_box_snapshot2};
     Snapshot snapshot_to_send({}, {}, {}, provision_boxes);
     protocol_server.send_snapshot(snapshot_to_send);
     Snapshot snapshot_received = protocol_client.recv_snapshot();
     ASSERT_EQ(snapshot_received.provision_boxes.size(), 2);
-    ASSERT_EQ(snapshot_received.provision_boxes.at(0).state, AMMO_BOX);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(0).state, PICKED);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).pos_x, 2 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).pos_y, 3 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(0).id, 4);
-    ASSERT_EQ(snapshot_received.provision_boxes.at(0).type, 1);
-    ASSERT_EQ(snapshot_received.provision_boxes.at(1).state, HEALTH_BOX);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(0).type, AMMO_BOX);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(0).height, 6 * PIX_PER_METER);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).state, UNPICKED);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).width, 12 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(1).pos_x, 12 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(1).pos_y, 12 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.provision_boxes.at(1).id, 12);
-    ASSERT_EQ(snapshot_received.provision_boxes.at(1).type, 12);
+    ASSERT_EQ(snapshot_received.provision_boxes.at(1).type, HEALTH_BOX);
 }
 
 

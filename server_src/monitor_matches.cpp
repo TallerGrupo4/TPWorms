@@ -13,7 +13,8 @@ MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
 
     for (auto& route: routes) {
         MapReader reader(route);
-        maps[map_id++] = reader.read_map();
+        Map map = reader.read_map();
+        maps[map.name] = map;
     }
 }
 
@@ -28,8 +29,8 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
-        map_names.push_back(std::to_string(map.first));
-        // map_names.push_back(map.second.name);
+        // map_names.push_back(std::to_string(map.first));
+        map_names.push_back(map.second.name);
     }
 
     kill_dead_matches();
@@ -45,8 +46,8 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
-        map_names.push_back(std::to_string(map.first));
-        // map_names.push_back(map.second.name);
+        // map_names.push_back(std::to_string(map.first));
+        map_names.push_back(map.second.name);
     }
     return matches[match_id]->get_queue();
 }
@@ -64,6 +65,7 @@ std::map<uint, std::string> MonitorMatches::list_matches() {
 
 void MonitorMatches::stop() {
     std::unique_lock<std::mutex> lock(m);
+    kill_dead_matches();
     for (auto& match: matches) {
         match.second->stop();
         match.second->join();
@@ -77,10 +79,10 @@ void MonitorMatches::start_match(uint match_id, std::string map_name) {
     if (matches[match_id]->has_started())
         throw MatchAlreadyStarted();
     // Map's key should be a string but for now it is an uint
-    uint map_name_int = std::stoi(map_name);
-    if (maps.find(std::stoi(map_name)) == maps.end())
+    // uint map_name_int = std::stoi(map_name);
+    if (maps.find(map_name) == maps.end())
         throw MapNotFound();
-    matches[match_id]->start_game(maps.at(map_name_int));
+    matches[match_id]->start_game(maps.at(map_name));
 }
 
 uint8_t MonitorMatches::get_number_of_players(uint match_id) {
@@ -93,7 +95,6 @@ uint8_t MonitorMatches::get_number_of_players(uint match_id) {
 void MonitorMatches::kill_dead_matches() {
     std::vector<uint> matches_to_delete;
     for (auto& match: matches) {
-        std::cout << "Checking match with id: " << match.first << std::endl;
         if (match.second->has_ended()) {
             match.second->join();
             matches_to_delete.push_back(match.first);

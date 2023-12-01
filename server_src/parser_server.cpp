@@ -37,9 +37,11 @@ void ParserServer::parse_projectile_mesures(float& x, float& y, float& angle, fl
     radius = apply_multiplier(radius);
 }
 
-void ParserServer::parse_provision_box_mesures(float& x, float& y) {
+void ParserServer::parse_provision_box_mesures(float& x, float& y, float& width, float& height) {
     x = apply_multiplier(x);
     y = apply_multiplier(y);
+    width = apply_multiplier(width);
+    height = apply_multiplier(height);
 }
 
 void ParserServer::parse_position_form_shoot(float& x, float& y) {

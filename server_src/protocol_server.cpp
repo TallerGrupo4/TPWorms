@@ -380,6 +380,11 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
         if (socket.sendall(aiming_angle, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
+        int ammo[1] = {worm.ammo};
+        ammo[0] = htonl(ammo[0]);
+        if (socket.sendall(ammo, 4, &was_closed) < 0) {
+            return SOCKET_FAILED;
+        }
     }
     return 1;
 }
@@ -427,8 +432,8 @@ void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& pro
     uint8_t num_of_provision_boxes[1] = {static_cast<uint8_t>(provision_boxes.size())};
     socket.sendall(num_of_provision_boxes, 1, &was_closed);
     for (auto& provision_box : provision_boxes) {
-        parser.parse_provision_box_mesures(provision_box.pos_x, provision_box.pos_y);
-        char type[1] = {provision_box.type};
+        parser.parse_provision_box_mesures(provision_box.pos_x, provision_box.pos_y, provision_box.height, provision_box.width);
+        BoxType type[1] = {provision_box.type};
         socket.sendall(type, 1, &was_closed);
         int pos_x[1] = {static_cast<int>(provision_box.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
@@ -440,8 +445,14 @@ void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& pro
         // socket.sendall(body_type, 1, &was_closed);
         char id[1] = {provision_box.id};
         socket.sendall(id, 1, &was_closed);
-        BoxType state[1] = {provision_box.state};
+        BoxState state[1] = {provision_box.state};
         socket.sendall(state, 1, &was_closed);
+        int width[1] = {static_cast<int>(provision_box.width)};
+        width[0] = htonl(width[0]);
+        socket.sendall(width, 4, &was_closed);
+        int height[1] = {static_cast<int>(provision_box.height)};
+        height[0] = htonl(height[0]);
+        socket.sendall(height, 4, &was_closed);
     }
 }
 
