@@ -221,6 +221,9 @@ void Game::step(int it) {
 
     if (turn_time > 0){
         turn_time -= it;
+        if (teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD){
+            manage_turn();
+        }
     } else {
         if (!turn_cleaning ){
             cleaning_time = 1 * FPS;
@@ -231,7 +234,6 @@ void Game::step(int it) {
             manage_turn();
         }
     }
-    // printf("turn time: %d\n", turn_time);
 }
 
 bool Game::check_end_game() {
