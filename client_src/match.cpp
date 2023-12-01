@@ -119,6 +119,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     char worm_turn_army_id = worms_map.at(worm_turn_id)->get_army_id();
     camera.update_turn_weapon(worms_map.at(worm_turn_id)->get_weapon());
     camera.set_army_turn(worm_turn_army_id);
+    camera.update_armies_health(snpsht.armies_health);
 }
 
 bool Match::get_next_target(Target& new_target) {

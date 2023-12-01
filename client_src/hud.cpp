@@ -101,6 +101,17 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
     }
 }
 
+void Hud::render_armies_health(SDL2pp::Renderer& renderer, int army_health_pos_y) {
+    int gap = 10;
+    int health_pos_x = gap;
+    int health_pos_y = army_health_pos_y;
+    for (const auto& pair : this->armies_health_texts) {
+        SDL2pp::Texture army_health_text_texture(renderer, *pair.second);
+        renderer.Copy(army_health_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(health_pos_x, health_pos_y, army_health_text_texture.GetWidth(), army_health_text_texture.GetHeight()));
+        health_pos_y += army_health_text_texture.GetHeight() + gap;
+    }
+}
+
 void Hud::render_weapon_icons(SDL2pp::Renderer& renderer) {
     int gap = 10;
     int icons_pos_x = renderer.GetLogicalWidth() - gap - (*this->bazooka_icon_on).GetWidth(); 
@@ -207,15 +218,21 @@ void Hud::render(SDL2pp::Renderer& renderer) {
             // marker_an->render(renderer, SDL2pp::Rect(marker_x/* - this->target.x_offset*/ - marker_an->get_frame_size()/2, marker_y/* - this->target.y_offset*/ - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
             marker_an->render(renderer, SDL2pp::Rect(marker_x - this->target.x_offset - marker_an->get_frame_size()/2, marker_y - this->target.y_offset - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
         }
+        int gap = 10;
+        int turn_time_pos_y = gap;
+        int turn_army_pos_y = turn_time_pos_y + (*this->turn_time_text).GetHeight() + gap;
+        int timer_pos_y = renderer.GetLogicalHeight() - gap - (*this->timer_text).GetHeight();
+        int charging_pos_y = timer_pos_y - gap - (*this->charging_text).GetHeight();
         SDL2pp::Texture turn_time_text_texture(renderer, *this->turn_time_text);
-        renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, 0, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
+        renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_time_pos_y, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
         SDL2pp::Texture turn_army_text_texture(renderer, *this->turn_army_text);
-        renderer.Copy(turn_army_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, (*this->turn_time_text).GetHeight() + 10, (*this->turn_army_text).GetWidth(), (*this->turn_army_text).GetHeight()));  
+        renderer.Copy(turn_army_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_army_pos_y, (*this->turn_army_text).GetWidth(), (*this->turn_army_text).GetHeight()));  
         SDL2pp::Texture timer_text_texture(renderer, *this->timer_text);
-        renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, renderer.GetLogicalHeight()-10 - (*this->timer_text).GetHeight(), (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
+        renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, timer_pos_y, (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
         SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
-        renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(0, renderer.GetLogicalHeight() - (*this->timer_text).GetHeight() - 20 - (*this->charging_text).GetHeight(), (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
+        renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, charging_pos_y, (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
         render_weapon_icons(renderer);
+        render_armies_health(renderer, turn_army_pos_y + (*this->turn_army_text).GetHeight() + gap*3);
     }
 }
 
@@ -225,6 +242,43 @@ void Hud::update_target(Target target) {
 
 void Hud::update_turn_weapon(TOOLS turn_worm_weapon) {
     this->turn_worm_weapon = turn_worm_weapon;
+}
+
+void Hud::update_armies_health(std::map<char, int>& armies_health) {
+    for (const auto& pair : armies_health) {
+        char army_id = pair.first;
+        int army_health = pair.second;
+        SDL2pp::Color army_color = WHITE;
+         std::string army_health_text_str;
+        if (army_id == this->my_army_id) {
+            army_health_text_str = "My Army Health: " + std::to_string(army_health);
+            army_color = my_army_color;
+        } else {
+            army_health_text_str = "Player " + std::to_string(army_id+1) + " Army Health: " + std::to_string(army_health);
+            switch (army_id) {
+            case 0:
+                army_color = BLUE;
+                break;
+            case 1:
+                army_color = RED;
+                break;
+            case 2:
+                army_color = YELLOW;
+                break;
+            case 3:
+                army_color = GREEN;
+                break;            
+            default:
+                army_color = ORANGE;
+                break;
+            }
+        }
+        if(this->armies_health_texts.find(army_id) == this->armies_health_texts.end()) {
+            this->armies_health_texts[army_id] = std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 12).RenderText_Blended(army_health_text_str, army_color));
+        } else {
+            *this->armies_health_texts[army_id] = SDL2pp::Font(WORMS_FONT_PATH, 12).RenderText_Blended(army_health_text_str, army_color);
+        }
+    }
 }
 
 void Hud::update_from_iter() {

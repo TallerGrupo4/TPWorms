@@ -1,6 +1,8 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <map>
+
 #include <SDL2pp/SDL2pp.hh>
 
 #include "constantes_cliente.h"
@@ -23,6 +25,7 @@ public:
     void update_hud();
     void update_marker(int x, int y);
     void update_turn_weapon(TOOLS turn_worm_weapon);
+    void update_armies_health(std::map<char, int>& armies_health);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_army_turn(char worm_turn_army_id);
     void set_marker_position(int x, int y);

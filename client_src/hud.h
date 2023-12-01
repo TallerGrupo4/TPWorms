@@ -2,6 +2,7 @@
 #define HUD_H
 
 #include <memory>
+#include <map>
 #include <SDL2pp/SDL2pp.hh>
 
 #include "constantes_cliente.h"
@@ -18,6 +19,7 @@ private:
     std::shared_ptr<SDL2pp::Surface> charging_text;
     std::shared_ptr<SDL2pp::Surface> turn_army_text;
     std::shared_ptr<SDL2pp::Surface> end_game_text;
+    std::map<char,std::shared_ptr<SDL2pp::Surface>> armies_health_texts;
     /*WEAPON ICONS*/
     std::shared_ptr<SDL2pp::Texture> bazooka_icon_on;
     std::shared_ptr<SDL2pp::Texture> bazooka_icon_off;
@@ -49,11 +51,13 @@ private:
     int marker_y;
 
     void render_weapon_icons(SDL2pp::Renderer& renderer);
+    void render_armies_health(SDL2pp::Renderer& renderer, int army_health_pos_y);
 public:
     explicit Hud();
     explicit Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uint turn_time, char my_army_id);
     void update_target(Target target);
     void update_turn_weapon(TOOLS turn_worm_weapon);
+    void update_armies_health(std::map<char, int>& armies_health);
     void update_from_iter();
     void update_marker(int x, int y);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
