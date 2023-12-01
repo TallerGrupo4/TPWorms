@@ -14,6 +14,7 @@ worm_friction: 1
 
 # World
 start_life: 100
+extra_health: 25
 null_state: 0
 initial_worms_turn: 0
 turn_time: 60
