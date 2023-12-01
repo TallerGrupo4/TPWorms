@@ -387,8 +387,10 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp:
             }
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
-            int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
-            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2) + 184;
+            // int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
+            // int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2) + 184;
+            int target_x = 1;
+            int target_y = 30;
             std::cout << "Target x: " << target_x << " Target y: " << target_y << "\n";
             action = std::make_shared<ActionShooting>(0, worm_turn_id, target_x, target_y);
             camera.take_out_marker();
