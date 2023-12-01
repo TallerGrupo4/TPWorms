@@ -5,14 +5,16 @@
 
 class ProvisionBoxSnapshot {
 public:
-    char type;
+    BoxType type;
     float pos_x;
     float pos_y;
     char id;
-    BoxType state;
+    BoxState state;
+    float width;
+    float height;
 
-    ProvisionBoxSnapshot(char type, float pos_x, float pos_y, char id, BoxType state):
-            type(type), pos_x(pos_x), pos_y(pos_y), id(id), state(state) {};
+    ProvisionBoxSnapshot(BoxType type, float pos_x, float pos_y, char id, BoxState state, float width, float height):
+            type(type), pos_x(pos_x), pos_y(pos_y), id(id), state(state), width(width), height(height) {};
 };
 
 #endif //PROVISION_BOX_SNAPSHOT_H

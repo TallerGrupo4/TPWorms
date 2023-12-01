@@ -355,22 +355,30 @@ void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
     uint8_t num_of_provision_boxes[1];
     socket.recvall(num_of_provision_boxes, 1, &was_closed);
     for (int i = 0; i < num_of_provision_boxes[0]; i++) {
-        char type[1];
+        BoxType type[1];
         int pos_x[1];
         int pos_y[1];
         char id[1];
-        BoxType state[1];
+        BoxState state[1];
+        int width[1];
+        int height[1];
         socket.recvall(type, 1, &was_closed);
         socket.recvall(pos_x, 4, &was_closed);
         socket.recvall(pos_y, 4, &was_closed);
         socket.recvall(id, 1, &was_closed);
         socket.recvall(state, 1, &was_closed);
+        socket.recvall(width, 4, &was_closed);
+        socket.recvall(height, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
+        width[0] = ntohl(width[0]);
+        height[0] = ntohl(height[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);
-        parser.parse_provision_box_mesures(_pos_x, _pos_y);
-        ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0]);
+        float _width = static_cast<float>(width[0]);
+        float _height = static_cast<float>(height[0]);
+        parser.parse_provision_box_mesures(_pos_x, _pos_y, _width, _height);
+        ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0], _width, _height);
         snapshot.provision_boxes.push_back(provision_box);
     }
 }

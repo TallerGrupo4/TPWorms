@@ -99,7 +99,9 @@ void ParserClient::parse_projectile_mesures(float& x, float& y, float& angle, fl
     radius = apply_pix_per_meter_and_multiplier(radius);
 }
 
-void ParserClient::parse_provision_box_mesures(float& x, float& y) {
+void ParserClient::parse_provision_box_mesures(float& x, float& y, float& width, float& height) {
     x = apply_pix_per_meter_and_multiplier(x);
     y = apply_pix_per_meter_and_multiplier(y);
+    width = apply_pix_per_meter_and_multiplier(width);
+    height = apply_pix_per_meter_and_multiplier(height);
 }
