@@ -11,11 +11,11 @@
 
 class Airstrike: public Weapon {
     float get_roof_height(b2Body* worm);
-    Projectile* shoot_airstrike_projectile(b2Body* worm, float x , float y);
+    std::shared_ptr<Projectile> shoot_airstrike_projectile(b2Body* worm, float x , float y);
 
     public:
     Airstrike();
-    void use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles) override;
+    void use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles) override;
     ~Airstrike();
 
 };

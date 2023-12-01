@@ -9,6 +9,7 @@
 #include "../../common_src/snapshot.h"
 #include "game_constants.h"
 #include "tool.h"
+#include "projectile_manager.h"
 #include "../config.h"
 #include "entity.h"
 
@@ -77,7 +78,7 @@ public:
 
     void jump (int dir);
 
-    bool use_tool(int power, float x, float y, int tool,std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    bool use_tool(int power, float x, float y, int tool, ProjectileManager& projectiles);
 
     void aim(int angle_inc, int direction);
 

@@ -27,7 +27,7 @@ float Airstrike::get_roof_height(b2Body* body){
         return max_y;
 }
 
-Projectile* Airstrike::shoot_airstrike_projectile(b2Body* worm, float x, float y){
+std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, float x, float y){
     b2Vec2 pos = b2Vec2(x, y);
 
     b2BodyDef bodyDef;
@@ -45,11 +45,11 @@ Projectile* Airstrike::shoot_airstrike_projectile(b2Body* worm, float x, float y
     body->CreateFixture(&fixture);
 
     body->ApplyLinearImpulseToCenter(b2Vec2(0, -1), true);
-    return new Projectile(body, damage, radius, projectile_type, explosion_type, 0, fragments, -90 * DEGTORAD);
+    return std::make_shared<Projectile>(body, damage, radius, projectile_type, explosion_type, 0, fragments, -90 * DEGTORAD);
 }
 
 
-void Airstrike::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+void Airstrike::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         float roof_height = get_roof_height(worm);
 
         std::vector<float> possible_xs = {-1.5 , -1 , -0.5 , 0 , 0.5 , 1 , 1.5};
@@ -61,8 +61,7 @@ void Airstrike::use(b2Body* worm, int direction, float angle, int time , int pow
             possible_xs.erase(possible_xs.begin() + random);
             random = rand() % possible_ys.size();
             float pos_y = possible_ys[random];
-            Projectile* p = shoot_airstrike_projectile(worm, pos_x + x, roof_height + y);
-            projectiles.insert(std::shared_ptr<Projectile>(p));
+            projectiles.add_projectile(shoot_airstrike_projectile(worm, pos_x + x, roof_height + y));
         }
 }
 

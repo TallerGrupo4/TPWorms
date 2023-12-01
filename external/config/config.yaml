@@ -27,7 +27,7 @@ worm_backflip_hor_speed: 1
 
 explosion_power: 20
 explosion_fragment_power: 5
-projectile_potency: 20
+projectile_potency: 8
 
 # Weapons
 bazooka_damage: 50

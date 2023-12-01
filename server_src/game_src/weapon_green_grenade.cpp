@@ -9,9 +9,9 @@
 
 GreenGrenade::GreenGrenade() : Weapon(GREEN_GRENADE, -1 , -1 , GREEN_GRENADE_DAMAGE, GREEN_GRENADE_RADIUS, 0  , EXPLOSIVE_TIMER, GreenGrenadeProj, false, true, true) {}
 
-void GreenGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+void GreenGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time, GREEN_GRENADE_RESTITUTION, GREEN_GRENADE_DENSITY);
-    projectiles.insert(projectile);
+    projectiles.add_projectile(projectile);
     shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
 }
 

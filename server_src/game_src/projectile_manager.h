@@ -29,6 +29,8 @@ private:
     
     std::unordered_set<std::shared_ptr<Projectile>>& get_projectiles();
 
+    void reset_id();
+
 
 };
 

@@ -36,7 +36,7 @@ void Explosion::apply_explosion(b2Body* body){
                     float explosion_distance = ((body_call->GetPosition())- body->GetPosition()).Length() - WORM_HEIGHT/2.0f;
                     float act_damage = damage - (damage * (explosion_distance/float(radius)));
                     w->apply_damage(act_damage);
-                    float impulse = EXPLOSION_POWER - (EXPLOSION_POWER * (explosion_distance/float(radius)));
+                    float impulse = explosion_power - (explosion_power * (explosion_distance/float(radius)));
                     
                     body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
                 }

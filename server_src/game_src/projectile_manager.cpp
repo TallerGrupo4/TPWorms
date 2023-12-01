@@ -37,7 +37,6 @@ void ProjectileManager::update_post_game(b2World& world){
         world.DestroyBody(projectile->get_body());
         projectiles.erase(projectile);
     }
-    projectile_id = 0;
 }
 
 
@@ -54,6 +53,10 @@ std::vector<ProjectileSnapshot> ProjectileManager::get_projectiles_snapshot(){
         projectiles_snapshot.push_back(projectile->get_snapshot());
     }
     return projectiles_snapshot;
+}
+
+void ProjectileManager::reset_id(){
+    projectile_id = 0;
 }
     
 

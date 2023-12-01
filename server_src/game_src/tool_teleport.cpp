@@ -19,7 +19,7 @@ bool Teleporter::validate_teleport(float x , float y, b2World* world){
     return true;
 }
 
-void Teleporter::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
+void Teleporter::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         printf("Teleporting\n");
         printf("x: %f, y: %f\n", x, y);
         if (!validate_teleport(x, y +PLAT_HEIGHT+0.2, worm->GetWorld() ) && !validate_teleport(x, y - PLAT_HEIGHT - 0.2, worm->GetWorld())){

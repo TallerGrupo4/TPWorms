@@ -90,7 +90,7 @@ void Game::jump_player(int id , int direction){
 
 void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int timer) {
     if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)) {
-        if (worm->use_tool(potency, pos_x, pos_y, timer, projectile_manager.get_projectiles() )){
+        if (worm->use_tool(potency, pos_x, pos_y, timer, projectile_manager)){
         turn_time = 3 * FPS;
         }
     }
@@ -329,7 +329,7 @@ void Game::manage_turn() {
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
-    projectile_id = 0;
+    projectile_manager.reset_id();
 }
 
 Snapshot Game::get_end_game_snapshot() {
