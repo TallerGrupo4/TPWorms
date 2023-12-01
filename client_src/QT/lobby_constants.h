@@ -1,0 +1,8 @@
+#ifndef LOBBY_CONSTANTS_H
+#define LOBBY_CONSTANTS_H
+
+#define MAIN_MENU_BACKGROUND_PATH ASSETS_PATH "/main_menu.png"
+#define MAIN_MENU_BACKGROUND_MUSIC_PATH ASSETS_PATH "/main_menu_music.wav"
+#define MAIN_MENU_BACKGROUND_MUSIC_2_PATH ASSETS_PATH "/main_menu_music_2.mp3"
+
+#endif // LOBBY_CONSTANTS_H

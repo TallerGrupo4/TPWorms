@@ -3,9 +3,10 @@
 #include "constantes_cliente.h"
 Match::Match() {}
 
-Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
+Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer) : 
             bkgrnd(std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer)),
             effects_an(std::make_shared<EffectsAnimations>(renderer, surfaces)),
+            effects_sound(std::make_shared<EffectsSounds>(mixer)),
             my_army_id(snpsht.my_army.begin()->first),
             worm_turn_id(snpsht.turn_time_and_worm_turn.worm_turn),
             turn_time(snpsht.turn_time_and_worm_turn.turn_time/FPS),
@@ -26,32 +27,32 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         switch (worm_snpsht.team_id) {
             case 0 : {
             ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, blue_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, blue_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, blue_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 1 : {
             ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, red_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, red_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, red_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 2 : {
             ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, yellow_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, yellow_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, yellow_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             }
             break;
             case 3 : {
             ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, green_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, green_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, green_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Green;
             }
             break;
             default: {
             ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, orange_widgets, surfaces, renderer, bkgrnd);
+            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, orange_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
             // worm_army_color = Orange;
             }
@@ -69,6 +70,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         if (!snpsht.worms.empty()) {
             char winner_team_id = snpsht.worms.front().team_id;
             camera.set_end_game(winner_team_id);
+            effects_sound->play_match_finnished_sound();
         }
     }
     if (turn_time != (snpsht.turn_time_and_worm_turn.turn_time/FPS)) {
@@ -96,7 +98,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
             //std::cout << "Not found proj from snapshot in map\n";
-            std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, effects_an, surfaces, renderer);
+            std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, effects_an, effects_sound, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
             //std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
@@ -357,10 +359,11 @@ bool Match::handle_down_button(std::shared_ptr<Action>& action) {
     return false;
 }
 
-bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action) {
+bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action, bool first_time_pressed) {
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon() and is_turn_worm_aiming_weapon()) {
-            charge_for_weapon += 1;
+            if (first_time_pressed) effects_sound->play_powerup_sound();
+            charge_for_weapon += 2;
             if(charge_for_weapon == 100) {
                 std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
                 action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
@@ -514,9 +517,10 @@ void Match::handle_mouse_motion(int mouse_x, int mouse_y) {
     }
 }
 
-bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
+bool Match::handle_enter_button(std::shared_ptr<Action>& action, bool first_time_pressed) {
     if(is_turn_worm_in_my_army()) {
         if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
+            if (first_time_pressed) effects_sound->play_worm_jump_sound();
             action = std::make_shared<ActionJump>(worm_turn_id);
             return true;
         }

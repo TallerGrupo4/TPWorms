@@ -16,11 +16,13 @@
 #include "background.h"
 #include "surfaces.h"
 #include "effects_animations.h"
+#include "effects_sounds.h"
 
 class Match {
 private:
     std::shared_ptr<Background> bkgrnd;
     std::shared_ptr<EffectsAnimations> effects_an;
+    std::shared_ptr<EffectsSounds> effects_sound;
     std::map<char, std::shared_ptr<Worm>> worms_map;
     std::map<char, std::shared_ptr<Projectile>> projectiles_map;
     char my_army_id;
@@ -33,7 +35,7 @@ private:
     bool get_next_target(Target& new_target);
 
 public:
-    explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer);
     explicit Match();
     void update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     void update_from_iter(int iter);
@@ -58,7 +60,7 @@ public:
     bool handle_right_button(std::shared_ptr<Action>& action);
     bool handle_up_button(std::shared_ptr<Action>& action);
     bool handle_down_button(std::shared_ptr<Action>& action);
-    bool handle_space_button_pressed(std::shared_ptr<Action>& action);
+    bool handle_space_button_pressed(std::shared_ptr<Action>& action, bool first_time_pressed);
     bool handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp::Renderer& renderer);
     void handle_1_button();
     void handle_2_button();
@@ -70,7 +72,7 @@ public:
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);
     bool handle_mouse_scroll_down(std::shared_ptr<Action>& action);
     void handle_mouse_motion(int mouse_x, int mouse_y);
-    bool handle_enter_button(std::shared_ptr<Action>& action);
+    bool handle_enter_button(std::shared_ptr<Action>& action, bool first_time_pressed);
     bool handle_backspace_button(std::shared_ptr<Action>& action);
 };
 

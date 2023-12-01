@@ -25,6 +25,7 @@ private:
     MatchSurfaces surfaces;
     SDL2pp::SDL sdl;
     SDL2pp::SDLTTF ttf;
+    SDL2pp::Mixer mixer;
     SDL2pp::Window window;
     SDL2pp::Renderer renderer;
     Match match;

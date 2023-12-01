@@ -1,8 +1,9 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd) : 
+Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd) : 
     bkgrnd(bkgrnd),
     effects_an(effects_an),
+    effects_sound(effects_sound),
     worm_an(renderer, surfaces),
     facing_left(worm_snpsht.direction == LEFT ? true : false),
     moving(false),
@@ -106,10 +107,36 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     }
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
-    if (state == DAMAGED) {
+    switch (state) {
+    case DAMAGED:
         effects_an->set_worm_hit_an(renderer, x, y);
-    } else if(state == SHOOTED and old_weapon == TOOLS::BASEBALL_BAT) {
-        effects_an->set_baseball_bat_hit(renderer, x, y);
+        effects_sound->play_worm_impact_sound();
+        break;
+    case SHOOTED:
+        switch (old_weapon) {
+        case TOOLS::BASEBALL_BAT: {
+            int baseball_hit_pos_x = (facing_left ? x - (width/2) : x + (width/2));
+            effects_an->set_baseball_bat_hit(renderer, baseball_hit_pos_x, y);
+            effects_sound->play_baseball_bat_sound();
+            }
+            break;
+        case TOOLS::TELEPORTATION:
+            effects_sound->play_teleport_sound();
+            //add teleportation animation
+            break;
+        case TOOLS::AIRSTRIKE:
+            effects_sound->play_airstrike_active_sound();
+            //add airstrike animation
+            break;
+        default:
+            break;
+        }
+        break;
+    case DEAD:
+        effects_sound->play_worm_death_sound();
+        break;
+    default:
+        break;
     }
     worm_an.update_from_snapshot(state, old_state, angle, old_angle, facing_left, old_facing_left, weapon, old_aiming_angle, aiming_angle);
 }

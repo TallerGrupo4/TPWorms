@@ -9,14 +9,25 @@
 
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(Client& client, bool& exit_succesful, Snapshot& map_snapshot): QMainWindow(nullptr), ui(new Ui::MainWindow), client(client), exit_succesful(exit_succesful), map_recieved(map_snapshot) {
+MainWindow::MainWindow(Client& client, bool& exit_succesful, Snapshot& map_snapshot): QMainWindow(nullptr), ui(new Ui::MainWindow), player(this), playlist(this), client(client), exit_succesful(exit_succesful), map_recieved(map_snapshot) {
     ui->setupUi(this);
     exit_succesful = false;
     // ui->Label_BackgroundImage->setPixmap(QPixmap(":/main_menu.png"));
+    
+    std::string path_to_bkgrnd_img(MAIN_MENU_BACKGROUND_PATH);
+    ui->Label_BackgroundImage->setPixmap(QPixmap(path_to_bkgrnd_img.data()));
 
-    std::string path_to_img(ASSETS_PATH);
-    path_to_img = path_to_img + "/main_menu.png";
-    ui->Label_BackgroundImage->setPixmap(QPixmap(path_to_img.data()));
+
+    QUrl url_to_bkgrnd_music = QUrl::fromLocalFile(QString::fromStdString(MAIN_MENU_BACKGROUND_MUSIC_PATH));
+    QUrl url_to_bkgrnd_music_2 = QUrl::fromLocalFile(QString::fromStdString(MAIN_MENU_BACKGROUND_MUSIC_2_PATH));
+
+    
+    playlist.addMedia(url_to_bkgrnd_music);
+    playlist.addMedia(url_to_bkgrnd_music_2);
+    playlist.setPlaybackMode(QMediaPlaylist::Loop);
+    player.setPlaylist(&playlist);
+    player.play();
+
     ui->MatchOptionsFrame->setVisible(true);
     ui->MatchOptionsFrame->setEnabled(true);
     ui->PreMatchFrame->setVisible(false);

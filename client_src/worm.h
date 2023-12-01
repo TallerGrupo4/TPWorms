@@ -12,6 +12,7 @@
 #include "colordependentwidgets.h"
 #include "worm_animations.h"
 #include "effects_animations.h"
+#include "effects_sounds.h"
 #include "surfaces.h"
 #include "worm_texts.h"
 #include "Animation.h"
@@ -19,7 +20,7 @@
 
 class Worm {
 public:
-    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd);
+    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd);
     ~Worm();
     void update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);
@@ -43,6 +44,7 @@ public:
 private:
     std::shared_ptr<Background> bkgrnd;
     std::shared_ptr<EffectsAnimations> effects_an; 
+    std::shared_ptr<EffectsSounds> effects_sound;
     WormAnimations worm_an;
     bool facing_left;
     bool moving;
