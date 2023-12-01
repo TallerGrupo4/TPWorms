@@ -112,7 +112,7 @@ platforms:
   width: 0.8
   height: 3
 - type: ShortVertical
-  x: -9
+  x: -10
   y: -13
   width: 0.8
   height: 3

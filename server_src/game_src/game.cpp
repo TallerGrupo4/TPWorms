@@ -45,6 +45,7 @@ std::vector<WormSnapshot> Game::assign_worms_to_teams(Map& map, std::vector<b2Ve
             current_id++;
         }
     }
+    if (remainder <= 0) return wormsSnapshots;
     for ( int i = 0 ; i < number_of_players; i++) {
         if (i >= remainder) {
             teams[i].add_health_to_worms(EXTRA_HEALTH);
