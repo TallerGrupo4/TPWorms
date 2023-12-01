@@ -26,8 +26,6 @@ void User::run() {
         sender->start();
         handle_match();
     } catch (const LibError& err) {
-        std::cout << "User connection was closed: "
-                  << err.what() << std::endl;
         _is_dead = true;
         if (queue_match) {
             try {
@@ -35,6 +33,7 @@ void User::run() {
                 queue_match->push(exit_command);
                 sender->stop();
                 sender->join();
+                std::cout << "User has left the match" << std::endl;
             } catch (const PlayerNotFound& e) {
                 // It is an 'expected' error but it should never reach this point
             } catch (const ClosedQueue& e) {

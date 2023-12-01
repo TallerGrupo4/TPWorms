@@ -25,7 +25,7 @@ bool ParserClient::get_degree_of_beam_type(BeamType type, int& degree) {
         case LargeHorizontal:
             return false;
         case LargeMinus25:
-            degree = 25; // -25?
+            degree = 25;
             return true;
         case LargeMinus45:
             degree = 45;

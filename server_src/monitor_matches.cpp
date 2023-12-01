@@ -62,6 +62,7 @@ std::map<uint, std::string> MonitorMatches::list_matches() {
 
 void MonitorMatches::stop() {
     std::unique_lock<std::mutex> lock(m);
+    kill_dead_matches();
     for (auto& match: matches) {
         match.second->stop();
         match.second->join();
@@ -91,7 +92,6 @@ uint8_t MonitorMatches::get_number_of_players(uint match_id) {
 void MonitorMatches::kill_dead_matches() {
     std::vector<uint> matches_to_delete;
     for (auto& match: matches) {
-        std::cout << "Checking match with id: " << match.first << std::endl;
         if (match.second->has_ended()) {
             match.second->join();
             matches_to_delete.push_back(match.first);
