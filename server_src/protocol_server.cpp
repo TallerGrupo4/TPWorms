@@ -123,6 +123,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_provision_boxes(snapshot.provision_boxes);
 
+    send_armies_health(snapshot.armies_health);
+
     return 1;
 }
 
@@ -211,8 +213,6 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     float pos_x_float = static_cast<float>(pos_x[0]);
     float pos_y_float = static_cast<float>(pos_y[0]);
     parser.parse_position_form_shoot(pos_x_float, pos_y_float);
-    std::cout << "pos_x_float: " << pos_x_float * PIX_PER_METER << std::endl;
-    std::cout << "pos_y_float: " << pos_y_float * PIX_PER_METER << std::endl;
     return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, 2 * FPS);
 }
 
@@ -442,6 +442,18 @@ void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& pro
         socket.sendall(id, 1, &was_closed);
         BoxType state[1] = {provision_box.state};
         socket.sendall(state, 1, &was_closed);
+    }
+}
+
+void ProtocolServer::send_armies_health(std::map<char, int>& armies_health) {
+    uint8_t num_of_armies[1] = {static_cast<uint8_t>(armies_health.size())};
+    socket.sendall(num_of_armies, 1, &was_closed);
+    for (auto& army : armies_health) {
+        char army_id[1] = {army.first};
+        socket.sendall(army_id, 1, &was_closed);
+        int health[1] = {army.second};
+        health[0] = htonl(health[0]);
+        socket.sendall(health, 4, &was_closed);
     }
 }
 

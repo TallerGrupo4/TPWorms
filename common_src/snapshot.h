@@ -41,6 +41,7 @@ public:
     std::map<char, std::vector<char>> my_army;
     MapDimensions_t map_dimensions;
     TurnTimeAndWormTurn_t turn_time_and_worm_turn;
+    std::map<char, int> armies_health;
 
     Snapshot(std::vector<WormSnapshot> worms, std::vector<ProjectileSnapshot> projectiles, std::vector<PlatformSnapshot> platforms, std::vector<ProvisionBoxSnapshot> provision_boxes):
             worms(worms), projectiles(projectiles) , platforms(platforms), provision_boxes(provision_boxes), map_dimensions() {};
@@ -59,6 +60,10 @@ public:
     void set_turn_time_and_worm_turn(int turn_time = 0, int worm_turn = 0) {
         turn_time_and_worm_turn.turn_time = turn_time;
         turn_time_and_worm_turn.worm_turn = worm_turn;
+    }
+
+    void set_armies_health(std::map<char, int> armies_health) {
+        this->armies_health = armies_health;
     }
 
     void set_end_game() {

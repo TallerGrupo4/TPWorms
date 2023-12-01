@@ -350,15 +350,19 @@ Snapshot Game::get_end_game_snapshot() {
 
 Snapshot Game::get_game_snapshot() {
     std::vector<WormSnapshot> worms;
+    std::map<char, int> teams_health;
     for (auto& team: teams) {
+        int team_health = 0;
         for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
             worms.push_back(worm->get_snapshot());
+            team_health += worm->life;
         }
-        // worms.push_back(pair.second->get_snapshot());
+        teams_health[team.first] = team_health;
     }
     std::vector<ProjectileSnapshot> projectiles_snaps = projectile_manager.get_projectiles_snapshot();
     Snapshot snapshot(worms, projectiles_snaps , {}, {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
+    snapshot.set_armies_health(teams_health);
     return snapshot;
 }
 

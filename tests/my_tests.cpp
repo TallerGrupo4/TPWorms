@@ -205,8 +205,8 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
-    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2);
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot2('2', 2, 2, 2, 2, 2, 2, 2, 2, 2, 2);
     std::vector<WormSnapshot> worms = {worm_snapshot, worm_snapshot2};
     Snapshot snapshot_to_send(worms, {}, {}, {});
     snapshot_to_send.my_army = {{1, {1}}};
@@ -221,6 +221,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
     ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
     ASSERT_EQ(snapshot_received.worms.at(1).pos_x, 2 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.worms.at(1).team_id, 2);
+    ASSERT_EQ(snapshot_received.worms.at(1).aiming_angle, 2);
     ASSERT_EQ(snapshot_received.my_army.at(1).at(0), 1); 
 }
 
@@ -231,7 +232,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_platforms_with_ma
     auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
     ProtocolClient protocol_client = protocols.first;
     ProtocolServer protocol_server = protocols.second;
-    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1);
+    WormSnapshot worm_snapshot('1', 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
     PlatformSnapshot platform_snapshot(LargeVertical, 1, 1, PLAT_BIG, PLAT_HEIGHT);
     PlatformSnapshot platform_snapshot2(LargeHorizontal, 2, 2, PLAT_BIG, PLAT_HEIGHT);
     std::vector<PlatformSnapshot> platforms = {platform_snapshot, platform_snapshot2};
@@ -470,6 +471,23 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_provision_boxes) {
     ASSERT_EQ(snapshot_received.provision_boxes.at(1).type, 12);
 }
 
+
+TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_armies_health) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket, parser_client, parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    Snapshot snapshot_to_send({}, {}, {}, {});
+    std::map<char, int> armies_health = {{1, 2}, {3, 4}};
+    snapshot_to_send.set_armies_health(armies_health);
+    protocol_server.send_snapshot(snapshot_to_send);
+    Snapshot snapshot_received = protocol_client.recv_snapshot();
+    ASSERT_EQ(snapshot_received.armies_health.size(), 2);
+    ASSERT_EQ(snapshot_received.armies_health.at(1), 2);
+    ASSERT_EQ(snapshot_received.armies_health.at(3), 4);
+}
 
 
 // ----------------------- SAD CASES -----------------------

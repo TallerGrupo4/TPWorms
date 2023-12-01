@@ -111,6 +111,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_projectiles(snapshot);
     recv_end_game(snapshot);
     recv_provision_boxes(snapshot);
+    recv_armies_health(snapshot);
     return snapshot;
 }
 
@@ -368,6 +369,19 @@ void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
         parser.parse_provision_box_mesures(_pos_x, _pos_y);
         ProvisionBoxSnapshot provision_box(type[0], _pos_x, _pos_y, id[0], state[0]);
         snapshot.provision_boxes.push_back(provision_box);
+    }
+}
+
+void ProtocolClient::recv_armies_health(Snapshot& snapshot) {
+    uint8_t num_of_armies[1];
+    socket.recvall(num_of_armies, 1, &was_closed);
+    for (int i = 0; i < num_of_armies[0]; i++) {
+        char army_id[1];
+        int health[1];
+        socket.recvall(army_id, 1, &was_closed);
+        socket.recvall(health, 4, &was_closed);
+        health[0] = ntohl(health[0]);
+        snapshot.armies_health[army_id[0]] = health[0];
     }
 }
 
