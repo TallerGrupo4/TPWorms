@@ -19,7 +19,9 @@ private:
 
     bool has_projectiles();
 
-    void update_during_game(int it);
+    void update_during_game(int& it, int& width, int& height);
+
+    void check_out_of_map_projectile(Projectile& p, int width, int height);
 
     void update_post_game(b2World& world);
 
