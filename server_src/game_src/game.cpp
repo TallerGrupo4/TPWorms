@@ -10,7 +10,7 @@
 
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), worm_comprobator(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -120,83 +120,10 @@ void Game::remove_army(char army_id){
     }
 }
 
-void Game::check_angles(Worm& w){
-    if (abs (w.get_angle()) >= ANG_THRESHOLD){
-        b2Body* body = w.body;
-        body->SetTransform(body->GetPosition(), w.last_angle());
-    }
-}
-
-void Game::check_states(Worm& w){
-    if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
-    if (w.get_state() == DAMAGED){
-        if (current_turn_player_id == w.get_id()) {
-            turn_time = 0;
-            return;
-        }
-    }
-    if (w.body->GetPosition().y <= water_level){
-        w.set_state(DEAD);
-        if (current_turn_player_id == w.get_id()){
-            turn_time = 0;
-        }
-        return;
-    }
-    if (w.get_number_contacts() == 1){
-        b2Body* body = w.body->GetContactList()->other;
-        if (body && body->GetType() == b2_staticBody){
-            if (body->GetFixtureList()->GetFriction() == 0){
-                w.set_state(SLIDING);
-            }
-            w.body->SetTransform(w.body->GetPosition(), body->GetAngle());
-            w.set_last_still_angle(body->GetAngle());
-        }
-    }
-    float diff = w.body->GetPosition().y - w.get_last_y();
-    if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
-        w.set_state(FALLING);
-    }
-    if (w.body->GetLinearVelocity() == b2Vec2_zero && w.body->GetAngularVelocity() == 0){
-        w.set_state(STILL);
-    }
-}
-
-void Game::check_velocities(Worm& w){
-    if (w.body->GetLinearVelocity().Length() < VEL_THRESHOLD ){
-        w.body->SetLinearVelocity(b2Vec2_zero);
-        w.body->SetAngularVelocity(0);
-    } 
-    if (abs (w.body->GetAngularVelocity()) > 0){
-        w.body->SetAngularVelocity(0);
-    }
-
-}
-
-void Game::check_out_of_map_worm(Worm& w){
-   float w_x = w.body->GetPosition().x;
-   float w_y = w.body->GetPosition().y;
-
-   if (w_x < -width/2 || w_x > width/2 || w_y < -height/2 || w_y > height/2){
-       w.set_state(DEAD);
-       if (current_turn_player_id == w.get_id()){
-           turn_time = 0;
-       }
-   }
-}
-
-
 
 void Game::worm_comprobations(){
     for (auto& team: teams) {
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            if (worm->get_state() == DEAD){
-                continue;
-            }
-            check_out_of_map_worm(*worm);
-            check_velocities(*worm);
-            check_states(*worm);
-            check_angles(*worm);
-        }
+        worm_comprobator.check_during_game(team.second.get_worms(), turn_time, current_turn_player_id, height , width, water_level);
     }
 }
 
@@ -205,18 +132,7 @@ void Game::game_post_cleanup(){
     box_manager.reap_boxes(world);
 
     for (auto& team: teams) {
-        std::vector<char> dead_worms_ids;
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            if (worm->get_state() == DAMAGED || worm->get_state() == SHOOTED){
-                worm->set_state(STILL);
-            }
-
-            if (worm->get_state() == DEAD && worm->body != nullptr) {
-                world.DestroyBody(worm->body);
-                worm->body = nullptr;
-                dead_worms_ids.push_back(worm->get_id());
-            }
-        }
+        std::list<char> dead_worms_ids = worm_comprobator.check_post_turn(team.second.get_worms(), world);
         for (char id: dead_worms_ids) {
             team.second.remove_player(id);
         }

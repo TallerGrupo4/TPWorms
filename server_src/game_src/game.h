@@ -11,6 +11,7 @@
 #include "team.h"
 #include "projectile_manager.h"
 #include "provision_box_manager.h"
+#include "worm_comprobator.h"
 
 
 
@@ -18,7 +19,7 @@
 #define GAME_H
 
 class Game {
-    float water_level;
+    int water_level;
     b2World world;
     int height;
     int width;
@@ -29,6 +30,7 @@ class Game {
     std::map<uint8_t, Team> teams;
     BoxManager box_manager;
     ProjectileManager projectile_manager;
+    WormComprobator worm_comprobator;
     int current_turn_player_id;
     int turn_time;
     int team_turn;
@@ -36,20 +38,19 @@ class Game {
     int cleaning_time;
     bool game_ended;
     int winner_team_id;
-    int projectile_id;
 
 
-    void check_angles(Worm& w);
+    // void check_angles(Worm& w);
 
-    void check_states(Worm& w);
+    // void check_states(Worm& w);
 
-    void check_velocities(Worm& w);
+    // void check_velocities(Worm& w);
 
     void worm_comprobations();
 
-    void check_out_of_map_worm(Worm& w);
+    // void check_out_of_map_worm(Worm& w);
 
-    void check_out_of_map_projectile(Projectile& p);
+    // void check_out_of_map_projectile(Projectile& p);
 
     void projectiles_comprobations(int it);
 

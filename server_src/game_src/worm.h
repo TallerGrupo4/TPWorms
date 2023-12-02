@@ -47,6 +47,7 @@ class WormNotFound: public std::exception {
 
 
 class Worm: public Entity {
+    friend class WormComprobator;
     friend class Game;
     std::vector<std::shared_ptr<Tool>> tools;
     char id;
