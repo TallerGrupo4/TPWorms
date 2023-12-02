@@ -189,6 +189,7 @@ void Game::worm_comprobations(){
 
 void Game::game_post_cleanup(){
     projectile_manager.update_post_game(world);
+    box_manager.reap_boxes(world);
 
     for (auto& team: teams) {
         std::vector<char> dead_worms_ids;
@@ -318,6 +319,22 @@ void Game::manage_turn() {
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
     projectile_manager.reset_id();
+    spawn_provision_box();
+}
+
+void Game::spawn_provision_box(){
+    std::vector<b2Vec2> current_spawn_points = spawn_points;
+    while (current_spawn_points.size() > 0){
+        int rand = std::rand() % current_spawn_points.size();
+        b2Vec2 spawn_point = current_spawn_points[rand];
+        // printf("Trying to spawn box at (%f, %f)\n", spawn_point.x, spawn_point.y);
+        if (box_manager.position_is_free(spawn_point, world)){
+            // printf("Spawning box at (%f, %f)\n", spawn_point.x, spawn_point.y);
+            box_manager.add_box(builder.create_provision_box_body(spawn_point.x, spawn_point.y));
+            return;
+        }
+        current_spawn_points.erase(current_spawn_points.begin() + rand);
+    }
 }
 
 Snapshot Game::get_end_game_snapshot() {
@@ -347,7 +364,8 @@ Snapshot Game::get_game_snapshot() {
         teams_health[team.first] = team_health;
     }
     std::vector<ProjectileSnapshot> projectiles_snaps = projectile_manager.get_projectiles_snapshot();
-    Snapshot snapshot(worms, projectiles_snaps , {}, {});
+    std::vector<ProvisionBoxSnapshot> boxes_snaps = box_manager.get_boxes_snapshot();
+    Snapshot snapshot(worms, projectiles_snaps , {}, boxes_snaps);
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     snapshot.set_armies_health(teams_health);
     return snapshot;

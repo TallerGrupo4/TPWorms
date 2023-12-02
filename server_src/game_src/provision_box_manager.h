@@ -13,15 +13,17 @@ private:
 
     BoxManager();
 
-    BoxType get_random_box_type();
+    std::shared_ptr<ProvisionBox> get_random_box_type(b2Body* body);
 
     bool has_boxes();
 
-    void add_box(BoxType type, b2Vec2 position);
+    void add_box(b2Body* body);
 
-    void reap_boxes();
+    void reap_boxes(b2World& world);
 
-    // std::vector<BoxSnapshot> get_boxes_snapshot();
+    bool position_is_free(b2Vec2 position, b2World& world);
+
+    std::vector<ProvisionBoxSnapshot> get_boxes_snapshot();
 
     
 

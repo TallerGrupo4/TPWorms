@@ -88,6 +88,23 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     return worm;
 }
 
+b2Body* GameBuilder::create_provision_box_body(float x , float y){
+    b2BodyDef box_def;
+    box_def.type = b2_dynamicBody;
+    box_def.position.Set(x, y);
+    b2Body* box = world.CreateBody(&box_def);
+    b2PolygonShape box_shape;
+    box_shape.SetAsBox(1, 1);
+    b2FixtureDef box_fixture;
+    box_fixture.shape = &box_shape;
+    box_fixture.density = 1;
+    box_fixture.restitution = 0;
+    box_fixture.friction = 2;
+    box->CreateFixture(&box_fixture);
+    return box;
+}
+
+
 void GameBuilder::create_platform_type(float x , float y, BeamType type){
     switch (type){
         case LargeVertical:

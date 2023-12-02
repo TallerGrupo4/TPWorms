@@ -44,6 +44,6 @@ target_include_directories(client PRIVATE common_src)
 #target_include_directories(server PRIVATE common_src)
 
 set_target_properties(client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
-set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")
+set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")
 
 

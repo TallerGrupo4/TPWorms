@@ -10,6 +10,7 @@
 #include "filter.h"
 #include "team.h"
 #include "projectile_manager.h"
+#include "provision_box_manager.h"
 
 
 
@@ -24,6 +25,7 @@ class Game {
     MyFilter filter;
     std::vector<b2Vec2> spawn_points;
     std::map<uint8_t, Team> teams;
+    BoxManager box_manager;
     ProjectileManager projectile_manager;
     int current_turn_player_id;
     int turn_time;
@@ -84,6 +86,8 @@ public:
     Snapshot get_game_snapshot();
 
     Snapshot get_end_game_snapshot();
+
+    void spawn_provision_box();
 
     ~Game();
 };

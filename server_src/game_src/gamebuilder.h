@@ -45,6 +45,8 @@ public:
 
     b2Body* create_fragment_body(b2Body* father_body, float angle);
 
+    b2Body* create_provision_box_body(float x , float y);
+
     ~GameBuilder();
 
 };
