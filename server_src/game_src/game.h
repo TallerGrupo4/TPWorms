@@ -47,6 +47,10 @@ class Game {
 
     void worm_comprobations();
 
+    void check_out_of_map_worm(Worm& w);
+
+    void check_out_of_map_projectile(Projectile& p);
+
     void projectiles_comprobations(int it);
 
     void manage_turn();

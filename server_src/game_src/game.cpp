@@ -172,12 +172,27 @@ void Game::check_velocities(Worm& w){
 
 }
 
+void Game::check_out_of_map_worm(Worm& w){
+   float w_x = w.body->GetPosition().x;
+   float w_y = w.body->GetPosition().y;
+
+   if (w_x < -width/2 || w_x > width/2 || w_y < -height/2 || w_y > height/2){
+       w.set_state(DEAD);
+       if (current_turn_player_id == w.get_id()){
+           turn_time = 0;
+       }
+   }
+}
+
+
+
 void Game::worm_comprobations(){
     for (auto& team: teams) {
         for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
             if (worm->get_state() == DEAD){
                 continue;
             }
+            check_out_of_map_worm(*worm);
             check_velocities(*worm);
             check_states(*worm);
             check_angles(*worm);
@@ -195,6 +210,7 @@ void Game::game_post_cleanup(){
             if (worm->get_state() == DAMAGED || worm->get_state() == SHOOTED){
                 worm->set_state(STILL);
             }
+
             if (worm->get_state() == DEAD && worm->body != nullptr) {
                 world.DestroyBody(worm->body);
                 worm->body = nullptr;
@@ -205,7 +221,6 @@ void Game::game_post_cleanup(){
             team.second.remove_player(id);
         }
     }
-    
 }
 
 void Game::step(int it) {
@@ -213,7 +228,7 @@ void Game::step(int it) {
     world.Step(time_simulate, 8, 3);
 
     worm_comprobations();
-    projectile_manager.update_during_game(it);
+    projectile_manager.update_during_game(it , width , height);
 
     if (turn_time > 0){
         turn_time -= it;
