@@ -124,7 +124,7 @@ WormSnapshot Worm::get_snapshot() {
         pos_y = body->GetPosition().y;
         angle = get_angle();
     }
-    int current_ammo;
+    int current_ammo = 0;
     if (curr_tool != NO_TOOL){
         current_ammo = tools[curr_tool]->get_ammo();
     }
