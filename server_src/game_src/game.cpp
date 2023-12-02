@@ -10,7 +10,7 @@
 
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), worm_comprobator(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), worm_comprobator(), current_turn_player_id(INITIAL_WORMS_TURN), shoot_cheat(false),turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -92,7 +92,11 @@ void Game::jump_player(int id , int direction){
 void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int timer) {
     if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)) {
         if (worm->use_tool(potency, pos_x, pos_y, timer, projectile_manager)){
-        turn_time = 3 * FPS;
+            if (shoot_cheat){
+                worm->has_used_tool = false;
+            } else {
+                turn_time = 3 * FPS;
+            } 
         }
     }
 }
@@ -249,6 +253,7 @@ void Game::manage_turn() {
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
+    shoot_cheat = false;
     projectile_manager.reset_id();
     spawn_provision_box();
 }
@@ -263,6 +268,31 @@ void Game::spawn_provision_box(){
             return;
         }
         current_spawn_points.erase(current_spawn_points.begin() + rand);
+    }
+}
+
+void Game::toggle_shoot_cheat(char id){
+    shoot_cheat = !shoot_cheat;
+    if (shoot_cheat){
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+            worm->has_used_tool = false;
+        }
+    }
+}
+
+void Game::cheat_turn_time(){
+    turn_time = 10 * FPS;
+}
+
+void Game::cheat_ammo(char id){
+    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+        worm->cheat_ammo();
+    }
+}
+
+void Game::cheat_life(char id){
+    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+        worm->add_health(100);
     }
 }
 

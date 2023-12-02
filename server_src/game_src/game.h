@@ -32,6 +32,7 @@ class Game {
     ProjectileManager projectile_manager;
     WormComprobator worm_comprobator;
     int current_turn_player_id;
+    bool shoot_cheat;
     int turn_time;
     int team_turn;
     bool turn_cleaning;
@@ -39,18 +40,7 @@ class Game {
     bool game_ended;
     int winner_team_id;
 
-
-    // void check_angles(Worm& w);
-
-    // void check_states(Worm& w);
-
-    // void check_velocities(Worm& w);
-
     void worm_comprobations();
-
-    // void check_out_of_map_worm(Worm& w);
-
-    // void check_out_of_map_projectile(Projectile& p);
 
     void projectiles_comprobations(int it);
 
@@ -95,6 +85,14 @@ public:
     Snapshot get_end_game_snapshot();
 
     void spawn_provision_box();
+
+    void toggle_shoot_cheat(char id);
+
+    void cheat_ammo(char id);
+
+    void cheat_life(char id);
+
+    void cheat_turn_time();
 
     ~Game();
 };

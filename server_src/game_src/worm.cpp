@@ -190,3 +190,14 @@ int Worm::get_number_contacts(){
     return number_contacts;
 }
 
+void Worm::cheat_ammo(){
+    for (auto& tool : tools){
+        if (tool != nullptr){
+            tool->add_ammo(1);
+        }
+    }
+}
+
+void Worm::cheat_has_shooted(){
+    has_used_tool = false;
+}

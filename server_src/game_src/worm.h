@@ -116,6 +116,10 @@ public:
 
     void add_ammo(int ammo , TOOLS tool);
 
+    void cheat_ammo();
+
+    void cheat_has_shooted();
+
     void add_health(int health);
 };
 
