@@ -200,6 +200,7 @@ void MatchRenderer::execute_and_update(int iter) {
 
 void MatchRenderer::start() {
     client.start();
+    srand(time(SEED_FOR_SRAND_TIME));
     Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
     SDL2pp::Music music(MUSIC_FOREST_PATH);
     mixer.SetMusicVolume(BACKGROUND_VOLUME);
