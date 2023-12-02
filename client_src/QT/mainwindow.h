@@ -2,8 +2,11 @@
 #define MAINWINDOW_H
 
 #include <qt5/QtWidgets/QMainWindow>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 
 #include "../client.h"
+#include "lobby_constants.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -20,6 +23,8 @@ public:
 
 private:
     Ui::MainWindow* ui;
+    QMediaPlayer player;
+    QMediaPlaylist playlist;
     Client& client;
     bool& exit_succesful;
     uint match_code = 0;

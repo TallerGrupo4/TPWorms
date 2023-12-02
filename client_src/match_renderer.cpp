@@ -6,12 +6,12 @@
 
 using namespace SDL2pp;
 
-MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO), ttf(),
+MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO), ttf(), mixer(AUDIO_HZ_CD_QUALITY, MIX_DEFAULT_FORMAT, MIXER_CHANNELS, MIXER_CHUNKSIZE),
                 window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
-        match = Match(map_received,surfaces,renderer);
+        match = Match(map_received, surfaces, renderer, mixer);
         this->render(renderer,match);
 }
 
@@ -57,7 +57,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_RETURN: {
-                        if (match.handle_enter_button(action)) {
+                        if (match.handle_enter_button(action, (keyEvent.repeat == 0) ? true : false)) {
                             client.send_action(action);
                         }
                         break;
@@ -70,7 +70,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                     }
                     case SDLK_SPACE: {
                         std::cout << "Entre al space pressed\n";
-                        if (match.handle_space_button_pressed(action)) {
+                        if (match.handle_space_button_pressed(action, (keyEvent.repeat == 0) ? true : false)) {
                             client.send_action(action);
                         }
                         break;
@@ -201,6 +201,9 @@ void MatchRenderer::execute_and_update(int iter) {
 void MatchRenderer::start() {
     client.start();
     Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
+    SDL2pp::Music music(MUSIC_FOREST_PATH);
+    mixer.SetMusicVolume(BACKGROUND_VOLUME);
+    mixer.PlayMusic(music, -1);
     clock.tick();
     // std::cout << "MatchRenderer::start() finished" << std::endl;
     client.exit();

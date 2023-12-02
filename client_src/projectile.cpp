@@ -1,8 +1,9 @@
 #include "projectile.h"
 
-Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) :
+Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) :
     proj_an(renderer, surfaces),
     effects_an(effects_an),
+    effects_sound(effects_sound),
     facing_left(proj_snpsht.direction == LEFT ? true : false),
     angle(proj_snpsht.angle),
     id(proj_snpsht.id),
@@ -14,15 +15,28 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAn
     width(std::round(proj_snpsht.width*5)),
     height(std::round(proj_snpsht.height*5)),
     exhaust_timer(0) {
-        std::cout << "projectile " << +id << " type: " << +type << std::endl;
-        std::cout << "state: " << +state << std::endl;
-        std::cout << "explosion_type: " << explosion_type << std::endl;
-        std::cout << "x: " << x << std::endl;
-        std::cout << "y: " << y << std::endl;
-        std::cout << "width: " << width << std::endl;
-        std::cout << "height: " << height << std::endl;
-        std::cout << "angle: " << angle << std::endl;
-        std::cout << "facing_left: " << facing_left << std::endl;
+        switch (type) {
+        case ProjectileTypes::DynamiteProj:
+            effects_sound->play_dynamite_active_sound();
+            break;
+        case ProjectileTypes::BazookaProj:
+            effects_sound->play_bazooka_shoot_sound();
+            break;
+        case ProjectileTypes::HolyGrenadeProj:
+            effects_sound->play_holy_grenade_active_sound();
+            break;
+        default:
+            break;
+        }
+        // std::cout << "projectile " << +id << " type: " << +type << std::endl;
+        // std::cout << "state: " << +state << std::endl;
+        // std::cout << "explosion_type: " << explosion_type << std::endl;
+        // std::cout << "x: " << x << std::endl;
+        // std::cout << "y: " << y << std::endl;
+        // std::cout << "width: " << width << std::endl;
+        // std::cout << "height: " << height << std::endl;
+        // std::cout << "angle: " << angle << std::endl;
+        // std::cout << "facing_left: " << facing_left << std::endl;
 }
 
 void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnapshot& proj_snpsht) {
@@ -32,14 +46,30 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
     x = proj_snpsht.pos_x;
     y = (-1)*proj_snpsht.pos_y;
     proj_an.update_from_snapshot(state, type);
-    if(state == EXPLODED) {
-        if(type == FragmentProj) {
+    switch (state) {
+    case ProjectileStates::EXPLODED:
+        switch (type) {
+        case ProjectileTypes::FragmentProj:
             effects_an->set_small_explosion_an(renderer, x, y);
-        } else {
+            effects_sound->play_small_explosion_sound();
+            break;
+        case ProjectileTypes::HolyGrenadeProj:
             effects_an->set_big_explosion_an(renderer, x, y);
+            effects_sound->play_holy_grenade_explosion_sound();
+            break;
+
+        case ProjectileTypes::DynamiteProj:
+            effects_sound->stop_dynamite_fuse_sound();
+        
+        default:
+            effects_an->set_big_explosion_an(renderer, x, y);
+            effects_sound->play_big_explosion_sound();
+            break;
         }
-    } else if (state == ALIVE) {
-        if((type == BazookaProj) or (type == MortarProj) or (type == AirStrikeProj)) {
+        break;
+    
+    case ProjectileStates::ALIVE:
+        if((type == ProjectileTypes::BazookaProj) or (type == ProjectileTypes::MortarProj) or (type == ProjectileTypes::AirStrikeProj)) {
             if(exhaust_timer == 1) {
                 effects_an->set_missile_exhaust_an(renderer, x, y);
                 exhaust_timer = 0;
@@ -47,14 +77,15 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
                 exhaust_timer++;
             }
         }
+        break;
     }
 }
 
 void Projectile::update_from_iter(int iter) {
-    std::cout << "update_from_iter\n";
-    std::cout << "id: " << +id << std::endl;
-    std::cout << "type: " << +type << std::endl;
-    std::cout << "state: " << +state << std::endl;
+    // std::cout << "update_from_iter\n";
+    // std::cout << "id: " << +id << std::endl;
+    // std::cout << "type: " << +type << std::endl;
+    // std::cout << "state: " << +state << std::endl;
     for (int i = 0; i < iter; i++) {
         proj_an.update_from_iter(state, type, angle);
     }

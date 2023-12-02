@@ -10,13 +10,14 @@
 #include "constantes_cliente.h"
 #include "projectile_animations.h"
 #include "effects_animations.h"
+#include "effects_sounds.h"
 #include "surfaces.h"
 #include "Animation.h"
 #include "background.h"
 
 class Projectile {
 public:
-    Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     void update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnapshot& proj_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
@@ -27,6 +28,7 @@ public:
 private:
     ProjectileAnimations proj_an;
     std::shared_ptr<EffectsAnimations> effects_an;
+    std::shared_ptr<EffectsSounds> effects_sound;
     bool facing_left;
     int angle;
     char id;

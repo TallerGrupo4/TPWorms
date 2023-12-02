@@ -18,6 +18,8 @@ sudo apt-get install libsdl2-dev
 In order to properly run the game, you need to install the qt5 library. To do so, run the following commands:
 ```
 sudo apt-get install qtbase5-dev
+sudo apt-get install qtmultimedia5-dev
+sudo apt-get install gstreamer1.0-plugins-good gstreamer1.0-plugins-bad gstreamer1.0-plugins-ugly
 ```
 
 ## YAML

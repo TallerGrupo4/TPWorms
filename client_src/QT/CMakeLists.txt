@@ -1,9 +1,11 @@
 project(Worms)
-add_definitions(-DASSETS_PATH="${PROJECT_SOURCE_DIR}/assets")
 cmake_minimum_required(VERSION 3.8)
+set(ENV{QT_PLUGIN_PATH} "home/facu/Qt/5.15.2/gcc_64/plugins")
+message("Agregando '${PROJECT_BINARY_DIR}' como directorio de includes")
+add_definitions(-DASSETS_PATH="${PROJECT_SOURCE_DIR}/assets")
 # Find the QtWidgets library
-find_package(Qt5 COMPONENTS Widgets REQUIRED)
-include_directories(${Qt5Widgets_INCLUDE_DIRS})
+find_package(Qt5 COMPONENTS Widgets Multimedia REQUIRED)
+include_directories(${Qt5Widgets_INCLUDE_DIRS} ${Qt5Multimedia_INCLUDE_DIRS})
 message("[INFO] La raiz del proyecto es ${PROJECT_SOURCE_DIR}")
 
 #include_directories(${PROJECT_SOURCE_DIR})
@@ -40,5 +42,5 @@ add_library(lobby
   ${UIS_HEADERS})
 
 # Use the Widgets module from Qt 5.
-target_link_libraries(lobby Qt5::Widgets Qt5::Core)
+target_link_libraries(lobby Qt5::Widgets Qt5::Core Qt5::Multimedia)
 set(CMAKE_CXX_FLAGS "-Wall -fPIC -std=c++17")

@@ -157,6 +157,8 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 aim_bsb_worm(WORM_AIMING_BASEBALL_BAT_SPRITES_PATH),
                                 aim_bsb_up_worm(WORM_AIMING_BASEBALL_BAT_UP_SPRITES_PATH),
                                 aim_bsb_down_worm(WORM_AIMING_BASEBALL_BAT_DOWN_SPRITES_PATH),
+                                /*WORM USING WEAPONS*/
+                                
                                 /*PROJECTILES*/
                                 bazooka_missile(BAZOOKA_PROJECTILE_SPRITES_PATH),
                                 mortar_round(MORTAR_PROJECTILE_SPRITES_PATH),
