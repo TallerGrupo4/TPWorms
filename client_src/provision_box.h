@@ -10,7 +10,7 @@
 #include "constantes_cliente.h"
 #include "effects_animations.h"
 #include "surfaces.h"
-#include "Animation.h"
+#include "provision_box_animations.h"
 
 class ProvisionBox {
 public:
@@ -18,15 +18,15 @@ public:
     void update_from_snapshot(SDL2pp::Renderer& renderer, ProvisionBoxSnapshot& box_snpsht);
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
-    ProjectileStates get_box_state();
+    BoxState get_box_state();
     int get_box_x();
     int get_box_y();
 private:
     ProvisionBoxAnimations box_an;
     std::shared_ptr<EffectsAnimations> effects_an;
     char id;
-    ProjectileStates state;
-    ProjectileTypes type;
+    BoxState state;
+    BoxType type;
     int x;
     int y;
     int width;

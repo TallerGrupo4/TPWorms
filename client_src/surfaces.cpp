@@ -17,7 +17,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 still_0_worm(WORM_STILL_0_SPRITES_PATH),
                                 still_0_up_worm(WORM_STILL_0_UP_SPRITES_PATH),
                                 still_0_down_worm(WORM_STILL_0_DOWN_SPRITES_PATH),
-                                still_1_worm(WORM_STILL_1_SPRITES_PATH),
+                                //still_1_worm(WORM_STILL_1_SPRITES_PATH),
                                 walking_worm(WORM_WALK_SPRITES_PATH),
                                 walking_up_worm(WORM_WALK_UP_SPRITES_PATH),
                                 walking_down_worm(WORM_WALK_DOWN_SPRITES_PATH),
@@ -157,8 +157,11 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 aim_bsb_worm(WORM_AIMING_BASEBALL_BAT_SPRITES_PATH),
                                 aim_bsb_up_worm(WORM_AIMING_BASEBALL_BAT_UP_SPRITES_PATH),
                                 aim_bsb_down_worm(WORM_AIMING_BASEBALL_BAT_DOWN_SPRITES_PATH),
-                                /*WORM USING WEAPONS*/
-                                
+                                /*PROVISION BOXES*/
+                                mcrate_still(MEDICAL_CRATE_PICKED_SPRITES_PATH),
+                                mcrate_picked(MEDICAL_CRATE_STILL_SPRITES_PATH),
+                                wcrate_still(WEAPON_CRATE_PICKED_SPRITES_PATH),
+                                wcrate_picked(WEAPON_CRATE_STILL_SPRITES_PATH),
                                 /*PROJECTILES*/
                                 bazooka_missile(BAZOOKA_PROJECTILE_SPRITES_PATH),
                                 mortar_round(MORTAR_PROJECTILE_SPRITES_PATH),
@@ -230,7 +233,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     still_0_worm.SetColorKey(true, 0);
     still_0_up_worm.SetColorKey(true, 0);
     still_0_down_worm.SetColorKey(true, 0);
-    still_1_worm.SetColorKey(true, 0);
+    //still_1_worm.SetColorKey(true, 0);
     walking_worm.SetColorKey(true, 0);
     walking_up_worm.SetColorKey(true, 0);
     walking_down_worm.SetColorKey(true, 0);
@@ -370,6 +373,11 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     aim_bsb_worm.SetColorKey(true, 0);
     aim_bsb_up_worm.SetColorKey(true, 0);
     aim_bsb_down_worm.SetColorKey(true, 0);
+    /*PROVISION BOXES*/
+    mcrate_still.SetColorKey(true, 0);
+    mcrate_picked.SetColorKey(true, 0);
+    wcrate_still.SetColorKey(true, 0);
+    wcrate_picked.SetColorKey(true, 0);
     /*PROJECTILES*/
     bazooka_missile.SetColorKey(true, 0);
     mortar_round.SetColorKey(true, 0);

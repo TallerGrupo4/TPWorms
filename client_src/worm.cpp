@@ -128,11 +128,9 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
             break;
         case TOOLS::TELEPORTATION:
             effects_sound->play_teleport_sound();
-            //add teleportation animation
             break;
         case TOOLS::AIRSTRIKE:
             effects_sound->play_airstrike_active_sound();
-            //add airstrike animation
             break;
         default:
             break;
@@ -150,6 +148,7 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
 void Worm::update_from_iter(int iter) {
     for (int i = 0; i < iter; i++) {
         worm_an.update_from_iter(state, angle, facing_left);
+        worm_texts.update_crosshair_from_iter();
     }
 }
 

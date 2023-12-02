@@ -6,7 +6,7 @@ WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfac
                                 still_0_an(renderer, surfaces.still_0_worm, SECS_FOR_STILL_SPRITES),
                                 still_0_up_an(renderer, surfaces.still_0_up_worm, SECS_FOR_STILL_SPRITES),
                                 still_0_down_an(renderer, surfaces.still_0_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_1_an(renderer, surfaces.still_1_worm, SECS_FOR_STILL_1_SPRITES),
+                                //still_1_an(renderer, surfaces.still_1_worm, SECS_FOR_STILL_1_SPRITES),
                                 walking_an(renderer, surfaces.walking_worm, SECS_FOR_WALKING_SPRITES),
                                 walking_up_an(renderer, surfaces.walking_up_worm, SECS_FOR_WALKING_SPRITES),
                                 walking_down_an(renderer, surfaces.walking_down_worm, SECS_FOR_WALKING_SPRITES),
@@ -18,7 +18,7 @@ WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfac
                                 slide_an(renderer, surfaces.slide_worm, SECS_FOR_SLIDE_SPRITES),
                                 slide_up_an(renderer, surfaces.slide_up_worm, SECS_FOR_SLIDE_SPRITES),
                                 slide_down_an(renderer, surfaces.slide_down_worm, SECS_FOR_SLIDE_SPRITES),
-                                dead_an(renderer, surfaces.dead_worm, SECS_FOR_DEAD_SPRITES),
+                                dead_an(renderer, surfaces.dead_worm, SECS_FOR_DEAD_SPRITES, false, true),
                                 winner_an(renderer, surfaces.winner_worm, SECS_FOR_WIN_SPRITES),
                                 /*WORM STILL STANCE WEAPONS*/
                                 still_baz_an(renderer, surfaces.still_baz_worm, SECS_FOR_STILL_SPRITES),
@@ -1183,5 +1183,7 @@ bool WormAnimations::is_action_state(int state) {
     bool is_sliding_state = (state == SLIDING);
     bool is_backflipping_state = (state == BACKFLIPPING);
     bool is_falling_state = (state == FALLING);
-    return (is_moving_state or is_climbing_state or is_jumping_state or is_sliding_state or is_backflipping_state or is_falling_state);
+    bool is_aiming_state = (state == AIMING);
+    bool is_shooting_state = (state == SHOOTED);
+    return (is_moving_state or is_climbing_state or is_jumping_state or is_sliding_state or is_backflipping_state or is_falling_state or is_aiming_state or is_shooting_state);
 }

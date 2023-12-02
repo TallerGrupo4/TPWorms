@@ -46,7 +46,7 @@ private:
     Animation still_0_an;
     Animation still_0_up_an;
     Animation still_0_down_an;
-    Animation still_1_an;
+    //Animation still_1_an;
     Animation walking_an;
     Animation walking_up_an;
     Animation walking_down_an;

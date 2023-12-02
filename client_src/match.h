@@ -10,6 +10,7 @@
 #include "../common_src/snapshot.h"
 #include "worm.h"
 #include "projectile.h"
+#include "provision_box.h"
 #include "camera.h"
 #include "constantes_cliente.h"
 #include "actions.h"
@@ -25,6 +26,7 @@ private:
     std::shared_ptr<EffectsSounds> effects_sound;
     std::map<char, std::shared_ptr<Worm>> worms_map;
     std::map<char, std::shared_ptr<Projectile>> projectiles_map;
+    std::map<char, std::shared_ptr<ProvisionBox>> provision_boxes_map;
     char my_army_id;
     char worm_turn_id;
     uint turn_time;

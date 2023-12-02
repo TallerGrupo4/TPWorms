@@ -8,7 +8,7 @@ public:
     void update_once_up() override;
     void update_once_down() override;
     void reset();
-    AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration, bool one_loop = false, bool is_orientation_horizontal = false);
+    AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal = false);
     ~AnimationScroll();
 };
 

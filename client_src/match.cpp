@@ -62,6 +62,12 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
         // this->worms_map[worm_snpsht.id] = worm;
         std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
+
+    for (auto& provision_box_snpsht : snpsht.provision_boxes) {
+        std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, surfaces, renderer);
+        this->provision_boxes_map[provision_box_snpsht.id] = provision_box;
+    }
+
     update_camera(1,1,true);
 }
 
@@ -94,6 +100,16 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
             ++it;
         }
     }
+
+    for (std::map<char,std::shared_ptr<ProvisionBox>>::iterator it = provision_boxes_map.begin(); it != provision_boxes_map.end();) {
+        if (it->second->get_box_state() == PICKED) {
+            std::cout << "Found box picked\n";
+            it = provision_boxes_map.erase(it);
+        } else {
+            ++it;
+        }
+    }
+
     for (auto& projectile_snpsht : snpsht.projectiles) {
         //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
@@ -104,6 +120,15 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         } else {
             //std::cout << "Found proj from snapshot in map --> update\n";
             projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(renderer, projectile_snpsht);
+        }
+    }
+
+    for (auto& provision_box_snpsht : snpsht.provision_boxes) {
+        if (provision_boxes_map.find(provision_box_snpsht.id) == provision_boxes_map.end() or provision_boxes_map.count(provision_box_snpsht.id) == 0) {
+            std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, surfaces, renderer);
+            this->provision_boxes_map[provision_box_snpsht.id] = provision_box;
+        } else {
+            provision_boxes_map.at(provision_box_snpsht.id)->update_from_snapshot(renderer, provision_box_snpsht);
         }
     }
 
@@ -292,6 +317,9 @@ void Match::update_from_iter(int iter) {
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end(); it++) {
         it->second->update_from_iter(iter);
     }
+    for (std::map<char,std::shared_ptr<ProvisionBox>>::iterator it = provision_boxes_map.begin(); it != provision_boxes_map.end(); it++) {
+        it->second->update_from_iter(iter);
+    }
     camera.update_hud();
     effects_an->update_from_iter();
     update_camera();
@@ -304,6 +332,9 @@ void Match::render(SDL2pp::Renderer& renderer) {
     }
     for (std::map<char,std::shared_ptr<Worm>>::iterator worm_hud_it = worms_map.begin(); worm_hud_it != worms_map.end(); worm_hud_it++) {
         worm_hud_it->second->render_texts_and_widgets(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
+    }
+    for (std::map<char,std::shared_ptr<ProvisionBox>>::iterator box_it = provision_boxes_map.begin(); box_it != provision_boxes_map.end(); box_it++) {
+        box_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
     for (std::map<char,std::shared_ptr<Projectile>>::iterator proj_it = projectiles_map.begin(); proj_it != projectiles_map.end(); proj_it++) {
         proj_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());

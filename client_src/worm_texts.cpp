@@ -18,6 +18,10 @@ void WormSpecificTexts::update_crosshair(int angle) {
     this->crosshair_angle = angle;
 }
 
+void WormSpecificTexts::update_crosshair_from_iter() {
+    this->crosshair_an.update_once();
+}
+
 void WormSpecificTexts::render(SDL2pp::Renderer& renderer, int worm_state, bool facing_left, int worm_center_x, int worm_center_y, int worm_top_y, int worm_botom_y) {
     int worm_text_x = worm_center_x - (this->worm_text.GetWidth() / 2);
     int worm_text_y = worm_top_y - this->worm_text.GetHeight() - 5;

@@ -25,7 +25,7 @@ public:
     Surface still_0_worm;
     Surface still_0_up_worm;
     Surface still_0_down_worm;
-    Surface still_1_worm;
+    //Surface still_1_worm;
     Surface walking_worm;
     Surface walking_up_worm;
     Surface walking_down_worm;
@@ -165,6 +165,11 @@ public:
     Surface aim_bsb_worm;
     Surface aim_bsb_up_worm;
     Surface aim_bsb_down_worm;
+    /*PROVISION BOXES*/
+    Surface mcrate_still;
+    Surface mcrate_picked;
+    Surface wcrate_still;
+    Surface wcrate_picked;
     /*PROJECTILES*/
     Surface bazooka_missile;
     Surface mortar_round;
