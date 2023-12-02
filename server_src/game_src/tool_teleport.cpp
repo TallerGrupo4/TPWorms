@@ -2,7 +2,7 @@
 #include "tool_teleport_callback.h"
 
 
-Teleporter::Teleporter(): Tool(TELEPORTATION, -1, false, -1) {}
+Teleporter::Teleporter(): Tool(TELEPORTATION, INF_AMMO, INF_AMMO, false) {}
 
 bool Teleporter::validate_teleport(float x , float y, b2World* world){
     for (int i =0 ; i < 32 ; i++){

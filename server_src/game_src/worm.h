@@ -77,6 +77,8 @@ public:
 
     bool use_tool(int power, float x, float y, int tool, ProjectileManager& projectiles);
 
+    void stop_aiming();
+
     void aim(int angle_inc, int direction);
 
     void change_tool(int scroll_direction);

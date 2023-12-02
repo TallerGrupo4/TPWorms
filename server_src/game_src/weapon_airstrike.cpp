@@ -6,7 +6,7 @@
 #define AIRSTIKE_DENSTIY ConfigSingleton::getInstance().get_airstrike_density()
 
 
-Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0, EXPLOSIVE, AirStrikeProj, true, false, false) {}
+Airstrike::Airstrike(): Weapon(AIRSTRIKE, AIRSTRIKE_MAX_AMMO/2, AIRSTRIKE_MAX_AMMO, AIRSTRIKE_DAMAGE, AIRSTRIKE_RADIUS, 0, EXPLOSIVE, AirStrikeProj, true, false, false) {}
 
 
 float Airstrike::get_roof_height(b2Body* body){
@@ -50,6 +50,7 @@ std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, 
 
 
 void Airstrike::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
+        if (ammo > 0) {ammo--;}
         float roof_height = get_roof_height(worm);
 
         std::vector<float> possible_xs = {-1.5 , -1 , -0.5 , 0 , 0.5 , 1 , 1.5};

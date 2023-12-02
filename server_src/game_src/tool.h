@@ -24,6 +24,8 @@ class Tool {
 
     void add_ammo(int ammo);
 
+    bool has_ammo();
+
     int get_ammo();
 
     ~Tool();

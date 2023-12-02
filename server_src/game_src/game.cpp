@@ -107,10 +107,6 @@ void Game::player_change_tool(int id, int direction) {
 }
 
 
-
-
-
-
 void Game::remove_army(char army_id){
     for (auto& team: teams) {
         if (team.first == army_id){
@@ -327,9 +323,7 @@ void Game::spawn_provision_box(){
     while (current_spawn_points.size() > 0){
         int rand = std::rand() % current_spawn_points.size();
         b2Vec2 spawn_point = current_spawn_points[rand];
-        // printf("Trying to spawn box at (%f, %f)\n", spawn_point.x, spawn_point.y);
         if (box_manager.position_is_free(spawn_point, world)){
-            // printf("Spawning box at (%f, %f)\n", spawn_point.x, spawn_point.y);
             box_manager.add_box(builder.create_provision_box_body(spawn_point.x, spawn_point.y));
             return;
         }

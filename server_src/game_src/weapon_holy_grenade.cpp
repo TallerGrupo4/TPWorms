@@ -8,7 +8,7 @@
 #define HOLY_GRENADE_DENSITY ConfigSingleton::getInstance().get_holy_grenade_density()
 #define HOLY_GRENADE_MAX_AMMO ConfigSingleton::getInstance().get_holy_grenade_max_ammo()
 
-HolyGrenade::HolyGrenade() : Weapon(HOLY_GRENADE, HOLY_GRENADE_MAX_AMMO , HOLY_GRENADE_MAX_AMMO , HOLY_GRENADE_DAMAGE, HOLY_GRENADE_RADIUS, 0 , EXPLOSIVE_TIMER ,HolyGrenadeProj , true, true, true) {}
+HolyGrenade::HolyGrenade() : Weapon(HOLY_GRENADE, HOLY_GRENADE_MAX_AMMO/2 , HOLY_GRENADE_MAX_AMMO , HOLY_GRENADE_DAMAGE, HOLY_GRENADE_RADIUS, 0 , EXPLOSIVE_TIMER ,HolyGrenadeProj , true, true, true) {}
 
 void HolyGrenade::use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles){
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time , HOLY_GRENADE_RESTITUTION, HOLY_GRENADE_DENSITY);

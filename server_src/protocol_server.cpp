@@ -201,19 +201,22 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     int potency[1];
     int pos_x[1];
     int pos_y[1];
+    int timer[1];
     socket.recvall(potency, 4, &was_closed);
     socket.recvall(pos_x, 4, &was_closed);
     socket.recvall(pos_y, 4, &was_closed);
+    socket.recvall(timer, 4, &was_closed);
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
     potency[0] = ntohl(potency[0]);
     pos_x[0] = ntohl(pos_x[0]);
     pos_y[0] = ntohl(pos_y[0]);
+    timer[0] = ntohl(timer[0]);
     float pos_x_float = static_cast<float>(pos_x[0]);
     float pos_y_float = static_cast<float>(pos_y[0]);
     parser.parse_position_form_shoot(pos_x_float, pos_y_float);
-    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, 2 * FPS);
+    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, timer[0] * FPS);
 }
 
 std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) {

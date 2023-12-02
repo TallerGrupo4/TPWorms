@@ -61,7 +61,9 @@ void Worm::jump (int dir){
 }
 
 bool Worm::use_tool(int power, float x, float y, int time , ProjectileManager& projectiles){
+
     if (tools[curr_tool] == nullptr || has_used_tool) {return false;}
+    if (!tools[curr_tool]->has_ammo()){return false;}
     tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time, power, x, y, projectiles);
     has_used_tool = true;
     aiming_angle = 0 ;
@@ -72,7 +74,7 @@ bool Worm::use_tool(int power, float x, float y, int time , ProjectileManager& p
 
 void Worm::aim(int angle_inc, int direction){
     printf("aiming angle: %f\n", aiming_angle);
-    if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim()) {return;}
+    if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim() || !tools[curr_tool]->has_ammo()) {return;}
     if (angle_inc == -1){
         aiming_angle -= 5.625f;
         if (aiming_angle <= MIN_AIMING_ANGLE) { aiming_angle = MIN_AIMING_ANGLE;}
@@ -162,7 +164,6 @@ void Worm::set_curr_tool(int new_tool){
 }
 
 void Worm::apply_damage(int damage){
-    // set_curr_tool(NO_TOOL);
     set_curr_tool(tools.size() - 1);
     life -= damage;
     state = DAMAGED;
@@ -173,8 +174,9 @@ void Worm::apply_damage(int damage){
 }
 
 void Worm::add_ammo(int ammo , TOOLS tool){
+    printf("adding ammo: %d\n", tool);
     if (tools[tool]->get_type() != tool){
-        throw std::runtime_error("Error: tool type does not match");
+        printf("ERROR: tool type does not match\n");
         return;
     }
     tools[tool]->add_ammo(ammo);

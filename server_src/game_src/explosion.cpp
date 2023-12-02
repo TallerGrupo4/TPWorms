@@ -37,7 +37,6 @@ void Explosion::apply_explosion(b2Body* body){
                     float act_damage = damage - (damage * (explosion_distance/float(radius)));
                     w->apply_damage(act_damage);
                     float impulse = explosion_power - (explosion_power * (explosion_distance/float(radius)));
-                    
                     body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
                 }
             }

@@ -4,9 +4,6 @@
 #include "worm.h"
 #include "explosion.h"
 #include "provisionBox.h"
-#include "provisionBox_trap.h"
-#include "provisionBox_heal.h"
-#include "provisionBox_ammo.h"
 
 
 
@@ -17,7 +14,6 @@ void MyListener::handle_begin_contact(b2Body* bodyA , b2Body* bodyB){
     Entity* eB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
 
     if (eA && eB){
-        printf("contacto entre %d y %d\n", eA->get_type(), eB->get_type());
         BodyType typeA = eA->get_type();
         BodyType typeB = eB->get_type();
         
@@ -27,7 +23,6 @@ void MyListener::handle_begin_contact(b2Body* bodyA , b2Body* bodyB){
         }
 
         if (typeA == WORM && typeB == PROVISION_BOX){
-            printf("contacto con caja\n");
             execute_box_contact(bodyA, bodyB);
         }
 
@@ -62,24 +57,12 @@ void MyListener::execute_box_contact(b2Body* bodyA , b2Body* bodyB){
     Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
     ProvisionBox* pB = reinterpret_cast<ProvisionBox*>(bodyB->GetUserData().pointer);
     pB->apply_effect(wA);
-    // BoxType box_type = pB->get_box_type();
-    // if (box_type == AMMO_BOX){
-    //     AmmoBox* aB = reinterpret_cast<AmmoBox*>(pB);
-    //     wA->add_ammo(aB->get_ammo(), aB->get_weapon_type());
-    // } else if (box_type == TRAP_BOX){
-    //     TrapBox* tB = reinterpret_cast<TrapBox*>(pB);
-    //     tB->apply_effect(wA);
-    // } else if (box_type == HEALTH_BOX){
-    //     HealBox* hB = reinterpret_cast<HealBox*>(pB);
-    //     hB->apply_effect(wA);
-    // }
 }
 
 void MyListener::execute_contact_jump(b2Body* bodyA , b2Body* bodyB){ 
     Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
     wA->add_contact();
     if (wA->get_state() == JUMPING || wA->get_state() == FALLING || wA->get_state() == BACKFLIPPING){
-        bodyA->SetLinearVelocity(b2Vec2_zero);
         float y_diff = bodyA->GetPosition().y - wA->get_last_y();
         if (y_diff < -FALL_DISTANCE_THRESHOLD){
             int damage = abs(std::round(y_diff));

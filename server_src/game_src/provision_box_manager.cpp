@@ -1,29 +1,9 @@
 #include "provision_box_manager.h"
-#include "provisionBox_ammo.h"
-#include "provisionBox_heal.h"
-#include "provisionBox_trap.h"
 #include "provision_box_callback.h"
 
 BoxManager::BoxManager(): box_id(0) {}
 
-// std::shared_ptr<ProvisionBox> BoxManager::get_random_box_type(b2Body* body){
-//     int random = rand() % 3;
-//     TOOLS tool;
-//     printf("random: %d\n", random);
-//     switch (random){
-//         case AMMO_BOX: {
-//             TOOLS tool = static_cast<TOOLS>(rand() % 9);
-//             return std::make_shared<AmmoBox>(body, box_id, 1 ,tool);
-//         }
-//         case HEALTH_BOX: {
-//             return std::make_shared<HealBox>(body, box_id, 25);
-//         }
-//         default: {
-//             return std::make_shared<TrapBox>(body, box_id, 20);
-//         }
-//     }
-//     return nullptr;
-// }
+
 
 std::shared_ptr<ProvisionBox> BoxManager::get_random_box_type(b2Body* body){
     int random = rand() % 3;
@@ -59,14 +39,12 @@ void BoxManager::add_box(b2Body* body){
 
 bool BoxManager::position_is_free(b2Vec2 position, b2World& world){
     b2AABB aabb;
-    aabb.lowerBound = b2Vec2(position.x - WORM_WIDTH/2, position.y - WORM_HEIGHT/2);
-    aabb.upperBound = b2Vec2(position.x + WORM_WIDTH/2, position.y + WORM_HEIGHT/2);
+    aabb.lowerBound = b2Vec2(position.x - 2, position.y - 2);
+    aabb.upperBound = b2Vec2(position.x + 2, position.y + 2);
     ProvisionBoxCallback callback;
     world.QueryAABB(&callback, aabb);
     return callback.count == 0;
 }
-
-
 
 
 void BoxManager::reap_boxes(b2World& world){
@@ -82,13 +60,13 @@ void BoxManager::reap_boxes(b2World& world){
     }
 }
 
-    std::vector<ProvisionBoxSnapshot> BoxManager::get_boxes_snapshot(){
-        std::vector<ProvisionBoxSnapshot> boxes_snapshot;
-        for (auto it = boxes.begin(); it != boxes.end(); ++it){
-            boxes_snapshot.push_back((*it)->get_snapshot());
-        }
-        return boxes_snapshot;
+std::vector<ProvisionBoxSnapshot> BoxManager::get_boxes_snapshot(){
+    std::vector<ProvisionBoxSnapshot> boxes_snapshot;
+    for (auto it = boxes.begin(); it != boxes.end(); ++it){
+        boxes_snapshot.push_back((*it)->get_snapshot());
     }
+    return boxes_snapshot;
+}
 
     
 

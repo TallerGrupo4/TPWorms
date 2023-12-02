@@ -42,15 +42,18 @@ void ProjectileManager::update_post_game(b2World& world){
 
 
 void ProjectileManager::add_projectile(std::shared_ptr<Projectile> projectile){
-    projectile->set_id(projectile_id);
     projectiles.insert(projectile);
-    projectile_id++;
 }
 
 std::vector<ProjectileSnapshot> ProjectileManager::get_projectiles_snapshot(){
     std::vector<ProjectileSnapshot> projectiles_snapshot;
     for (auto& projectile : projectiles){
-        projectiles_snapshot.push_back(projectile->get_snapshot());
+        ProjectileSnapshot projectile_snapshot = projectile->get_snapshot();
+        if (projectile_snapshot.id != INVALID){
+            projectile_snapshot.id = projectile_id;
+            projectile_id++;
+        }
+        projectiles_snapshot.push_back(projectile_snapshot);
     }
     return projectiles_snapshot;
 }

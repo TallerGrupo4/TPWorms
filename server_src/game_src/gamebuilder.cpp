@@ -82,7 +82,7 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     b2FixtureDef worm_fixture;
     worm_fixture.density = 1;
     worm_fixture.shape = &worm_shape;
-    worm_fixture.restitution = 0.3f;
+    worm_fixture.restitution = 0.5f;
     worm_fixture.friction = WORM_FRICTION;
     worm->CreateFixture(&worm_fixture);
     return worm;
@@ -186,8 +186,8 @@ b2Body* GameBuilder::create_projectile_body(float angle , float x , float y, flo
 b2Body* GameBuilder::create_fragment_body(b2Body* father_body , float angle){
     b2Vec2 pos = father_body->GetPosition();
 
-    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.5f;
-    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.5f;
+    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
+    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
 
     b2BodyDef fragment_def;
     fragment_def.type = b2_dynamicBody;

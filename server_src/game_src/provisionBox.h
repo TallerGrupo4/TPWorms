@@ -27,8 +27,6 @@ class ProvisionBox: public Entity {
 
     ProvisionBoxSnapshot get_snapshot();
 
-    // virtual void apply_effect(Worm* worm) = 0;
-
     void apply_effect(Worm* worm);
 
 };
