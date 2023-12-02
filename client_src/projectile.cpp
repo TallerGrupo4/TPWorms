@@ -11,7 +11,7 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAn
     type(static_cast<ProjectileTypes>(proj_snpsht.type)),
     x(proj_snpsht.pos_x),
     y((-1)*proj_snpsht.pos_y),
-    explosion_type(proj_snpsht.explosion_type),
+    explosion_type(proj_snpsht.explosion_radius),
     width(std::round(proj_snpsht.width*5)),
     height(std::round(proj_snpsht.height*5)),
     exhaust_timer(0) {

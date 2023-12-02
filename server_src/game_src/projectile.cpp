@@ -92,7 +92,7 @@ char Projectile::get_id() {
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
-    return ProjectileSnapshot(projectile_type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
+    return ProjectileSnapshot(projectile_type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, radius);
 }
 
 

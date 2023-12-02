@@ -413,7 +413,7 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
         socket.sendall(state, 4, &was_closed);
         char id[1] = {projectile.id};
         socket.sendall(id, 1, &was_closed);
-        int explosion_type[1] = {projectile.explosion_type};
+        int explosion_type[1] = {projectile.explosion_radius};
         explosion_type[0] = htonl(explosion_type[0]);
         socket.sendall(explosion_type, 4, &was_closed);
         int radius[1] = {static_cast<int>(projectile.radius)};
