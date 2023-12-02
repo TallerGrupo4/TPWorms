@@ -20,6 +20,8 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     builder.create_map(snapshot);
     water_level = map.water_level;
     spawn_points = map.spawn_points;
+    height = map.height;
+    width = map.width;
 
     std::vector<b2Vec2> current_spawn_points = map.spawn_points;
     std::vector<WormSnapshot> worm_snaps =  assign_worms_to_teams(map, current_spawn_points, match_teams , number_of_players);

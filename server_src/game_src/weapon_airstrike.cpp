@@ -53,8 +53,8 @@ void Airstrike::use(b2Body* worm, int direction, float angle, int time , int pow
         if (ammo > 0) {ammo--;}
         float roof_height = get_roof_height(worm);
 
-        std::vector<float> possible_xs = {-1.5 , -1 , -0.5 , 0 , 0.5 , 1 , 1.5};
-        std::vector<float> possible_ys = {-3 , -4 , -2 , -1 , -5};
+        std::vector<float> possible_xs = {-1.5 , -1 ,  -0.5, 0 , 0.5 , 1 , 1.5};
+        std::vector<float> possible_ys = {-3 , -4 , -2 , -1 , -5, -6};
         
         for (int i = 0 ; i < 6 ; i++){
             int random = rand() % possible_xs.size();
@@ -62,7 +62,8 @@ void Airstrike::use(b2Body* worm, int direction, float angle, int time , int pow
             possible_xs.erase(possible_xs.begin() + random);
             random = rand() % possible_ys.size();
             float pos_y = possible_ys[random];
-            projectiles.add_projectile(shoot_airstrike_projectile(worm, pos_x + x, roof_height + y));
+            possible_ys.erase(possible_ys.begin() + random);
+            projectiles.add_projectile(shoot_airstrike_projectile(worm, pos_x + x, roof_height + pos_y));
         }
 }
 

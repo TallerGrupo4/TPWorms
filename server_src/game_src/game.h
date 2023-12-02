@@ -20,6 +20,8 @@
 class Game {
     float water_level;
     b2World world;
+    int height;
+    int width;
     GameBuilder builder;
     MyListener listener;
     MyFilter filter;
