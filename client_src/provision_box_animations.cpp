@@ -6,7 +6,6 @@ ProvisionBoxAnimations::ProvisionBoxAnimations(SDL2pp::Renderer& renderer, Match
     mcrate_picked_an(renderer, surfaces.mcrate_picked, SECS_FOR_PROVISION_BOXES_SPRITES, true),
     wcrate_still_an(renderer, surfaces.wcrate_still, SECS_FOR_PROVISION_BOXES_SPRITES, false, true),
     wcrate_picked_an(renderer, surfaces.wcrate_picked, SECS_FOR_PROVISION_BOXES_SPRITES, true) {
-        srand(time(SEED_FOR_SRAND_TIME));
         trap_box_disguise = static_cast<BoxType>(rand() % PROVISION_BOX_DISGUISE_TYPES);
 }
 

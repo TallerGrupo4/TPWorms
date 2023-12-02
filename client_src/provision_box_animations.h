@@ -2,7 +2,6 @@
 #define PROVISION_BOX_ANIMATIONS_H
 
 #include <cstdlib>
-#include <ctime>
 
 #include <SDL2pp/SDL2pp.hh>
 

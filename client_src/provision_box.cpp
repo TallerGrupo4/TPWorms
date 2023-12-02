@@ -1,8 +1,9 @@
 #include "provision_box.h"
 
-ProvisionBox::ProvisionBox(ProvisionBoxSnapshot box_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
+ProvisionBox::ProvisionBox(ProvisionBoxSnapshot box_snpsht, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
     box_an(renderer, surfaces),
     effects_an(effects_an),
+    effects_sound(effects_sound),
     id(box_snpsht.id),
     state(box_snpsht.state),
     type(box_snpsht.type),
@@ -10,7 +11,12 @@ ProvisionBox::ProvisionBox(ProvisionBoxSnapshot box_snpsht, std::shared_ptr<Effe
     y((-1)*box_snpsht.pos_y),
     width(box_snpsht.width),
     height(box_snpsht.height) {
-
+        std::cout << "provision box " << +id << " type: " << +type << std::endl;
+        std::cout << "state: " << +state << std::endl;
+        std::cout << "x: " << x << std::endl;
+        std::cout << "y: " << y << std::endl;
+        std::cout << "width: " << width << std::endl;
+        std::cout << "height: " << height << std::endl;
 }
 
 void ProvisionBox::update_from_snapshot(SDL2pp::Renderer& renderer, ProvisionBoxSnapshot& box_snpsht) {
@@ -28,7 +34,8 @@ void ProvisionBox::update_from_snapshot(SDL2pp::Renderer& renderer, ProvisionBox
             /*effecto de agarrar la caja*/
             break;
         case BoxType::TRAP_BOX :
-            /*effecto de agarrar la caja*/
+            effects_an->set_big_explosion_an(renderer, x, y);
+            effects_sound->play_big_explosion_sound();
             break;
         }
         break;

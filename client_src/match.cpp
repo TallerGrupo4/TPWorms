@@ -64,8 +64,9 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
     }
 
     for (auto& provision_box_snpsht : snpsht.provision_boxes) {
-        std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, surfaces, renderer);
+        std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, effects_sound, surfaces, renderer);
         this->provision_boxes_map[provision_box_snpsht.id] = provision_box;
+        std::cout << "box_map constructor, box_id == " << +provision_box_snpsht.id << std::endl;
     }
 
     update_camera(1,1,true);
@@ -125,7 +126,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
 
     for (auto& provision_box_snpsht : snpsht.provision_boxes) {
         if (provision_boxes_map.find(provision_box_snpsht.id) == provision_boxes_map.end() or provision_boxes_map.count(provision_box_snpsht.id) == 0) {
-            std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, surfaces, renderer);
+            std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, effects_sound, surfaces, renderer);
             this->provision_boxes_map[provision_box_snpsht.id] = provision_box;
         } else {
             provision_boxes_map.at(provision_box_snpsht.id)->update_from_snapshot(renderer, provision_box_snpsht);
