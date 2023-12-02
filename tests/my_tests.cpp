@@ -217,7 +217,7 @@ TEST(ProtocolHappyCasesPseudoLobbyServer, Start_match_send_map_worms) {
     ASSERT_EQ(snapshot_received.worms.at(0).max_health, 1);
     ASSERT_EQ(snapshot_received.worms.at(0).pos_x, 1 * PIX_PER_METER);
     ASSERT_EQ(snapshot_received.worms.at(0).team_id, 1);
-    ASSERT_EQ(snapshot_received.worms.at(0).ammo, 1);
+    ASSERT_EQ(snapshot_received.worms.at(0).current_ammo, 1);
     ASSERT_EQ(snapshot_received.worms.at(1).id, '2');
     ASSERT_EQ(snapshot_received.worms.at(1).max_health, 2);
     ASSERT_EQ(snapshot_received.worms.at(1).pos_x, 2 * PIX_PER_METER);

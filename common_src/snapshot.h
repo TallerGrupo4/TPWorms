@@ -10,11 +10,7 @@
 #include "worm_snapshot.h"
 #include "platform_snapshot.h"
 #include "../server_src/config.h"
-
-#define WORM_WIDTH ConfigSingleton::getInstance().get_worm_width()
-#define WORM_HEIGHT ConfigSingleton::getInstance().get_worm_height()
-#define PLAT_SMALL ConfigSingleton::getInstance().get_plat_small()
-#define PLAT_HEIGHT ConfigSingleton::getInstance().get_plat_height()
+#include "../server_src/game_src/game_constants.h"
 
 struct MapDimensions {
     float height = DEFAULT;

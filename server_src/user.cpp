@@ -29,6 +29,7 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
+                std::cout << "User has left the match with an army_id of: " << +my_army_id << std::endl;
                 std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(my_army_id);
                 queue_match->push(exit_command);
                 sender->stop();
