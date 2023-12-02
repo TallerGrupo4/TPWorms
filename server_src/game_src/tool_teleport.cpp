@@ -30,6 +30,7 @@ void Teleporter::use(b2Body* worm, int direction, float angle, int time , int po
         worm->SetAwake(true);
         worm->SetLinearVelocity(b2Vec2(0, 0));
         worm->SetAngularVelocity(0);
+        printf("x: %f, y: %f\n", x, y);
 }
 
 Teleporter::~Teleporter() {}
