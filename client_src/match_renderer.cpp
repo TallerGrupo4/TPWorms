@@ -30,8 +30,6 @@ bool MatchRenderer::handleEvents(Match& match) {
                         mouse_motion_y = 0;
                         break;
                     }
-                    case SDLK_q:
-                        return false;
                     case SDLK_LEFT: {
                         if (match.handle_left_button(action)) {
                             client.send_action(action);
@@ -57,7 +55,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_RETURN: {
-                        if (match.handle_enter_button(action, (keyEvent.repeat == 0) ? true : false)) {
+                        if (match.handle_enter_button(action)) {
                             client.send_action(action);
                         }
                         break;

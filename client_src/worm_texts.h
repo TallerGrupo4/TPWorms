@@ -15,6 +15,8 @@ private:
     SDL_Color player_color;
     Animation crosshair_an;
     int crosshair_angle;
+    int crosshair_x;
+    int crosshair_y;
     SDL2pp::Texture army_text;
     SDL2pp::Texture worm_text;
     SDL2pp::Surface health_text;
@@ -24,6 +26,8 @@ public:
     void update_crosshair(int angle);
     void update_crosshair_from_iter();
     void render(SDL2pp::Renderer& renderer, int worm_state, bool facing_left, int worm_center_x, int worm_center_y, int worm_top_y, int worm_botom_y);
+    int get_crosshair_x();
+    int get_crosshair_y();
 };
 
 #endif  // WORM_SURFACES_H

@@ -103,7 +103,6 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     state = worm_snpsht.state;
     int old_aiming_angle = aiming_angle;
     aiming_angle = worm_snpsht.aiming_angle;
-    //std::cout << "new angle: " << aiming_angle << std::endl;
     worm_texts.update_crosshair(aiming_angle);
     TOOLS old_weapon = weapon;
     TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
@@ -114,6 +113,9 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
     switch (state) {
+    case JUMPING:
+        if(old_state == STILL) effects_sound->play_worm_jump_sound();
+        break;
     case DAMAGED:
         effects_an->set_worm_hit_an(renderer, x, y);
         effects_sound->play_worm_impact_sound();
@@ -121,8 +123,9 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     case SHOOTED:
         switch (old_weapon) {
         case TOOLS::BASEBALL_BAT: {
-            int baseball_hit_pos_x = (facing_left ? x - (width/2) : x + (width/2));
-            effects_an->set_baseball_bat_hit(renderer, baseball_hit_pos_x, y);
+            int baseball_hit_pos_x = x + worm_texts.get_crosshair_x();
+            int baseball_hit_pos_y = y + worm_texts.get_crosshair_y();
+            effects_an->set_baseball_bat_hit(renderer, baseball_hit_pos_x, baseball_hit_pos_y);
             effects_sound->play_baseball_bat_sound();
             }
             break;

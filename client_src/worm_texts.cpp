@@ -4,6 +4,8 @@ WormSpecificTexts::WormSpecificTexts(SDL2pp::Renderer& renderer, char army_id, A
     player_color(widgets.get_worm_color()),
     crosshair_an(renderer, widgets.get_crosshair(), SECS_FOR_CROSSHAIR_SPRITES),
     crosshair_angle(0),
+    crosshair_x(0),
+    crosshair_y(0),
     army_text(renderer, SDL2pp::Font(WORMS_FONT_PATH, WORM_FONT_SIZE).RenderText_Blended(std::string("Player " + std::to_string(army_id+1)), player_color)),
     worm_text(renderer, SDL2pp::Font(WORMS_FONT_PATH, WORM_FONT_SIZE).RenderText_Blended(std::string("Worm " + std::to_string(worm_id+1)), player_color)),
     health_text(SDL2pp::Font(WORMS_FONT_PATH, WORM_FONT_SIZE).RenderText_Blended(std::string(std::to_string(health_points) + "/" + std::to_string(max_health)), player_color)) {}
@@ -30,11 +32,11 @@ void WormSpecificTexts::render(SDL2pp::Renderer& renderer, int worm_state, bool 
     int health_text_x = worm_center_x - (this->health_text.GetWidth() / 2);
     int health_text_y = worm_botom_y + 5;
     SDL2pp::Texture health_text_texture(renderer, this->health_text);
-    renderer.SetDrawColor({0,0,0});
+    renderer.SetDrawColor(BLACK);
     renderer.FillRect(SDL2pp::Rect(worm_text_x, worm_text_y, this->worm_text.GetWidth(), this->worm_text.GetHeight()));
     renderer.FillRect(SDL2pp::Rect(army_text_x, army_text_y, this->army_text.GetWidth(), this->army_text.GetHeight()));
     renderer.FillRect(SDL2pp::Rect(health_text_x, health_text_y, this->health_text.GetWidth(), this->health_text.GetHeight()));
-    renderer.SetDrawColor({255,255,255});
+    renderer.SetDrawColor(WHITE);
     renderer.Copy(this->worm_text, SDL2pp::NullOpt, SDL2pp::Rect(worm_text_x, worm_text_y, this->worm_text.GetWidth(), this->worm_text.GetHeight()));
     renderer.Copy(this->army_text, SDL2pp::NullOpt, SDL2pp::Rect(army_text_x, army_text_y, this->army_text.GetWidth(), this->army_text.GetHeight()));
     renderer.Copy(health_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(health_text_x, health_text_y, this->health_text.GetWidth(), this->health_text.GetHeight()));
@@ -42,13 +44,23 @@ void WormSpecificTexts::render(SDL2pp::Renderer& renderer, int worm_state, bool 
         SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         //std::cout << "crosshair angle: " << this->crosshair_angle << std::endl;
         int distance_from_worm_center_x = std::round(cos(std::abs(this->crosshair_angle)*M_PI/180)*CROSSHAIR_DISTANCE_FROM_WORM_CENTER);
-        int distance_from_worm_center_y = std::round(sin(std::abs(this->crosshair_angle*M_PI/180))*CROSSHAIR_DISTANCE_FROM_WORM_CENTER);
+        int distance_from_worm_center_y = std::round(sin(std::abs(this->crosshair_angle)*M_PI/180)*CROSSHAIR_DISTANCE_FROM_WORM_CENTER);
         if(this->crosshair_angle > 0) {
             distance_from_worm_center_y *= -1;
         }
         if(facing_left) {
             distance_from_worm_center_x *= -1;
         }
+        crosshair_x = distance_from_worm_center_x;
+        crosshair_y = distance_from_worm_center_y;
         this->crosshair_an.render(renderer, SDL2pp::Rect(worm_center_x + distance_from_worm_center_x - this->crosshair_an.get_frame_size()/2, worm_center_y + distance_from_worm_center_y - this->crosshair_an.get_frame_size()/2, this->crosshair_an.get_frame_size(), this->crosshair_an.get_frame_size()), flip);
     }
+}
+
+int WormSpecificTexts::get_crosshair_x() {
+    return this->crosshair_x/RESOLUTION_MULTIPLIER;
+}
+
+int WormSpecificTexts::get_crosshair_y() {
+    return this->crosshair_y/RESOLUTION_MULTIPLIER;
 }

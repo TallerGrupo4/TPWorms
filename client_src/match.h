@@ -74,7 +74,7 @@ public:
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);
     bool handle_mouse_scroll_down(std::shared_ptr<Action>& action);
     void handle_mouse_motion(int mouse_x, int mouse_y);
-    bool handle_enter_button(std::shared_ptr<Action>& action, bool first_time_pressed);
+    bool handle_enter_button(std::shared_ptr<Action>& action);
     bool handle_backspace_button(std::shared_ptr<Action>& action);
 };
 

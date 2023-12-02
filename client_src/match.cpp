@@ -552,10 +552,9 @@ void Match::handle_mouse_motion(int mouse_x, int mouse_y) {
     }
 }
 
-bool Match::handle_enter_button(std::shared_ptr<Action>& action, bool first_time_pressed) {
+bool Match::handle_enter_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(!is_turn_worm_aiming_weapon() and !turn_worm_has_weapon()) {
-            if (first_time_pressed) effects_sound->play_worm_jump_sound();
             action = std::make_shared<ActionJump>(worm_turn_id);
             return true;
         }
