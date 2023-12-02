@@ -120,6 +120,9 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
     char worm_turn_army_id = worms_map.at(worm_turn_id)->get_army_id();
     camera.update_turn_weapon(worms_map.at(worm_turn_id)->get_weapon());
+    if(worms_map.at(worm_turn_id)->has_weapon()) {
+        camera.update_turn_weapon_ammo(worms_map.at(worm_turn_id)->get_weapon_ammo());
+    }
     camera.set_army_turn(worm_turn_army_id);
     camera.update_armies_health(snpsht.armies_health);
 }

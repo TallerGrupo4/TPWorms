@@ -33,6 +33,7 @@ public:
     int get_worm_x();
     int get_worm_y();
     TOOLS get_weapon();
+    int get_weapon_ammo();
     bool has_weapon();
     bool has_dynamite();
     bool has_weapon_to_aim();
@@ -54,6 +55,7 @@ private:
     int max_health;
     int state;
     TOOLS weapon;
+    int weapon_ammo;
     int aiming_angle;
     int x;
     int y;

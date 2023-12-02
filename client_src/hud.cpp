@@ -4,6 +4,7 @@ Hud::Hud() : target(),
             marker_an(nullptr),
             /*TEXTS*/
             turn_time_text(nullptr),
+            ammo_text(nullptr),
             timer_text(nullptr),
             charging_text(nullptr),
             turn_army_text(nullptr),
@@ -43,6 +44,7 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
      marker_an(nullptr),
      /*TEXTS*/
      turn_time_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Turn Time: " + std::to_string(turn_time)), WHITE))),
+     ammo_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Weapon Ammo: "), WHITE))),
      timer_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Grenade Timer: "), WHITE))),
      charging_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Weapon Charge: "), WHITE))),
      turn_army_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("PLACEHOLDER TEXT TURN ARMY"), WHITE))),
@@ -114,17 +116,17 @@ void Hud::render_armies_health(SDL2pp::Renderer& renderer, int army_health_pos_y
 
 void Hud::render_weapon_icons(SDL2pp::Renderer& renderer) {
     int gap = 10;
-    int icons_pos_x = renderer.GetLogicalWidth() - gap - (*this->bazooka_icon_on).GetWidth(); 
-    int bazooka_pos_y = gap;
-    int mortar_pos_y = bazooka_pos_y + (*this->bazooka_icon_on).GetHeight() + gap;
-    int green_grenade_pos_y = mortar_pos_y + (*this->mortar_icon_on).GetHeight() + gap;
-    int red_grenade_pos_y = green_grenade_pos_y + (*this->green_grenade_icon_on).GetHeight() + gap;
-    int banana_pos_y = red_grenade_pos_y + (*this->red_grenade_icon_on).GetHeight() + gap;
-    int holy_pos_y = banana_pos_y + (*this->banana_icon_on).GetHeight() + gap;
-    int dynamite_pos_y = holy_pos_y + (*this->holy_icon_on).GetHeight() + gap;
-    int baseball_bat_pos_y = dynamite_pos_y + (*this->dynamite_icon_on).GetHeight() + gap;
-    int air_strike_pos_y = baseball_bat_pos_y + (*this->baseball_bat_icon_on).GetHeight() + gap;
-    int teleport_pos_y = air_strike_pos_y + (*this->air_strike_icon_on).GetHeight() + gap;
+    int icons_pos_x = renderer.GetLogicalWidth() - gap - (*this->teleport_icon_on).GetWidth(); 
+    int teleport_pos_y = gap;
+    int air_strike_pos_y = teleport_pos_y + (*this->teleport_icon_on).GetHeight() + gap;
+    int baseball_bat_pos_y = air_strike_pos_y + (*this->air_strike_icon_on).GetHeight() + gap;
+    int dynamite_pos_y = baseball_bat_pos_y + (*this->baseball_bat_icon_on).GetHeight() + gap;
+    int holy_pos_y = dynamite_pos_y + (*this->dynamite_icon_on).GetHeight() + gap;
+    int banana_pos_y = holy_pos_y + (*this->holy_icon_on).GetHeight() + gap;
+    int red_grenade_pos_y = banana_pos_y + (*this->banana_icon_on).GetHeight() + gap;
+    int green_grenade_pos_y = red_grenade_pos_y + (*this->red_grenade_icon_on).GetHeight() + gap;
+    int mortar_pos_y = green_grenade_pos_y + (*this->green_grenade_icon_on).GetHeight() + gap;
+    int bazooka_pos_y = mortar_pos_y + (*this->mortar_icon_on).GetHeight() + gap;
     
     renderer.Copy(*this->bazooka_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, bazooka_pos_y, (*this->bazooka_icon_off).GetWidth(), (*this->bazooka_icon_off).GetHeight()));
     renderer.Copy(*this->mortar_icon_off, SDL2pp::NullOpt, SDL2pp::Rect(icons_pos_x, mortar_pos_y, (*this->mortar_icon_off).GetWidth(), (*this->mortar_icon_off).GetHeight()));
@@ -222,13 +224,16 @@ void Hud::render(SDL2pp::Renderer& renderer) {
         int turn_time_pos_y = gap;
         int turn_army_pos_y = turn_time_pos_y + (*this->turn_time_text).GetHeight() + gap;
         int timer_pos_y = renderer.GetLogicalHeight() - gap - (*this->timer_text).GetHeight();
-        int charging_pos_y = timer_pos_y - gap - (*this->charging_text).GetHeight();
+        int weapon_ammo_pos_y = timer_pos_y - gap - (*this->ammo_text).GetHeight();
+        int charging_pos_y = weapon_ammo_pos_y - gap - (*this->charging_text).GetHeight();
         SDL2pp::Texture turn_time_text_texture(renderer, *this->turn_time_text);
         renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_time_pos_y, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
         SDL2pp::Texture turn_army_text_texture(renderer, *this->turn_army_text);
         renderer.Copy(turn_army_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_army_pos_y, (*this->turn_army_text).GetWidth(), (*this->turn_army_text).GetHeight()));  
         SDL2pp::Texture timer_text_texture(renderer, *this->timer_text);
         renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, timer_pos_y, (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
+        SDL2pp::Texture ammo_text_texture(renderer, *this->ammo_text);
+        renderer.Copy(ammo_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, weapon_ammo_pos_y, (*this->ammo_text).GetWidth(), (*this->ammo_text).GetHeight()));
         SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
         renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, charging_pos_y, (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
         render_weapon_icons(renderer);
@@ -242,6 +247,17 @@ void Hud::update_target(Target target) {
 
 void Hud::update_turn_weapon(TOOLS turn_worm_weapon) {
     this->turn_worm_weapon = turn_worm_weapon;
+}
+
+void Hud::update_turn_weapon_ammo(int turn_worm_weapon_ammo) {
+    std::string ammo_count;
+    if(turn_worm_weapon_ammo == -1) {
+        ammo_count = "Inf";
+    } else {
+        ammo_count = std::to_string(turn_worm_weapon_ammo);
+    }
+    std::string ammo_text_str = "Weapon Ammo: " + ammo_count;
+    *this->ammo_text = SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(ammo_text_str, WHITE);
 }
 
 void Hud::update_armies_health(std::map<char, int>& armies_health) {

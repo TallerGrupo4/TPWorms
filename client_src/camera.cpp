@@ -25,6 +25,10 @@ void Camera::update_turn_weapon(TOOLS turn_worm_weapon) {
     this->hud.update_turn_weapon(turn_worm_weapon);
 }
 
+void Camera::update_turn_weapon_ammo(int turn_worm_weapon_ammo) {
+    this->hud.update_turn_weapon_ammo(turn_worm_weapon_ammo);
+}
+
 void Camera::update_armies_health(std::map<char, int>& armies_health) {
     this->hud.update_armies_health(armies_health);
 }

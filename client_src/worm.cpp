@@ -13,6 +13,7 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::share
     max_health(worm_snpsht.max_health),
     state(worm_snpsht.state),
     weapon(static_cast<TOOLS>(worm_snpsht.weapon)),
+    weapon_ammo(worm_snpsht.current_ammo),
     aiming_angle(worm_snpsht.aiming_angle),
     x(worm_snpsht.pos_x),
     y((-1)*worm_snpsht.pos_y),
@@ -37,6 +38,10 @@ int Worm::get_worm_y() {
 
 TOOLS Worm::get_weapon() {
     return this->weapon;
+}
+
+int Worm::get_weapon_ammo() {
+    return this->weapon_ammo;
 }
 
 bool Worm::has_weapon() {
@@ -87,6 +92,7 @@ char Worm::get_army_id() {
 }
 
 void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht) {
+    weapon_ammo = worm_snpsht.current_ammo;
     int old_angle = angle;
     angle = worm_snpsht.angle;
     bool old_facing_left = facing_left;
