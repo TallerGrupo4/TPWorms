@@ -150,7 +150,7 @@ enum BeamType : char {
 //Consts for render
 #define PIX_PER_METER 6.0f
 
-
+#define INF_AMMO -1
 
 // Consts for game loop
 #define FPS 30.0f

@@ -36,7 +36,7 @@ private:
     ProjectileTypes type;
     int x;
     int y;
-    int explosion_type;
+    int explosion_size;
     int width;
     int height;
     int exhaust_timer;

@@ -3,6 +3,11 @@ name : map1
 platforms:
 - type: LargeHorizontal
   x: 0
+  y: 0
+  width: 6
+  height: 0.8
+- type: LargeHorizontal
+  x: 0
   y: -10
   width: 6
   height: 0.8
@@ -141,24 +146,24 @@ spawn_points:
   y: 6.6
 - x: -16
   y: -1
-- x: 11.8
-  y: -0.4
+# - x: 11.8
+#   y: -0.4
 - x: -20.2
   y: -0.4
 - x: 16
   y: 1
 - x: 20.2
-  y: 1.6
-- x: 11.8
-  y: 1.6
+  y: 1.8
+- x: 13
+  y: 2
 - x: -12
   y: 13
 - x: -7.8
   y: 13.6
 - x: -16.2
   y: 13.6
-- x: 17
-  y: 5
+- x: 20
+  y: 15.6
 - x: 24.2
   y: 16.6
 - x: 15.8
@@ -167,7 +172,7 @@ spawn_points:
 dimensions:
 - height: 100
   width: 100
-  amount_of_worms: 7
+  amount_of_worms: 16
   water_level: -25
 
   

@@ -255,7 +255,7 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         angle[0] = ntohl(angle[0]);
         direction[0] = ntohl(direction[0]);
         state[0] = ntohl(state[0]);
-        explosion_type[0] = ntohl(explosion_type[0]);
+        explosion_type[0] = ntohl(explosion_type[0]) * PIX_PER_METER;
         radius[0] = ntohl(radius[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);

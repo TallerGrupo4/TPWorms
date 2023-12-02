@@ -417,7 +417,7 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp:
     if(is_turn_worm_in_my_army()) {
         if(turn_worm_has_charging_weapon() and is_turn_worm_aiming_weapon()) {
             std::cout << "Sending ActionShoot in space release with charge: " << charge_for_weapon << std::endl;
-            action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id);
+            action = std::make_shared<ActionShooting>(charge_for_weapon, worm_turn_id, timer_for_weapon);
             charge_for_weapon = 0;
             camera.clear_charging_value();
             if(turn_worm_has_timer_weapon()) {
@@ -426,16 +426,16 @@ bool Match::handle_space_button_release(std::shared_ptr<Action>& action, SDL2pp:
             }
             return true;
         } else if (turn_worm_has_guided_weapon() and camera.is_marker_set()) {
-            // int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
-            // int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2) + 184;
-            int target_x = 1;
-            int target_y = 30;
+            int target_x = camera.get_marker_x() - (int)(renderer.GetLogicalWidth()/2);
+            int target_y = camera.get_marker_y() - (int)(renderer.GetLogicalHeight()/2);
+            // int target_x = 1; => 1/6
+            // int target_y = 30; => -5
             std::cout << "Target x: " << target_x << " Target y: " << target_y << "\n";
             action = std::make_shared<ActionShooting>(0, worm_turn_id, target_x, target_y);
             camera.take_out_marker();
             return true;
         } else if(turn_worm_has_dynamite()) {
-            action = std::make_shared<ActionShooting>(0, worm_turn_id);
+            action = std::make_shared<ActionShooting>(0, worm_turn_id, timer_for_weapon);
             camera.clear_timer_value();
             timer_for_weapon = 0;
             return true;

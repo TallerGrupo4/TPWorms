@@ -15,7 +15,7 @@ worm_jump_hor_speed: 3
 worm_backflip_speed: 6
 worm_backflip_hor_speed: 1
 
-explosion_power: 20
+explosion_power: 50
 explosion_fragment_power: 5
 projectile_potency: 8
 
@@ -63,11 +63,20 @@ dynamite_restitution: 0.3
 dynamite_density: 1
 
 baseball_bat_damage: 10
+baseball_bat_power: 20
 
 airstrike_damage: 40
 airstrike_radius: 2
 airstrike_max_ammo: 2
 
-
 fragment_damage: 10
 fragment_radius: 2
+
+#Provision Boxes
+health_box_life: 25
+
+trap_box_damage: 30
+trap_box_power: 40
+trap_box_radius: 2
+
+ammo_box_ammo: 1

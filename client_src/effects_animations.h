@@ -15,11 +15,13 @@ class PosAndAnimation {
 private:
     int x;
     int y;
+    int explosion_size;
     Animation an;
 public:
-    PosAndAnimation(int x, int y, SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint seconds_for_an, bool an_is_looped) : x(x), y(y), an(renderer, surface, seconds_for_an, an_is_looped) {}
+    PosAndAnimation(int x, int y, SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint seconds_for_an, bool an_is_looped, int explosion_size=0) : x(x), y(y), explosion_size(explosion_size), an(renderer, surface, seconds_for_an, an_is_looped) {}
     int get_x() { return x; }
     int get_y() { return y; }
+    int get_explosion_size() {return explosion_size;}
     Animation& get_an() { return an; }
 };
 
@@ -29,8 +31,8 @@ public:
     void render(SDL2pp::Renderer& renderer, int camara_offset_x, int camera_offset_y);
     void set_worm_hit_an(SDL2pp::Renderer& renderer, int x, int y);
     void set_baseball_bat_hit(SDL2pp::Renderer& renderer, int x, int y);
-    void set_big_explosion_an(SDL2pp::Renderer& renderer, int x, int y);
-    void set_small_explosion_an(SDL2pp::Renderer& renderer, int x, int y);
+    void set_big_explosion_an(SDL2pp::Renderer& renderer, int x, int y, int explosion_size = 0);
+    void set_small_explosion_an(SDL2pp::Renderer& renderer, int x, int y, int explosion_size = 0);
     void set_missile_exhaust_an(SDL2pp::Renderer& renderer, int x, int y);
     void update_from_iter();
 private:

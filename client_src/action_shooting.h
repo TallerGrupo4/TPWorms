@@ -9,8 +9,9 @@ private:
     int potency;
     int position_x = 0;
     int position_y = 0;
+    int timer = 0;
 public:
-    ActionShooting(int potency, uint8_t worm_id = 0, int position_x = 0, int position_y = 0) : Action(SHOOT, 0, worm_id), potency(potency), position_x(position_x), position_y(position_y) {};
+    ActionShooting(int potency, uint8_t worm_id = 0, int timer = 0, int position_x = 0, int position_y = 0) : Action(SHOOT, 0, worm_id), potency(potency), position_x(position_x), position_y(position_y), timer(timer) {};
 
     int send(Socket& socket, bool& was_closed) override {
         uint8_t worm_id[1] = {this->worm_id};
@@ -30,6 +31,9 @@ public:
         int position_y[1] = {this->position_y};
         position_y[0] = htonl(position_y[0]);
         ret = socket.sendall(position_y, 4, &was_closed);
+        int timer[1] = {this->timer};
+        timer[0] = htonl(timer[0]);
+        ret = socket.sendall(timer, 4, &was_closed);
         if (was_closed) return WAS_CLOSED;
         return ret;
     }
