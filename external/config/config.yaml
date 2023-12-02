@@ -7,6 +7,8 @@ extra_health: 25
 null_state: 0
 initial_worms_turn: 0
 turn_time: 60
+wind_min: 0.2
+wind_max: 10
 
 # Physics Constants
 worm_speed: 2
@@ -15,7 +17,7 @@ worm_jump_hor_speed: 3
 worm_backflip_speed: 6
 worm_backflip_hor_speed: 1
 
-explosion_power: 50
+explosion_power: 25
 explosion_fragment_power: 5
 projectile_potency: 8
 
@@ -23,13 +25,13 @@ projectile_potency: 8
 bazooka_damage: 50
 bazooka_radius: 2
 bazooka_misile_restitution: 0
-bazooka_misile_density: 1
+bazooka_misile_density: 0.5
 
 mortar_damage: 50
 mortar_radius: 2
 mortar_fragments: 6
 mortar_misile_restitution: 0
-mortar_misile_density: 1
+mortar_misile_density: 0.5
 mortar_max_ammo: 10
 
 green_grenade_damage: 30

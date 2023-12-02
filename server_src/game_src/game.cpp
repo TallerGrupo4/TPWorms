@@ -27,6 +27,7 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     std::vector<WormSnapshot> worm_snaps =  assign_worms_to_teams(map, current_spawn_points, match_teams , number_of_players);
 
     current_turn_player_id = teams[0].get_next_player_id();
+    projectile_manager.randomize_wind();
 
     snapshot.worms = worm_snaps;
     return snapshot;
@@ -187,7 +188,6 @@ bool Game::check_end_game() {
 void Game::turn_clean_up(){
     for (auto& team: teams) {
         for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            // I think this if DEAD is not necessary anymore
             if (worm->get_state() == DEAD) {continue;}
             worm->set_used_tool(false);
             if (worm->state == AIMING) {
@@ -234,6 +234,8 @@ void Game::manage_turn() {
         team_turn++;
         if (team_turn > ((int) teams.size() - 1)) {
             // End of round
+            projectile_manager.randomize_wind();
+
             team_turn = 0;
         }
         try {

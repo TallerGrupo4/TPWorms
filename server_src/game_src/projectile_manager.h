@@ -7,6 +7,7 @@
 class ProjectileManager {
 private:
     std::unordered_set<std::shared_ptr<Projectile>> projectiles;
+    float wind_force;
     int projectile_id;
 
     void correct_angle_projectile(std::shared_ptr<Projectile> projectile);
@@ -18,6 +19,12 @@ private:
     ~ProjectileManager();
 
     bool has_projectiles();
+
+    void randomize_wind();
+
+    void apply_wind(Projectile& projectile);
+
+    float get_wind_force();
 
     void update_during_game(int& it, int& width, int& height);
 

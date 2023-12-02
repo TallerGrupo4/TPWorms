@@ -35,6 +35,14 @@ public:
         return turn_time;
     }
 
+    float get_wind_min(){
+        return wind_min;
+    }
+
+    float get_wind_max(){
+        return wind_max;
+    }
+
     float get_worm_speed() const {
         return worm_speed;
     }
@@ -279,6 +287,8 @@ private:
             initial_worms_turn = config["initial_worms_turn"].as<int>();
             turn_time = config["turn_time"].as<int>();
             turn_time = turn_time *  30; // 30 is the fps of the game
+            wind_min = config["wind_min"].as<float>();
+            wind_max = config["wind_max"].as<float>();
             // Physics
             worm_speed = config["worm_speed"].as<float>();
             worm_jump_speed = config["worm_jump_speed"].as<float>();
@@ -367,6 +377,8 @@ private:
     int null_state;
     int initial_worms_turn;
     int turn_time;
+    float wind_min;
+    float wind_max;
     float worm_speed;
     float worm_jump_speed;
     float worm_jump_hor_speed;

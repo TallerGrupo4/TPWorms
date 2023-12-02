@@ -29,7 +29,7 @@
         float pos_y = worm->GetPosition().y + sin(angle) * OFFSET;
         GameBuilder gamebuilder(*worm->GetWorld());
         b2Body* projectileBody = gamebuilder.create_projectile_body(angle, pos_x, pos_y, restitution, density);
-        std::shared_ptr<Projectile> p = std::make_shared<Projectile>(projectileBody, damage, radius, projectile_type, explosion_type, timer, fragments, angle);
+        std::shared_ptr<Projectile> p = std::make_shared<Projectile>(projectileBody, damage, radius, projectile_type, explosion_type, timer, fragments, angle, is_afected_by_wind);
 
         return p;
     }

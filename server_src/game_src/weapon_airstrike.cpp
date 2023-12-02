@@ -45,7 +45,7 @@ std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, 
     body->CreateFixture(&fixture);
 
     body->ApplyLinearImpulseToCenter(b2Vec2(0, -1), true);
-    return std::make_shared<Projectile>(body, damage, radius, projectile_type, explosion_type, 0, fragments, -90 * DEGTORAD);
+    return std::make_shared<Projectile>(body, damage, radius, projectile_type, explosion_type, 0, fragments, -90 * DEGTORAD, true);
 }
 
 
