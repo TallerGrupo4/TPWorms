@@ -1,17 +1,6 @@
 # Game Settings
 max_players: 4
 
-# Platforms
-plat_small: 3
-plat_big: 6
-plat_height: 0.8
-plat_friction: 0.1
-
-# Worms
-worm_width: 1.5
-worm_height: 1.5
-worm_friction: 1
-
 # World
 start_life: 100
 extra_health: 25

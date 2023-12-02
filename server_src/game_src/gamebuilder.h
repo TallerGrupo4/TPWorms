@@ -8,13 +8,6 @@
 #include "beam.h"
 #include "../config.h"
 
-#define PLAT_FRICTION ConfigSingleton::getInstance().get_plat_friction()
-#define PLAT_SMALL ConfigSingleton::getInstance().get_plat_small()
-#define PLAT_BIG ConfigSingleton::getInstance().get_plat_big()
-#define PLAT_HEIGHT ConfigSingleton::getInstance().get_plat_height()
-#define WORM_WIDTH ConfigSingleton::getInstance().get_worm_width()
-#define WORM_HEIGHT ConfigSingleton::getInstance().get_worm_height()
-#define WORM_FRICTION ConfigSingleton::getInstance().get_worm_friction()
 
 class GameBuilder {
     std::vector<std::shared_ptr<Beam>> beams;

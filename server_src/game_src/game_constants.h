@@ -39,4 +39,17 @@ enum BodyType{
 #define OFFSET 2
 
 
+// World
+// Platforms
+#define PLAT_SMALL 3
+#define PLAT_BIG 6
+#define PLAT_HEIGHT 0.8f
+#define PLAT_FRICTION 0.1f
+
+// Worms
+#define WORM_WIDTH 1.5f
+#define WORM_HEIGHT 1.5f
+#define WORM_FRICTION 1.0f
+
+
 #endif // GAME_CONSTANTS_H

@@ -19,34 +19,6 @@ public:
         return max_players;
     }
 
-    int get_plat_small() const {
-        return plat_small;
-    }
-
-    int get_plat_big() const {
-        return plat_big;
-    }
-
-    float get_plat_height() const {
-        return plat_height;
-    }
-
-    float get_plat_friction() const {
-        return plat_friction;
-    }
-
-    float get_worm_width() const {
-        return worm_width;
-    }
-
-    float get_worm_height() const {
-        return worm_height;
-    }
-
-    float get_worm_friction() const {
-        return worm_friction;
-    }
-
     int get_start_life() const {
         return start_life;
     }
@@ -276,15 +248,6 @@ private:
             std::cout << "Reading config file..." << std::endl;
             YAML::Node config = YAML::LoadFile("../external/config/config.yaml");
             max_players = config["max_players"].as<int>();
-            // Platforms
-            plat_small = config["plat_small"].as<int>();
-            plat_big = config["plat_big"].as<int>();
-            plat_height = config["plat_height"].as<float>();
-            plat_friction = config["plat_friction"].as<float>();
-            // Worms
-            worm_width = config["worm_width"].as<float>();
-            worm_height = config["worm_height"].as<float>();
-            worm_friction = config["worm_friction"].as<float>();
             // World
             start_life = config["start_life"].as<int>();
             extra_health = config["extra_health"].as<int>();
@@ -367,13 +330,6 @@ private:
     }
 // Game
     int max_players;
-    int plat_small;
-    int plat_big;
-    float plat_height;
-    float plat_friction;
-    float worm_width;
-    float worm_height;
-    float worm_friction;
     int start_life;
     int extra_health;
     int null_state;
