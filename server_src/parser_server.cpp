@@ -1,5 +1,4 @@
 #include <cmath>
-#include <iostream>
 #include <sstream>
 #include <string>
 #include "parser_server.h"
@@ -46,13 +45,7 @@ void ParserServer::parse_provision_box_mesures(float& x, float& y, float& width,
 }
 
 void ParserServer::parse_position_form_shoot(float& x, float& y) {
-    std::cout << "Received" << std::endl;
-    std::cout << "x: " << x << " y: " << y << std::endl;
     x = std::round((x * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
     y = std::round((-y * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
-    // x =  x / PIX_PER_METER;
-    // y =  -y / PIX_PER_METER;
-    std::cout << "Parsed" << std::endl;
-    std::cout << "x: " << x << " y: " << y << std::endl;
 }
 
