@@ -36,7 +36,7 @@ enum BodyType{
 
 
 //BUILDER CONSTANTS
-#define OFFSET 2
+#define OFFSET 1.5f
 
 
 // World
@@ -44,7 +44,7 @@ enum BodyType{
 #define PLAT_SMALL 3
 #define PLAT_BIG 6
 #define PLAT_HEIGHT 0.8f
-#define PLAT_FRICTION 0.1f
+#define PLAT_FRICTION 0.3f
 
 // Worms
 #define WORM_WIDTH 1.5f

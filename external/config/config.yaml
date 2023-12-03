@@ -13,9 +13,9 @@ wind_max: 10
 # Physics Constants
 worm_speed: 2
 worm_jump_speed: 6
-worm_jump_hor_speed: 3
+worm_jump_hor_speed: 4
 worm_backflip_speed: 8
-worm_backflip_hor_speed: 1
+worm_backflip_hor_speed: 2
 
 explosion_power: 25
 explosion_fragment_power: 5
@@ -48,7 +48,7 @@ red_grenade_density: 1
 
 banana_damage: 70
 banana_radius: 2
-banana_restitution: 1
+banana_restitution: 0.6
 banana_density: 0.8
 banana_max_ammo: 5
 
@@ -65,7 +65,7 @@ dynamite_restitution: 0.3
 dynamite_density: 1
 
 baseball_bat_damage: 10
-baseball_bat_power: 20
+baseball_bat_power: 30
 
 airstrike_damage: 40
 airstrike_radius: 2

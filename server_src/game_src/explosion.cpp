@@ -21,30 +21,27 @@ void Explosion::apply_explosion(b2Body* body){
         b2Vec2 endPos = body->GetPosition() + radius * direction;
         b2RayCastExplosionCallback callback;
         world->RayCast(&callback, body->GetPosition(), endPos);
-        b2Body* body_call = callback.body;
-        if (body_call != nullptr){
-            if (!bodies.empty() && bodies.find(body_call) != bodies.end()){
-                continue;
-            }
-            if (body_call->GetType() == b2_staticBody){
-                bodies.insert(body_call);
-                continue;
-            }
-            Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(body_call->GetUserData().pointer));
-            if (w) {
-                if (w->get_type() == WORM){
-                    float explosion_distance = ((body_call->GetPosition())- body->GetPosition()).Length() - WORM_HEIGHT/2.0f;
-                    float act_damage = damage - (damage * (explosion_distance/float(radius)));
-                    w->apply_damage(act_damage);
-                    float impulse = explosion_power - (explosion_power * (explosion_distance/float(radius)));
-                    body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
+        std::list<b2Body*> bodies_call = callback.bodies;
+        for (b2Body* body_call : bodies_call){
+            if (bodies.find(body_call) == bodies.end()){
+                Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(body_call->GetUserData().pointer));
+                if (w) {
+                    if (w->get_type() == WORM){
+                        float explosion_distance = ((body_call->GetPosition())- body->GetPosition()).Length() - WORM_HEIGHT/2.0f;
+                        float act_damage = damage - (damage * (explosion_distance/float(radius)));
+                        w->apply_damage(act_damage);
+                        float impulse = explosion_power - (explosion_power * (explosion_distance/float(radius)));
+                        body_call -> ApplyLinearImpulseToCenter(impulse  * direction, true);
+                    }
                 }
+                bodies.insert(body_call);
             }
-            bodies.insert(body_call);
         }
     }
-
 }
+
+
+
 
 void Explosion::create_fragments(b2Body* body , std::unordered_set<std::shared_ptr<Projectile>>& projectiles){
     for (int i =0 ; i < fragments; i++){

@@ -44,7 +44,7 @@ spawn_points:
 
 
 dimensions:
-- height: 50
-  width: 50
+- height: 60
+  width: 60
   amount_of_worms: 4
   water_level: -10
