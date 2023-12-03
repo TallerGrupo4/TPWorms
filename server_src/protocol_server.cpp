@@ -155,6 +155,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         case CHANGE_TOOL: {
             return recv_change_tool(worm_id[0]);
         }
+        case CHEAT: {
+            return recv_cheat(worm_id[0]);
+        }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
             return std::make_shared<GameCommand>();
@@ -226,6 +229,31 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) 
         throw LibError(errno, "Socket was closed");
     }
     return std::make_shared<ChangeToolCommand>(worm_id, scroll_direction[0]);
+}
+
+std::shared_ptr<GameCommand> ProtocolServer::recv_cheat(uint8_t& worm_id) {
+    Cheats cheat[1];
+    socket.recvall(cheat, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    switch (cheat[0]) {
+        case EXTRA_LIFE: {
+            return std::make_shared<CheatLifeCommand>(worm_id);
+        }
+        case EXTRA_AMMO: {
+            return std::make_shared<CheatAmmoCommand>(worm_id);
+        }
+        case EXTRA_TURN_TIME: {
+            return std::make_shared<CheatTurnCommand>(worm_id);
+        }
+        case EXTRA_SHOOTING: {
+            return std::make_shared<CheatShootCommand>(worm_id);
+        }
+        default:
+            break;
+    }
+    return std::make_shared<GameCommand>();
 }
 
 int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms, int& _water_level) {

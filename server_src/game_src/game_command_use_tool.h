@@ -22,4 +22,4 @@ class UseToolCommand: public GameCommand {
 };
 
 
-#endif  // __GAME_COMMAND_SHOOT_H
+#endif  // __GAME_COMMAND_USE_TOOL_H
