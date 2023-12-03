@@ -35,7 +35,19 @@ private:
     uint timer_for_weapon;
     bool already_shot_charged_weapon;
 
+    void update_camera_for_less_priority_targets(int camera_offset_x, int camera_offset_y, bool center_camera);
     bool get_next_target(Target& new_target);
+    bool turn_worm_facing_left();
+    char get_turn_worm_id();
+    bool is_turn_worm_in_my_army();
+    bool is_turn_worm_still();
+    bool turn_worm_has_dynamite();
+    bool turn_worm_has_weapon();
+    bool turn_worm_has_weapon_to_aim();
+    bool turn_worm_has_charging_weapon();
+    bool turn_worm_has_timer_weapon();
+    bool turn_worm_has_guided_weapon();
+    bool is_turn_worm_aiming_weapon();
 
 public:
     explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer);
@@ -48,17 +60,6 @@ public:
     void render(SDL2pp::Renderer& renderer);
     int get_turn_worm_x();
     int get_turn_worm_y();
-    bool turn_worm_facing_left();
-    char get_turn_worm_id();
-    bool is_turn_worm_in_my_army();
-    bool is_turn_worm_still();
-    bool turn_worm_has_dynamite();
-    bool turn_worm_has_weapon();
-    bool turn_worm_has_weapon_to_aim();
-    bool turn_worm_has_charging_weapon();
-    bool turn_worm_has_timer_weapon();
-    bool turn_worm_has_guided_weapon();
-    bool is_turn_worm_aiming_weapon();
     bool handle_left_button(std::shared_ptr<Action>& action);
     bool handle_right_button(std::shared_ptr<Action>& action);
     bool handle_up_button(std::shared_ptr<Action>& action);

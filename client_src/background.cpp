@@ -28,7 +28,7 @@ void Background::render(SDL2pp::Renderer& renderer, int camera_offset_x, int cam
 
 void Background::render_water(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
     SDL_RendererFlip flip = SDL_FLIP_NONE;
-    int water_pos_y = (-1)*water_level+(renderer.GetLogicalHeight()/2);
+    int water_pos_y = ((-1)*water_level*RESOLUTION_MULTIPLIER)+(renderer.GetLogicalHeight()/2) - WATER_ABOVE_OFFSET*2;
     int water_parts_width = water_an.get_frame_size();
     int start_pos_x = 0;
     int times_to_render_waves = (renderer.GetLogicalWidth()/water_parts_width);
