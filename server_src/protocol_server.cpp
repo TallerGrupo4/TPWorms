@@ -125,6 +125,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_armies_health(snapshot.armies_health);
 
+    send_wind_force(snapshot.get_wind_force());
+
     return 1;
 }
 
@@ -499,6 +501,11 @@ void ProtocolServer::send_armies_health(std::map<char, int>& armies_health) {
     }
 }
 
+void ProtocolServer::send_wind_force(int wind_force) {
+    int wind[1] = {wind_force};
+    wind[0] = htonl(wind[0]);
+    socket.sendall(wind, 4, &was_closed);
+}
 
 
 const Command ProtocolServer::recv_create(const char* code) {

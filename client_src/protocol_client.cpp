@@ -112,6 +112,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_end_game(snapshot);
     recv_provision_boxes(snapshot);
     recv_armies_health(snapshot);
+    recv_wind_force(snapshot);
     return snapshot;
 }
 
@@ -133,6 +134,16 @@ void ProtocolClient::send_map_name(const std::string map_name) {
     if (socket.sendall(map_name.c_str(), map_name.size(), &was_closed) < 0) {
         // throw error...
     }
+}
+
+void ProtocolClient::recv_wind_force(Snapshot& snapshot) {
+    int wind_force[1];
+    socket.recvall(wind_force, 4, &was_closed);
+    if (was_closed) {
+        // throw
+    }
+    wind_force[0] = ntohl(wind_force[0]);
+    snapshot.set_wind_force(wind_force[0]);
 }
 
 void ProtocolClient::recv_dimensions(Snapshot& snapshot) {

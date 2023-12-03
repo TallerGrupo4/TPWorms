@@ -43,6 +43,7 @@ private:
     void send_end_game(bool end_game);
     void send_provision_boxes(std::vector<ProvisionBoxSnapshot>& provision_boxes);
     void send_armies_health(std::map<char, int>& armies_health);
+    void send_wind_force(int wind_force);
     std::shared_ptr<GameCommand> recv_mov(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_jump(uint8_t& worm_id);
     std::shared_ptr<GameCommand> recv_aim(uint8_t& worm_id);

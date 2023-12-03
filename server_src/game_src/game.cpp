@@ -28,7 +28,7 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
 
     current_turn_player_id = teams[0].get_next_player_id();
     projectile_manager.randomize_wind();
-
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     snapshot.worms = worm_snaps;
     return snapshot;
 }
@@ -308,6 +308,7 @@ Snapshot Game::get_end_game_snapshot() {
     Snapshot snapshot(worms, {} , {}, {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     snapshot.set_end_game();
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     return snapshot;
 }
 
@@ -327,6 +328,7 @@ Snapshot Game::get_game_snapshot() {
     Snapshot snapshot(worms, projectiles_snaps , {}, boxes_snaps);
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     snapshot.set_armies_health(teams_health);
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     return snapshot;
 }
 

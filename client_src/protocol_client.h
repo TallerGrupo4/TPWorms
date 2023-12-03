@@ -39,6 +39,7 @@ private:
     void recv_end_game(Snapshot& snapshot);
     void recv_provision_boxes(Snapshot& snapshot);
     void recv_armies_health(Snapshot& snapshot);
+    void recv_wind_force(Snapshot& snapshot);
     void send_match_id(const uint match_id);
     void send_map_name(const std::string map_name);
 
