@@ -47,26 +47,20 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
             ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, green_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, green_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
-            // worm_army_color = Green;
             }
             break;
             default: {
             ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
             std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, orange_widgets, surfaces, renderer, bkgrnd);
             this->worms_map[worm_snpsht.id] = worm;
-            // worm_army_color = Orange;
             }
             break;
         }
-        // std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, color_map, surfaces, renderer, bkgrnd);
-        // this->worms_map[worm_snpsht.id] = worm;
-        std::cout << "worm_map constructor, worm_id == " << +worm_snpsht.id << std::endl;
     }
 
     for (auto& provision_box_snpsht : snpsht.provision_boxes) {
         std::shared_ptr<ProvisionBox> provision_box = std::make_shared<ProvisionBox>(provision_box_snpsht, effects_an, effects_sound, surfaces, renderer);
         this->provision_boxes_map[provision_box_snpsht.id] = provision_box;
-        std::cout << "box_map constructor, box_id == " << +provision_box_snpsht.id << std::endl;
     }
 
     update_camera(1,1,true);
@@ -85,9 +79,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
         camera.update_turn_time_text(turn_time);    
     }
     for (std::map<char,std::shared_ptr<Projectile>>::iterator it = projectiles_map.begin(); it != projectiles_map.end();) {
-        //std::cout << "Inside proj destroyer\n";
         if (it->second->get_proj_state() == EXPLODED) {
-            std::cout << "Found proj exploded\n";
             Target new_target = {
                     PlayerType,
                     -1,
@@ -104,7 +96,6 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
 
     for (std::map<char,std::shared_ptr<ProvisionBox>>::iterator it = provision_boxes_map.begin(); it != provision_boxes_map.end();) {
         if (it->second->get_box_state() == PICKED) {
-            std::cout << "Found box picked\n";
             it = provision_boxes_map.erase(it);
         } else {
             ++it;
@@ -112,14 +103,10 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
 
     for (auto& projectile_snpsht : snpsht.projectiles) {
-        //std::cout << "inside proj snapshot\n";
         if (projectiles_map.find(projectile_snpsht.id) == projectiles_map.end() or projectiles_map.count(projectile_snpsht.id) == 0) {
-            //std::cout << "Not found proj from snapshot in map\n";
             std::shared_ptr<Projectile> projectile = std::make_shared<Projectile>(projectile_snpsht, effects_an, effects_sound, surfaces, renderer);
             this->projectiles_map[projectile_snpsht.id] = projectile;
-            //std::cout << "proj_map constructor, proj_id == " << +projectile_snpsht.id << std::endl;
         } else {
-            //std::cout << "Found proj from snapshot in map --> update\n";
             projectiles_map.at(projectile_snpsht.id)->update_from_snapshot(renderer, projectile_snpsht);
         }
     }
@@ -151,6 +138,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     }
     camera.set_army_turn(worm_turn_army_id);
     camera.update_armies_health(snpsht.armies_health);
+    camera.update_wind_velocity(snpsht.get_wind_force());
 }
 
 bool Match::get_next_target(Target& new_target) {
@@ -496,7 +484,7 @@ void Match::handle_5_button() {
 bool Match::handle_cheat_1(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still()) {
-            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            action = std::make_shared<ActionCheatExtraLife>(worm_turn_id);
             return true;
         }
     }
@@ -506,7 +494,7 @@ bool Match::handle_cheat_1(std::shared_ptr<Action>& action) {
 bool Match::handle_cheat_2(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still()) {
-            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            action = std::make_shared<ActionCheatExtraAmmo>(worm_turn_id);
             return true;
         }
     }
@@ -516,7 +504,7 @@ bool Match::handle_cheat_2(std::shared_ptr<Action>& action) {
 bool Match::handle_cheat_3(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still()) {
-            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            action = std::make_shared<ActionExtraTurnTime>(worm_turn_id);
             return true;
         }
     }
@@ -526,7 +514,7 @@ bool Match::handle_cheat_3(std::shared_ptr<Action>& action) {
 bool Match::handle_cheat_4(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_still()) {
-            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            action = std::make_shared<ActionExtraShooting>(worm_turn_id);
             return true;
         }
     }

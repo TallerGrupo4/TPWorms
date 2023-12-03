@@ -1,5 +1,5 @@
-#ifndef ACTION_MOV_H
-#define ACTION_MOV_H
+#ifndef ACTION_CHEAT_H
+#define ACTION_CHEAT_H
 
 #include "action.h"
 
@@ -47,4 +47,4 @@ public:
     ~ActionExtraShooting() = default;
 };
 
-#endif //ACTION_MOV_H
+#endif //ACTION_CHEAT_H
