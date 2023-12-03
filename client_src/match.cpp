@@ -483,40 +483,32 @@ void Match::handle_5_button() {
 
 bool Match::handle_cheat_1(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
-            action = std::make_shared<ActionCheatExtraLife>(worm_turn_id);
-            return true;
-        }
+        action = std::make_shared<ActionCheatExtraLife>(worm_turn_id);
+        return true;
     }
     return false;
 }
 
 bool Match::handle_cheat_2(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
-            action = std::make_shared<ActionCheatExtraAmmo>(worm_turn_id);
-            return true;
-        }
+        action = std::make_shared<ActionCheatExtraAmmo>(worm_turn_id);
+        return true;
     }
     return false;
 }
 
 bool Match::handle_cheat_3(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
-            action = std::make_shared<ActionExtraTurnTime>(worm_turn_id);
-            return true;
-        }
+        action = std::make_shared<ActionExtraTurnTime>(worm_turn_id);
+        return true;
     }
     return false;
 }
 
 bool Match::handle_cheat_4(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
-        if(is_turn_worm_still()) {
-            action = std::make_shared<ActionExtraShooting>(worm_turn_id);
-            return true;
-        }
+        action = std::make_shared<ActionExtraShooting>(worm_turn_id);
+        return true;
     }
     return false;
 }
