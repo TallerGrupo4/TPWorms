@@ -192,7 +192,7 @@ void WormAnimations::render_angle_dependent_an(Animation& up_an, Animation& down
     }
 }
 
-void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+void WormAnimations::render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                     const bool facing_left,
                     int left_offset,
                     int right_offset,
@@ -235,6 +235,26 @@ void WormAnimations::render(int state, int angle, TOOLS weapon, SDL2pp::Renderer
                         bellow_offset);
         break;
     case STILL:
+        if(weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
+            if(angle == 0) {
+                still_thr_an.render(renderer, dst,
+                            flip,
+                            left_offset,
+                            right_offset,
+                            above_offset,
+                            bellow_offset);
+            } else {
+                render_angle_dependent_an(still_thr_up_an, still_thr_down_an,
+                                        angle, facing_left,
+                                        renderer, dst,
+                                        flip,
+                                        left_offset,
+                                        right_offset,
+                                        above_offset,
+                                        bellow_offset);
+            }
+            break;
+        }
         switch (weapon) {
         case BAZOOKA:
             if(angle == 0) {
@@ -1097,7 +1117,11 @@ void WormAnimations::push_back_with_angle(Animation& middle_an, Animation& down_
     }
 }
 
-void WormAnimations::push_drop_weapon_an(TOOLS weapon, int angle, const bool facing_left) {
+void WormAnimations::push_drop_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left) {
+    if(weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
+        push_back_with_angle(drop_thr_an, drop_thr_down_an, drop_thr_up_an, angle, facing_left);
+        return;
+    }
     switch (weapon) {
         case BAZOOKA:
             push_back_with_angle(drop_baz_an, drop_baz_down_an, drop_baz_up_an, angle, facing_left);
@@ -1134,7 +1158,11 @@ void WormAnimations::push_drop_weapon_an(TOOLS weapon, int angle, const bool fac
     }
 }
 
-void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int angle, const bool facing_left) {
+void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left) {
+    if(weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
+        push_back_with_angle(get_thr_an, get_thr_down_an, get_thr_up_an, angle, facing_left);
+        return;
+    }
     switch (weapon) {
         case BAZOOKA:
             push_back_with_angle(get_baz_an, get_baz_down_an, get_baz_up_an, angle, facing_left);
@@ -1171,9 +1199,9 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int angle, const bool 
     }
 }
 
-void WormAnimations::update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int angle, const bool facing_left) {
-    push_drop_weapon_an(actual_weapon, angle, facing_left);
-    push_pick_up_weapon_an(new_weapon, angle, facing_left);
+void WormAnimations::update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int actual_weapon_ammo, int new_weapon_ammo, int angle, const bool facing_left) {
+    push_drop_weapon_an(actual_weapon, actual_weapon_ammo, angle, facing_left);
+    push_pick_up_weapon_an(new_weapon, new_weapon_ammo, angle, facing_left);
 }
 
 bool WormAnimations::is_action_state(int state) {
@@ -1186,4 +1214,13 @@ bool WormAnimations::is_action_state(int state) {
     bool is_aiming_state = (state == AIMING);
     bool is_shooting_state = (state == SHOOTED);
     return (is_moving_state or is_climbing_state or is_jumping_state or is_sliding_state or is_backflipping_state or is_falling_state or is_aiming_state or is_shooting_state);
+}
+
+bool WormAnimations::is_weapon_grenade_type(TOOLS weapon) {
+    bool is_green_grenade = (weapon == TOOLS::GREEN_GRENADE);
+    bool is_red_grenade = (weapon == TOOLS::RED_GRENADE);
+    bool is_banana = (weapon == TOOLS::BANANA);
+    bool is_holy_grenade = (weapon == TOOLS::HOLY_GRENADE);
+    bool is_dynamite = (weapon == TOOLS::DYNAMITE);
+    return (is_green_grenade or is_red_grenade or is_banana or is_holy_grenade or is_dynamite);
 }

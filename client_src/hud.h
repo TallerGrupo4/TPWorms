@@ -14,6 +14,7 @@ private:
     Target target;
     std::unique_ptr<Animation> marker_an;
     /*TEXTS*/
+    std::shared_ptr<SDL2pp::Surface> wind_velocity_text;
     std::shared_ptr<SDL2pp::Surface> turn_time_text;
     std::shared_ptr<SDL2pp::Surface> ammo_text;
     std::shared_ptr<SDL2pp::Surface> timer_text;
@@ -59,6 +60,7 @@ public:
     void update_target(Target target);
     void update_turn_weapon(TOOLS turn_worm_weapon);
     void update_turn_weapon_ammo(int turn_worm_weapon_ammo);
+    void update_wind_velocity(int wind_velocity);
     void update_armies_health(std::map<char, int>& armies_health);
     void update_from_iter();
     void update_marker(int x, int y);

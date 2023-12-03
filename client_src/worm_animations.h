@@ -15,7 +15,7 @@
 class WormAnimations {
 public:
     WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces);
-    void render(int state, int angle, TOOLS weapon, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+    void render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                        const bool facing_left,
                        int left_offset = 0,
                        int right_offset = 0,
@@ -23,10 +23,11 @@ public:
                        int bellow_offset = 0);
     void update_from_snapshot(int state, int old_state, int angle, int old_angle, bool facing_left, bool old_facing_left, TOOLS weapon, int old_aiming_angle, int new_aiming_angle);
     void update_from_iter(int state, int angle, bool facing_left);
-    void update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int angle, const bool facing_left);
+    void update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int actual_weapon_ammo, int new_weapon_ammo, int angle, const bool facing_left);
 private:
     void reset_old_an(int old_state, int old_angle, bool old_facing_left, int old_aiming_angle);  
     bool is_action_state(int state);
+    bool is_weapon_grenade_type(TOOLS weapon);
     void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
     void render_angle_dependent_an(Animation& up_an, Animation& down_an,
                                     const int angle, const bool facing_left,
@@ -37,8 +38,8 @@ private:
                                     int above_offset,
                                     int bellow_offset);
     void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle, const bool facing_left);
-    void push_drop_weapon_an(TOOLS weapon, int angle, const bool facing_left);
-    void push_pick_up_weapon_an(TOOLS weapon, int angle, const bool facing_left);
+    void push_drop_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left);
+    void push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left);
 
     std::list<std::reference_wrapper<Animation>> lingering_animations;
     TOOLS old_weapon;
