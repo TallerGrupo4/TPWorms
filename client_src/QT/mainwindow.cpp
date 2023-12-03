@@ -227,7 +227,6 @@ QString code_string = ui->CreateMatchLineEdit->text();
                     } catch (const LostConnection& e) {
                     std::cerr << "Lost connection in create match" << std::endl;
                     exit_succesful = false;
-                    client.exit();
                     this->close();
                 }
         } else {
