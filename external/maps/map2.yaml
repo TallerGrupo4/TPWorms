@@ -4,54 +4,33 @@ platforms:
 - type: ShortHorizontal
   x: 0
   y: 0
-  width: 3
-  height: 0.8
 - type: ShortVertical
   x: -5
   y: 0
-  width: 0.8
-  height: 3
 - type: Short45
   x: 5
   y: 3
-  width: 3
-  height: 0.8
 - type: Short25
   x: 7
   y: -3
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -7
   y: 3
-  width: 3
-  height: 0.8
 - type: ShortMinus45
   x: -7
   y: -7
-  width: 3
-  height: 0.8
 - type: ShortMinus65
   x: 7
   y: 7
-  width: 3
-  height: 0.8
 - type: ShortVerticalFlipped
   x: 8
   y: 0
-  width: 0.8
-  height: 3
 - type: Short65
   x: 6
   y: 1
-  width: 3
-  height: 0.8
 - type: LargeHorizontal
   x: 0
   y: 5
-  width: 6
-  height: 0.8
-
 
 spawn_points:
 - x: 0

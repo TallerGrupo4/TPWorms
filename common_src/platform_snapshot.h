@@ -14,9 +14,16 @@ public:
     float width;
     float height;
 
-
-    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float width = PLAT_SMALL, float height = PLAT_HEIGHT):
+    PlatformSnapshot(BeamType type, float pos_x, float pos_y, float width, float height):
             type(type), pos_x(pos_x), pos_y(pos_y), width(width), height(height) {};
+
+
+    PlatformSnapshot(BeamType type, float pos_x, float pos_y):
+            type(type), pos_x(pos_x), pos_y(pos_y) ,width(PLAT_SMALL), height(PLAT_HEIGHT) {
+                if (type <= 8){
+                    width = PLAT_BIG;
+                }
+            };
     ~PlatformSnapshot(){};
 };
 
