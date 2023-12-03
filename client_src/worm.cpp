@@ -117,6 +117,9 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     case JUMPING:
         if(old_state == STILL) effects_sound->play_worm_jump_sound();
         break;
+    case BACKFLIPPING:
+        if(old_state == STILL) effects_sound->play_worm_jump_sound();
+        break;
     case DAMAGED:
         effects_an->set_worm_hit_an(renderer, x, y);
         effects_sound->play_worm_impact_sound();
