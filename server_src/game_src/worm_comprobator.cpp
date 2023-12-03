@@ -79,11 +79,13 @@ void WormComprobator::check_velocities(Worm& w){
         w.body->SetAngularVelocity(0);
     } 
     // To avoid the worm from moving a lot when down in a slope
-    if (w.act_dir == LEFT && w.get_angle() > 0){
-        w.body->ApplyForceToCenter(b2Vec2(5 * w.body->GetMass(),0), true);
-    }
-    if (w.act_dir == RIGHT && w.get_angle() < 0){
-        w.body->ApplyForceToCenter(b2Vec2(-5 * w.body->GetMass(),0), true);
+    if (w.state == CLIMBING){
+        if (w.act_dir == LEFT && w.get_angle() > 0){
+            w.body->ApplyForceToCenter(b2Vec2(5 * w.body->GetMass(),0), true);
+        }
+        if (w.act_dir == RIGHT && w.get_angle() < 0){
+            w.body->ApplyForceToCenter(b2Vec2(-5 * w.body->GetMass(),0), true);
+        }
     }
     // To avoid the worm from spinning when 
     if (abs (w.body->GetAngularVelocity()) > 0){
