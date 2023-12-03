@@ -96,7 +96,6 @@ void WormComprobator::check_out_of_map_worm(Worm& w, int& turn_time, int& curren
     // To avoid the worm from going out of the map
    float w_x = w.body->GetPosition().x;
    float w_y = w.body->GetPosition().y;
-
    if (w_x < -width/2 || w_x > width/2 || w_y < -height/2 || w_y > height/2|| w_y < water_level){
        w.set_state(DEAD);
        if (current_turn_player_id == w.get_id()){

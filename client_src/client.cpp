@@ -11,7 +11,6 @@
 Client::Client(const char* hostname, const char* servername):
         socket(hostname, servername),
         queue_sender_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
-        // queue_sender_match(std::make_shared<Queue<Action>>(QUEUE_MAX_SIZE)),
         queue_sender_match(std::make_shared<Queue<std::shared_ptr<Action>>>(QUEUE_MAX_SIZE)),
         queue_receiver_lobby(std::make_shared<Queue<Command>>(QUEUE_MAX_SIZE)),
         queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
@@ -42,8 +41,7 @@ void Client::stop() {
 
 Command Client::recv_lobby_command() {
     if (!is_connected()) {
-        // throw LibError(errno, "Client is not connected");
-        // throw LostConnection("Client is not connected");
+        throw LostConnection();
     }
     Command command = protocol.recv_command();
     return command;
@@ -51,8 +49,7 @@ Command Client::recv_lobby_command() {
 
 Snapshot Client::recv_map() {
     if (!is_connected()) {
-        // throw LibError(errno, "Client is not connected");
-        // throw LostConnection("Client is not connected");
+        throw LostConnection();
     }
     Snapshot snapshot = protocol.recv_snapshot();
     return snapshot;
@@ -60,19 +57,14 @@ Snapshot Client::recv_map() {
 
 bool Client::recv_snapshot(Snapshot& snapshot) {
     if (!is_connected()) {
-        // throw LibError(errno, "Client is not connected");
-        // throw LostConnection("Client is not connected");
+        throw LostConnection();
     }
     return queue_receiver_match->try_pop(snapshot);
-    // Snapshot snapshot;
-    // queue_receiver_match->try_pop(snapshot);
-    // return snapshot;
 }
 
 void Client::send_lobby_command(Command command) {
     if (!protocol.is_connected()) {
-        // throw LibError(errno, "Client is not connected");
-        // throw LostConnection("Client is not connected");
+        throw LostConnection();
     }
     protocol.send_command(command);
 }
@@ -80,8 +72,7 @@ void Client::send_lobby_command(Command command) {
 
 void Client::send_action(std::shared_ptr<Action> action) {
     if (!is_connected()) {
-        // throw LibError(errno, "Client is not connected");
-        // throw LostConnection("Client is not connected");
+        throw LostConnection();
     }
     queue_sender_match->try_push(action);
 }
@@ -93,7 +84,6 @@ void Client::exit() {
 
 
 bool Client::is_connected() {
-    // return protocol.is_connected() && !is_dead;
     return client_sender->is_connected() && client_receiver->is_connected() && !is_dead;
 }
 

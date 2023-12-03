@@ -9,6 +9,7 @@
 #include "../client.h"
 #include "lobby_constants.h"
 #include "worker.h"
+#include "../../common_src/custom_errors.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {

@@ -204,24 +204,31 @@ QString code_string = ui->CreateMatchLineEdit->text();
                 return;
             }
             Command cmd(CASE_CREATE, match_id);
-            client.send_lobby_command(cmd);
-            Command recv_cmd = client.recv_lobby_command();
-            switch (recv_cmd.get_code()) {
-                case CASE_MATCH_ALREADY_EXISTS:
-                    ui->CreateMatchLineEdit->clear();
-                    ui->ErrorCreatingMatchLabel->clear();
-                    ui->ErrorCreatingMatchLabel->setText("Error: Match already exist");
-                    break;
+            try {
+                client.send_lobby_command(cmd);
+                Command recv_cmd = client.recv_lobby_command();
+                switch (recv_cmd.get_code()) {
+                    case CASE_MATCH_ALREADY_EXISTS:
+                        ui->CreateMatchLineEdit->clear();
+                        ui->ErrorCreatingMatchLabel->clear();
+                        ui->ErrorCreatingMatchLabel->setText("Error: Match already exist");
+                        break;
 
-                case CASE_CREATE:
-                    if(match_id != recv_cmd.get_match_id()) {
-                        std::cerr << "MATCH CODE INCORRECT IN CREATING IN LOBBY: RECV FROM COMMAND IS DIFFERENT FROM CLIENT ( match_id: " << match_id << " recv_id: " << recv_cmd.get_match_id() << " )"<< std::endl;
-                        exit_succesful = false;
-                        this->close();
+                    case CASE_CREATE:
+                        if(match_id != recv_cmd.get_match_id()) {
+                            std::cerr << "MATCH CODE INCORRECT IN CREATING IN LOBBY: RECV FROM COMMAND IS DIFFERENT FROM CLIENT ( match_id: " << match_id << " recv_id: " << recv_cmd.get_match_id() << " )"<< std::endl;
+                            exit_succesful = false;
+                            this->close();
+                        }
+                        match_code = match_id;
+                        handle_pre_match(recv_cmd.get_map_names(), recv_cmd.get_number_of_players(), true);
+                        break;
                     }
-                    match_code = match_id;
-                    handle_pre_match(recv_cmd.get_map_names(), recv_cmd.get_number_of_players(), true);
-                    break;
+                    } catch (const LostConnection& e) {
+                    std::cerr << "Lost connection in create match" << std::endl;
+                    exit_succesful = false;
+                    client.exit();
+                    this->close();
                 }
         } else {
             ui->CreateMatchLineEdit->clear();
