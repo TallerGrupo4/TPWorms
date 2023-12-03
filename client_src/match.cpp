@@ -4,7 +4,7 @@
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer) : 
-            bkgrnd(std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, surfaces, renderer)),
+            bkgrnd(std::make_shared<Background>(snpsht.platforms, snpsht.map_dimensions.width, snpsht.map_dimensions.height, snpsht.map_dimensions.water_level, surfaces, renderer)),
             effects_an(std::make_shared<EffectsAnimations>(renderer, surfaces)),
             effects_sound(std::make_shared<EffectsSounds>(mixer)),
             my_army_id(snpsht.my_army.begin()->first),
@@ -312,6 +312,7 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
 }
 
 void Match::update_from_iter(int iter) {
+    bkgrnd->update_water();
     for (std::map<char,std::shared_ptr<Worm>>::iterator it = worms_map.begin(); it != worms_map.end(); it++) {
         it->second->update_from_iter(iter);
     }
@@ -340,6 +341,7 @@ void Match::render(SDL2pp::Renderer& renderer) {
     for (std::map<char,std::shared_ptr<Projectile>>::iterator proj_it = projectiles_map.begin(); proj_it != projectiles_map.end(); proj_it++) {
         proj_it->second->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     }
+    bkgrnd->render_water(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     this->effects_an->render(renderer, this->camera.get_offset_x(), this->camera.get_offset_y());
     this->camera.render(renderer);
 }

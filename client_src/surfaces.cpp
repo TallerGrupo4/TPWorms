@@ -2,7 +2,8 @@
 
 using namespace SDL2pp;
 
-MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
+MatchSurfaces::MatchSurfaces() : background1(BACKGROUND_FOREST_PATH),
+                                water(WATER_SPRITES_PATH),
                                 /*CROSSHAIR/MARKER*/
                                 crosshair_blue(CROSSHAIR_BLUE_SPRITES_PATH),
                                 crosshair_red(CROSSHAIR_RED_SPRITES_PATH),
@@ -220,6 +221,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 short_beam_m_45(BEAM_SHORT_MINUS_45),
                                 short_beam_m_65(BEAM_SHORT_MINUS_65),
                                 short_beam_vertical_flipped(BEAM_SHORT_VERTICAL_FLIPPED) {
+    water.SetColorKey(true, 0);
     crosshair_blue.SetColorKey(true, 0);
     crosshair_red.SetColorKey(true, 0);
     crosshair_green.SetColorKey(true, 0);

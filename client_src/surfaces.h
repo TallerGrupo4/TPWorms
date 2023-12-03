@@ -10,6 +10,8 @@ class MatchSurfaces {
 public:    
     /*BACKGROUND*/
     Surface background1;
+    /*WATER*/
+    Surface water;
     /*CROSSHAIR/MARKER*/
     Surface crosshair_blue;
     Surface crosshair_red;

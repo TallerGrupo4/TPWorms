@@ -64,6 +64,8 @@ struct Target {
 
 #define BLUE {71, 83, 255}
 
+#define DARK_BLUE {27, 28, 59}
+
 #define YELLOW {255, 187, 15}
 
 #define GREEN {36, 159, 63}
@@ -76,7 +78,15 @@ struct Target {
 
 /*BACKGROUNDS*/
 
-#define BACKGROUND1_PATH BACKGROUND_PATH "/background1.png"
+#define BACKGROUND_FOREST_PATH BACKGROUND_PATH "/background_mountains.png"
+
+/*WATER*/
+
+#define SECS_FOR_WATER 1
+
+#define WATER_ABOVE_OFFSET 104
+
+#define WATER_SPRITES_PATH MISC_SPRITES_PATH "/water.png"
 
 /*CROSSHAIR/MARKER*/
 
