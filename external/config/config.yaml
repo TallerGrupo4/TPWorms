@@ -12,9 +12,9 @@ wind_max: 10
 
 # Physics Constants
 worm_speed: 2
-worm_jump_speed: 4
+worm_jump_speed: 6
 worm_jump_hor_speed: 3
-worm_backflip_speed: 6
+worm_backflip_speed: 8
 worm_backflip_hor_speed: 1
 
 explosion_power: 25
