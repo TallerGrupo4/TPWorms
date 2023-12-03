@@ -69,6 +69,10 @@ public:
     void handle_3_button();
     void handle_4_button();
     void handle_5_button();
+    bool handle_cheat_1(std::shared_ptr<Action>& action);
+    bool handle_cheat_2(std::shared_ptr<Action>& action);
+    bool handle_cheat_3(std::shared_ptr<Action>& action);
+    bool handle_cheat_4(std::shared_ptr<Action>& action);
     void handle_mouse_left_click(int mouse_x, int mouse_y);
     bool handle_mouse_right_click(std::shared_ptr<Action>& action, int mouse_x, int mouse_y);
     bool handle_mouse_scroll_up(std::shared_ptr<Action>& action);

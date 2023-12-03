@@ -493,6 +493,46 @@ void Match::handle_5_button() {
     }
 }
 
+bool Match::handle_cheat_1(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_cheat_2(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_cheat_3(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Match::handle_cheat_4(std::shared_ptr<Action>& action) {
+    if(is_turn_worm_in_my_army()) {
+        if(is_turn_worm_still()) {
+            action = std::make_shared<ActionChangeWeapon>(worm_turn_id);
+            return true;
+        }
+    }
+    return false;
+}
+
 
 void Match::handle_mouse_left_click(int mouse_x, int mouse_y) {
     if(is_turn_worm_in_my_army()) {
