@@ -9,7 +9,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND_FOREST_PATH),
                                 crosshair_red(CROSSHAIR_RED_SPRITES_PATH),
                                 crosshair_green(CROSSHAIR_GREEN_SPRITES_PATH),
                                 crosshair_yellow(CROSSHAIR_YELLOW_SPRITES_PATH),
-                                crossharir_purple(CROSSHAIR_PURPLE_SPRITES_PATH),
+                                crosshair_purple(CROSSHAIR_PURPLE_SPRITES_PATH),
                                 marker_blue(MARKER_BLUE_SPRITES_PATH),
                                 marker_red(MARKER_RED_SPRITES_PATH),
                                 marker_green(MARKER_GREEN_SPRITES_PATH),
@@ -226,7 +226,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND_FOREST_PATH),
     crosshair_red.SetColorKey(true, 0);
     crosshair_green.SetColorKey(true, 0);
     crosshair_yellow.SetColorKey(true, 0);
-    crossharir_purple.SetColorKey(true, 0);
+    crosshair_purple.SetColorKey(true, 0);
     marker_blue.SetColorKey(true, 0);
     marker_red.SetColorKey(true, 0);
     marker_green.SetColorKey(true, 0);

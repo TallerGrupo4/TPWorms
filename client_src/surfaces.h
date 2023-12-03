@@ -17,7 +17,7 @@ public:
     Surface crosshair_red;
     Surface crosshair_green;
     Surface crosshair_yellow;
-    Surface crossharir_purple;
+    Surface crosshair_purple;
     Surface marker_blue;
     Surface marker_red;
     Surface marker_green;

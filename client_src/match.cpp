@@ -17,46 +17,19 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 
     camera.update_turn_time_text(turn_time);
 
-
-    SDL_Color blue_color = BLUE;
-    SDL_Color red_color = RED;
-    SDL_Color yellow_color = YELLOW;
-    SDL_Color green_color = GREEN;
-    SDL_Color orange_color = ORANGE;
+    std::map<int, std::pair<std::reference_wrapper<SDL2pp::Surface>, SDL_Color>> team_info = {
+        {0, {surfaces.crosshair_blue, BLUE}},
+        {1, {surfaces.crosshair_red, RED}},
+        {2, {surfaces.crosshair_yellow, YELLOW}},
+        {3, {surfaces.crosshair_green, GREEN}},
+        {4, {surfaces.crosshair_purple, ORANGE}}
+    };
 
     for (WormSnapshot worm_snpsht : snpsht.worms){
-        switch (worm_snpsht.team_id) {
-            case 0 : {
-            ArmyColorDependentMisc blue_widgets(surfaces.crosshair_blue, blue_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, blue_widgets, surfaces, renderer, bkgrnd);
-            this->worms_map[worm_snpsht.id] = worm;
-            }
-            break;
-            case 1 : {
-            ArmyColorDependentMisc red_widgets(surfaces.crosshair_red, red_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, red_widgets, surfaces, renderer, bkgrnd);
-            this->worms_map[worm_snpsht.id] = worm;
-            }
-            break;
-            case 2 : {
-            ArmyColorDependentMisc yellow_widgets(surfaces.crosshair_yellow, yellow_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, yellow_widgets, surfaces, renderer, bkgrnd);
-            this->worms_map[worm_snpsht.id] = worm;
-            }
-            break;
-            case 3 : {
-            ArmyColorDependentMisc green_widgets(surfaces.crosshair_green, green_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, green_widgets, surfaces, renderer, bkgrnd);
-            this->worms_map[worm_snpsht.id] = worm;
-            }
-            break;
-            default: {
-            ArmyColorDependentMisc orange_widgets(surfaces.crossharir_purple, orange_color);
-            std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, orange_widgets, surfaces, renderer, bkgrnd);
-            this->worms_map[worm_snpsht.id] = worm;
-            }
-            break;
-        }
+        std::pair<std::reference_wrapper<SDL2pp::Surface>, SDL_Color> widgets_info = (worm_snpsht.team_id > 3) ? team_info.at(4) : team_info.at(worm_snpsht.team_id);
+        ArmyColorDependentMisc widgets(widgets_info.first.get(), widgets_info.second);
+        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, widgets, surfaces, renderer, bkgrnd);
+        this->worms_map[worm_snpsht.id] = worm;
     }
 
     for (auto& provision_box_snpsht : snpsht.provision_boxes) {
@@ -230,28 +203,6 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
     case NoneType:
     case PlayerType:
         update_camera_for_less_priority_targets(camera_offset_x, camera_offset_y, center_camera);
-        // if (center_camera) {
-        //     new_target = {
-        //         WormType,
-        //         get_turn_worm_id(),
-        //         -1,
-        //         get_turn_worm_x()*RESOLUTION_MULTIPLIER,
-        //         get_turn_worm_y()*RESOLUTION_MULTIPLIER
-        //     };
-        //     camera.update(new_target);
-        // } else if(get_next_target(new_target)) {
-        //         camera.update(new_target);
-        // } else if ((camera_offset_x != 0) and (camera_offset_y != 0)) {
-        //         new_target = {
-        //             PlayerType,
-        //             -1,
-        //             -1,
-        //             camera_offset_x + get_turn_worm_x()*RESOLUTION_MULTIPLIER,
-        //             camera_offset_y + get_turn_worm_y()*RESOLUTION_MULTIPLIER
-        //         };
-        //         camera.update(new_target);
-        //     }
-        // }
         break;
     case ProjectileType:
         auto target_proj = projectiles_map.at(camera.get_target_proj_id());
@@ -268,27 +219,6 @@ void Match::update_camera(int camera_offset_x, int camera_offset_y,
             break;
         }
         update_camera_for_less_priority_targets(camera_offset_x, camera_offset_y, center_camera);
-        // if (center_camera) {
-        //     new_target = {
-        //         WormType,
-        //         get_turn_worm_id(),
-        //         -1,
-        //         get_turn_worm_x()*RESOLUTION_MULTIPLIER,
-        //         get_turn_worm_y()*RESOLUTION_MULTIPLIER
-        //     };
-        //     camera.update(new_target);
-        // } else if(get_next_target(new_target)) {
-        //         camera.update(new_target);
-        // } else if ((camera_offset_x != 0) and (camera_offset_y != 0)) {
-        //         new_target = {
-        //             PlayerType,
-        //             -1,
-        //             -1,
-        //             camera_offset_x + get_turn_worm_x()*RESOLUTION_MULTIPLIER,
-        //             camera_offset_y + get_turn_worm_y()*RESOLUTION_MULTIPLIER
-        //         };
-        //         camera.update(new_target);
-        // }
         break;
     }
 }
