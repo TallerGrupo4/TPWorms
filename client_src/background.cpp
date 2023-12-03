@@ -18,7 +18,7 @@ void Background::render(SDL2pp::Renderer& renderer, int camera_offset_x, int cam
         bkgrnd_image,
         source_rect,
         dest_rect,
-        0.0,              // don't rotate
+        0.0,
         SDL2pp::NullOpt);
 
     for (size_t i = 0; i < beams.size(); i++) {
@@ -30,15 +30,15 @@ void Background::render_water(SDL2pp::Renderer& renderer, int camera_offset_x, i
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     int water_pos_y = (-1)*water_level+(renderer.GetLogicalHeight()/2);
     int water_parts_width = water_an.get_frame_size();
-
     int start_pos_x = 0;
     int times_to_render_waves = (renderer.GetLogicalWidth()/water_parts_width);
     while(start_pos_x < times_to_render_waves * water_parts_width) {
         this->water_an.render(renderer, SDL2pp::Rect(start_pos_x,water_pos_y - camera_offset_y,water_parts_width,water_an.get_frame_size()), flip);
         start_pos_x += water_parts_width;
     }
+    int sea_pos_y = water_pos_y + water_parts_width;
     renderer.SetDrawColor(DARK_BLUE);
-    renderer.FillRect(SDL2pp::Rect(0, water_pos_y + water_parts_width - camera_offset_y, renderer.GetLogicalWidth(), renderer.GetLogicalHeight()));
+    renderer.FillRect(SDL2pp::Rect(0, sea_pos_y - camera_offset_y, renderer.GetLogicalWidth(), height + sea_pos_y));
     renderer.SetDrawColor(WHITE);
 }
 

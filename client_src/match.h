@@ -33,6 +33,7 @@ private:
     Camera camera;
     uint charge_for_weapon;
     uint timer_for_weapon;
+    bool already_shot_charged_weapon;
 
     bool get_next_target(Target& new_target);
 
