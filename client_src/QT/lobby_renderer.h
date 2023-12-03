@@ -4,6 +4,7 @@
 #include <exception>
 #include <iostream>
 #include <QApplication>
+#include <QMetaType>
 
 #include "mainwindow.h"
 #include "../client.h"

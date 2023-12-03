@@ -4,6 +4,7 @@ LobbyRenderer::LobbyRenderer(Client& client) : client(client) {}
 
 bool LobbyRenderer::start(int argc, char* argv[]) {
     QApplication app(argc,argv);
+    qRegisterMetaType<Snapshot>("Snapshot");
     bool exit_succesfull = false;
     MainWindow w(client,exit_succesfull,map_snapshot);
     w.show();

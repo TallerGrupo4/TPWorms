@@ -7,7 +7,7 @@
 using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO), ttf(), mixer(AUDIO_HZ_CD_QUALITY, MIX_DEFAULT_FORMAT, MIXER_CHANNELS, MIXER_CHUNKSIZE),
-                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
+                window("WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
