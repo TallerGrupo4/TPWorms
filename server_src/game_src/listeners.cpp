@@ -63,6 +63,10 @@ void MyListener::execute_contact_jump(b2Body* bodyA , b2Body* bodyB){
     Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
     wA->add_contact();
     if (wA->get_state() == JUMPING || wA->get_state() == FALLING || wA->get_state() == BACKFLIPPING){
+        if (wA->get_state() == JUMPING || wA->get_state() == BACKFLIPPING){
+            wA->set_state(STILL);
+            bodyA->SetLinearVelocity(b2Vec2(0,0));
+        }
         float y_diff = bodyA->GetPosition().y - wA->get_last_y();
         if (y_diff < -FALL_DISTANCE_THRESHOLD){
             int damage = abs(std::round(y_diff));

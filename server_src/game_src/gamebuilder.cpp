@@ -85,7 +85,7 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     b2FixtureDef worm_fixture;
     worm_fixture.density = 1;
     worm_fixture.shape = &worm_shape;
-    worm_fixture.restitution = 0.2f;
+    worm_fixture.restitution = 0.3f;
     worm_fixture.friction = WORM_FRICTION;
     worm->CreateFixture(&worm_fixture);
     return worm;
