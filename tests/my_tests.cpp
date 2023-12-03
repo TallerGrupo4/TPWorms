@@ -14,6 +14,7 @@
 #include "../common_src/snapshot.h"
 #include "../server_src/game_src/game_command.h"
 #include "../client_src/actions.h"
+#include "action_cheat.h"
 
 const char* serverPort = "8080";
 const char* ip = "localhost";
@@ -406,6 +407,75 @@ TEST(ProtocolHappyCasesMatch, Send_action_change_tool_and_recv_gameCommand_chang
     ASSERT_EQ(changeToolCommand->get_direction(), 1);
     ASSERT_EQ(changeToolCommand->get_worm_id(), 2);
 }
+
+TEST(ProtocolHappyCasesMatch, Send_action_cheat_extra_life_and_recv_gameCommand_cheat_extra_life) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionCheatExtraLife>(1);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    CheatLifeCommand* cheatExtraLifeCommand = dynamic_cast<CheatLifeCommand*>(game_command.get());
+    ASSERT_NE(cheatExtraLifeCommand, nullptr);
+    ASSERT_EQ(cheatExtraLifeCommand->get_worm_id(), 1);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_action_cheat_extra_ammo_and_recv_gameCommand_cheat_extra_ammo) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionCheatExtraAmmo>(1);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    CheatAmmoCommand* cheatExtraAmmoCommand = dynamic_cast<CheatAmmoCommand*>(game_command.get());
+    ASSERT_NE(cheatExtraAmmoCommand, nullptr);
+    ASSERT_EQ(cheatExtraAmmoCommand->get_worm_id(), 1);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_action_cheat_extra_turn_time_and_recv_gameCommand_cheat_extra_turn_time) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionExtraTurnTime>(1);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    CheatTurnCommand* cheatExtraTurnTimeCommand = dynamic_cast<CheatTurnCommand*>(game_command.get());
+    ASSERT_NE(cheatExtraTurnTimeCommand, nullptr);
+    ASSERT_EQ(cheatExtraTurnTimeCommand->get_worm_id(), 1);
+}
+
+TEST(ProtocolHappyCasesMatch, Send_action_cheat_extra_shooting_and_recv_gameCommand_cheat_extra_shooting) {
+    Socket dummy_socket(serverPort);
+    ParserClient parser_client;
+    ParserServer parser_server;
+    auto protocols = createProtocols(dummy_socket,
+                                     parser_client,
+                                     parser_server);
+    ProtocolClient protocol_client = protocols.first;
+    ProtocolServer protocol_server = protocols.second;
+    std::shared_ptr<Action> action = std::make_shared<ActionExtraShooting>(1);
+    protocol_client.send_action(action);
+    std::shared_ptr<GameCommand> game_command = protocol_server.recv_game_command();
+    CheatShootCommand* cheatExtraShootingCommand = dynamic_cast<CheatShootCommand*>(game_command.get());
+    ASSERT_NE(cheatExtraShootingCommand, nullptr);
+    ASSERT_EQ(cheatExtraShootingCommand->get_worm_id(), 1);
+}
+
 
 
 // SEND AND RECV SNAPSHOT (WormSnapshot and PlatformSnapshot already tested in PseudoLobby)
