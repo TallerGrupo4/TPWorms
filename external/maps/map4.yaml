@@ -115,4 +115,4 @@ dimensions:
 - height: 100
   width: 100
   amount_of_worms: 10
-  water_level: -20
+  water_level: -25
