@@ -2,10 +2,10 @@
 
 ProvisionBoxAnimations::ProvisionBoxAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces) :
     trap_box_disguise(static_cast<BoxType>(0)),
-    mcrate_still_an(renderer, surfaces.mcrate_still, SECS_FOR_PROVISION_BOXES_SPRITES, false, true),
-    mcrate_picked_an(renderer, surfaces.mcrate_picked, SECS_FOR_PROVISION_BOXES_SPRITES, true),
-    wcrate_still_an(renderer, surfaces.wcrate_still, SECS_FOR_PROVISION_BOXES_SPRITES, false, true),
-    wcrate_picked_an(renderer, surfaces.wcrate_picked, SECS_FOR_PROVISION_BOXES_SPRITES, true) {
+    mcrate_still_an(renderer, surfaces.mcrate_still, MILISECS_FOR_PROVISION_BOXES_SPRITES, false, true),
+    mcrate_picked_an(renderer, surfaces.mcrate_picked, MILISECS_FOR_PROVISION_BOXES_SPRITES, true),
+    wcrate_still_an(renderer, surfaces.wcrate_still, MILISECS_FOR_PROVISION_BOXES_SPRITES, false, true),
+    wcrate_picked_an(renderer, surfaces.wcrate_picked, MILISECS_FOR_PROVISION_BOXES_SPRITES, true) {
         trap_box_disguise = static_cast<BoxType>(rand() % PROVISION_BOX_DISGUISE_TYPES);
 }
 

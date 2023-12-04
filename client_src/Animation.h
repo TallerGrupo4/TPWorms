@@ -20,7 +20,7 @@ class Area;
 
 class Animation {
 public:
-    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration, bool one_loop = false, bool loop_reversed = false, bool is_orientation_horizontal = false);
+    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_miliseconds, bool one_loop = false, bool loop_reversed = false, bool is_orientation_horizontal = false);
     ~Animation();
     bool update_once();
     virtual void update_once_up() {return;}

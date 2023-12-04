@@ -4,7 +4,7 @@
  */
 #include "Animation.h"
 
-Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_seconds, bool one_loop, bool loop_reversed, bool is_orientation_horizontal) :
+Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_miliseconds, bool one_loop, bool loop_reversed, bool is_orientation_horizontal) :
         texture(SDL2pp::Texture(renderer,surface)),
         is_orientation_horizontal(is_orientation_horizontal),
         one_loop(one_loop),
@@ -16,7 +16,7 @@ Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint 
                           (this->texture.GetHeight() / this->texture.GetWidth())),
         size(this->is_orientation_horizontal ? this->texture.GetHeight() :
                                                this->texture.GetWidth()),
-        time_between_frames(std::round(static_cast<float>(loop_duration_seconds * FPS) / numFrames)),
+        time_between_frames(std::round(static_cast<float>(loop_duration_miliseconds * (FPS/1000) / numFrames))),
         actual_time_between_frames(time_between_frames) {    
     assert(this->numFrames > 0);
     assert(this->size > 0);
@@ -80,36 +80,8 @@ bool Animation::advanceFrame() {
             this->currentFrame = this->currentFrame % this->numFrames;
         }
         this->actual_time_between_frames = this->time_between_frames;
-        // if (this->reverse) {
-        //     this->currentFrame -= 1;
-        //     if (this->currentFrame < 0) {
-        //         this->currentFrame = 0;
-        //         this->reverse = false;
-        //     }
-        // } else {
-        //     this->currentFrame += 1;
-        //     if (this->currentFrame == this->numFrames) {
-        //         this->currentFrame = this->numFrames - 1;
-        //         this->reverse = true;
-        //     }
-        // }
-        // this->actual_time_between_frames = this->time_between_frames;
     }
     return true;
-
-    // if(this->one_loop) {
-    //     if (((this->currentFrame+1) == this->numFrames) and (this->actual_time_between_frames == 0)) {
-    //         return false;
-    //     }
-    // }
-    // if (this->actual_time_between_frames != 0) {
-    //     this->actual_time_between_frames -= 1;
-    // } else {
-    //     this->currentFrame += 1;
-    //     this->currentFrame = this->currentFrame % this->numFrames;
-    //     this->actual_time_between_frames = this->time_between_frames;
-    // }
-    // return true;
 }
 
 void Animation::reset() {

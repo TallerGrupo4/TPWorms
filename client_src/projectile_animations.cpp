@@ -1,12 +1,12 @@
 #include "projectile_animations.h"
 
 ProjectileAnimations::ProjectileAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces) :
-                                ban_an(renderer, surfaces.banana, SECS_FOR_GRENADES_SPRITES),
-                                gr_an(renderer, surfaces.grenade, SECS_FOR_GRENADES_SPRITES),
-                                cls_an(renderer, surfaces.cluster_bomb, SECS_FOR_GRENADES_SPRITES),
-                                cls_fragment_an(renderer, surfaces.cluster_bomb_fragments, SECS_FOR_FRAGMENTS_SPRITES),
-                                dyn_an(renderer, surfaces.dynamite, SECS_FOR_DYNAMITE_SPRITES),
-                                holy_grenade_an(renderer, surfaces.holy_grenade, SECS_FOR_GRENADES_SPRITES),
+                                ban_an(renderer, surfaces.banana, MILISECS_FOR_GRENADES_SPRITES),
+                                gr_an(renderer, surfaces.grenade, MILISECS_FOR_GRENADES_SPRITES),
+                                cls_an(renderer, surfaces.cluster_bomb, MILISECS_FOR_GRENADES_SPRITES),
+                                cls_fragment_an(renderer, surfaces.cluster_bomb_fragments, MILISECS_FOR_FRAGMENTS_SPRITES),
+                                dyn_an(renderer, surfaces.dynamite, MILISECS_FOR_DYNAMITE_SPRITES),
+                                holy_grenade_an(renderer, surfaces.holy_grenade, MILISECS_FOR_GRENADES_SPRITES),
                                 bazooka_missile_an(renderer, surfaces.bazooka_missile, 0),
                                 mortar_round_an(renderer, surfaces.mortar_round, 0),
                                 air_missile_an(renderer, surfaces.air_missile, 0) {

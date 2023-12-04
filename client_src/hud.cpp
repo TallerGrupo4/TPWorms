@@ -83,23 +83,23 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
 
     switch (my_army_id) {
     case 0:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_blue, SECS_FOR_MARKER_SPRITES, false, true);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_blue, MILISECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = BLUE;
         break;
     case 1:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_red, SECS_FOR_MARKER_SPRITES, false, true);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_red, MILISECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = RED;
         break;
     case 2:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_yellow, SECS_FOR_MARKER_SPRITES, false, true);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_yellow, MILISECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = YELLOW;
         break;
     case 3:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_green, SECS_FOR_MARKER_SPRITES, false, true);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_green, MILISECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = GREEN;
         break;
     default:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_purple, SECS_FOR_MARKER_SPRITES, false, true);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_purple, MILISECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = ORANGE;
         break;
     }

@@ -2,7 +2,7 @@
 
 WormWidgets::WormWidgets(SDL2pp::Renderer& renderer, char army_id, ArmyColorDependentWidgets widgets, char worm_id, int health_points, int max_health) :
     player_color(widgets.get_worm_color()),
-    crosshair_an(renderer, widgets.get_crosshair(), SECS_FOR_CROSSHAIR_SPRITES),
+    crosshair_an(renderer, widgets.get_crosshair(), MILISECS_FOR_CROSSHAIR_SPRITES),
     crosshair_angle(0),
     crosshair_x(0),
     crosshair_y(0),

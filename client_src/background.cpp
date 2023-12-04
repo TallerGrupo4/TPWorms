@@ -1,7 +1,7 @@
 #include "background.h"
 
 Background::Background(std::vector<PlatformSnapshot> platforms, int map_width, int map_height, int water_level, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : bkgrnd_image(SDL2pp::Texture(renderer,surfaces.background1)),
-                    water_an(renderer, surfaces.water, SECS_FOR_WATER),
+                    water_an(renderer, surfaces.water, MILISECS_FOR_WATER),
                     width(map_width),
                     height(map_height),
                     water_level(water_level) {
