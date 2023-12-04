@@ -158,3 +158,10 @@ Also, if you want to change the default external/config/config.yaml file in orde
 sudo make install -j4
 ```
 and then run the server with the default configuration file but with your new changes.
+
+### Maps
+If you want to add or modify maps, you will need to do it in the external/maps folder of the project and recomplie it. Once you made the changes, you can run:
+```
+sudo make install -j4
+```
+and then run the server with the default configuration file but with your new changes for the maps.
