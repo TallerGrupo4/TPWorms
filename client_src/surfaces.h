@@ -3,7 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "constantes_cliente.h"
+#include "client_constants.h"
 
 using namespace SDL2pp;
 class MatchSurfaces {

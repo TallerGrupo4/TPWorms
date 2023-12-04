@@ -28,15 +28,6 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAn
         default:
             break;
         }
-        // std::cout << "projectile " << +id << " type: " << +type << std::endl;
-        // std::cout << "state: " << +state << std::endl;
-        // std::cout << "explosion_type: " << explosion_type << std::endl;
-        // std::cout << "x: " << x << std::endl;
-        // std::cout << "y: " << y << std::endl;
-        // std::cout << "width: " << width << std::endl;
-        // std::cout << "height: " << height << std::endl;
-        // std::cout << "angle: " << angle << std::endl;
-        // std::cout << "facing_left: " << facing_left << std::endl;
 }
 
 void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnapshot& proj_snpsht) {
@@ -82,10 +73,6 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
 }
 
 void Projectile::update_from_iter(int iter) {
-    // std::cout << "update_from_iter\n";
-    // std::cout << "id: " << +id << std::endl;
-    // std::cout << "type: " << +type << std::endl;
-    // std::cout << "state: " << +state << std::endl;
     for (int i = 0; i < iter; i++) {
         proj_an.update_from_iter(state, type, angle);
     }
@@ -94,14 +81,10 @@ void Projectile::update_from_iter(int iter) {
 void Projectile::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
     int top_left_x = (x-width/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2) - camera_offset_x;
     int top_left_y = (y-height/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
-    //std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
     
     proj_an.render(state, type, angle, renderer, SDL2pp::Rect(top_left_x, top_left_y, width*RESOLUTION_MULTIPLIER,
                         height*RESOLUTION_MULTIPLIER),
                         facing_left);
-    // if(state != DEAD) {
-    //     worm_texts.render(renderer, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
-    // }
 }
 
 ProjectileStates Projectile::get_proj_state() {
@@ -112,7 +95,4 @@ int Projectile::get_proj_x() {
 }
 int Projectile::get_proj_y() {
     return this->y;
-}
-bool Projectile::proj_facing_left() {
-    return this->facing_left;
 }

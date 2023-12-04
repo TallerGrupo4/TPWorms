@@ -7,7 +7,7 @@
 
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
-#include "constantes_cliente.h"
+#include "client_constants.h"
 #include "effects_animations.h"
 #include "effects_sounds.h"
 #include "surfaces.h"

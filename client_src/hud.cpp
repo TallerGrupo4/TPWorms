@@ -214,12 +214,11 @@ void Hud::render(SDL2pp::Renderer& renderer) {
     } else {
         if (marker_following_mouse) {
             SDL_RendererFlip flip = SDL_FLIP_NONE;
-            marker_an->render(renderer, SDL2pp::Rect(marker_x/* - this->target.x_offset*/ - marker_an->get_frame_size()/2, marker_y/* - this->target.y_offset*/ - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
+            marker_an->render(renderer, SDL2pp::Rect(marker_x - marker_an->get_frame_size()/2, marker_y - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
         } else if (marker_set) {
             SDL_RendererFlip flip = SDL_FLIP_NONE;
             std::cout << "marker_x: " << marker_x << std::endl;
             std::cout << "marker_y: " << marker_y << std::endl;
-            // marker_an->render(renderer, SDL2pp::Rect(marker_x/* - this->target.x_offset*/ - marker_an->get_frame_size()/2, marker_y/* - this->target.y_offset*/ - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
             marker_an->render(renderer, SDL2pp::Rect(marker_x - this->target.x_offset - marker_an->get_frame_size()/2, marker_y - this->target.y_offset - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
         }
         int gap = 10;

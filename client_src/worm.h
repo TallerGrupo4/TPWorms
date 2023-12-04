@@ -8,7 +8,7 @@
 
 #include "../common_src/snapshot.h"
 #include "../common_src/constants.h"
-#include "constantes_cliente.h"
+#include "client_constants.h"
 #include "colordependentwidgets.h"
 #include "worm_animations.h"
 #include "effects_animations.h"
@@ -19,7 +19,7 @@
 
 class Worm {
 public:
-    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentWidgets widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     ~Worm();
     void update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);

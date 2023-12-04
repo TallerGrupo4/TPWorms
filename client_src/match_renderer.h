@@ -3,7 +3,6 @@
 
 #include <exception>
 #include <iostream>
-#include <chrono>
 #include <map>
 #include <vector>
 #include <ctime>
@@ -13,13 +12,14 @@
 #include <thread>
 
 #include "../common_src/clock.h"
+#include "../common_src/custom_errors.h"
 
 #include "actions.h"
 #include "worm.h"
 #include "match.h"
 #include "client.h"
 #include "surfaces.h"
-#include "constantes_cliente.h"
+#include "client_constants.h"
 
 class MatchRenderer {
 private:
@@ -34,8 +34,6 @@ private:
     bool running = true;
     int mouse_motion_x = 0;
     int mouse_motion_y = 0;
-    // std::map<char, std::vector<char>> my_army;
-    // uint8_t worm_turn_id = 0;
 
     bool handleEvents(Match& match);
 

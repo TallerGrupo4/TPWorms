@@ -5,7 +5,6 @@ AnimationScroll::AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& su
 }
 
 void AnimationScroll::update_with_angle(int angle) {
-    //int last_frame = this->numFrames-1;
     if (angle < -87) {
         this->currentFrame = 0;
     } else if (angle > -87 and angle < -81) {

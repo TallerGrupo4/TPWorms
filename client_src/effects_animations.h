@@ -7,7 +7,7 @@
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/constants.h"
-#include "constantes_cliente.h"
+#include "client_constants.h"
 #include "surfaces.h"
 #include "Animation.h"
 
@@ -36,10 +36,7 @@ public:
     void set_missile_exhaust_an(SDL2pp::Renderer& renderer, int x, int y);
     void update_from_iter();
 private:
-    //bool is_action_state(ProjectileStates state);
-    // void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
-    // void push_drop_weapon_an(TOOLS weapon, int angle, const bool facing_left);
-    // void push_pick_up_weapon_an(TOOLS weapon, int angle, const bool facing_left);
+    void renderAnimation(Animation& animation, SDL2pp::Renderer& renderer, int size, int x, int y, SDL_RendererFlip flip, int camera_offset_x, int camera_offset_y);
 
     std::list<std::unique_ptr<PosAndAnimation>> lingering_animations;
     /*NEED OF ITER*/

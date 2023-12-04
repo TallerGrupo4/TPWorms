@@ -1,5 +1,5 @@
-#ifndef CLIENTE_CONSTANTES_H
-#define CLIENTE_CONSTANTES_H
+#ifndef CLIENT_CONSTANTS_H
+#define CLIENT_CONSTANTS_H
 
 #include "../common_src/constants.h"
 
@@ -768,4 +768,4 @@ struct Target {
 
 #define WORM_DEATH_SOUND_PATH SOUNDS_PATH "/COUGH5.WAV"
 
-#endif  // CLIENTE_CONSTANTES_H
+#endif  // CLIENT_CONSTANTS_H
