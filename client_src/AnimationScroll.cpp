@@ -1,7 +1,7 @@
 #include "AnimationScroll.h"
 
 AnimationScroll::AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal): Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
-    currentFrame = 16;
+    currentFrame = 14;
 }
 
 void AnimationScroll::update_once_up() {
@@ -17,7 +17,7 @@ void AnimationScroll::update_once_down() {
 }
 
 void AnimationScroll::reset() {
-    this->currentFrame = 16;
+    this->currentFrame = 14;
 }
 
 AnimationScroll::~AnimationScroll() {}
