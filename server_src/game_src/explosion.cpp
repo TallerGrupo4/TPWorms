@@ -12,6 +12,14 @@
 
 Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, int damage, int explosion_power) : type(type), fragments(fragments), fragment_damage(fragment_damage), radius(radius), damage(damage), explosion_power(explosion_power) {}
 
+void Explosion::sort_by_distance(std::list<b2Body*>& bodies , b2Body* body){
+    bodies.sort([body](b2Body* a , b2Body* b){
+        float distance_a = ((a->GetPosition())- body->GetPosition()).Length();
+        float distance_b = ((b->GetPosition())- body->GetPosition()).Length();
+        return distance_a < distance_b;
+    });
+}
+
 void Explosion::apply_explosion(b2Body* body){
     std::unordered_set<b2Body*> bodies;
     b2World* world = body->GetWorld();
@@ -22,7 +30,11 @@ void Explosion::apply_explosion(b2Body* body){
         b2RayCastExplosionCallback callback;
         world->RayCast(&callback, body->GetPosition(), endPos);
         std::list<b2Body*> bodies_call = callback.bodies;
+        sort_by_distance(bodies_call , body);
         for (b2Body* body_call : bodies_call){
+            if (body_call->GetType() == b2_staticBody){
+                break;
+            }
             if (bodies.find(body_call) == bodies.end()){
                 Worm* w = reinterpret_cast<Worm*>(static_cast<uintptr_t>(body_call->GetUserData().pointer));
                 if (w) {
@@ -39,6 +51,8 @@ void Explosion::apply_explosion(b2Body* body){
         }
     }
 }
+
+
 
 
 
