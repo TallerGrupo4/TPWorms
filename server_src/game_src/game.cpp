@@ -157,6 +157,9 @@ void Game::step(int it) {
         turn_time -= it;
         if (teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD){
             turn_time = 0;
+            turn_cleaning = true;
+            cleaning_time = 1 * FPS;
+            turn_clean_up();
         }
     } else {
         if (!turn_cleaning ){
