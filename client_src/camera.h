@@ -46,7 +46,7 @@ public:
     int get_marker_y();
     int get_offset_x();
     int get_offset_y();
-    void toogle_player_activated();
+    void toogle_player_activated(SDL2pp::Window& window, int pos_x_to_warp_mouse, int pos_y_to_warp_mouse);
     bool is_player_activated();
     bool is_marker_set();
     bool is_marker_active();
