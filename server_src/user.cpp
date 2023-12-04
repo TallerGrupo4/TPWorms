@@ -30,12 +30,11 @@ void User::run() {
         _is_dead = true;
         if (queue_match) {
             try {
-                std::cout << "User has left the match with an army_id of: " << +my_army_id << std::endl;
+                std::cout << _BLUE << "User has left the match with an army_id of: " << _RESET << +my_army_id << std::endl;
                 std::shared_ptr<ExitCommand> exit_command = std::make_shared<ExitCommand>(my_army_id);
                 queue_match->push(exit_command);
                 sender->stop();
                 sender->join();
-                std::cout << "User has left the match" << std::endl;
             } catch (const PlayerNotFound& e) {
                 // It is an 'expected' error but it should never reach this point
             } catch (const ClosedQueue& e) {
@@ -64,23 +63,23 @@ void User::handle_starting_match() {
                     // TODO: KILL THIS CORRUPTED CLIENT
                     continue;
                 }
-                std::cout << "Starting match with id: " << command.get_match_id() << std::endl;
+                std::cout << _YELLOW << "Starting match with id: " << _RESET << command.get_match_id() << std::endl;
                 monitor_matches.start_match(match_id, command.get_map_name());
-                std::cout << "Match started with id: " << match_id << std::endl;
+                std::cout << _GREEN << "Match started with id: " << _RESET << match_id << std::endl;
                 return;
             } catch (const MatchNotFound& err) {
                 // It should never reach this point I think
-                std::cout << "Match not found with id: " << match_id << std::endl;
+                std::cout << _RED << "Match not found with id: " << _RESET << match_id << std::endl;
                 // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             } catch (const MatchAlreadyStarted& err) {
                 // It should never reach this point I think
-                std::cout << "Match already started with id: " << match_id << std::endl;
+                std::cout << _RED << "Match already started with id: " << _RESET << match_id << std::endl;
                 // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             } catch (const MapNotFound& err) {
                 // It should never reach this point I think
-                std::cout << "Map not found with name: " << command.get_map_name() << std::endl;
+                std::cout << _RED << "Map not found with name: " << _RESET << command.get_map_name() << std::endl;
                 // TODO: KILL THIS CORRUPTED CLIENT
                 continue;
             }
@@ -95,9 +94,6 @@ void User::handle_starting_match() {
 void User::handle_match() {
     while (protocol.is_connected()) {
         std::shared_ptr<GameCommand> game_command = protocol.recv_game_command();
-
-        // CHANGE THIS TO ^^^^!!!!! 
-        // std::shared_ptr<GameCommand> game_command = protocol.recv_game_command(worms_ids[0]);
         queue_match->push(game_command);
     }
 }
@@ -125,10 +121,10 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 in_match = true;
                 is_creator = true;
                 code = CASE_CREATE;
-                std::cout << "Match created with id: " << match_id << std::endl;
+                std::cout << _GREEN << "Match created with id: " << _RESET << match_id << std::endl;
             } catch (const MatchAlreadyExists& err) {
                 code = CASE_MATCH_ALREADY_EXISTS;
-                std::cout << "Match already exists with id: " << command.get_match_id() << std::endl;
+                std::cout << _RED << "Match already exists with id: " << _RESET << command.get_match_id() << std::endl;
             }
             Command command_to_send(code, match_id, map_names, number_of_players);
             protocol.send_command(command_to_send);
@@ -139,16 +135,16 @@ bool User::interpretate_command_in_lobby(Command& command) {
                 queue_match = monitor_matches.join_match(sender->get_queue(), command.get_match_id(), number_of_players, map_names, my_army_id);
                 in_match = true;
                 code = CASE_JOIN;
-                std::cout << "Match joined with id: " << command.get_match_id() << std::endl;
+                std::cout << _RED << _GREEN << "Match joined with id: " << _RESET << command.get_match_id() << std::endl;
             } catch (const MatchFull& err) {
                 code = CASE_MATCH_FULL;
-                std::cout << "Match is full with id: " << command.get_match_id() << std::endl;
+                std::cout << _RED << "Match is full with id: " << _RESET << command.get_match_id() << std::endl;
             } catch (const MatchNotFound& err) {
                 code = CASE_MATCH_NOT_FOUND;
-                std::cout << "Match not found with id: " << command.get_match_id() << std::endl;
+                std::cout << _RED << "Match not found with id: " << _RESET << command.get_match_id() << std::endl;
             } catch (const MatchAlreadyStarted& err) {
                 code = CASE_MATCH_ALREADY_STARTED;
-                std::cout << "Match already started with id: " << command.get_match_id() << std::endl;
+                std::cout << _RED << "Match already started with id: " << _RESET << command.get_match_id() << std::endl;
             }
             Command command_to_send(code, match_id, map_names, number_of_players);
             protocol.send_command(command_to_send);
@@ -175,7 +171,7 @@ void User::stop() {
         sender->join();
     } catch (const LibError& err) {
         std::cout << "Something went wrong and an exception was caught in the User"
-                  << " while stoping it: " << err.what() << std::endl;
+                  << " while stopping it: " << err.what() << std::endl;
     } catch (const ClosedQueue& err) {
         // It is an 'expected' error
     }

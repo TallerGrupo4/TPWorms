@@ -4,6 +4,7 @@
 #include <yaml-cpp/yaml.h>
 #include <filesystem>
 #include <iostream>
+#include "../common_src/constants.h"
 
 class ConfigSingleton {
 public:
@@ -285,7 +286,7 @@ private:
         throw std::runtime_error("Config file does not exist: " + file_path + ". Please create it properly and pass the absolute path to it. E.g. /etc/worms/config.yaml. See the README for more information.");
         }
         try {
-            std::cout << "Reading config file..." << std::endl;
+            std::cout << _YELLOW << "Reading config file..." << _RESET << std::endl;
             YAML::Node config = YAML::LoadFile(file_path);
             max_players = config["max_players"].as<int>();
             // World
@@ -366,7 +367,7 @@ private:
             trap_box_radius = config["trap_box_radius"].as<float>();
             ammo_box_ammo = config["ammo_box_ammo"].as<int>();
 
-            std::cout << "Config file read successfully" << std::endl;
+            std::cout << _MAGENTA << "Config file read successfully" << _RESET << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
             // Maybe throw an exception and catch it in the main?
