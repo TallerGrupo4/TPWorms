@@ -1,6 +1,4 @@
 #include "match.h"
-#include <iostream>
-#include "constantes_cliente.h"
 
 Match::Match() {}
 
@@ -28,7 +26,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
 
     for (WormSnapshot worm_snpsht : snpsht.worms){
         std::pair<std::reference_wrapper<SDL2pp::Surface>, SDL_Color> widgets_info = (worm_snpsht.team_id > 3) ? team_info.at(4) : team_info.at(worm_snpsht.team_id);
-        ArmyColorDependentMisc widgets(widgets_info.first.get(), widgets_info.second);
+        ArmyColorDependentWidgets widgets(widgets_info.first.get(), widgets_info.second);
         std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, widgets, surfaces, renderer);
         this->worms_map[worm_snpsht.id] = worm;
     }
@@ -266,7 +264,6 @@ void Match::render(SDL2pp::Renderer& renderer) {
 bool Match::handle_left_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
-            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA IZQ con el aim\n";
             action = std::make_shared<ActionAim>(LEFT, CENTER, worm_turn_id);
             return true;
         }
@@ -281,7 +278,6 @@ bool Match::handle_left_button(std::shared_ptr<Action>& action) {
 bool Match::handle_right_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army()) {
         if(is_turn_worm_aiming_weapon()) {
-            std::cout << "ENTRE PARA MANDAR QUE MIRE PARA LA DER con el aim\n";
             action = std::make_shared<ActionAim>(RIGHT, CENTER, worm_turn_id);
             return true;
         } 
@@ -295,7 +291,6 @@ bool Match::handle_right_button(std::shared_ptr<Action>& action) {
 
 bool Match::handle_up_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army() and is_turn_worm_aiming_weapon()) {
-        std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ARRiba con el aim\n";
         action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, UP, worm_turn_id);
         return true;
     }
@@ -304,7 +299,6 @@ bool Match::handle_up_button(std::shared_ptr<Action>& action) {
 
 bool Match::handle_down_button(std::shared_ptr<Action>& action) {
     if(is_turn_worm_in_my_army() and is_turn_worm_aiming_weapon()) {
-        std::cout << "ENTRE PARA MANDAR QUE MIRE PARA ABAJO con el aim\n";
         action = std::make_shared<ActionAim>(turn_worm_facing_left() ? LEFT : RIGHT, DOWN, worm_turn_id);
         return true;
     }
@@ -317,7 +311,6 @@ bool Match::handle_space_button_pressed(std::shared_ptr<Action>& action, bool fi
             if (first_time_pressed) effects_sound->play_powerup_sound();
             charge_for_weapon += 2;
             if(charge_for_weapon == 100) {
-                std::cout << "Sending ActionShoot in space pressed with charge: " << charge_for_weapon << std::endl;
                 action = std::make_shared<ActionShooting>(100, worm_turn_id);
                 charge_for_weapon = 0;
                 camera.clear_charging_value();

@@ -5,7 +5,6 @@ Background::Background(std::vector<PlatformSnapshot> platforms, int map_width, i
                     width(map_width),
                     height(map_height),
                     water_level(water_level) {
-    std::cout << "water level: " << water_level << "\n";
     for (size_t i = 0; i < platforms.size(); i++) {
         this->beams.push_back(Beam(platforms[i],surfaces,renderer,map_width,map_height));
     }

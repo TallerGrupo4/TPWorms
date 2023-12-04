@@ -11,28 +11,20 @@ EffectsAnimations::EffectsAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& 
 
 }
 
-void EffectsAnimations::render(SDL2pp::Renderer& renderer, int camara_offset_x, int camera_offset_y) {
+void EffectsAnimations::renderAnimation(Animation& animation, SDL2pp::Renderer& renderer, int size, int x, int y, SDL_RendererFlip flip, int camera_offset_x, int camera_offset_y) {
+    int top_left_x = (x * RESOLUTION_MULTIPLIER) - (size / 2) + (int)(renderer.GetLogicalWidth() / 2) - camera_offset_x;
+    int top_left_y = (y * RESOLUTION_MULTIPLIER) - (size / 2) + (int)(renderer.GetLogicalHeight() / 2) - camera_offset_y;
+    animation.render(renderer, SDL2pp::Rect(top_left_x, top_left_y, size, size), flip);
+}
+
+void EffectsAnimations::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     for(auto& animation_and_pos : lingering_animations) {
-        int size_of_explosion = animation_and_pos->get_explosion_size()*2;
+        int size_of_explosion = animation_and_pos->get_explosion_size() * 2;
         if(size_of_explosion != 0){
-            int top_left_x = (animation_and_pos->get_x()*RESOLUTION_MULTIPLIER)-(size_of_explosion/2) + (int)(renderer.GetLogicalWidth()/2) - camara_offset_x;
-            int top_left_y = (animation_and_pos->get_y()*RESOLUTION_MULTIPLIER)-(size_of_explosion/2) + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
-            animation_and_pos->get_an().render(renderer,
-                                    SDL2pp::Rect(top_left_x,
-                                        top_left_y,
-                                        size_of_explosion,
-                                        size_of_explosion),
-                                    flip);
+            renderAnimation(animation_and_pos->get_an(), renderer, size_of_explosion, animation_and_pos->get_x(), animation_and_pos->get_y(), flip, camera_offset_x, camera_offset_y);
         } else {
-            int top_left_x = (animation_and_pos->get_x()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalWidth()/2) - camara_offset_x;
-            int top_left_y = (animation_and_pos->get_y()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
-            animation_and_pos->get_an().render(renderer,
-                                        SDL2pp::Rect(top_left_x,
-                                            top_left_y,
-                                            animation_and_pos->get_an().get_frame_size(),
-                                            animation_and_pos->get_an().get_frame_size()),
-                                        flip);
+            renderAnimation(animation_and_pos->get_an(), renderer, animation_and_pos->get_an().get_frame_size(), animation_and_pos->get_x(), animation_and_pos->get_y(), flip, camera_offset_x, camera_offset_y);
         }
     }
 }

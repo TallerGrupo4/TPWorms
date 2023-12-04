@@ -5,7 +5,7 @@
 #include <map>
 #include <SDL2pp/SDL2pp.hh>
 
-#include "constantes_cliente.h"
+#include "client_constants.h"
 #include "surfaces.h"
 #include "Animation.h"
 

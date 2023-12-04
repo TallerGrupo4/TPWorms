@@ -1,6 +1,6 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
+Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentWidgets widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
     effects_an(effects_an),
     effects_sound(effects_sound),
     facing_left(worm_snpsht.direction == LEFT ? true : false),

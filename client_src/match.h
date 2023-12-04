@@ -12,7 +12,7 @@
 #include "projectile.h"
 #include "provision_box.h"
 #include "camera.h"
-#include "constantes_cliente.h"
+#include "client_constants.h"
 #include "actions.h"
 #include "background.h"
 #include "surfaces.h"

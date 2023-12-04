@@ -8,7 +8,6 @@
 
 #include "mainwindow.h"
 #include "../client.h"
-#include "../constantes_cliente.h"
 
 class LobbyRenderer {
 private:
