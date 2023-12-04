@@ -11,7 +11,7 @@ class WormComprobator{
 
     void check_velocities(Worm& w);
 
-    void check_out_of_map_worm(Worm& w, int& turn_time, int& current_turn_player_id, int& height , int& width, int& water_level);
+    bool check_out_of_map_worm(Worm& w, int& turn_time, int& current_turn_player_id, int& height , int& width, int& water_level);
 
     public:
 

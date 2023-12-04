@@ -9,7 +9,10 @@ void WormComprobator::check_during_game(std::list<std::shared_ptr<Worm>>& worms,
         if (w->state == DEAD){
             continue;
         }
-        check_out_of_map_worm(*w, time, current_id, height , width, water_level);
+        if (check_out_of_map_worm(*w, time, current_id, height , width, water_level)){
+            continue;
+        }
+        
         check_states(*w, time, current_id);
         check_angles(*w);
         check_velocities(*w);
@@ -114,15 +117,21 @@ void WormComprobator::check_velocities(Worm& w){
 
 }
 
-void WormComprobator::check_out_of_map_worm(Worm& w, int& turn_time, int& current_turn_player_id, int& height , int& width, int& water_level){
+bool WormComprobator::check_out_of_map_worm(Worm& w, int& turn_time, int& current_turn_player_id, int& height , int& width, int& water_level){
     // To avoid the worm from going out of the map
    float w_x = w.body->GetPosition().x;
    float w_y = w.body->GetPosition().y;
    if (w_x < -width/2 || w_x > width/2 || w_y < -height/2 || w_y > height/2|| w_y < water_level){
        w.set_state(DEAD);
+       w.body->SetLinearVelocity(b2Vec2_zero);
+       w.body->SetAngularVelocity(0);
+       w.body->SetGravityScale(0);
        if (current_turn_player_id == w.get_id()){
            turn_time = 0;
        }
+       return true;
+   } else {
+         return false;
    }
 }
 
