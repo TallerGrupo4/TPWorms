@@ -66,24 +66,24 @@ WARNING/NOTE 2: Running only make and trying to execute the executable file will
 
 To run it, you need to run:
 ```
-server <port>
+worms_server <port>
 ```
 and
 ```
-client <host> <port>
+worms <host> <port>
 ```
 where <port> is the port you want to use and <host> is the host you want to connect to. If you want to connect to the server in your own computer, you can use localhost as the host. For example:
 ```
-server 8080
+worms_server 8080
 ```
 and
 ```
-client 127.0.0.1 8080
+worms 127.0.0.1 8080
 ```
 In those examples you will be using the port 8080 and connecting to the server in your own computer using the default configuration.
 If you want to run your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file. For example:
 ```
-server 8080 /home/user/config.yaml
+worms_server 8080 /home/user/config.yaml
 ```
 Make sure that the config.yaml file is in the same format as the one in the external/config folder of the project.
 
@@ -131,6 +131,7 @@ GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
 ```
 -----------------
 NOTE: Remember that to run the tests you will need to be in the build folder.
+
 -----------------
 
 For running the project normally once again you will need to run the cmake script for removing the cache and re-generate it without the testing flag:
@@ -148,7 +149,7 @@ The configuration file is located in the external/config folder of the project a
 There you can change the game settings such as the worm's health, max players, etc.
 If you want to run the server with your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file as explained before. Anyways, here is an example of a custom config.yaml file located in the a arbitrary folder:
 ```
-server 8080 /home/user/Desktop/config.yaml
+worms_server 8080 /home/user/Desktop/config.yaml
 ```
 Remember that the config.yaml file needs to be in the same format as the one in the external/config folder of the project.
 (Replace /home/user/Desktop/config.yaml with the absolute path to your config.yaml file)
