@@ -11,6 +11,13 @@ bool Tool::can_aim(){
     return has_scope;
 }
 
+bool Tool::has_ammo(){
+    if (ammo > 0 || ammo == INF_AMMO){
+        return true;
+    }
+    return false;
+}
+
 void Tool::add_ammo(int ammo){
     if (this->ammo + ammo > max_ammo){
         return;

@@ -3,10 +3,10 @@
 
 Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, int map_width, int map_height) : beam_image(assign_texture(pltfrm,surfaces,renderer)) {
     this->type = pltfrm.type;
-    // std::cout << "tipo de la viga recibido" << pltfrm.type << std::endl;
-    // std::cout << "x de la viga recibido: " << pltfrm.pos_x << " y de la viga recibido: " << pltfrm.pos_y << std::endl;
-    // std::cout << "width de la viga recibido: " << pltfrm.width << " height de la viga recibido: " << pltfrm.height << std::endl;
-    // std::cout << "imagen de la viga (height): " << beam_image.GetHeight() << " imagen de la viga (width): " << beam_image.GetWidth() << std::endl; 
+    std::cout << "tipo de la viga recibido" << +pltfrm.type << std::endl;
+    std::cout << "x de la viga recibido: " << pltfrm.pos_x << " y de la viga recibido: " << pltfrm.pos_y << std::endl;
+    std::cout << "width de la viga recibido: " << pltfrm.width << " height de la viga recibido: " << pltfrm.height << std::endl;
+    std::cout << "imagen de la viga (height): " << beam_image.GetHeight() << " imagen de la viga (width): " << beam_image.GetWidth() << std::endl; 
     this->width = pltfrm.width*RESOLUTION_MULTIPLIER;
     this->height = pltfrm.height*RESOLUTION_MULTIPLIER;
     this->x = pltfrm.pos_x*RESOLUTION_MULTIPLIER - width/2;

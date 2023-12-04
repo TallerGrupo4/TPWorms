@@ -22,33 +22,33 @@ void ProjectileAnimations::render(ProjectileStates state, ProjectileTypes type, 
 
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     switch (state) {
-    case ALIVE:
+    case ProjectileStates::ALIVE:
         switch (type) {
-        case BANANA:
+        case ProjectileTypes::BananaProj:
             ban_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case GreenGrenadeProj:
+        case ProjectileTypes::GreenGrenadeProj:
             gr_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case RedGrenadeProj:
+        case ProjectileTypes::RedGrenadeProj:
             cls_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case FragmentProj:
+        case ProjectileTypes::FragmentProj:
             cls_fragment_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case DynamiteProj:
+        case ProjectileTypes::DynamiteProj:
             dyn_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case HolyGrenadeProj:
+        case ProjectileTypes::HolyGrenadeProj:
             holy_grenade_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case BazookaProj:
+        case ProjectileTypes::BazookaProj:
             bazooka_missile_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case MortarProj:
+        case ProjectileTypes::MortarProj:
             mortar_round_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
-        case AirStrikeProj:
+        case ProjectileTypes::AirStrikeProj:
             air_missile_an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
             break;
         default:
@@ -62,24 +62,24 @@ void ProjectileAnimations::render(ProjectileStates state, ProjectileTypes type, 
 
 void ProjectileAnimations::update_from_snapshot(ProjectileStates state, ProjectileTypes type) {
     switch (state) {
-    case ALIVE:
+    case ProjectileStates::ALIVE:
         switch (type) {
-        case BANANA:
+        case ProjectileTypes::BananaProj:
             ban_an.update_once();
             break;
-        case GreenGrenadeProj:
+        case ProjectileTypes::GreenGrenadeProj:
             gr_an.update_once();
             break;
-        case RedGrenadeProj:
+        case ProjectileTypes::RedGrenadeProj:
             cls_an.update_once();
             break;
-        case FragmentProj:
+        case ProjectileTypes::FragmentProj:
             cls_fragment_an.update_once();
             break;
-        case DynamiteProj:
+        case ProjectileTypes::DynamiteProj:
             dyn_an.update_once();
             break;
-        case HolyGrenadeProj:
+        case ProjectileTypes::HolyGrenadeProj:
             holy_grenade_an.update_once();
             break;
         default:
@@ -94,15 +94,15 @@ void ProjectileAnimations::update_from_snapshot(ProjectileStates state, Projecti
 void ProjectileAnimations::update_from_iter(ProjectileStates state, ProjectileTypes type, int angle) {
         
     switch (state) {
-    case ALIVE:
+    case ProjectileStates::ALIVE:
         switch (type) {
-        case BazookaProj:
+        case ProjectileTypes::BazookaProj:
             bazooka_missile_an.update_with_angle(angle);
             break;
-        case MortarProj:
+        case ProjectileTypes::MortarProj:
             mortar_round_an.update_with_angle(angle);
             break;
-        case AirStrikeProj:
+        case ProjectileTypes::AirStrikeProj:
             air_missile_an.update_with_angle(angle);
             break;
         default:

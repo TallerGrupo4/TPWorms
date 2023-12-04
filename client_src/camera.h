@@ -26,6 +26,7 @@ public:
     void update_marker(int x, int y);
     void update_turn_weapon(TOOLS turn_worm_weapon);
     void update_turn_weapon_ammo(int turn_worm_weapon_ammo);
+    void update_wind_velocity(int wind_velocity);
     void update_armies_health(std::map<char, int>& armies_health);
     void follow_mouse_with_marker(int mouse_x, int mouse_y);
     void set_army_turn(char worm_turn_army_id);
@@ -45,7 +46,7 @@ public:
     int get_marker_y();
     int get_offset_x();
     int get_offset_y();
-    void toogle_player_activated();
+    void toogle_player_activated(SDL2pp::Window& window, int pos_x_to_warp_mouse, int pos_y_to_warp_mouse);
     bool is_player_activated();
     bool is_marker_set();
     bool is_marker_active();

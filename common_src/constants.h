@@ -113,6 +113,13 @@ enum BeamType : char {
     ShortVerticalFlipped, // 17
 };
 
+enum Cheats : char {
+    EXTRA_LIFE,
+    EXTRA_AMMO,
+    EXTRA_TURN_TIME,
+    EXTRA_SHOOTING,
+};
+
 #define STILL 0
 #define MOVING 1
 #define JUMPING 2
@@ -138,6 +145,7 @@ enum BeamType : char {
 #define SHOOT 0x05
 #define AIM 0x06
 #define CHANGE_TOOL 0x07
+#define CHEAT 0x08
 
 
 
@@ -150,7 +158,7 @@ enum BeamType : char {
 //Consts for render
 #define PIX_PER_METER 6.0f
 
-
+#define INF_AMMO -1
 
 // Consts for game loop
 #define FPS 30.0f

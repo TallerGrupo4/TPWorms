@@ -11,7 +11,7 @@ Projectile::Projectile(ProjectileSnapshot proj_snpsht, std::shared_ptr<EffectsAn
     type(static_cast<ProjectileTypes>(proj_snpsht.type)),
     x(proj_snpsht.pos_x),
     y((-1)*proj_snpsht.pos_y),
-    explosion_type(proj_snpsht.explosion_type),
+    explosion_size(proj_snpsht.explosion_radius*RESOLUTION_MULTIPLIER),
     width(std::round(proj_snpsht.width*5)),
     height(std::round(proj_snpsht.height*5)),
     exhaust_timer(0) {
@@ -50,11 +50,11 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
     case ProjectileStates::EXPLODED:
         switch (type) {
         case ProjectileTypes::FragmentProj:
-            effects_an->set_small_explosion_an(renderer, x, y);
+            effects_an->set_small_explosion_an(renderer, x, y, explosion_size);
             effects_sound->play_small_explosion_sound();
             break;
         case ProjectileTypes::HolyGrenadeProj:
-            effects_an->set_big_explosion_an(renderer, x, y);
+            effects_an->set_big_explosion_an(renderer, x, y, explosion_size);
             effects_sound->play_holy_grenade_explosion_sound();
             break;
 
@@ -62,7 +62,7 @@ void Projectile::update_from_snapshot(SDL2pp::Renderer& renderer, ProjectileSnap
             effects_sound->stop_dynamite_fuse_sound();
         
         default:
-            effects_an->set_big_explosion_an(renderer, x, y);
+            effects_an->set_big_explosion_an(renderer, x, y, explosion_size);
             effects_sound->play_big_explosion_sound();
             break;
         }

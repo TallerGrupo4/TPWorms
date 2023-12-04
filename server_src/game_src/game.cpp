@@ -10,7 +10,7 @@
 
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
-Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), current_turn_player_id(INITIAL_WORMS_TURN), turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1), projectile_id(0) {
+Game::Game(): world(b2Vec2(0.0f, -10.0f)), builder(world), listener() , filter(), projectile_manager(), worm_comprobator(), current_turn_player_id(INITIAL_WORMS_TURN), shoot_cheat(false),turn_time(TURN_TIME), team_turn(0), turn_cleaning(false), game_ended(false), winner_team_id(-1) {
     world.SetContactListener(&listener);
     world.SetContactFilter(&filter);
 }
@@ -20,12 +20,15 @@ Snapshot Game::start_and_send(Map& map, int number_of_players, std::map<char, st
     builder.create_map(snapshot);
     water_level = map.water_level;
     spawn_points = map.spawn_points;
+    height = map.height;
+    width = map.width;
 
     std::vector<b2Vec2> current_spawn_points = map.spawn_points;
     std::vector<WormSnapshot> worm_snaps =  assign_worms_to_teams(map, current_spawn_points, match_teams , number_of_players);
 
     current_turn_player_id = teams[0].get_next_player_id();
-
+    projectile_manager.randomize_wind();
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     snapshot.worms = worm_snaps;
     return snapshot;
 }
@@ -89,7 +92,11 @@ void Game::jump_player(int id , int direction){
 void Game::player_use_tool(int id, int potency, float pos_x , float pos_y, int timer) {
     if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)) {
         if (worm->use_tool(potency, pos_x, pos_y, timer, projectile_manager)){
-        turn_time = 3 * FPS;
+            if (shoot_cheat){
+                worm->has_used_tool = false;
+            } else {
+                turn_time = 3 * FPS;
+            } 
         }
     }
 }
@@ -107,10 +114,6 @@ void Game::player_change_tool(int id, int direction) {
 }
 
 
-
-
-
-
 void Game::remove_army(char army_id){
     for (auto& team: teams) {
         if (team.first == army_id){
@@ -122,104 +125,38 @@ void Game::remove_army(char army_id){
     }
 }
 
-void Game::check_angles(Worm& w){
-    if (abs (w.get_angle()) >= ANG_THRESHOLD){
-        b2Body* body = w.body;
-        body->SetTransform(body->GetPosition(), w.last_angle());
-    }
-}
-
-void Game::check_states(Worm& w){
-    if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
-    if (w.get_state() == DAMAGED){
-        if (current_turn_player_id == w.get_id()) {
-            turn_time = 0;
-            return;
-        }
-    }
-    if (w.body->GetPosition().y <= water_level){
-        w.set_state(DEAD);
-        if (current_turn_player_id == w.get_id()){
-            turn_time = 0;
-        }
-        return;
-    }
-    if (w.get_number_contacts() == 1){
-        b2Body* body = w.body->GetContactList()->other;
-        if (body && body->GetType() == b2_staticBody){
-            if (body->GetFixtureList()->GetFriction() == 0){
-                w.set_state(SLIDING);
-            }
-            w.body->SetTransform(w.body->GetPosition(), body->GetAngle());
-            w.set_last_still_angle(body->GetAngle());
-        }
-    }
-    float diff = w.body->GetPosition().y - w.get_last_y();
-    if (diff < -1.5 && w.get_state() != FALLING && !w.in_contact() && w.body->GetLinearVelocity().Length() > 1){
-        w.set_state(FALLING);
-    }
-    if (w.body->GetLinearVelocity() == b2Vec2_zero && w.body->GetAngularVelocity() == 0){
-        w.set_state(STILL);
-    }
-}
-
-void Game::check_velocities(Worm& w){
-    if (w.body->GetLinearVelocity().Length() < VEL_THRESHOLD ){
-        w.body->SetLinearVelocity(b2Vec2_zero);
-        w.body->SetAngularVelocity(0);
-    } 
-    if (abs (w.body->GetAngularVelocity()) > 0){
-        w.body->SetAngularVelocity(0);
-    }
-
-}
 
 void Game::worm_comprobations(){
     for (auto& team: teams) {
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            if (worm->get_state() == DEAD){
-                continue;
-            }
-            check_velocities(*worm);
-            check_states(*worm);
-            check_angles(*worm);
-        }
+        worm_comprobator.check_during_game(team.second.get_worms(), turn_time, current_turn_player_id, height , width, water_level);
     }
 }
 
 void Game::game_post_cleanup(){
     projectile_manager.update_post_game(world);
+    box_manager.reap_boxes(world);
 
     for (auto& team: teams) {
-        std::vector<char> dead_worms_ids;
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            if (worm->get_state() == DAMAGED || worm->get_state() == SHOOTED){
-                worm->set_state(STILL);
-            }
-            if (worm->get_state() == DEAD && worm->body != nullptr) {
-                world.DestroyBody(worm->body);
-                worm->body = nullptr;
-                dead_worms_ids.push_back(worm->get_id());
-            }
-        }
+        std::list<char> dead_worms_ids = worm_comprobator.check_post_game(team.second.get_worms(), world);
         for (char id: dead_worms_ids) {
             team.second.remove_player(id);
         }
     }
-    
 }
+
 
 void Game::step(int it) {
     float time_simulate = (float) it / FPS;
     world.Step(time_simulate, 8, 3);
 
+    
+    projectile_manager.update_during_game(it , width , height);
     worm_comprobations();
-    projectile_manager.update_during_game(it);
 
     if (turn_time > 0){
         turn_time -= it;
         if (teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD){
-            manage_turn();
+            turn_time = 0;
         }
     } else {
         if (!turn_cleaning ){
@@ -256,21 +193,9 @@ bool Game::check_end_game() {
 
 void Game::turn_clean_up(){
     for (auto& team: teams) {
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            // I think this if DEAD is not necessary anymore
-            if (worm->get_state() == DEAD) {continue;}
-            worm->set_used_tool(false);
-            if (worm->state == AIMING) {
-                worm->set_state(STILL);
-            }
-            worm->store_tool();
-            if (worm->body->GetLinearVelocity() != b2Vec2_zero || worm->body->GetAngularVelocity() != 0){
-                cleaning_time = 1 * FPS;
-                return;
-            }
-        }
+        if (!worm_comprobator.have_worm_finished_turn(team.second.get_worms(), cleaning_time)){return;}
     }
-
+    
     if (projectile_manager.has_projectiles()){
         cleaning_time = 1 * FPS;
         return;
@@ -304,6 +229,8 @@ void Game::manage_turn() {
         team_turn++;
         if (team_turn > ((int) teams.size() - 1)) {
             // End of round
+            projectile_manager.randomize_wind();
+
             team_turn = 0;
         }
         try {
@@ -317,7 +244,55 @@ void Game::manage_turn() {
     } while (worm_is_dead);
     // Reset the turn timer for the next player
     turn_time = TURN_TIME;
+    shoot_cheat = false;
     projectile_manager.reset_id();
+    spawn_provision_box();
+}
+
+void Game::spawn_provision_box(){
+    std::vector<b2Vec2> current_spawn_points = spawn_points;
+    while (current_spawn_points.size() > 0){
+        int rand = std::rand() % current_spawn_points.size();
+        b2Vec2 spawn_point = current_spawn_points[rand];
+        if (box_manager.position_is_free(spawn_point, world)){
+            box_manager.add_box(builder.create_provision_box_body(spawn_point.x, spawn_point.y));
+            return;
+        }
+        current_spawn_points.erase(current_spawn_points.begin() + rand);
+    }
+}
+
+void Game::toggle_shoot_cheat(char id){
+    if (!turn_cleaning){
+        shoot_cheat = !shoot_cheat;
+        if (shoot_cheat){
+            if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+                worm->has_used_tool = false;
+            }
+        }
+    }
+}
+
+void Game::cheat_turn_time(){
+    if (!turn_cleaning){
+        turn_time += 10 * FPS;
+    }
+}
+
+void Game::cheat_ammo(char id){
+    if (!turn_cleaning){
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+          worm->cheat_ammo();
+        }
+    }
+}
+
+void Game::cheat_life(char id){
+    if (!turn_cleaning){
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+            worm->add_health(100);
+        }
+    }
 }
 
 Snapshot Game::get_end_game_snapshot() {
@@ -332,6 +307,7 @@ Snapshot Game::get_end_game_snapshot() {
     Snapshot snapshot(worms, {} , {}, {});
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     snapshot.set_end_game();
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     return snapshot;
 }
 
@@ -347,9 +323,11 @@ Snapshot Game::get_game_snapshot() {
         teams_health[team.first] = team_health;
     }
     std::vector<ProjectileSnapshot> projectiles_snaps = projectile_manager.get_projectiles_snapshot();
-    Snapshot snapshot(worms, projectiles_snaps , {}, {});
+    std::vector<ProvisionBoxSnapshot> boxes_snaps = box_manager.get_boxes_snapshot();
+    Snapshot snapshot(worms, projectiles_snaps , {}, boxes_snaps);
     snapshot.set_turn_time_and_worm_turn(turn_time, current_turn_player_id);
     snapshot.set_armies_health(teams_health);
+    snapshot.set_wind_force(projectile_manager.get_wind_force());
     return snapshot;
 }
 

@@ -4,11 +4,12 @@
 #include "game_constants.h"
 
 #define BAT_DAMAGE ConfigSingleton::getInstance().get_baseball_bat_damage()
+#define BAT_POWER ConfigSingleton::getInstance().get_baseball_bat_power()
 
 
-Bat::Bat() : Tool(BASEBALL_BAT, 0, 0, true), damage(BAT_DAMAGE) {}
+Bat::Bat() : Tool(BASEBALL_BAT, INF_AMMO, INF_AMMO, true), damage(BAT_DAMAGE) {}
 
-void Bat::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
+bool Bat::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         float lower_angle = angle - 45 * DEGTORAD;
         std::unordered_set<b2Body*> bodies;
         for (int i = 0 ; i < 10 ; i++){
@@ -26,11 +27,12 @@ void Bat::use(b2Body* worm, int direction, float angle, int time , int power , f
                     Worm* wB = reinterpret_cast<Worm*>(callback.body->GetUserData().pointer);
                     if (wB && wB->get_type() == WORM){
                         wB->apply_damage(BAT_DAMAGE);
-                        callback.body->ApplyLinearImpulseToCenter( b2Vec2( 20 * direction.x,  20 * direction.y), true);
+                        callback.body->ApplyLinearImpulseToCenter( b2Vec2( BAT_POWER * direction.x,  BAT_POWER * direction.y), true);
                     }
                 }
             }
         }
+        return true;
 }
 
 Bat::~Bat() {}

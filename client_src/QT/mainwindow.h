@@ -4,9 +4,12 @@
 #include <qt5/QtWidgets/QMainWindow>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
+#include <QThread>
 
 #include "../client.h"
 #include "lobby_constants.h"
+#include "worker.h"
+#include "../../common_src/custom_errors.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -21,6 +24,9 @@ public:
     explicit MainWindow(Client& client, bool& exit_succesful, Snapshot& map_snapshot);
     ~MainWindow();
 
+public slots:
+    void onMatchesListViewClicked(const QModelIndex& index);
+
 private:
     Ui::MainWindow* ui;
     QMediaPlayer player;
@@ -29,6 +35,8 @@ private:
     bool& exit_succesful;
     uint match_code = 0;
     Snapshot& map_recieved;
+    Worker* worker;
+    QThread* thread;
 
     void joinMatch();
     void createMatch();
@@ -36,5 +44,6 @@ private:
     void refreshPlayersInPreMatch();
     void refreshMatchesList();
     void handle_pre_match(std::vector<std::string> map_names, uint8_t number_of_players, bool creator);
+    void updateMap(const Snapshot& map);
 };
 #endif  // MAINWINDOW_H

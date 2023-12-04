@@ -2,10 +2,13 @@
 
 float GameBuilder::calculate_plat_frict(float angle){
     float friction = 0;
-    if (abs(angle) > 45){
+    if (abs(angle) > 45 && abs(angle) != 90){
         return friction;
     } else {
         friction = (abs(angle) * 0.02f) + PLAT_FRICTION;
+        while (friction > 1){
+            friction -= 1;
+        }
         return friction;
     }
 }
@@ -88,6 +91,23 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     return worm;
 }
 
+b2Body* GameBuilder::create_provision_box_body(float x , float y){
+    b2BodyDef box_def;
+    box_def.type = b2_dynamicBody;
+    box_def.position.Set(x, y);
+    b2Body* box = world.CreateBody(&box_def);
+    b2PolygonShape box_shape;
+    box_shape.SetAsBox(1, 1);
+    b2FixtureDef box_fixture;
+    box_fixture.shape = &box_shape;
+    box_fixture.density = 1;
+    box_fixture.restitution = 0;
+    box_fixture.friction = 2;
+    box->CreateFixture(&box_fixture);
+    return box;
+}
+
+
 void GameBuilder::create_platform_type(float x , float y, BeamType type){
     switch (type){
         case LargeVertical:
@@ -169,8 +189,8 @@ b2Body* GameBuilder::create_projectile_body(float angle , float x , float y, flo
 b2Body* GameBuilder::create_fragment_body(b2Body* father_body , float angle){
     b2Vec2 pos = father_body->GetPosition();
 
-    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.5f;
-    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.5f;
+    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
+    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
 
     b2BodyDef fragment_def;
     fragment_def.type = b2_dynamicBody;

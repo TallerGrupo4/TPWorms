@@ -62,7 +62,8 @@ void Worm::jump (int dir){
 
 bool Worm::use_tool(int power, float x, float y, int time , ProjectileManager& projectiles){
     if (tools[curr_tool] == nullptr || has_used_tool) {return false;}
-    tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time, power, x, y, projectiles);
+    if (!tools[curr_tool]->has_ammo()){return false;}
+    if (!tools[curr_tool]->use(body , act_dir , aiming_angle * DEGTORAD, time, power, x, y, projectiles)){return false;}
     has_used_tool = true;
     aiming_angle = 0 ;
     state = SHOOTED;
@@ -71,8 +72,7 @@ bool Worm::use_tool(int power, float x, float y, int time , ProjectileManager& p
 }
 
 void Worm::aim(int angle_inc, int direction){
-    printf("aiming angle: %f\n", aiming_angle);
-    if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim()) {return;}
+    if ((state != STILL && state != AIMING) || tools[curr_tool] == nullptr || !tools[curr_tool]->can_aim() || !tools[curr_tool]->has_ammo() || has_used_tool) {return;}
     if (angle_inc == -1){
         aiming_angle -= 5.625f;
         if (aiming_angle <= MIN_AIMING_ANGLE) { aiming_angle = MIN_AIMING_ANGLE;}
@@ -149,6 +149,10 @@ float Worm::last_angle(){
     return last_still_angle;
 }
 
+void Worm::reset_aiming_angle(){
+    aiming_angle = 0;
+}
+
 float Worm::get_last_y(){
     return last_y;
 }
@@ -162,7 +166,6 @@ void Worm::set_curr_tool(int new_tool){
 }
 
 void Worm::apply_damage(int damage){
-    // set_curr_tool(NO_TOOL);
     set_curr_tool(tools.size() - 1);
     life -= damage;
     state = DAMAGED;
@@ -173,10 +176,6 @@ void Worm::apply_damage(int damage){
 }
 
 void Worm::add_ammo(int ammo , TOOLS tool){
-    if (tools[tool]->get_type() != tool){
-        throw std::runtime_error("Error: tool type does not match");
-        return;
-    }
     tools[tool]->add_ammo(ammo);
 }
 
@@ -188,3 +187,14 @@ int Worm::get_number_contacts(){
     return number_contacts;
 }
 
+void Worm::cheat_ammo(){
+    for (auto& tool : tools){
+        if (tool != nullptr){
+            tool->add_ammo(1);
+        }
+    }
+}
+
+void Worm::cheat_has_shooted(){
+    has_used_tool = false;
+}

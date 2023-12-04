@@ -3,6 +3,7 @@
 Hud::Hud() : target(),
             marker_an(nullptr),
             /*TEXTS*/
+            wind_velocity_text(nullptr),
             turn_time_text(nullptr),
             ammo_text(nullptr),
             timer_text(nullptr),
@@ -43,11 +44,12 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
      target(target),
      marker_an(nullptr),
      /*TEXTS*/
+     wind_velocity_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Wind Speed: "), WHITE))),
      turn_time_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Turn Time: " + std::to_string(turn_time)), WHITE))),
      ammo_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Weapon Ammo: "), WHITE))),
      timer_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Grenade Timer: "), WHITE))),
      charging_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("Weapon Charge: "), WHITE))),
-     turn_army_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("PLACEHOLDER TEXT TURN ARMY"), WHITE))),
+     turn_army_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(std::string("WAITING TURN TO START"), WHITE))),
      end_game_text(std::make_shared<SDL2pp::Surface>(SDL2pp::Font(WORMS_FONT_PATH, 64).RenderText_Blended(std::string("PLACEHOLDER TEXT END GAME"), WHITE))),
      /*WEAPON ICONS*/
      bazooka_icon_on(std::make_shared<SDL2pp::Texture>(renderer, surfaces.bazooka_icon_on)),
@@ -81,23 +83,23 @@ Hud::Hud(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, Target target, uin
 
     switch (my_army_id) {
     case 0:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_blue, SECS_FOR_MARKER_SPRITES);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_blue, SECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = BLUE;
         break;
     case 1:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_red, SECS_FOR_MARKER_SPRITES);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_red, SECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = RED;
         break;
     case 2:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_yellow, SECS_FOR_MARKER_SPRITES);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_yellow, SECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = YELLOW;
         break;
     case 3:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_green, SECS_FOR_MARKER_SPRITES);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_green, SECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = GREEN;
         break;
     default:
-        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_purple, SECS_FOR_MARKER_SPRITES);
+        marker_an = std::make_unique<Animation>(renderer, surfaces.marker_purple, SECS_FOR_MARKER_SPRITES, false, true);
         my_army_color = ORANGE;
         break;
     }
@@ -221,11 +223,14 @@ void Hud::render(SDL2pp::Renderer& renderer) {
             marker_an->render(renderer, SDL2pp::Rect(marker_x - this->target.x_offset - marker_an->get_frame_size()/2, marker_y - this->target.y_offset - marker_an->get_frame_size()/2, marker_an->get_frame_size(), marker_an->get_frame_size()), flip);
         }
         int gap = 10;
+        int wind_velocity_pos_y = renderer.GetLogicalHeight() - gap - wind_velocity_text->GetHeight();
+        int wind_velocity_pos_x = renderer.GetLogicalWidth() - gap - wind_velocity_text->GetWidth();
         int turn_time_pos_y = gap;
-        int turn_army_pos_y = turn_time_pos_y + (*this->turn_time_text).GetHeight() + gap;
+        int turn_army_pos_y = turn_time_pos_y + turn_time_text->GetHeight() + gap;
         int timer_pos_y = renderer.GetLogicalHeight() - gap - (*this->timer_text).GetHeight();
         int weapon_ammo_pos_y = timer_pos_y - gap - (*this->ammo_text).GetHeight();
         int charging_pos_y = weapon_ammo_pos_y - gap - (*this->charging_text).GetHeight();
+
         SDL2pp::Texture turn_time_text_texture(renderer, *this->turn_time_text);
         renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_time_pos_y, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
         SDL2pp::Texture turn_army_text_texture(renderer, *this->turn_army_text);
@@ -236,6 +241,8 @@ void Hud::render(SDL2pp::Renderer& renderer) {
         renderer.Copy(ammo_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, weapon_ammo_pos_y, (*this->ammo_text).GetWidth(), (*this->ammo_text).GetHeight()));
         SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
         renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, charging_pos_y, (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
+        SDL2pp::Texture velocity_text_texture(renderer, *this->wind_velocity_text);
+        renderer.Copy(velocity_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(wind_velocity_pos_x, wind_velocity_pos_y, this->wind_velocity_text->GetWidth(), this->wind_velocity_text->GetHeight()));
         render_weapon_icons(renderer);
         render_armies_health(renderer, turn_army_pos_y + (*this->turn_army_text).GetHeight() + gap*3);
     }
@@ -258,6 +265,17 @@ void Hud::update_turn_weapon_ammo(int turn_worm_weapon_ammo) {
     }
     std::string ammo_text_str = "Weapon Ammo: " + ammo_count;
     *this->ammo_text = SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(ammo_text_str, WHITE);
+}
+
+void Hud::update_wind_velocity(int wind_velocity) {
+    std::string wind_speed_direction_str;
+    if(wind_velocity < 0) {
+        wind_speed_direction_str = " W";
+    } else if (wind_velocity > 0){
+        wind_speed_direction_str = " E";
+    }
+    std::string wind_speed_str = "Wind Speed: " + std::to_string(std::abs(wind_velocity)) + wind_speed_direction_str;
+    *this->wind_velocity_text = SDL2pp::Font(WORMS_FONT_PATH, 16).RenderText_Blended(wind_speed_str, WHITE);
 }
 
 void Hud::update_armies_health(std::map<char, int>& armies_health) {

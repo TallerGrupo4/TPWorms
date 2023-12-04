@@ -2,15 +2,15 @@
 #define CONFIG_SINGLETON_H
 
 #include <yaml-cpp/yaml.h>
+#include <filesystem>
 #include <iostream>
 
 class ConfigSingleton {
 public:
-    static ConfigSingleton& getInstance() {
-        static ConfigSingleton instance;
+    static ConfigSingleton& getInstance(const std::string& filePath = "") {
+        static ConfigSingleton instance(filePath);
         return instance;
     }
-
     int get_extra_health() const {
         return extra_health;
     }
@@ -33,6 +33,14 @@ public:
 
     int get_turn_time() const {
         return turn_time;
+    }
+
+    float get_wind_min(){
+        return wind_min;
+    }
+
+    float get_wind_max(){
+        return wind_max;
     }
 
     float get_worm_speed() const {
@@ -211,6 +219,10 @@ public:
         return baseball_bat_damage;
     }
 
+    int get_baseball_bat_power() const {
+        return baseball_bat_power;
+    }
+
     int get_airstrike_damage() const {
         return airstrike_damage;
     }
@@ -231,6 +243,26 @@ public:
         return fragment_radius;
     }
 
+    int get_health_box_life() const {
+        return health_box_life;
+    }
+
+    int get_trap_box_damage() const {
+        return trap_box_damage;
+    }
+
+    float get_trap_box_power() const {
+        return trap_box_power;
+    }
+
+    float get_trap_box_radius() const {
+        return trap_box_radius;
+    }
+
+    int get_ammo_box_ammo() const {
+        return ammo_box_ammo;
+    }
+
     ~ConfigSingleton() {}
 
     ConfigSingleton(ConfigSingleton const&) = delete;
@@ -239,14 +271,22 @@ public:
 
 
 private:
-    ConfigSingleton() {
+    std::string file_path;
+
+    ConfigSingleton(const std::string& filePath) : file_path(filePath) {
         readConfigFromFile();
     }
 
     void readConfigFromFile() {
+        if (file_path.empty()) {
+            throw std::runtime_error("Config file path is not set");
+        }
+        if (!std::filesystem::exists(file_path)) {
+        throw std::runtime_error("Config file does not exist: " + file_path + ". Please create it properly and pass the absolute path to it. E.g. /etc/worms/config.yaml. See the README for more information.");
+        }
         try {
             std::cout << "Reading config file..." << std::endl;
-            YAML::Node config = YAML::LoadFile("../external/config/config.yaml");
+            YAML::Node config = YAML::LoadFile(file_path);
             max_players = config["max_players"].as<int>();
             // World
             start_life = config["start_life"].as<int>();
@@ -255,6 +295,8 @@ private:
             initial_worms_turn = config["initial_worms_turn"].as<int>();
             turn_time = config["turn_time"].as<int>();
             turn_time = turn_time *  30; // 30 is the fps of the game
+            wind_min = config["wind_min"].as<float>();
+            wind_max = config["wind_max"].as<float>();
             // Physics
             worm_speed = config["worm_speed"].as<float>();
             worm_jump_speed = config["worm_jump_speed"].as<float>();
@@ -309,6 +351,7 @@ private:
             dynamite_density = config["dynamite_density"].as<float>();
             // Baseball bat
             baseball_bat_damage = config["baseball_bat_damage"].as<int>();
+            baseball_bat_power = config["baseball_bat_power"].as<int>();
             // Airstrike
             airstrike_damage = config["airstrike_damage"].as<int>();
             airstrike_radius = config["airstrike_radius"].as<int>();
@@ -316,6 +359,13 @@ private:
             // Fragments
             fragment_damage = config["fragment_damage"].as<int>();
             fragment_radius = config["fragment_radius"].as<int>();
+            // Provision Box
+            health_box_life = config["health_box_life"].as<int>();
+            trap_box_damage = config["trap_box_damage"].as<int>();
+            trap_box_power = config["trap_box_power"].as<float>();
+            trap_box_radius = config["trap_box_radius"].as<float>();
+            ammo_box_ammo = config["ammo_box_ammo"].as<int>();
+
             std::cout << "Config file read successfully" << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
@@ -335,6 +385,8 @@ private:
     int null_state;
     int initial_worms_turn;
     int turn_time;
+    float wind_min;
+    float wind_max;
     float worm_speed;
     float worm_jump_speed;
     float worm_jump_hor_speed;
@@ -399,6 +451,7 @@ private:
 
 // Baseball bat
     int baseball_bat_damage;
+    int baseball_bat_power;
 
 // Airstrike
     int airstrike_damage;
@@ -408,6 +461,15 @@ private:
 // Fragments
     int fragment_damage;
     int fragment_radius;
+
+// Provision Box
+    int health_box_life;
+
+    int trap_box_damage;
+    float trap_box_power;
+    float trap_box_radius;
+
+    int ammo_box_ammo;
 
     // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
 

@@ -1,9 +1,6 @@
 #ifndef PROJECTILE_ANIMATIONS_H
 #define PROJECTILE_ANIMATIONS_H
 
-#include <memory>
-#include <list>
-
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/constants.h"
@@ -24,8 +21,6 @@ public:
     void update_from_snapshot(ProjectileStates state, ProjectileTypes type);
     void update_from_iter(ProjectileStates state, ProjectileTypes type, int angle);
 private:
-    //bool is_action_state(ProjectileStates state);
-    // void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
     void render_angle_dependent_an(Animation& up_an, Animation& down_an,
                                     const int angle, const bool facing_left,
                                     SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
@@ -34,11 +29,6 @@ private:
                                     int right_offset,
                                     int above_offset,
                                     int bellow_offset);
-    // void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle, const bool facing_left);
-    // void push_drop_weapon_an(TOOLS weapon, int angle, const bool facing_left);
-    // void push_pick_up_weapon_an(TOOLS weapon, int angle, const bool facing_left);
-
-    //std::list<std::reference_wrapper<Animation>> lingering_animations;
     /*NEED OF ITER*/
     Animation ban_an;
     Animation gr_an;

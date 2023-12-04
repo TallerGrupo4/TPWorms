@@ -9,7 +9,7 @@ class Teleporter: public Tool {
     public:
     Teleporter();
 
-    void use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles);
+    bool use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles);
 
     ~Teleporter();
 

@@ -7,12 +7,12 @@
 using namespace SDL2pp;
 
 MatchRenderer::MatchRenderer(Client& client, Snapshot map_received) : client(client), sdl(SDL_INIT_VIDEO | SDL_INIT_AUDIO), ttf(), mixer(AUDIO_HZ_CD_QUALITY, MIX_DEFAULT_FORMAT, MIXER_CHANNELS, MIXER_CHUNKSIZE),
-                window("SDL2pp demo", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
+                window("WORMS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 1280, 720, SDL_WINDOW_RESIZABLE),
                 renderer(window, -1, SDL_RENDERER_ACCELERATED) {
         renderer.SetLogicalSize(window.GetWidth(), window.GetHeight());
         SDL_WarpMouseInWindow(window.Get(),window.GetWidth()/2,window.GetHeight()/2);
         match = Match(map_received, surfaces, renderer, mixer);
-        this->render(renderer,match);
+        render(renderer,match);
 }
 
 bool MatchRenderer::handleEvents(Match& match) {
@@ -21,17 +21,15 @@ bool MatchRenderer::handleEvents(Match& match) {
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
             case SDL_KEYDOWN: {
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+                SDL_KeyboardEvent& keyEvent = event.key;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE: {
-                        SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
-                        match.update_camera(mouse_motion_x, mouse_motion_y, true, true);
+                        // SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
+                        match.update_camera(mouse_motion_x, mouse_motion_y, true, true, false, &window, match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
                         mouse_motion_x = 0;
                         mouse_motion_y = 0;
                         break;
                     }
-                    case SDLK_q:
-                        return false;
                     case SDLK_LEFT: {
                         if (match.handle_left_button(action)) {
                             client.send_action(action);
@@ -57,7 +55,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_RETURN: {
-                        if (match.handle_enter_button(action, (keyEvent.repeat == 0) ? true : false)) {
+                        if (match.handle_enter_button(action)) {
                             client.send_action(action);
                         }
                         break;
@@ -99,21 +97,34 @@ bool MatchRenderer::handleEvents(Match& match) {
             }  // Fin KEY_DOWN
             break;
             case SDL_KEYUP: {
-                SDL_KeyboardEvent& keyEvent = (SDL_KeyboardEvent&)event;
+                SDL_KeyboardEvent& keyEvent = event.key;
                 switch (keyEvent.keysym.sym) {
-                    // case SDLK_LEFT:
-                    //     action = std::make_shared<ActionMovLeft>();
-                    //     client.send_action(action);
-                    //     //player.stopMoving();
-                    //     break;
-                    // case SDLK_RIGHT:
-                    //     action = std::make_shared<ActionMovRight>();
-                    //     client.send_action(action);
-                    //     //player.stopMoving();
-                    //     break;
                     case SDLK_SPACE: {
-                        std::cout << "Entre al space release\n";
                         if (match.handle_space_button_release(action, renderer)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                    case SDLK_F1: {
+                        if (match.handle_cheat_1(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                    case SDLK_F2: {
+                        if (match.handle_cheat_2(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                    case SDLK_F3: {
+                        if (match.handle_cheat_3(action)) {
+                            client.send_action(action);
+                        }
+                        break;
+                    }
+                    case SDLK_F4: {
+                        if (match.handle_cheat_4(action)) {
                             client.send_action(action);
                         }
                         break;
@@ -122,19 +133,15 @@ bool MatchRenderer::handleEvents(Match& match) {
             }  // Fin KEY_UP
             break;
             case SDL_MOUSEMOTION: {
-                //std::cout << "\n\nDID ENTER IN SDL_MOUSEMOTION\n" << std::endl;
-                SDL_MouseMotionEvent& mouseMotionEvent = (SDL_MouseMotionEvent&)event;
-                std::cout << "x:" << mouseMotionEvent.x << " y: " << mouseMotionEvent.y << std::endl;
+                SDL_MouseMotionEvent& mouseMotionEvent = event.motion;
                 match.handle_mouse_motion(mouseMotionEvent.x , mouseMotionEvent.y);
-                //window.GetHeight()/2
                 mouse_motion_x += mouseMotionEvent.xrel;
                 mouse_motion_y += mouseMotionEvent.yrel;
-                //std::cout << "x relative:" << mouse_motion_x << " y relative: " << mouse_motion_y << std::endl;
                 match.update_camera(mouse_motion_x, mouse_motion_y, false, false, true);
                 break;
             }
             case SDL_MOUSEWHEEL: {
-                SDL_MouseWheelEvent& MouseWheelEvent = (SDL_MouseWheelEvent&)event;
+                SDL_MouseWheelEvent& MouseWheelEvent = event.wheel;
                 if (MouseWheelEvent.y > 0) {
                     if (match.handle_mouse_scroll_up(action)) {
                         client.send_action(action);
@@ -147,7 +154,7 @@ bool MatchRenderer::handleEvents(Match& match) {
                 break;
             }
             case SDL_MOUSEBUTTONDOWN: {
-                SDL_MouseButtonEvent& mouseButtonEvent = (SDL_MouseButtonEvent&)event;
+                SDL_MouseButtonEvent& mouseButtonEvent = event.button;
                 switch (mouseButtonEvent.button) {
                 case SDL_BUTTON_LEFT:
                     match.handle_mouse_left_click(mouseButtonEvent.x, mouseButtonEvent.y);
@@ -160,15 +167,14 @@ bool MatchRenderer::handleEvents(Match& match) {
                 default:
                     break;
                 }
-                std::cout << "x:" << mouseButtonEvent.x << " y: " << mouseButtonEvent.y << std::endl;
-                std::cout << "x for server: " << mouseButtonEvent.x - (renderer.GetLogicalWidth()/2) << " y for server: " << mouseButtonEvent.y - (renderer.GetLogicalHeight()/2)  << std::endl;
                 break;
             }
             case SDL_QUIT: {
                 return false;
             }
         }  // fin switch(event)
-    }      // fin while(SDL_PollEvents)
+    }   // fin while(SDL_PollEvents)
+
     return true;
 }
 
@@ -188,24 +194,23 @@ void MatchRenderer::execute_and_update(int iter) {
         while (client.recv_snapshot(snapshot)) {
             match.update_from_snapshot(snapshot, surfaces, renderer);
         }
-        
         match.update_from_iter(iter);
         render(renderer, match);
     } catch (std::exception& e) {
-
-        // If case of error, print it and exit with error
         std::cerr<< "Uknown execption catched in Main thread, match_renderer " << e.what() << std::endl;
+        running = false;
+    } catch (...) {
+        std::cerr<< "Uknown execption catched in Main thread, match_renderer " << std::endl;
     }
 }
 
 void MatchRenderer::start() {
     client.start();
+    srand(time(SEED_FOR_SRAND_TIME));
     Clock clock(std::bind(&MatchRenderer::execute_and_update, this, std::placeholders::_1), FRAME_TIME, running);
     SDL2pp::Music music(MUSIC_FOREST_PATH);
     mixer.SetMusicVolume(BACKGROUND_VOLUME);
     mixer.PlayMusic(music, -1);
     clock.tick();
-    // std::cout << "MatchRenderer::start() finished" << std::endl;
     client.exit();
-    // std::cout << "MatchRenderer::start() client.exit() finished" << std::endl;
 }

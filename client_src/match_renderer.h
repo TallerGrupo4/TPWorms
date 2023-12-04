@@ -6,6 +6,8 @@
 #include <chrono>
 #include <map>
 #include <vector>
+#include <ctime>
+#include <cstdlib>
 
 #include <SDL2pp/SDL2pp.hh>
 #include <thread>

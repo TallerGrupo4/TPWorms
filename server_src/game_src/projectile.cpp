@@ -3,17 +3,20 @@
 
 #define EXPLOSION_POWER ConfigSingleton::getInstance().get_explosion_power()
 #define EXPLOSION_FRAGMENT_POWER ConfigSingleton::getInstance().get_explosion_fragment_power()
+#define FRAGMENT_DAMAGE ConfigSingleton::getInstance().get_fragment_damage()
 
 
-Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle):
- Entity(body, PROJECITLE), damage(damage), radius(radius), projectile_type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID)  {
+Projectile::Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle, bool affected_by_wind):
+ Entity(body, PROJECITLE), damage(damage), radius(radius), projectile_type(type), explosion_type(explosion_type), radius_body_size(0.2), timer(timer), fragments(fragments), angle(angle), state(ALIVE) , id(INVALID), affected_by_wind(affected_by_wind)  {
         body->GetUserData().pointer = (uintptr_t) this;
         body->SetTransform(body->GetPosition(), angle);
     }
 
 Projectile::~Projectile() {}
 
-
+bool Projectile::is_affected_by_wind(){
+    return affected_by_wind;
+}
 
 void Projectile::decresease_timer(int tick) {
     if (timer > 0){
@@ -28,11 +31,11 @@ int Projectile::get_timer() {
 void Projectile::explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles) {
     set_state(EXPLODED);
     if (projectile_type == FragmentProj){
-        Explosion ex(explosion_type, fragments, fragment_damage, radius, damage, EXPLOSION_FRAGMENT_POWER);
+        Explosion ex(explosion_type, fragments, FRAGMENT_DAMAGE, radius, damage, EXPLOSION_FRAGMENT_POWER);
         ex.explode(body, projectiles);
 
     } else {
-        Explosion ex(explosion_type, fragments, fragment_damage, radius, damage, EXPLOSION_POWER);
+        Explosion ex(explosion_type, fragments, FRAGMENT_DAMAGE, radius, damage, EXPLOSION_POWER);
         ex.explode(body, projectiles);
     }
 }
@@ -59,7 +62,7 @@ int Projectile::get_fragments() {
 }
 
 int Projectile::get_fragment_damage() {
-    return fragment_damage;
+    return FRAGMENT_DAMAGE;
 }
 
 float Projectile::get_angle(){
@@ -92,7 +95,7 @@ char Projectile::get_id() {
 ProjectileSnapshot Projectile::get_snapshot() {
     float pos_x = body->GetPosition().x;
     float pos_y = body->GetPosition().y;
-    return ProjectileSnapshot(projectile_type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, explosion_type);
+    return ProjectileSnapshot(projectile_type, pos_x, pos_y, get_angle(), get_direction(), radius_body_size, state, id, radius);
 }
 
 

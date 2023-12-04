@@ -14,14 +14,26 @@ EffectsAnimations::EffectsAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& 
 void EffectsAnimations::render(SDL2pp::Renderer& renderer, int camara_offset_x, int camera_offset_y) {
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     for(auto& animation_and_pos : lingering_animations) {
-        int top_left_x = (animation_and_pos->get_x()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalWidth()/2) - camara_offset_x;
-        int top_left_y = (animation_and_pos->get_y()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
-        animation_and_pos->get_an().render(renderer,
+        int size_of_explosion = animation_and_pos->get_explosion_size()*2;
+        if(size_of_explosion != 0){
+            int top_left_x = (animation_and_pos->get_x()*RESOLUTION_MULTIPLIER)-(size_of_explosion/2) + (int)(renderer.GetLogicalWidth()/2) - camara_offset_x;
+            int top_left_y = (animation_and_pos->get_y()*RESOLUTION_MULTIPLIER)-(size_of_explosion/2) + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
+            animation_and_pos->get_an().render(renderer,
                                     SDL2pp::Rect(top_left_x,
                                         top_left_y,
-                                        animation_and_pos->get_an().get_frame_size(),
-                                        animation_and_pos->get_an().get_frame_size()),
+                                        size_of_explosion,
+                                        size_of_explosion),
                                     flip);
+        } else {
+            int top_left_x = (animation_and_pos->get_x()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalWidth()/2) - camara_offset_x;
+            int top_left_y = (animation_and_pos->get_y()*RESOLUTION_MULTIPLIER)-(animation_and_pos->get_an().get_frame_size()/2) + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
+            animation_and_pos->get_an().render(renderer,
+                                        SDL2pp::Rect(top_left_x,
+                                            top_left_y,
+                                            animation_and_pos->get_an().get_frame_size(),
+                                            animation_and_pos->get_an().get_frame_size()),
+                                        flip);
+        }
     }
 }
 
@@ -35,17 +47,17 @@ void EffectsAnimations::set_baseball_bat_hit(SDL2pp::Renderer& renderer, int x, 
     lingering_animations.push_back(std::move(baseball_bat_hit_an));
 }
 
-void EffectsAnimations::set_big_explosion_an(SDL2pp::Renderer& renderer, int x, int y) {
-    std::unique_ptr<PosAndAnimation> big_circle_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, big_explosion_circle_surface, SECS_FOR_EXPLOSIONS_SPRITES, true);
+void EffectsAnimations::set_big_explosion_an(SDL2pp::Renderer& renderer, int x, int y, int explosion_size) {
+    std::unique_ptr<PosAndAnimation> big_circle_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, big_explosion_circle_surface, SECS_FOR_EXPLOSIONS_SPRITES, true, explosion_size);
     lingering_animations.push_back(std::move(big_circle_explosion_an));
-    std::unique_ptr<PosAndAnimation> big_ring_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, big_explosion_rings_surface, SECS_FOR_EXPLOSIONS_SPRITES, true);
+    std::unique_ptr<PosAndAnimation> big_ring_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, big_explosion_rings_surface, SECS_FOR_EXPLOSIONS_SPRITES, true, explosion_size);
     lingering_animations.push_back(std::move(big_ring_explosion_an));
 }
 
-void EffectsAnimations::set_small_explosion_an(SDL2pp::Renderer& renderer, int x, int y) {
-    std::unique_ptr<PosAndAnimation> small_circle_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, small_explosion_circle_surface, SECS_FOR_EXPLOSIONS_SPRITES, true);
+void EffectsAnimations::set_small_explosion_an(SDL2pp::Renderer& renderer, int x, int y, int explosion_size) {
+    std::unique_ptr<PosAndAnimation> small_circle_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, small_explosion_circle_surface, SECS_FOR_EXPLOSIONS_SPRITES, true, explosion_size);
     lingering_animations.push_back(std::move(small_circle_explosion_an));
-    std::unique_ptr<PosAndAnimation> small_ring_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, small_explosion_rings_surface, SECS_FOR_EXPLOSIONS_SPRITES, true);
+    std::unique_ptr<PosAndAnimation> small_ring_explosion_an = std::make_unique<PosAndAnimation>(x, y, renderer, small_explosion_rings_surface, SECS_FOR_EXPLOSIONS_SPRITES, true, explosion_size);
     lingering_animations.push_back(std::move(small_ring_explosion_an));
 }
 

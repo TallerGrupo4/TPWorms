@@ -1,6 +1,6 @@
 #include "AnimationAngle.h"
 
-AnimationAngle::AnimationAngle(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration, bool one_loop, bool is_orientation_horizontal): Animation(renderer, surface, loop_duration, one_loop, is_orientation_horizontal) {
+AnimationAngle::AnimationAngle(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal) : Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
     currentFrame = 8;
 }
 

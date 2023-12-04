@@ -1,5 +1,6 @@
 #include "protocol_client.h"
 #include "../common_src/liberror.h"
+#include "../common_src/custom_errors.h"
 
 #include <cstdint>
 #include <iostream>
@@ -17,7 +18,7 @@ ProtocolClient::ProtocolClient(Socket& socket, ParserClient& parser): socket(soc
 void ProtocolClient::send_command(const Command& command) {
     char code[1] = {command.get_code()};
     if (socket.sendall(code, 1, &was_closed) < 0) {
-        // throw error...
+        throw LostConnection();
     }
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
         // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
@@ -32,7 +33,7 @@ const Command ProtocolClient::recv_command() {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);
     if (ret < 0) {
-        // Throw
+        throw LostConnection();
     }
     switch (code[0]) {
         case CASE_JOIN: {
@@ -89,7 +90,7 @@ const Command ProtocolClient::recv_command() {
             break;
     }
     if (was_closed) {
-        // Throw
+        throw LostConnection();
     }
     // Throw error
     return Command(DEFAULT, DEFAULT);
@@ -112,6 +113,7 @@ Snapshot ProtocolClient::recv_snapshot() {
     recv_end_game(snapshot);
     recv_provision_boxes(snapshot);
     recv_armies_health(snapshot);
+    recv_wind_force(snapshot);
     return snapshot;
 }
 
@@ -121,18 +123,28 @@ Snapshot ProtocolClient::recv_snapshot() {
 void ProtocolClient::send_match_id(const uint match_id) {
     uint match_id_to_send = htonl(match_id);
     if (socket.sendall(&match_id_to_send, 4, &was_closed) < 0) {
-        // throw error...
+        throw LostConnection();
     }
 }
 
 void ProtocolClient::send_map_name(const std::string map_name) {
     uint16_t len = htons(static_cast<uint16_t>(map_name.size()));
     if (socket.sendall(&len, 2, &was_closed) < 0) {
-        // throw error...
+        throw LostConnection();
     }
     if (socket.sendall(map_name.c_str(), map_name.size(), &was_closed) < 0) {
-        // throw error...
+        throw LostConnection();
     }
+}
+
+void ProtocolClient::recv_wind_force(Snapshot& snapshot) {
+    int wind_force[1];
+    socket.recvall(wind_force, 4, &was_closed);
+    if (was_closed) {
+        throw LostConnection();
+    }
+    wind_force[0] = ntohl(wind_force[0]);
+    snapshot.set_wind_force(wind_force[0]);
 }
 
 void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
@@ -161,7 +173,6 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
     int _water_level = water_level[0];
     int _amount_of_worms = amount_of_worms[0];
     parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height, _water_level);
-    
     snapshot.set_dimensions(_height, _width, _worm_width, _worm_height, _amount_of_worms, _water_level);
 
 }
@@ -169,7 +180,7 @@ void ProtocolClient::recv_dimensions(Snapshot& snapshot) {
 void ProtocolClient::recv_platforms(Snapshot& snapshot) {
     uint16_t num_of_plats[1];
     socket.recvall(num_of_plats, 2, &was_closed);
-    // if (was_closed) throw WasClosed;
+    if (was_closed) throw LostConnection();
     num_of_plats[0] = ntohs(num_of_plats[0]);
     for (int i = 0; i < num_of_plats[0]; i++) {
         BeamType type[1];
@@ -178,15 +189,15 @@ void ProtocolClient::recv_platforms(Snapshot& snapshot) {
         int width[1];
         int height[1];
         socket.recvall(type, 1, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_x, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_y, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(width, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(height, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         width[0] = ntohl(width[0]);
@@ -242,20 +253,28 @@ void ProtocolClient::recv_projectiles(Snapshot& snapshot) {
         int explosion_type[1];
         int radius[1];
         socket.recvall(pos_x, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_y, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(angle, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(type, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(direction, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(state, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(id, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(explosion_type, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(radius, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
         angle[0] = ntohl(angle[0]);
         direction[0] = ntohl(direction[0]);
         state[0] = ntohl(state[0]);
-        explosion_type[0] = ntohl(explosion_type[0]);
+        explosion_type[0] = ntohl(explosion_type[0]) * PIX_PER_METER;
         radius[0] = ntohl(radius[0]);
         float _pos_x = static_cast<float>(pos_x[0]);
         float _pos_y = static_cast<float>(pos_y[0]);
@@ -273,9 +292,9 @@ void ProtocolClient::recv_time_and_worm_turn(Snapshot& snapshot) {
     int turn_time[1];
     int worm_turn[1];
     socket.recvall(turn_time, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+    if (was_closed) throw LostConnection();
     socket.recvall(worm_turn, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+    if (was_closed) throw LostConnection();
     turn_time[0] = ntohl(turn_time[0]);
     worm_turn[0] = ntohl(worm_turn[0]);
     snapshot.turn_time_and_worm_turn.turn_time = turn_time[0];
@@ -285,7 +304,7 @@ void ProtocolClient::recv_time_and_worm_turn(Snapshot& snapshot) {
 void ProtocolClient::recv_worms(Snapshot& snapshot) {
     uint16_t num_of_worms[1];
     socket.recvall(num_of_worms, 2, &was_closed);
-    // if (was_closed) throw WasClosed;
+    if (was_closed) throw LostConnection();
     num_of_worms[0] = ntohs(num_of_worms[0]);
     for (int i = 0; i < num_of_worms[0]; i++) {
         char id[1];
@@ -301,27 +320,27 @@ void ProtocolClient::recv_worms(Snapshot& snapshot) {
         int aiming_angle[1];
         int current_ammo[1];
         socket.recvall(id, 1, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_x, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_y, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(angle, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(max_health, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(health, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(direction, 1, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(weapon, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(state, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(team_id, 1, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(aiming_angle, 4, &was_closed);
-    // if (was_closed) throw WasClosed;
+        if (was_closed) throw LostConnection();
         socket.recvall(current_ammo, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
@@ -344,7 +363,7 @@ void ProtocolClient::recv_end_game(Snapshot& snapshot) {
     char end_game[1];
     socket.recvall(end_game, 1, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     if (end_game[0] == 1 /*true*/) {
         snapshot.set_end_game();
@@ -363,11 +382,17 @@ void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
         int width[1];
         int height[1];
         socket.recvall(type, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_x, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(pos_y, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(id, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(state, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(width, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(height, 4, &was_closed);
         pos_x[0] = ntohl(pos_x[0]);
         pos_y[0] = ntohl(pos_y[0]);
@@ -386,11 +411,14 @@ void ProtocolClient::recv_provision_boxes(Snapshot& snapshot) {
 void ProtocolClient::recv_armies_health(Snapshot& snapshot) {
     uint8_t num_of_armies[1];
     socket.recvall(num_of_armies, 1, &was_closed);
+    if (was_closed) throw LostConnection();
     for (int i = 0; i < num_of_armies[0]; i++) {
         char army_id[1];
         int health[1];
         socket.recvall(army_id, 1, &was_closed);
+        if (was_closed) throw LostConnection();
         socket.recvall(health, 4, &was_closed);
+        if (was_closed) throw LostConnection();
         health[0] = ntohl(health[0]);
         snapshot.armies_health[army_id[0]] = health[0];
     }
@@ -400,10 +428,10 @@ void ProtocolClient::recv_armies_health(Snapshot& snapshot) {
 void ProtocolClient::recv_match_id(uint* match_id) {
     int ret = socket.recvall(match_id, 4, &was_closed);
     if (ret < 0) {
-        // throw
+        throw LostConnection();
     }
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     match_id[0] = ntohl(match_id[0]);
 }
@@ -411,7 +439,7 @@ void ProtocolClient::recv_match_id(uint* match_id) {
 void ProtocolClient::recv_number_of_players(uint8_t* number_of_players) {
     socket.recvall(number_of_players, 1, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
 }
 
@@ -419,13 +447,13 @@ std::string ProtocolClient::recv_map_name() {
     uint16_t len[1];
     socket.recvall(len, 2, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     len[0] = ntohs(len[0]);
     std::vector<char> map_name(len[0]);
     socket.recvall(map_name.data(), len[0], &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     std::string map_name_str(map_name.begin(), map_name.end());
     return map_name_str;
@@ -435,25 +463,25 @@ std::map<uint, std::string> ProtocolClient::recv_list() {
     uint8_t num_of_matches[1];
     socket.recvall(num_of_matches, 1, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     std::map<uint, std::string> matches_availables;
     for (int i = 0; i < num_of_matches[0]; i++) {
         uint match_id[1];
         socket.recvall(match_id, 4, &was_closed);
         if (was_closed) {
-            // throw
+            throw LostConnection();
         }
         match_id[0] = ntohl(match_id[0]);
         uint8_t map_name_size[1];
         socket.recvall(map_name_size, 1, &was_closed);
         if (was_closed) {
-            // throw
+            throw LostConnection();
         }
         std::vector<char> map_name(map_name_size[0]);
         socket.recvall(map_name.data(), map_name_size[0], &was_closed);
         if (was_closed) {
-            // throw
+            throw LostConnection();
         }
         std::string map_name_str(map_name.begin(), map_name.end());
         matches_availables[match_id[0]] = map_name_str;
@@ -465,7 +493,7 @@ std::vector<std::string> ProtocolClient::recv_map_names() {
     uint16_t num_of_maps[1];
     socket.recvall(num_of_maps, 2, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     num_of_maps[0] = ntohs(num_of_maps[0]);
     std::vector<std::string> map_names;
@@ -473,13 +501,13 @@ std::vector<std::string> ProtocolClient::recv_map_names() {
         uint16_t len[1];
         socket.recvall(len, 2, &was_closed);
         if (was_closed) {
-            // throw
+            throw LostConnection();
         }
         len[0] = ntohs(len[0]);
         std::vector<char> map_name(len[0]);  // <char>?? 
         socket.recvall(map_name.data(), len[0], &was_closed);
         if (was_closed) {
-            // throw
+            throw LostConnection();
         }
         std::string map_name_str(map_name.begin(), map_name.end());
         map_names.push_back(map_name_str);
@@ -491,7 +519,7 @@ uint8_t ProtocolClient::recv_number_of_players() {
     uint8_t number_of_players[1];
     socket.recvall(number_of_players, 1, &was_closed);
     if (was_closed) {
-        // throw
+        throw LostConnection();
     }
     return number_of_players[0];
 }

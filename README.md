@@ -45,32 +45,53 @@ mkdir build
 cd build
 cmake ..
 ```
-TIP: If you already have a build folder with the cmake script already ran (if not, skip this command), you can run the 
+TIP: If you already have a build folder with the cmake script already ran (if not, skip this command/TIP), you can run the 
 following command to re-build the project using the cache and compile it at the same time without
 needing to be at the build folder (you need to be at the root folder of the project):
 ```
 cmake --build build/ -j 12
 ```
-Now, you can run the makefile by running (inside the build folder):
+Now, you can run the make install command (with sudo needed) by running (inside the build folder):
 ```
-make
+sudo make install -j4
 ```
-This will generate the executable file. To run it, you need to run:
+This will generate the executable file which you'll be able to execute it from anywhere you want (not necessarily from the build folder).
+
+
+-----------------
+NOTE: If you want to run the make install without installing the executable file, you can run:
 ```
-./server <port>
+make -j4
+```
+This will generate the executables files inside the build folder, but you will only be able to execute them from there.
+
+NOTE 2: If you run make install, this command will create the executable file inside the build folder, but it will also copy it to /usr/local/bin, so you will be able to execute it from anywhere you want. And it will also copy files in /var/worms and /etc/worms.
+-----------------
+
+
+To run it, you need to run:
+```
+server <port>
 ```
 and
 ```
-./client <host> <port>
+client <host> <port>
 ```
 where <port> is the port you want to use and <host> is the host you want to connect to. If you want to connect to the server in your own computer, you can use localhost as the host. For example:
 ```
-./server 8080
+server 8080
 ```
 and
 ```
-./client 127.0.0.1 8080
+client 127.0.0.1 8080
 ```
+In those examples you will be using the port 8080 and connecting to the server in your own computer using the default configuration.
+If you want to run your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file. For example:
+```
+server 8080 /home/user/config.yaml
+```
+Make sure that the config.yaml file is in the same format as the one in the external/config folder of the project.
+
 If you want to add more libraries or flags to the makefile, you can do it by adding them to the CMakeLists.txt file. For example, if you want to add the flag -Wall, you need to add it to the line:
 ```
 set(CMAKE_CXX_FLAGS "-g -std=c++17")
@@ -107,20 +128,32 @@ rm CMakeCache.txt && cmake .. -DTESTING=ON
 ```
 Then you will need to run the makefile:
 ```
-make -j4
+sudo make install -j4
 ```
 And finally you will need to run the tests:
 ```
 GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
 ```
+-----------------
+NOTE: Remember that to run the tests you will need to be in the build folder.
+-----------------
+
 For running the project normally once again you will need to run the cmake script for removing the cache and re-generate it without the testing flag:
 ```
 rm CMakeCache.txt && cmake ..
 ```
-And then run the makefile as explained before.
+Then you will need to run the makefile:
+```
+sudo make install -j4
+```
 
 ### Configuration
 
 The configuration file is located in the external/config folder of the project and is called config.yaml.
 There you can change the game settings such as the worm's health, max players, etc.
-
+If you want to run the server with your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file as explained before. Anyways, here is an example of a custom config.yaml file located in the a arbitrary folder:
+```
+server 8080 /home/user/Desktop/config.yaml
+```
+Remember that the config.yaml file needs to be in the same format as the one in the external/config folder of the project.
+(Replace /home/user/Desktop/config.yaml with the absolute path to your config.yaml file)

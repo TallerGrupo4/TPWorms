@@ -11,7 +11,8 @@
 class EffectsSounds {
 public:
     explicit EffectsSounds(SDL2pp::Mixer& mixer);
-    void play_match_finnished_sound();
+    void play_match_winner_sound();
+    void play_match_loser_sound();
     void play_big_explosion_sound();
     void play_small_explosion_sound();
     void play_holy_grenade_explosion_sound();
@@ -29,7 +30,8 @@ public:
 private:
     SDL2pp::Mixer& mixer;
     /*FINNISHED*/
-    SDL2pp::Chunk match_finnished_sound; //CrowdPart1.wav
+    SDL2pp::Chunk match_winner_sound;
+    SDL2pp::Chunk match_loser_sound;
     /*EXPLOSION SOUNDS*/
     SDL2pp::Chunk big_explosion_sound; //explosion 2
     SDL2pp::Chunk small_explosion_sound; //explosion 3

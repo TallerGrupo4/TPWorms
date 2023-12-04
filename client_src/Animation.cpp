@@ -1,13 +1,15 @@
 /*
- * Created by Federico Manuel Gomez Peter
+ * Inspired by the work from Federico Manuel Gomez Peter
  * Date: 17/05/18.
  */
 #include "Animation.h"
 
-Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_seconds, bool one_loop, bool is_orientation_horizontal) :
+Animation::Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_seconds, bool one_loop, bool loop_reversed, bool is_orientation_horizontal) :
         texture(SDL2pp::Texture(renderer,surface)),
         is_orientation_horizontal(is_orientation_horizontal),
         one_loop(one_loop),
+        loop_reversed(loop_reversed),
+        reverse(false),
         currentFrame(0),
         numFrames(this->is_orientation_horizontal ?
                           (this->texture.GetWidth() / this->texture.GetHeight()) :
@@ -59,11 +61,55 @@ bool Animation::advanceFrame() {
     if (this->actual_time_between_frames != 0) {
         this->actual_time_between_frames -= 1;
     } else {
-        this->currentFrame += 1;
-        this->currentFrame = this->currentFrame % this->numFrames;
+        if (this->loop_reversed) {
+            if (this->reverse) {
+                this->currentFrame -= 1;
+                if (this->currentFrame < 0) {
+                    this->currentFrame = 1;
+                    this->reverse = false;
+                }
+            } else {
+                this->currentFrame += 1;
+                if (this->currentFrame == this->numFrames-1) {
+                    this->currentFrame = this->numFrames-2;
+                    this->reverse = true;
+                }
+            }
+        } else {
+            this->currentFrame += 1;
+            this->currentFrame = this->currentFrame % this->numFrames;
+        }
         this->actual_time_between_frames = this->time_between_frames;
+        // if (this->reverse) {
+        //     this->currentFrame -= 1;
+        //     if (this->currentFrame < 0) {
+        //         this->currentFrame = 0;
+        //         this->reverse = false;
+        //     }
+        // } else {
+        //     this->currentFrame += 1;
+        //     if (this->currentFrame == this->numFrames) {
+        //         this->currentFrame = this->numFrames - 1;
+        //         this->reverse = true;
+        //     }
+        // }
+        // this->actual_time_between_frames = this->time_between_frames;
     }
     return true;
+
+    // if(this->one_loop) {
+    //     if (((this->currentFrame+1) == this->numFrames) and (this->actual_time_between_frames == 0)) {
+    //         return false;
+    //     }
+    // }
+    // if (this->actual_time_between_frames != 0) {
+    //     this->actual_time_between_frames -= 1;
+    // } else {
+    //     this->currentFrame += 1;
+    //     this->currentFrame = this->currentFrame % this->numFrames;
+    //     this->actual_time_between_frames = this->time_between_frames;
+    // }
+    // return true;
 }
 
 void Animation::reset() {

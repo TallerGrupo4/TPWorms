@@ -19,7 +19,9 @@ Match::Match():
         keep_running(true),
         match_started(false),
         queue(std::make_shared<Queue<std::shared_ptr<GameCommand>>>(QUEUE_MAX_SIZE)),
-        id_counter(0) {}
+        id_counter(0) {
+        srand(static_cast<unsigned int>(time(nullptr)));        
+    }
 
 
 uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>

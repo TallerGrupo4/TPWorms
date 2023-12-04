@@ -2,13 +2,14 @@
 
 using namespace SDL2pp;
 
-MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
+MatchSurfaces::MatchSurfaces() : background1(BACKGROUND_FOREST_PATH),
+                                water(WATER_SPRITES_PATH),
                                 /*CROSSHAIR/MARKER*/
                                 crosshair_blue(CROSSHAIR_BLUE_SPRITES_PATH),
                                 crosshair_red(CROSSHAIR_RED_SPRITES_PATH),
                                 crosshair_green(CROSSHAIR_GREEN_SPRITES_PATH),
                                 crosshair_yellow(CROSSHAIR_YELLOW_SPRITES_PATH),
-                                crossharir_purple(CROSSHAIR_PURPLE_SPRITES_PATH),
+                                crosshair_purple(CROSSHAIR_PURPLE_SPRITES_PATH),
                                 marker_blue(MARKER_BLUE_SPRITES_PATH),
                                 marker_red(MARKER_RED_SPRITES_PATH),
                                 marker_green(MARKER_GREEN_SPRITES_PATH),
@@ -17,7 +18,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 still_0_worm(WORM_STILL_0_SPRITES_PATH),
                                 still_0_up_worm(WORM_STILL_0_UP_SPRITES_PATH),
                                 still_0_down_worm(WORM_STILL_0_DOWN_SPRITES_PATH),
-                                still_1_worm(WORM_STILL_1_SPRITES_PATH),
+                                //still_1_worm(WORM_STILL_1_SPRITES_PATH),
                                 walking_worm(WORM_WALK_SPRITES_PATH),
                                 walking_up_worm(WORM_WALK_UP_SPRITES_PATH),
                                 walking_down_worm(WORM_WALK_DOWN_SPRITES_PATH),
@@ -157,8 +158,11 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 aim_bsb_worm(WORM_AIMING_BASEBALL_BAT_SPRITES_PATH),
                                 aim_bsb_up_worm(WORM_AIMING_BASEBALL_BAT_UP_SPRITES_PATH),
                                 aim_bsb_down_worm(WORM_AIMING_BASEBALL_BAT_DOWN_SPRITES_PATH),
-                                /*WORM USING WEAPONS*/
-                                
+                                /*PROVISION BOXES*/
+                                mcrate_still(MEDICAL_CRATE_STILL_SPRITES_PATH),
+                                mcrate_picked(MEDICAL_CRATE_PICKED_SPRITES_PATH),
+                                wcrate_still(WEAPON_CRATE_STILL_SPRITES_PATH),
+                                wcrate_picked(WEAPON_CRATE_PICKED_SPRITES_PATH),
                                 /*PROJECTILES*/
                                 bazooka_missile(BAZOOKA_PROJECTILE_SPRITES_PATH),
                                 mortar_round(MORTAR_PROJECTILE_SPRITES_PATH),
@@ -217,11 +221,12 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
                                 short_beam_m_45(BEAM_SHORT_MINUS_45),
                                 short_beam_m_65(BEAM_SHORT_MINUS_65),
                                 short_beam_vertical_flipped(BEAM_SHORT_VERTICAL_FLIPPED) {
+    water.SetColorKey(true, 0);
     crosshair_blue.SetColorKey(true, 0);
     crosshair_red.SetColorKey(true, 0);
     crosshair_green.SetColorKey(true, 0);
     crosshair_yellow.SetColorKey(true, 0);
-    crossharir_purple.SetColorKey(true, 0);
+    crosshair_purple.SetColorKey(true, 0);
     marker_blue.SetColorKey(true, 0);
     marker_red.SetColorKey(true, 0);
     marker_green.SetColorKey(true, 0);
@@ -230,7 +235,7 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     still_0_worm.SetColorKey(true, 0);
     still_0_up_worm.SetColorKey(true, 0);
     still_0_down_worm.SetColorKey(true, 0);
-    still_1_worm.SetColorKey(true, 0);
+    //still_1_worm.SetColorKey(true, 0);
     walking_worm.SetColorKey(true, 0);
     walking_up_worm.SetColorKey(true, 0);
     walking_down_worm.SetColorKey(true, 0);
@@ -370,6 +375,11 @@ MatchSurfaces::MatchSurfaces() : background1(BACKGROUND1_PATH),
     aim_bsb_worm.SetColorKey(true, 0);
     aim_bsb_up_worm.SetColorKey(true, 0);
     aim_bsb_down_worm.SetColorKey(true, 0);
+    /*PROVISION BOXES*/
+    mcrate_still.SetColorKey(true, 0);
+    mcrate_picked.SetColorKey(true, 0);
+    wcrate_still.SetColorKey(true, 0);
+    wcrate_picked.SetColorKey(true, 0);
     /*PROJECTILES*/
     bazooka_missile.SetColorKey(true, 0);
     mortar_round.SetColorKey(true, 0);

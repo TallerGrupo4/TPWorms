@@ -2,7 +2,8 @@
 
 EffectsSounds::EffectsSounds(SDL2pp::Mixer& mixer) : mixer(mixer),
                 /*FINNISHED*/
-                match_finnished_sound(MATCH_FINNISHED_SOUND_PATH),
+                match_winner_sound(MATCH_WINNER_SOUND_PATH),
+                match_loser_sound(MATCH_LOSER_SOUND_PATH),
                 /*EXPLOSION SOUNDS*/
                 big_explosion_sound(BIG_EXPLOSION_SOUND_PATH),
                 small_explosion_sound(SMALL_EXPLOSION_SOUND_PATH),
@@ -22,8 +23,12 @@ EffectsSounds::EffectsSounds(SDL2pp::Mixer& mixer) : mixer(mixer),
 
 }
 
-void EffectsSounds::play_match_finnished_sound() {
-    mixer.PlayChannel(-1, match_finnished_sound, -1);
+void EffectsSounds::play_match_winner_sound() {
+    mixer.PlayChannel(-1, match_winner_sound, -1);
+}
+
+void EffectsSounds::play_match_loser_sound() {
+    mixer.PlayChannel(-1, match_loser_sound, -1);
 }
 
 void EffectsSounds::play_big_explosion_sound() {

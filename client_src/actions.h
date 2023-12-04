@@ -2,3 +2,4 @@
 #include "action_change_weapon.h"
 #include "action_shooting.h"
 #include "action_mov.h"
+#include "action_cheat.h"

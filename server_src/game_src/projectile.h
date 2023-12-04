@@ -19,13 +19,13 @@ class Projectile: public Entity {
     float radius_body_size;
     int timer;
     int fragments;
-    int fragment_damage;
     float angle;
     char state;
     char id;
+    bool affected_by_wind;
 
     public: 
-        Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle);
+        Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle, bool affected_by_wind );
 
         ~Projectile();
 
@@ -52,6 +52,8 @@ class Projectile: public Entity {
         ProjectileTypes get_projectile_type();
 
         int get_fragment_damage();
+
+        bool is_affected_by_wind();
 
         void set_id(char id);
 

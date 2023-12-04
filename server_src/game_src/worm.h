@@ -47,6 +47,7 @@ class WormNotFound: public std::exception {
 
 
 class Worm: public Entity {
+    friend class WormComprobator;
     friend class Game;
     std::vector<std::shared_ptr<Tool>> tools;
     char id;
@@ -76,6 +77,8 @@ public:
     void jump (int dir);
 
     bool use_tool(int power, float x, float y, int tool, ProjectileManager& projectiles);
+
+    void stop_aiming();
 
     void aim(int angle_inc, int direction);
 
@@ -113,7 +116,13 @@ public:
 
     void add_ammo(int ammo , TOOLS tool);
 
+    void cheat_ammo();
+
+    void cheat_has_shooted();
+
     void add_health(int health);
+
+    void reset_aiming_angle();
 };
 
 #endif  // WORM_H

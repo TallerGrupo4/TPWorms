@@ -4,149 +4,90 @@ platforms:
 - type: Short25
   x: -1
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: -4
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -7
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortVertical
   x: 0
   y: -9
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: -8
   y: -9
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 1
   y: -5
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: -4
   y: -4
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: 4
   y: -4
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 9
   y: -5
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: 15
   y: -4
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 11
   y: -10
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: 15
   y: -9
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 10
   y: -15
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: 14
   y: -14
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: 7
   y: -14
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 13
   y: -3
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: 17
   y: -2
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: -11
   y: -10
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: -15
   y: -9
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: -7
   y: -9
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: -14
   y: -14
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: -18
   y: -13
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: -10
   y: -13
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: 0
   y: 0
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: 4
   y: 1
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: -4
   y: 1
-  width: 0.8
-  height: 3
 - type: LargeHorizontal
   x: -20
   y: -20
-  width: 6
-  height: 0.8
 - type: ShortVertical
   x: -24
   y: -19
-  width: 0.8
-  height: 3
 - type: ShortVertical
   x: -16
   y: -19
-  width: 0.8
-  height: 3
-
 
 spawn_points:
 - x: -4
@@ -172,6 +113,6 @@ spawn_points:
 
 dimensions:
 - height: 100
-  width: 50
+  width: 100
   amount_of_worms: 10
   water_level: -25

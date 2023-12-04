@@ -29,6 +29,7 @@ struct TurnTimeAndWormTurn {
 
 class Snapshot {
     bool end_game = false;
+    int wind_force = 0;
 public:
     std::vector<WormSnapshot> worms;
     std::vector<ProjectileSnapshot> projectiles;
@@ -64,6 +65,14 @@ public:
 
     void set_end_game() {
         end_game = true;
+    }
+
+    void set_wind_force(int wind_force) {
+        this->wind_force = wind_force;
+    }
+
+    int get_wind_force() {
+        return wind_force;
     }
 
     bool get_end_game() {

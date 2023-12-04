@@ -4,6 +4,7 @@
 #include <box2d/box2d.h>
 #include <unordered_set>
 #include <memory>
+#include <list>
 class Projectile;
 
 
@@ -25,6 +26,8 @@ class Explosion {
     void explode(b2Body* body, std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
 
     void apply_explosion(b2Body* body);
+
+    void sort_by_distance(std::list<b2Body*>& bodies , b2Body* body);
 
 
 

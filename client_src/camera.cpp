@@ -29,6 +29,10 @@ void Camera::update_turn_weapon_ammo(int turn_worm_weapon_ammo) {
     this->hud.update_turn_weapon_ammo(turn_worm_weapon_ammo);
 }
 
+void Camera::update_wind_velocity(int wind_velocity) {
+    this->hud.update_wind_velocity(wind_velocity);
+}
+
 void Camera::update_armies_health(std::map<char, int>& armies_health) {
     this->hud.update_armies_health(armies_health);
 }
@@ -105,8 +109,13 @@ int Camera::get_offset_y() {
     return this->target.y_offset;
 }
 
-void Camera::toogle_player_activated() {
-    this->player_activated = this->player_activated ? false : true;
+void Camera::toogle_player_activated(SDL2pp::Window& window, int pos_x_to_warp_mouse, int pos_y_to_warp_mouse) {
+    if (player_activated) {
+        SDL_WarpMouseInWindow(window.Get(), pos_x_to_warp_mouse, pos_y_to_warp_mouse);
+        player_activated = false;
+    } else {
+        player_activated = true;
+    }
 }
 
 bool Camera::is_player_activated() {

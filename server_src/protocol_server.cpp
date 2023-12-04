@@ -125,6 +125,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_armies_health(snapshot.armies_health);
 
+    send_wind_force(snapshot.get_wind_force());
+
     return 1;
 }
 
@@ -154,6 +156,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
         }
         case CHANGE_TOOL: {
             return recv_change_tool(worm_id[0]);
+        }
+        case CHEAT: {
+            return recv_cheat(worm_id[0]);
         }
         default:
             // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
@@ -201,19 +206,22 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     int potency[1];
     int pos_x[1];
     int pos_y[1];
+    int timer[1];
     socket.recvall(potency, 4, &was_closed);
     socket.recvall(pos_x, 4, &was_closed);
     socket.recvall(pos_y, 4, &was_closed);
+    socket.recvall(timer, 4, &was_closed);
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
     potency[0] = ntohl(potency[0]);
     pos_x[0] = ntohl(pos_x[0]);
     pos_y[0] = ntohl(pos_y[0]);
+    timer[0] = ntohl(timer[0]);
     float pos_x_float = static_cast<float>(pos_x[0]);
     float pos_y_float = static_cast<float>(pos_y[0]);
     parser.parse_position_form_shoot(pos_x_float, pos_y_float);
-    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, 2 * FPS);
+    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, timer[0] * FPS);
 }
 
 std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) {
@@ -223,6 +231,31 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) 
         throw LibError(errno, "Socket was closed");
     }
     return std::make_shared<ChangeToolCommand>(worm_id, scroll_direction[0]);
+}
+
+std::shared_ptr<GameCommand> ProtocolServer::recv_cheat(uint8_t& worm_id) {
+    Cheats cheat[1];
+    socket.recvall(cheat, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
+    }
+    switch (cheat[0]) {
+        case EXTRA_LIFE: {
+            return std::make_shared<CheatLifeCommand>(worm_id);
+        }
+        case EXTRA_AMMO: {
+            return std::make_shared<CheatAmmoCommand>(worm_id);
+        }
+        case EXTRA_TURN_TIME: {
+            return std::make_shared<CheatTurnCommand>(worm_id);
+        }
+        case EXTRA_SHOOTING: {
+            return std::make_shared<CheatShootCommand>(worm_id);
+        }
+        default:
+            break;
+    }
+    return std::make_shared<GameCommand>();
 }
 
 int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms, int& _water_level) {
@@ -413,7 +446,7 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
         socket.sendall(state, 4, &was_closed);
         char id[1] = {projectile.id};
         socket.sendall(id, 1, &was_closed);
-        int explosion_type[1] = {projectile.explosion_type};
+        int explosion_type[1] = {projectile.explosion_radius};
         explosion_type[0] = htonl(explosion_type[0]);
         socket.sendall(explosion_type, 4, &was_closed);
         int radius[1] = {static_cast<int>(projectile.radius)};
@@ -468,6 +501,11 @@ void ProtocolServer::send_armies_health(std::map<char, int>& armies_health) {
     }
 }
 
+void ProtocolServer::send_wind_force(int wind_force) {
+    int wind[1] = {wind_force};
+    wind[0] = htonl(wind[0]);
+    socket.sendall(wind, 4, &was_closed);
+}
 
 
 const Command ProtocolServer::recv_create(const char* code) {

@@ -16,11 +16,10 @@
 #include "surfaces.h"
 #include "worm_texts.h"
 #include "Animation.h"
-#include "background.h"
 
 class Worm {
 public:
-    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd);
+    Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
     ~Worm();
     void update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht);
     void update_from_iter(int iter);
@@ -43,10 +42,10 @@ public:
     bool worm_facing_left();
     char get_army_id();
 private:
-    std::shared_ptr<Background> bkgrnd;
+    void handleShootedState(SDL2pp::Renderer& renderer, TOOLS old_weapon);
+
     std::shared_ptr<EffectsAnimations> effects_an; 
     std::shared_ptr<EffectsSounds> effects_sound;
-    WormAnimations worm_an;
     bool facing_left;
     bool moving;
     int angle;
@@ -62,6 +61,7 @@ private:
     int width;
     int height;
     char army_id;
+    WormAnimations worm_an;
     WormSpecificTexts worm_texts;
 };
 

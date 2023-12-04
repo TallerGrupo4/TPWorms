@@ -4,213 +4,129 @@ platforms:
 - type: Short25
   x: -1
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: -4
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -7
   y: -9.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 2
   y: -4.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 1
   y: -5
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -2
   y: -4.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 11
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 9
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 7
   y: -9.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 12
   y: -14.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 10
   y: -15
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 8
   y: -14.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 11
   y: -4.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 9
   y: -5
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 7
   y: -4.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 13
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 11
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 9
   y: -9.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 11
   y: -4.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 9
   y: -5
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 7
   y: -4.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 13
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 11
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 9
   y: -9.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 12
   y: -14.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 10
   y: -15
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 8
   y: -14.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 15
   y: -2.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 13
   y: -3
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: 11
   y: -2.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: -8
   y: -9.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: -10
   y: -10
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -12
   y: -9.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: -12
   y: -13.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: -14
   y: -14
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -16
   y: -13.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: 2
   y: 0.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: 0
   y: 0
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -2
   y: 0.5
-  width: 3
-  height: 0.8
 - type: Short25
   x: -18
   y: -19.5
-  width: 3
-  height: 0.8
 - type: ShortHorizontal
   x: -20
   y: -20
-  width: 3
-  height: 0.8
 - type: ShortMinus25
   x: -22
   y: -19.5
-  width: 3
-  height: 0.8
 
 spawn_points:
 - x: -3
@@ -236,6 +152,6 @@ spawn_points:
 
 dimensions:
 - height: 100
-  width: 50
+  width: 100
   amount_of_worms: 10
   water_level: -25
