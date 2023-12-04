@@ -19,7 +19,6 @@ private:
     Socket& socket;
     std::shared_ptr<Queue<Command>> queue_lobby;
     std::shared_ptr<Queue<std::shared_ptr<Action>>> queue_match;
-    // std::shared_ptr<Queue<Action>> queue_match;
     std::atomic<bool>& in_match;
     ParserClient parser;
     ProtocolClient protocol;
@@ -27,7 +26,6 @@ private:
 
 public:
     explicit ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
-                        //   std::shared_ptr<Queue<Action>> _queue_match,
                           std::shared_ptr<Queue<std::shared_ptr<Action>>> _queue_match,
                           std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead);
 

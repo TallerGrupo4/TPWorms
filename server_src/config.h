@@ -370,10 +370,8 @@ private:
             std::cout << _MAGENTA << "Config file read successfully" << _RESET << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
-            // Maybe throw an exception and catch it in the main?
             std::cerr << "Error reading YAML file: " << e.what() << std::endl;
             std::cerr << "In column " << e.mark.column << " and line " << e.mark.line << std::endl;
-            // Print additional information about the error, if available
         } catch(...) {
             std::cerr << "Something went wrong and an unknown exception was caught in the ConfigSingleton"
                       << std::endl;
@@ -471,8 +469,6 @@ private:
     float trap_box_radius;
 
     int ammo_box_ammo;
-
-    // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
 
 };
 

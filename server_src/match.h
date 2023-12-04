@@ -25,13 +25,11 @@ class Match: public Thread {
         std::string name;
         bool keep_running;
         bool match_started;
-        // This doesn't need to be a shared_ptr, we could pass a reference of it to the receiver
         std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> queue;
         std::vector<std::shared_ptr<Queue<Snapshot>>> players_queues;
         char id_counter;
         
         void send_initial_data();
-        // void move_player(int direction, char id);
         void push_all_players(Snapshot snapshot);
 
 

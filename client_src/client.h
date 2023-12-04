@@ -7,7 +7,6 @@
 #include "../common_src/constants.h"
 #include "../common_src/command.h"
 #include "../common_src/snapshot.h"
-// #include "../common_src/game_command.h"
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
 #include "protocol_client.h"
@@ -24,7 +23,6 @@ private:
     std::atomic<bool> in_match = false;
     std::shared_ptr<Queue<Command>> queue_sender_lobby;
     std::shared_ptr<Queue<std::shared_ptr<Action>>> queue_sender_match;
-    // std::shared_ptr<Queue<Action>> queue_sender_match;
     std::shared_ptr<Queue<Command>> queue_receiver_lobby;
     std::shared_ptr<Queue<Snapshot>> queue_receiver_match;
     std::unique_ptr<ClientSender> client_sender;

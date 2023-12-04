@@ -8,7 +8,6 @@
 #define YAML_READER_H
 
 
-// Para facilitar el uso de los beams en los YAMLs
 namespace YAML {
 template<>
 struct convert<BeamType> {
@@ -42,7 +41,7 @@ struct convert<BeamType> {
                 return true;
             }
         }
-        return false; // Invalid enum value
+        return false;
     }
 };
 }
@@ -58,7 +57,6 @@ class Reader {
 
 
 
-//TODO
 class SettingsReader: public Reader {
     SettingsReader(std::string route): Reader(route) {}
 };

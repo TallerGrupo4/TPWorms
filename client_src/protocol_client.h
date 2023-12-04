@@ -55,7 +55,6 @@ public:
     // Match
     Snapshot recv_snapshot();
     void send_action(std::shared_ptr<Action> action);
-    // void send_action(Action& action);
     bool is_connected() { return !was_closed;}
     
     bool operator==(const ProtocolClient& other) const { return this->socket == other.socket; }

@@ -5,7 +5,6 @@
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
-// #include "../common_src/game_command.h"
 #include "game_src/game_command.h"
 
 #include "match.h"

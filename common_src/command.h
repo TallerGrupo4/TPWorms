@@ -8,8 +8,6 @@
 #ifndef COMMAND_H
 #define COMMAND_H
 
-// Create constructors for the Command based on the code
-// Make every attribute of the struct constant after initialization
 class Command {
 private:
     const char code;

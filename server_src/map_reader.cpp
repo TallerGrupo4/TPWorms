@@ -26,8 +26,6 @@ std::vector<PlatformSnapshot>  MapReader::read_platforms(){
         BeamType type =platform["type"].as<BeamType>();
         float x = platform["x"].as<float>();
         float y = platform["y"].as<float>();
-        // float width = platform["width"].as<float>();
-        // float height = platform["height"].as<float>();
         platforms_snap.push_back(PlatformSnapshot(type, x, y));
     }
     return platforms_snap;

@@ -29,7 +29,6 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
     for (auto& map: maps) {
-        // map_names.push_back(std::to_string(map.first));
         map_names.push_back(map.second.name);
     }
 
@@ -78,8 +77,6 @@ void MonitorMatches::start_match(uint match_id, std::string map_name) {
         throw MatchNotFound();
     if (matches[match_id]->has_started())
         throw MatchAlreadyStarted();
-    // Map's key should be a string but for now it is an uint
-    // uint map_name_int = std::stoi(map_name);
     if (maps.find(map_name) == maps.end())
         throw MapNotFound();
     matches[match_id]->start_game(maps.at(map_name));

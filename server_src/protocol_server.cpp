@@ -68,9 +68,6 @@ void ProtocolServer::send_command(const Command& command) {
 const Command ProtocolServer::recv_command() {
     char code[1];
     int ret = socket.recvall(code, 1, &was_closed);
-    if (ret < 0) {
-        // throw
-    }
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
     }
@@ -528,7 +525,7 @@ const std::string ProtocolServer::recv_map_name() {
     std::vector<char> map_name(map_name_size[0]);
     socket.recvall(map_name.data(), map_name_size[0], &was_closed);
     if (was_closed) {
-        // throw
+        throw LibError(errno, "Socket was closed");
     }
     std::string map_name_str(map_name.begin(), map_name.end());
     return map_name_str;
@@ -538,7 +535,7 @@ const uint ProtocolServer::recv_match_id() {
     uint match_id[1];
     int ret = socket.recvall(match_id, 4, &was_closed);
     if (ret < 0) {
-        // throw
+        throw LibError(errno, "Socket was closed");
     }
     if (was_closed) {
         throw LibError(errno, "Socket was closed");
@@ -579,14 +576,14 @@ void ProtocolServer::send_list(const std::map<uint, std::string>& matches_availa
         uint match_id[1] = {match.first};
         match_id[0] = htonl(match_id[0]);
         if (socket.sendall(match_id, 4, &was_closed) < 0) {
-            // throw
+            throw LibError(errno, "Socket was closed");
         }
         uint8_t map_name_size[1] = {static_cast<uint8_t>(match.second.size())};
         if (socket.sendall(map_name_size, 1, &was_closed) < 0) {
-            // throw
+            throw LibError(errno, "Socket was closed");
         }
         if (socket.sendall(match.second.c_str(), match.second.size(), &was_closed) < 0) {
-            // throw
+            throw LibError(errno, "Socket was closed");
         }
     }
 }

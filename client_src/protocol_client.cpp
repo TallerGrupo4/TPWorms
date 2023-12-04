@@ -21,7 +21,6 @@ void ProtocolClient::send_command(const Command& command) {
         throw LostConnection();
     }
     if (code[0] == CASE_JOIN || code[0] == CASE_CREATE) {
-        // In CASE_START and CASE_NUMBER_OF_PLAYERS the match_id should be sent as well
         send_match_id(command.get_match_id());
     } else if (code[0] == CASE_START) {
         send_match_id(command.get_match_id());
@@ -92,7 +91,7 @@ const Command ProtocolClient::recv_command() {
     if (was_closed) {
         throw LostConnection();
     }
-    // Throw error
+    // Throw "man in the middle" error
     return Command(DEFAULT, DEFAULT);
 }
 

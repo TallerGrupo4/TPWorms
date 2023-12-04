@@ -1,11 +1,9 @@
 #include <cstring>
-// #include <queue>
 #include <deque>
 #include <iomanip>
 #include <iostream>
 #include <map>
 
-// Move this to tests folder
 
 #ifdef TESTING
 #ifndef DUMMY_SOCKET_H

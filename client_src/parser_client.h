@@ -1,11 +1,11 @@
 #include <vector>
 
-#include "../common_src/parser.h"
+#include "../common_src/constants.h"
 
 #ifndef PARSER_CLIENT_H
 #define PARSER_CLIENT_H
 
-class ParserClient: public Parser {
+class ParserClient {
 
 private:
     float apply_pix_per_meter_and_multiplier(float& value);

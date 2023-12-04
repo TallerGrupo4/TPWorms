@@ -1,5 +1,6 @@
 #include "parser_client.h"
 
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
