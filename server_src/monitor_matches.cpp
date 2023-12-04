@@ -24,7 +24,7 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
 
-    std::cout << "Creating match with id: " << match_id << std::endl;
+    std::cout << _YELLOW << "Creating match with id: " << _RESET << match_id << std::endl;
     matches[match_id] = std::make_unique<Match>();
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
@@ -98,7 +98,7 @@ void MonitorMatches::kill_dead_matches() {
         if (match.second->has_ended()) {
             match.second->join();
             matches_to_delete.push_back(match.first);
-            std::cout << "Match with id: " << match.first << " has ended" << std::endl;
+            std::cout << _BLUE << "Match with id: " << _RESET <<  match.first << _BLUE << " has ended" << _RESET << std::endl;
         }
     }
     for (auto& match_id: matches_to_delete) {

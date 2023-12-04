@@ -25,7 +25,7 @@ Match::Match():
 
 
 uint8_t Match::add_player(std::shared_ptr<Queue<Snapshot>>
-                              player_queue) {  // TODO: Make army (group of worms instead of one)
+                              player_queue) {
     if (match_started) throw MatchAlreadyStarted();
     if (id_counter >= MAX_PLAYERS)
         throw MatchFull();
@@ -58,7 +58,6 @@ void Match::push_all_players(Snapshot snapshot) {
             * in other place, but I believe that here could
             * be a good place to do it.
             */
-            // players_queues.erase(std::remove(players_queues.begin(), players_queues.end(), player_queue), players_queues.end());
             continue;
         } 
     }
@@ -79,13 +78,12 @@ void Match::send_initial_data() {
         } 
         i++;
     }
-    // push_all_players(start_snap);
 }
 
 void Match::run(){
     Clock clock([this](int iter) { execute_and_step(iter); }, FRAME_TIME, keep_running);
     clock.tick();
-    std::cout << "Match ended " << keep_running << std::endl;
+    std::cout << _BLUE << "Match ended " << _RESET << keep_running << std::endl;
 }
 
 void Match::execute_and_step(int iter) {
@@ -118,7 +116,6 @@ void Match::stop() {
 
 bool Match::has_started() { return match_started; }
 
-// std::shared_ptr<Queue<GameCommand*>> Match::get_queue() { return queue; }
 std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> Match::get_queue() { return queue; }
 
 std::string Match::get_map_name() { return name; }
@@ -126,6 +123,4 @@ std::string Match::get_map_name() { return name; }
 bool Match::has_ended() { return !keep_running; }
 
 Match::~Match() {
-    // Perhaps it would be better to close the queue here
-    // queue->close();
 }

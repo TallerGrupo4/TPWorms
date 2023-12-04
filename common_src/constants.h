@@ -168,5 +168,16 @@ enum Cheats : char {
 #define PI 3.14159265358979323846f
 
 
+//the following are UBUNTU/LINUX, and MacOS ONLY terminal color codes.
+#define _RESET   "\033[0m"
+#define _BLACK   "\033[30m"      /* Black */
+#define _RED     "\033[31m"      /* Red */
+#define _GREEN   "\033[32m"      /* Green */
+#define _YELLOW  "\033[33m"      /* Yellow */
+#define _BLUE    "\033[34m"      /* Blue */
+#define _MAGENTA "\033[35m"      /* Magenta */
+#define _CYAN    "\033[36m"      /* Cyan */
+#define _WHITE   "\033[37m"      /* White */
+
 
 #endif  // _CONSTANTS_H_

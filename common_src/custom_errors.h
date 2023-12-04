@@ -55,7 +55,7 @@ class LostConnection: public std::exception {
 public:
     LostConnection() {}
     ~LostConnection() {}
-    virtual const char* what() const noexcept { return "Lost connection"; }
+    virtual const char* what() const noexcept { return "Lost connection with the server"; }
 };
 
 // class NonStopExecption: public std::exception{
