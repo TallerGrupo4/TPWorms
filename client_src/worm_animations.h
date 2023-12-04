@@ -14,35 +14,52 @@
 
 class WormAnimations {
 public:
-    WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces);
+    WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state, int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left, int aiming_angle);
     void render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                        const bool facing_left,
                        int left_offset = 0,
                        int right_offset = 0,
                        int above_offset = 0,
                        int bellow_offset = 0);
-    void update_from_snapshot(int state, int old_state, int angle, int old_angle, bool facing_left, bool old_facing_left, TOOLS weapon, int old_aiming_angle, int new_aiming_angle);
+    void update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon, int weapon_ammo, int aiming_angle);
     void update_from_iter(int state, int angle, bool facing_left);
-    void update_changing_weapons(TOOLS actual_weapon, TOOLS new_weapon, int actual_weapon_ammo, int new_weapon_ammo, int angle, const bool facing_left);
+    void update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle, const bool facing_left);
 private:
-    void reset_old_an(int old_state, int old_angle, bool old_facing_left, int old_aiming_angle);  
+    void update_animations(Animation& up_an, Animation& down_an, int angle, bool facing_left);
+    void update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an, AnimationScroll& down_an, int angle, bool facing_left, int aiming_angle, TOOLS weapon);
+    void reset_old_specific_an(Animation& an, Animation& up_an, Animation& down_an);
+    void reset_old_an();  
     bool is_action_state(int state);
     bool is_weapon_grenade_type(TOOLS weapon);
-    void check_aiming_angle(AnimationScroll& an, int new_aiming_angle, int old_aiming_angle);
-    void render_angle_dependent_an(Animation& up_an, Animation& down_an,
-                                    const int angle, const bool facing_left,
-                                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                                    SDL_RendererFlip flip,
-                                    int left_offset,
-                                    int right_offset,
-                                    int above_offset,
-                                    int bellow_offset);
+    void check_aiming_angle(AnimationScroll& an, int new_aiming_angle);
+    void render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo,
+                    const int angle, const bool facing_left,
+                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+                    SDL_RendererFlip flip,
+                    int left_offset,
+                    int right_offset,
+                    int above_offset,
+                    int bellow_offset);
+    void render_angle_dependent_an(Animation& an, Animation& up_an, Animation& down_an,
+                    const int angle, const bool facing_left,
+                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+                    SDL_RendererFlip flip,
+                    int left_offset,
+                    int right_offset,
+                    int above_offset,
+                    int bellow_offset);
     void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle, const bool facing_left);
-    void push_drop_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left);
+    void push_drop_weapon_an(int angle, const bool facing_left);
     void push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left);
 
     std::list<std::reference_wrapper<Animation>> lingering_animations;
+    /*WORM PREVIOUS INFO*/
+    int old_state;
+    int old_angle;
     TOOLS old_weapon;
+    int old_weapon_ammo;
+    bool old_facing_left;
+    int old_aiming_angle;
     /*WORM MOVEMENTS*/
     Animation still_0_an;
     Animation still_0_up_an;

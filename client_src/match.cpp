@@ -1,6 +1,7 @@
 #include "match.h"
 #include <iostream>
 #include "constantes_cliente.h"
+
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer) : 
@@ -28,7 +29,7 @@ Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& rendere
     for (WormSnapshot worm_snpsht : snpsht.worms){
         std::pair<std::reference_wrapper<SDL2pp::Surface>, SDL_Color> widgets_info = (worm_snpsht.team_id > 3) ? team_info.at(4) : team_info.at(worm_snpsht.team_id);
         ArmyColorDependentMisc widgets(widgets_info.first.get(), widgets_info.second);
-        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, widgets, surfaces, renderer, bkgrnd);
+        std::shared_ptr<Worm> worm = std::make_shared<Worm>(worm_snpsht, snpsht.map_dimensions.worm_width, snpsht.map_dimensions.worm_height, effects_an, effects_sound, widgets, surfaces, renderer);
         this->worms_map[worm_snpsht.id] = worm;
     }
 
@@ -44,7 +45,7 @@ void Match::update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2
     if(snpsht.get_end_game() and !snpsht.worms.empty()) {
         char winner_team_id = snpsht.worms.front().team_id;
         camera.set_end_game(winner_team_id);
-        effects_sound->play_match_finnished_sound();
+        winner_team_id == my_army_id ? effects_sound->play_match_winner_sound() : effects_sound->play_match_loser_sound();
     }
 
     uint new_turn_time = (snpsht.turn_time_and_worm_turn.turn_time / FPS);

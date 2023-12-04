@@ -1,10 +1,8 @@
 #include "worm.h"
 
-Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, std::shared_ptr<Background>& bkgrnd) : 
-    bkgrnd(bkgrnd),
+Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::shared_ptr<EffectsAnimations>& effects_an, std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentMisc widgets, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer) : 
     effects_an(effects_an),
     effects_sound(effects_sound),
-    worm_an(renderer, surfaces),
     facing_left(worm_snpsht.direction == LEFT ? true : false),
     moving(false),
     angle(worm_snpsht.angle),
@@ -20,6 +18,7 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::share
     width(worm_width),
     height(worm_height),
     army_id(worm_snpsht.team_id),
+    worm_an(renderer, surfaces, state, angle, weapon, weapon_ammo, facing_left, aiming_angle),
     worm_texts(renderer, army_id, widgets, id, health_points, max_health) {std::cout << "worm " << +id << " army_id: " << +army_id << std::endl;}
 
 Worm::~Worm() {}
@@ -92,31 +91,26 @@ char Worm::get_army_id() {
 }
 
 void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht) {
-    int old_weapon_ammo = weapon_ammo;
+    int old_state = state;
+    TOOLS old_weapon = weapon;
+    
     weapon_ammo = worm_snpsht.current_ammo;
-    int old_angle = angle;
     angle = worm_snpsht.angle;
-    bool old_facing_left = facing_left;
-    facing_left = (worm_snpsht.direction == LEFT ? true : false);
+    facing_left = (worm_snpsht.direction == LEFT);
     health_points = worm_snpsht.health;
     worm_texts.update_health(health_points, max_health);
-    int old_state = state;
     state = worm_snpsht.state;
-    int old_aiming_angle = aiming_angle;
     aiming_angle = worm_snpsht.aiming_angle;
     worm_texts.update_crosshair(aiming_angle);
-    TOOLS old_weapon = weapon;
     TOOLS new_weapon = static_cast<TOOLS>(worm_snpsht.weapon);
     if (old_weapon != new_weapon) {
-        worm_an.update_changing_weapons(weapon,new_weapon, old_weapon_ammo, weapon_ammo, angle, facing_left);
+        worm_an.update_changing_weapons(new_weapon, weapon_ammo, angle, facing_left);
         weapon = new_weapon;
     }
     y = (-1)*worm_snpsht.pos_y;
     x = worm_snpsht.pos_x;
     switch (state) {
     case JUMPING:
-        if(old_state == STILL) effects_sound->play_worm_jump_sound();
-        break;
     case BACKFLIPPING:
         if(old_state == STILL) effects_sound->play_worm_jump_sound();
         break;
@@ -125,23 +119,7 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
         effects_sound->play_worm_impact_sound();
         break;
     case SHOOTED:
-        switch (old_weapon) {
-        case TOOLS::BASEBALL_BAT: {
-            int baseball_hit_pos_x = x + worm_texts.get_crosshair_x();
-            int baseball_hit_pos_y = y + worm_texts.get_crosshair_y();
-            effects_an->set_baseball_bat_hit(renderer, baseball_hit_pos_x, baseball_hit_pos_y);
-            effects_sound->play_baseball_bat_sound();
-            }
-            break;
-        case TOOLS::TELEPORTATION:
-            effects_sound->play_teleport_sound();
-            break;
-        case TOOLS::AIRSTRIKE:
-            effects_sound->play_airstrike_active_sound();
-            break;
-        default:
-            break;
-        }
+        handleShootedState(renderer, old_weapon);
         break;
     case DEAD:
         effects_sound->play_worm_death_sound();
@@ -149,7 +127,27 @@ void Worm::update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_s
     default:
         break;
     }
-    worm_an.update_from_snapshot(state, old_state, angle, old_angle, facing_left, old_facing_left, weapon, old_aiming_angle, aiming_angle);
+    worm_an.update_from_snapshot(state, angle, facing_left, weapon, weapon_ammo, aiming_angle);
+}
+
+void Worm::handleShootedState(SDL2pp::Renderer& renderer, TOOLS old_weapon) {
+    switch (old_weapon) {
+    case TOOLS::BASEBALL_BAT: {
+        int baseball_hit_pos_x = x + worm_texts.get_crosshair_x();
+        int baseball_hit_pos_y = y + worm_texts.get_crosshair_y();
+        effects_an->set_baseball_bat_hit(renderer, baseball_hit_pos_x, baseball_hit_pos_y);
+        effects_sound->play_baseball_bat_sound();
+        }
+        break;
+    case TOOLS::TELEPORTATION:
+        effects_sound->play_teleport_sound();
+        break;
+    case TOOLS::AIRSTRIKE:
+        effects_sound->play_airstrike_active_sound();
+        break;
+    default:
+        break;
+    }
 }
 
 void Worm::update_from_iter(int iter) {

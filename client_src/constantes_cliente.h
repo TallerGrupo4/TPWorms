@@ -728,7 +728,9 @@ struct Target {
 
 /*MATCH FINNISHED*/
 
-#define MATCH_FINNISHED_SOUND_PATH SOUNDS_PATH "/CrowdPart1.wav"
+#define MATCH_LOSER_SOUND_PATH SOUNDS_PATH "/lose_end.wav"
+
+#define MATCH_WINNER_SOUND_PATH SOUNDS_PATH "/win_end.wav"
 
 /*EXPLOSION SOUNDS*/
 
