@@ -152,3 +152,9 @@ server 8080 /home/user/Desktop/config.yaml
 ```
 Remember that the config.yaml file needs to be in the same format as the one in the external/config folder of the project.
 (Replace /home/user/Desktop/config.yaml with the absolute path to your config.yaml file)
+
+Also, if you want to change the default external/config/config.yaml file in order to try different configurations, you will be able to do it but, because this file is set as a default configuration file, you will need to recompile the project in order to see the changes Once you made the changes, you can run:
+```
+sudo make install -j4
+```
+and then run the server with the default configuration file but with your new changes.
