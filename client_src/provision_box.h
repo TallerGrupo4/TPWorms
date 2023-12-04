@@ -20,8 +20,6 @@ public:
     void update_from_iter(int iter);
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
     BoxState get_box_state();
-    int get_box_x();
-    int get_box_y();
 private:
     ProvisionBoxAnimations box_an;
     std::shared_ptr<EffectsAnimations> effects_an;

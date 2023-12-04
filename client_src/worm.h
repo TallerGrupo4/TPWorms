@@ -14,7 +14,7 @@
 #include "effects_animations.h"
 #include "effects_sounds.h"
 #include "surfaces.h"
-#include "worm_texts.h"
+#include "worm_widgets.h"
 #include "Animation.h"
 
 class Worm {
@@ -62,7 +62,7 @@ private:
     int height;
     char army_id;
     WormAnimations worm_an;
-    WormSpecificTexts worm_texts;
+    WormWidgets worm_texts;
 };
 
 #endif  // WORM_H

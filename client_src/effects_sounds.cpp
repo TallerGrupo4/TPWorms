@@ -1,6 +1,8 @@
 #include "effects_sounds.h"
 
 EffectsSounds::EffectsSounds(SDL2pp::Mixer& mixer) : mixer(mixer),
+                /*PICKUP BOX*/
+                pickup_box_sound(PICKUP_BOX_SOUND_PATH),
                 /*FINNISHED*/
                 match_winner_sound(MATCH_WINNER_SOUND_PATH),
                 match_loser_sound(MATCH_LOSER_SOUND_PATH),
@@ -21,6 +23,10 @@ EffectsSounds::EffectsSounds(SDL2pp::Mixer& mixer) : mixer(mixer),
                 worm_impact_sound(WORM_IMPACT_SOUND_PATH),
                 worm_death_sound(WORM_DEATH_SOUND_PATH) {
 
+}
+
+void EffectsSounds::play_pickup_box_sound() {
+    mixer.PlayChannel(-1, pickup_box_sound, 0);
 }
 
 void EffectsSounds::play_match_winner_sound() {

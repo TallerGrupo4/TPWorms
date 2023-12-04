@@ -10,14 +10,7 @@ ProvisionBox::ProvisionBox(ProvisionBoxSnapshot box_snpsht, std::shared_ptr<Effe
     x(box_snpsht.pos_x),
     y((-1)*box_snpsht.pos_y),
     width(box_snpsht.width),
-    height(box_snpsht.height) {
-        std::cout << "provision box " << +id << " type: " << +type << std::endl;
-        std::cout << "state: " << +state << std::endl;
-        std::cout << "x: " << x << std::endl;
-        std::cout << "y: " << y << std::endl;
-        std::cout << "width: " << width << std::endl;
-        std::cout << "height: " << height << std::endl;
-}
+    height(box_snpsht.height) {}
 
 void ProvisionBox::update_from_snapshot(SDL2pp::Renderer& renderer, ProvisionBoxSnapshot& box_snpsht) {
     state = box_snpsht.state;
@@ -28,10 +21,8 @@ void ProvisionBox::update_from_snapshot(SDL2pp::Renderer& renderer, ProvisionBox
     case BoxState::PICKED:
         switch (type) {
         case BoxType::HEALTH_BOX :
-            /*effecto de agarrar la caja*/
-            break;
         case BoxType::AMMO_BOX :
-            /*effecto de agarrar la caja*/
+            effects_sound->play_pickup_box_sound();
             break;
         case BoxType::TRAP_BOX :
             effects_an->set_big_explosion_an(renderer, x, y);
@@ -60,12 +51,4 @@ void ProvisionBox::render(SDL2pp::Renderer& renderer, int camera_offset_x, int c
 
 BoxState ProvisionBox::get_box_state() {
     return this->state;
-}
-
-int ProvisionBox::get_box_x() {
-    return this->x;
-}
-
-int ProvisionBox::get_box_y() {
-    return this->y;
 }

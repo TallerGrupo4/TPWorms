@@ -722,6 +722,10 @@ struct Target {
 
 /*SOUNDS*/
 
+/*PICKUP BOX*/
+
+#define PICKUP_BOX_SOUND_PATH SOUNDS_PATH "/TIMERTICK.WAV"
+
 /*ROUND STARTS*/
 
 #define ROUND_START_SOUND_PATH SOUNDS_PATH "/StartRound.wav"

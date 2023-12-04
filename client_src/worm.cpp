@@ -19,7 +19,7 @@ Worm::Worm(WormSnapshot worm_snpsht, int worm_width, int worm_height, std::share
     height(worm_height),
     army_id(worm_snpsht.team_id),
     worm_an(renderer, surfaces, state, angle, weapon, weapon_ammo, facing_left, aiming_angle),
-    worm_texts(renderer, army_id, widgets, id, health_points, max_health) {std::cout << "worm " << +id << " army_id: " << +army_id << std::endl;}
+    worm_texts(renderer, army_id, widgets, id, health_points, max_health) {}
 
 Worm::~Worm() {}
 
@@ -61,8 +61,6 @@ bool Worm::has_weapon_to_aim() {
 
 bool Worm::has_charging_weapon() {
     bool is_weapon_baseball_bat = (this->weapon == TOOLS::BASEBALL_BAT);
-    std::cout << "is_weapon_baseball_bat: " << +is_weapon_baseball_bat << std::endl;
-    std::cout << "has_weapon_to_aim: " << +has_weapon_to_aim() << std::endl;
     return (has_weapon_to_aim() and (!is_weapon_baseball_bat));
 }
 
@@ -158,10 +156,8 @@ void Worm::update_from_iter(int iter) {
 }
 
 void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {
-    //std::cout << "x worm: " << x << " y worm: " << y << std::endl;
     int top_left_x = (x-width/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalWidth()/2) - camera_offset_x;
     int top_left_y = (y-height/2)*RESOLUTION_MULTIPLIER + (int)(renderer.GetLogicalHeight()/2) - camera_offset_y;
-    //std::cout << "top_left_x: " << top_left_x << " top_left_y: " << top_left_y << std::endl;
     
     worm_an.render(state, angle, weapon, weapon_ammo, renderer, SDL2pp::Rect(top_left_x, top_left_y, width*RESOLUTION_MULTIPLIER,
                         height*RESOLUTION_MULTIPLIER),
@@ -170,9 +166,6 @@ void Worm::render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_of
                         WORM_WALK_RIGHT_OFFSET,
                         WORM_WALK_ABOVE_OFFSET,
                         WORM_WALK_BELLOW_OFFSET);
-    // if(state != DEAD) {
-    //     worm_texts.render(renderer, state, facing_left, top_left_x + width*RESOLUTION_MULTIPLIER/2, top_left_y + height*RESOLUTION_MULTIPLIER/2, top_left_y, top_left_y + height*RESOLUTION_MULTIPLIER);
-    // }
 }
 
 void Worm::render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y) {

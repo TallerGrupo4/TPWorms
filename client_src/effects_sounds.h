@@ -11,6 +11,7 @@
 class EffectsSounds {
 public:
     explicit EffectsSounds(SDL2pp::Mixer& mixer);
+    void play_pickup_box_sound();
     void play_match_winner_sound();
     void play_match_loser_sound();
     void play_big_explosion_sound();
@@ -29,6 +30,8 @@ public:
     void stop_dynamite_fuse_sound();
 private:
     SDL2pp::Mixer& mixer;
+    /*PICKUP BOX*/
+    SDL2pp::Chunk pickup_box_sound;
     /*FINNISHED*/
     SDL2pp::Chunk match_winner_sound;
     SDL2pp::Chunk match_loser_sound;

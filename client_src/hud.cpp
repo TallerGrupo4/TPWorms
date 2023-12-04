@@ -231,20 +231,32 @@ void Hud::render(SDL2pp::Renderer& renderer) {
         int weapon_ammo_pos_y = timer_pos_y - gap - (*this->ammo_text).GetHeight();
         int charging_pos_y = weapon_ammo_pos_y - gap - (*this->charging_text).GetHeight();
 
-        SDL2pp::Texture turn_time_text_texture(renderer, *this->turn_time_text);
-        renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_time_pos_y, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
-        SDL2pp::Texture turn_army_text_texture(renderer, *this->turn_army_text);
-        renderer.Copy(turn_army_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_army_pos_y, (*this->turn_army_text).GetWidth(), (*this->turn_army_text).GetHeight()));  
-        SDL2pp::Texture timer_text_texture(renderer, *this->timer_text);
-        renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, timer_pos_y, (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
-        SDL2pp::Texture ammo_text_texture(renderer, *this->ammo_text);
-        renderer.Copy(ammo_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, weapon_ammo_pos_y, (*this->ammo_text).GetWidth(), (*this->ammo_text).GetHeight()));
-        SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
-        renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, charging_pos_y, (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
-        SDL2pp::Texture velocity_text_texture(renderer, *this->wind_velocity_text);
-        renderer.Copy(velocity_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(wind_velocity_pos_x, wind_velocity_pos_y, this->wind_velocity_text->GetWidth(), this->wind_velocity_text->GetHeight()));
-        render_weapon_icons(renderer);
-        render_armies_health(renderer, turn_army_pos_y + (*this->turn_army_text).GetHeight() + gap*3);
+        switch(target.type_of_target) {
+            case TargetType::WormType: {
+                SDL2pp::Texture timer_text_texture(renderer, *this->timer_text);
+                renderer.Copy(timer_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, timer_pos_y, (*this->timer_text).GetWidth(), (*this->timer_text).GetHeight())); 
+                SDL2pp::Texture ammo_text_texture(renderer, *this->ammo_text);
+                renderer.Copy(ammo_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, weapon_ammo_pos_y, (*this->ammo_text).GetWidth(), (*this->ammo_text).GetHeight()));
+                SDL2pp::Texture charging_text_texture(renderer, *this->charging_text);
+                renderer.Copy(charging_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, charging_pos_y, (*this->charging_text).GetWidth(), (*this->charging_text).GetHeight()));  
+                render_weapon_icons(renderer);
+                }
+            case TargetType::ProjectileType: {
+                SDL2pp::Texture velocity_text_texture(renderer, *this->wind_velocity_text);
+                renderer.Copy(velocity_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(wind_velocity_pos_x, wind_velocity_pos_y, this->wind_velocity_text->GetWidth(), this->wind_velocity_text->GetHeight()));
+                }
+            case TargetType::PlayerType: {
+                SDL2pp::Texture turn_time_text_texture(renderer, *this->turn_time_text);
+                renderer.Copy(turn_time_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_time_pos_y, (*this->turn_time_text).GetWidth(), (*this->turn_time_text).GetHeight()));  
+                SDL2pp::Texture turn_army_text_texture(renderer, *this->turn_army_text);
+                renderer.Copy(turn_army_text_texture, SDL2pp::NullOpt, SDL2pp::Rect(gap, turn_army_pos_y, (*this->turn_army_text).GetWidth(), (*this->turn_army_text).GetHeight()));  
+                render_armies_health(renderer, turn_army_pos_y + (*this->turn_army_text).GetHeight() + gap*3);
+                }
+                break;
+            case TargetType::NoneType:
+                break;
+        }
+
     }
 }
 
