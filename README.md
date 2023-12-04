@@ -59,15 +59,10 @@ This will generate the executable file which you'll be able to execute it from a
 
 
 -----------------
-NOTE: If you want to run the make install without installing the executable file, you can run:
-```
-make -j4
-```
-This will generate the executables files inside the build folder, but you will only be able to execute them from there.
+NOTE: If you run make install, this command will create the executable file inside the build folder, but it will also copy it to /usr/local/bin, so you will be able to execute it from anywhere you want. And it will also copy files in /var/worms and /etc/worms.
+WARNING/NOTE 2: Running only make and trying to execute the executable file will not work, you need to run make install first because the maps are being fetched from /var/worms and that is not customizable.
 
-NOTE 2: If you run make install, this command will create the executable file inside the build folder, but it will also copy it to /usr/local/bin, so you will be able to execute it from anywhere you want. And it will also copy files in /var/worms and /etc/worms.
 -----------------
-
 
 To run it, you need to run:
 ```
