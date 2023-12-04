@@ -1,6 +1,7 @@
 #include "user.h"
 
 #include <memory>
+#include <stdexcept>
 #include <utility>
 
 #include <sys/socket.h>
@@ -39,6 +40,8 @@ void User::run() {
                 // It is an 'expected' error but it should never reach this point
             } catch (const ClosedQueue& e) {
                 // It is an 'expected' error but it should never reach this point
+            } catch (const std::runtime_error& e) {
+                // It is an 'expected' error because the queue->close from ElDipa throws it
             }
         }
     } catch (const std::exception& err) {
@@ -173,7 +176,10 @@ void User::stop() {
     } catch (const LibError& err) {
         std::cout << "Something went wrong and an exception was caught in the User"
                   << " while stoping it: " << err.what() << std::endl;
-    } catch (...) {
+    } catch (const ClosedQueue& err) {
+        // It is an 'expected' error
+    }
+    catch (...) {
         std::cerr << R"(Something went wrong and \
             an unknown exception was caught in the User while stoping it: )"
                   << std::endl;
