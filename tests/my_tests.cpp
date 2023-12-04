@@ -568,7 +568,6 @@ TEST(ProtocolHappyCasesMatch, Send_and_recv_snapshot_armies_health) {
 
 // ----------------------- SAD CASES -----------------------
 
-// Not handling sad cases yet
 
 TEST(ProtocolSadCasesLobby, FullMatch) {
     Socket dummy_socket(serverPort);
