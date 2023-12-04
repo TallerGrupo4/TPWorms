@@ -19,7 +19,9 @@ class WormComprobator{
 
     void check_during_game(std::list<std::shared_ptr<Worm>>& worms, int& time, int& current_id, int& height , int& width, int& water_level);
 
-    std::list<char> check_post_turn(std::list<std::shared_ptr<Worm>>& worms, b2World& world);
+    std::list<char> check_post_game(std::list<std::shared_ptr<Worm>>& worms, b2World& world);
+
+    bool have_worm_finished_turn(std::list<std::shared_ptr<Worm>>& worms, int& cleaning_time);
 
 
     ~WormComprobator();

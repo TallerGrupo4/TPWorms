@@ -16,7 +16,9 @@ void WormComprobator::check_during_game(std::list<std::shared_ptr<Worm>>& worms,
     }
 }
 
-std::list<char> WormComprobator::check_post_turn(std::list<std::shared_ptr<Worm>>& worms, b2World& world){
+
+
+std::list<char> WormComprobator::check_post_game(std::list<std::shared_ptr<Worm>>& worms, b2World& world){
     std::list<char> dead_worms;
     for (auto& w : worms){
         if (w->state == DAMAGED || w->state == SHOOTED){
@@ -32,6 +34,23 @@ std::list<char> WormComprobator::check_post_turn(std::list<std::shared_ptr<Worm>
     return dead_worms;
 }
 
+bool WormComprobator::have_worm_finished_turn(std::list<std::shared_ptr<Worm>>& worms, int& cleaning_time){
+    for (auto& w: worms){
+        if (w->get_state() == DEAD) {continue;}
+        w->set_used_tool(false);
+        w->reset_aiming_angle();
+        if (w->state == AIMING) {
+            w->set_state(STILL);
+        }
+        w->store_tool();
+        if (w->get_state() != DEAD && w->body->GetLinearVelocity() != b2Vec2_zero || w->body->GetAngularVelocity() != 0){
+            cleaning_time = 1 * FPS;
+            return false;
+        }
+    }
+    return true;
+}
+
 void WormComprobator::check_angles(Worm& w){
     // To avoid the worm from spinning when angle is too big
     if (abs (w.get_angle()) >= ANG_THRESHOLD){
@@ -43,9 +62,7 @@ void WormComprobator::check_angles(Worm& w){
 void WormComprobator::check_states(Worm& w, int& turn_time, int& current_turn_player_id){
     // To skip turn if damaged
     if (w.get_state() == DAMAGED){
-        printf("Worm %d damaged\n", w.get_id());
         if (current_turn_player_id == w.get_id()) {
-            printf("Skipping turn\n");
             turn_time = 0;
             return;
         }

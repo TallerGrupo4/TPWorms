@@ -121,6 +121,8 @@ public:
     void cheat_has_shooted();
 
     void add_health(int health);
+
+    void reset_aiming_angle();
 };
 
 #endif  // WORM_H

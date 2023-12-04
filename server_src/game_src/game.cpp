@@ -137,7 +137,7 @@ void Game::game_post_cleanup(){
     box_manager.reap_boxes(world);
 
     for (auto& team: teams) {
-        std::list<char> dead_worms_ids = worm_comprobator.check_post_turn(team.second.get_worms(), world);
+        std::list<char> dead_worms_ids = worm_comprobator.check_post_game(team.second.get_worms(), world);
         for (char id: dead_worms_ids) {
             team.second.remove_player(id);
         }
@@ -193,20 +193,9 @@ bool Game::check_end_game() {
 
 void Game::turn_clean_up(){
     for (auto& team: teams) {
-        for (std::shared_ptr<Worm> worm: team.second.get_worms()) {
-            if (worm->get_state() == DEAD) {continue;}
-            worm->set_used_tool(false);
-            if (worm->state == AIMING) {
-                worm->set_state(STILL);
-            }
-            worm->store_tool();
-            if (worm->get_state() != DEAD && worm->body->GetLinearVelocity() != b2Vec2_zero || worm->body->GetAngularVelocity() != 0){
-                cleaning_time = 1 * FPS;
-                return;
-            }
-        }
+        if (!worm_comprobator.have_worm_finished_turn(team.second.get_worms(), cleaning_time)){return;}
     }
-
+    
     if (projectile_manager.has_projectiles()){
         cleaning_time = 1 * FPS;
         return;

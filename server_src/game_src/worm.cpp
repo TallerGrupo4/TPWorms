@@ -149,6 +149,10 @@ float Worm::last_angle(){
     return last_still_angle;
 }
 
+void Worm::reset_aiming_angle(){
+    aiming_angle = 0;
+}
+
 float Worm::get_last_y(){
     return last_y;
 }
