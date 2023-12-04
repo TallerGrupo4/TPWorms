@@ -56,7 +56,9 @@ public:
     void update_from_iter(int iter);
     void update_camera(int camera_offset_x = 0, int camera_offset_y = 0,
                        bool center_camera = false, bool player_activated = false,
-                       bool need_to_be_player_activated = false);
+                       bool need_to_be_player_activated = false, SDL2pp::Window* window = nullptr,
+                       int pos_x_to_warp_mouse = 0,
+                       int pos_y_to_warp_mouse = 0);
     void render(SDL2pp::Renderer& renderer);
     int get_turn_worm_x();
     int get_turn_worm_y();

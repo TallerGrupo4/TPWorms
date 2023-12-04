@@ -24,8 +24,8 @@ bool MatchRenderer::handleEvents(Match& match) {
                 SDL_KeyboardEvent& keyEvent = event.key;
                 switch (keyEvent.keysym.sym) {
                     case SDLK_ESCAPE: {
-                        SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
-                        match.update_camera(mouse_motion_x, mouse_motion_y, true, true);
+                        // SDL_WarpMouseInWindow(window.Get(), match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
+                        match.update_camera(mouse_motion_x, mouse_motion_y, true, true, false, &window, match.get_turn_worm_x() + window.GetWidth()/2 - mouse_motion_x, match.get_turn_worm_y() + window.GetHeight()/2 - mouse_motion_y);
                         mouse_motion_x = 0;
                         mouse_motion_y = 0;
                         break;

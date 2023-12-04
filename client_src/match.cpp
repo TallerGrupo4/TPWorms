@@ -176,12 +176,14 @@ void Match::update_camera_for_less_priority_targets(int camera_offset_x, int cam
 
 void Match::update_camera(int camera_offset_x, int camera_offset_y,
                          bool center_camera, bool player_activated,
-                         bool need_to_be_player_activated) { 
+                         bool need_to_be_player_activated, SDL2pp::Window* window,
+                         int pos_x_to_warp_mouse,
+                         int pos_y_to_warp_mouse) { 
     if(!camera.is_player_activated() and need_to_be_player_activated) {
         return;
     }
     if (player_activated) {
-        camera.toogle_player_activated();
+        camera.toogle_player_activated(*window, pos_x_to_warp_mouse, pos_y_to_warp_mouse);
     }
     
     TargetType target_type = this->camera.has_target();
