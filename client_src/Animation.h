@@ -32,7 +32,7 @@ public:
                 int right_offset = 0,
                 int above_offset = 0,
                 int bellow_offset = 0);
-    void reset();
+    virtual void reset();
     int get_frame_size();
 
 protected:

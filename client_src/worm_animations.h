@@ -31,7 +31,6 @@ private:
     void reset_old_an();  
     bool is_action_state(int state);
     bool is_weapon_grenade_type(TOOLS weapon);
-    void check_aiming_angle(AnimationScroll& an, int new_aiming_angle);
     void render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo,
                     const int angle, const bool facing_left,
                     SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,

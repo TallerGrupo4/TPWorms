@@ -600,138 +600,138 @@ void WormAnimations::reset_old_an() {
     case BACKFLIPPING:
         backflip_an.reset();
         break;
-    case AIMING:
-        switch (old_weapon) {
-            case BAZOOKA:
-                reset_old_specific_an(aim_baz_an, aim_baz_up_an, aim_baz_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_baz_up_an.reset();
-                //     } else {
-                //         aim_baz_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_baz_down_an.reset();
-                //     } else {
-                //         aim_baz_up_an.reset();
-                //     }
-                // } else {
-                //     aim_baz_an.reset();
-                // }
-                break;
-            case MORTAR:
-                reset_old_specific_an(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_mortar_up_an.reset();
-                //     } else {
-                //         aim_mortar_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_mortar_down_an.reset();
-                //     } else {
-                //         aim_mortar_up_an.reset();
-                //     }
-                // } else {
-                //     aim_mortar_an.reset();
-                // }
-                break;
-            case GREEN_GRENADE:
-                reset_old_specific_an(aim_grn_an, aim_grn_up_an, aim_grn_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_grn_up_an.reset();
-                //     } else {
-                //         aim_grn_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_grn_down_an.reset();
-                //     } else {
-                //         aim_grn_up_an.reset();
-                //     }
-                // } else {
-                //     aim_grn_an.reset();
-                // }
-                break;
-            case RED_GRENADE:
-                reset_old_specific_an(aim_cls_an, aim_cls_up_an, aim_cls_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_cls_up_an.reset();
-                //     } else {
-                //         aim_cls_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_cls_down_an.reset();
-                //     } else {
-                //         aim_cls_up_an.reset();
-                //     }
-                // } else {
-                //     aim_cls_an.reset();
-                // }
-                break;
-            case BANANA:
-                reset_old_specific_an(aim_ban_an, aim_ban_up_an, aim_ban_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_ban_up_an.reset();
-                //     } else {
-                //         aim_ban_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_ban_down_an.reset();
-                //     } else {
-                //         aim_ban_up_an.reset();
-                //     }
-                // } else {
-                //     aim_ban_an.reset();
-                // }
-                break;
-            case HOLY_GRENADE:
-                reset_old_specific_an(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_hgr_up_an.reset();
-                //     } else {
-                //         aim_hgr_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_hgr_down_an.reset();
-                //     } else {
-                //         aim_hgr_up_an.reset();
-                //     }
-                // } else {
-                //     aim_hgr_an.reset();
-                // }
-                break;
-            case BASEBALL_BAT:
-                reset_old_specific_an(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an);
-                // if(old_angle > 0) {
-                //     if (!old_facing_left) {
-                //         aim_bsb_up_an.reset();
-                //     } else {
-                //         aim_bsb_down_an.reset();
-                //     }
-                // } else if (old_angle < 0) {
-                //     if (!old_facing_left) {
-                //         aim_bsb_down_an.reset();
-                //     } else {
-                //         aim_bsb_up_an.reset();
-                //     }
-                // } else {
-                //     aim_bsb_an.reset();
-                // }
-                break;
-            default:
-                break;
-        }
-        break;
+    // case AIMING:
+    //     switch (old_weapon) {
+    //         case BAZOOKA:
+    //             reset_old_specific_an(aim_baz_an, aim_baz_up_an, aim_baz_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_baz_up_an.reset();
+    //             //     } else {
+    //             //         aim_baz_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_baz_down_an.reset();
+    //             //     } else {
+    //             //         aim_baz_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_baz_an.reset();
+    //             // }
+    //             break;
+    //         case MORTAR:
+    //             reset_old_specific_an(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_mortar_up_an.reset();
+    //             //     } else {
+    //             //         aim_mortar_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_mortar_down_an.reset();
+    //             //     } else {
+    //             //         aim_mortar_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_mortar_an.reset();
+    //             // }
+    //             break;
+    //         case GREEN_GRENADE:
+    //             reset_old_specific_an(aim_grn_an, aim_grn_up_an, aim_grn_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_grn_up_an.reset();
+    //             //     } else {
+    //             //         aim_grn_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_grn_down_an.reset();
+    //             //     } else {
+    //             //         aim_grn_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_grn_an.reset();
+    //             // }
+    //             break;
+    //         case RED_GRENADE:
+    //             reset_old_specific_an(aim_cls_an, aim_cls_up_an, aim_cls_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_cls_up_an.reset();
+    //             //     } else {
+    //             //         aim_cls_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_cls_down_an.reset();
+    //             //     } else {
+    //             //         aim_cls_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_cls_an.reset();
+    //             // }
+    //             break;
+    //         case BANANA:
+    //             reset_old_specific_an(aim_ban_an, aim_ban_up_an, aim_ban_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_ban_up_an.reset();
+    //             //     } else {
+    //             //         aim_ban_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_ban_down_an.reset();
+    //             //     } else {
+    //             //         aim_ban_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_ban_an.reset();
+    //             // }
+    //             break;
+    //         case HOLY_GRENADE:
+    //             reset_old_specific_an(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_hgr_up_an.reset();
+    //             //     } else {
+    //             //         aim_hgr_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_hgr_down_an.reset();
+    //             //     } else {
+    //             //         aim_hgr_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_hgr_an.reset();
+    //             // }
+    //             break;
+    //         case BASEBALL_BAT:
+    //             reset_old_specific_an(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an);
+    //             // if(old_angle > 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_bsb_up_an.reset();
+    //             //     } else {
+    //             //         aim_bsb_down_an.reset();
+    //             //     }
+    //             // } else if (old_angle < 0) {
+    //             //     if (!old_facing_left) {
+    //             //         aim_bsb_down_an.reset();
+    //             //     } else {
+    //             //         aim_bsb_up_an.reset();
+    //             //     }
+    //             // } else {
+    //             //     aim_bsb_an.reset();
+    //             // }
+    //             break;
+    //         default:
+    //             break;
+    //     }
+    //     break;
     default:
         break;
     }
@@ -756,18 +756,18 @@ void WormAnimations::update_animations(Animation& up_an, Animation& down_an, int
 void WormAnimations::update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an, AnimationScroll& down_an, int angle, bool facing_left, int aiming_angle, TOOLS weapon) {
     if(angle > 0) {
         if (!facing_left) {
-            check_aiming_angle(up_an, aiming_angle);
+            up_an.update_with_angle(aiming_angle);
         } else {
-            check_aiming_angle(down_an, aiming_angle);
+            down_an.update_with_angle(aiming_angle);
         }
     } else if (angle < 0) {
         if (!facing_left) {
-            check_aiming_angle(down_an, aiming_angle);
+            down_an.update_with_angle(aiming_angle);
         } else {
-            check_aiming_angle(up_an, aiming_angle);
+            up_an.update_with_angle(aiming_angle);
         }
     } else {
-        check_aiming_angle(an, aiming_angle);
+        an.update_with_angle(aiming_angle);
     }
 }
 
@@ -1001,14 +1001,6 @@ void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left
     old_aiming_angle = aiming_angle;
     old_weapon = weapon;
     old_weapon_ammo = weapon_ammo;
-}
-
-void WormAnimations::check_aiming_angle(AnimationScroll& an, int new_aiming_angle) {
-    if(new_aiming_angle > old_aiming_angle) {
-        an.update_once_down();
-    } else if (new_aiming_angle < old_aiming_angle) {
-        an.update_once_up();
-    }
 }
 
 void WormAnimations::update_from_iter(int state, int angle, bool facing_left) {
