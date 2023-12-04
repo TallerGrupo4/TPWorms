@@ -8,13 +8,13 @@
 
 class MapRoutes {
 private:
+    std::string maps_path;
     std::list<std::string> routes;
 
 public:
-    MapRoutes() {
+    MapRoutes(std::string maps_path) : maps_path(maps_path) {
         // Path to the folder containing the YAML files while being inside build (monitor_matches uses this)
-        std::string folderPath = "../external/maps";
-        for (const auto& entry : std::filesystem::directory_iterator(folderPath)) {
+        for (const auto& entry : std::filesystem::directory_iterator(maps_path)) {
             if (entry.path().extension() == ".yaml") {
                 routes.push_front(entry.path().string());
             }

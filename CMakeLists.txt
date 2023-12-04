@@ -47,3 +47,42 @@ set_target_properties(client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")
 
 
+
+# Specify installation paths
+install(TARGETS server client
+        RUNTIME DESTINATION /usr/bin
+)
+
+# Install configuration files
+install(FILES ${CMAKE_SOURCE_DIR}/external/config/config.yaml
+        DESTINATION /etc/worms
+)
+
+install(FILES ${CMAKE_SOURCE_DIR}/server_src/config.h
+        DESTINATION /etc/worms
+)
+
+# Install other necessary files
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/client_src
+        DESTINATION /var/worms
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/server_src
+        DESTINATION /var/worms
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/common_src
+        DESTINATION /var/worms
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/tests
+        DESTINATION /var/worms
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/external
+        DESTINATION /var/worms
+)
+
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/cmake
+        DESTINATION /var/worms
+)

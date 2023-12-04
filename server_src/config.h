@@ -2,15 +2,15 @@
 #define CONFIG_SINGLETON_H
 
 #include <yaml-cpp/yaml.h>
+#include <filesystem>
 #include <iostream>
 
 class ConfigSingleton {
 public:
-    static ConfigSingleton& getInstance() {
-        static ConfigSingleton instance;
+    static ConfigSingleton& getInstance(const std::string& filePath = "") {
+        static ConfigSingleton instance(filePath);
         return instance;
     }
-
     int get_extra_health() const {
         return extra_health;
     }
@@ -271,14 +271,22 @@ public:
 
 
 private:
-    ConfigSingleton() {
+    std::string file_path;
+
+    ConfigSingleton(const std::string& filePath) : file_path(filePath) {
         readConfigFromFile();
     }
 
     void readConfigFromFile() {
+        if (file_path.empty()) {
+            throw std::runtime_error("Config file path is not set");
+        }
+        if (!std::filesystem::exists(file_path)) {
+        throw std::runtime_error("Config file does not exist: " + file_path + ". Please create it properly and pass the absolute path to it. E.g. /etc/worms/config.yaml. See the README for more information.");
+        }
         try {
             std::cout << "Reading config file..." << std::endl;
-            YAML::Node config = YAML::LoadFile("../external/config/config.yaml");
+            YAML::Node config = YAML::LoadFile(file_path);
             max_players = config["max_players"].as<int>();
             // World
             start_life = config["start_life"].as<int>();
