@@ -13,7 +13,7 @@ bool GreenGrenade::use(b2Body* worm, int direction, float angle , int time,  int
     std::shared_ptr<Projectile> projectile = create_projectile(worm, direction, angle, power, time, GREEN_GRENADE_RESTITUTION, GREEN_GRENADE_DENSITY);
     projectiles.add_projectile(projectile);
     shoot (b2Vec2(direction * cos(angle), sin(angle)), power, projectile->get_body());
-    return false;
+    return true;
 }
 
 
