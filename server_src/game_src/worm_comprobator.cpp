@@ -6,12 +6,12 @@ WormComprobator::WormComprobator(){}
 
 void WormComprobator::check_during_game(std::list<std::shared_ptr<Worm>>& worms, int& time, int& current_id, int& height , int& width, int& water_level){
     for (auto& w : worms){
-        check_out_of_map_worm(*w, time, current_id, height , width, water_level);
         if (w->state == DEAD){
             continue;
         }
-        check_angles(*w);
+        check_out_of_map_worm(*w, time, current_id, height , width, water_level);
         check_states(*w, time, current_id);
+        check_angles(*w);
         check_velocities(*w);
     }
 }
@@ -41,15 +41,18 @@ void WormComprobator::check_angles(Worm& w){
 }
 
 void WormComprobator::check_states(Worm& w, int& turn_time, int& current_turn_player_id){
-    // To let the worm shoot in peace
-    if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
     // To skip turn if damaged
     if (w.get_state() == DAMAGED){
+        printf("Worm %d damaged\n", w.get_id());
         if (current_turn_player_id == w.get_id()) {
+            printf("Skipping turn\n");
             turn_time = 0;
             return;
         }
     }
+    // To let the worm shoot in peace
+    if (w.get_state() == SHOOTED || w.get_state() == AIMING) {return;}
+
     // To apply slide when angle is too big and correct angle
     if (w.get_number_contacts() == 1){
         b2Body* body = w.body->GetContactList()->other;

@@ -11,7 +11,7 @@ class HolyGrenade : public Weapon {
     public:
     HolyGrenade();
 
-    void use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles) override;
+    bool use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles) override;
 
     ~HolyGrenade();
 

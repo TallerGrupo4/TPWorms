@@ -5,5 +5,5 @@ CheatShootCommand::CheatShootCommand(char id): GameCommand(id) {}
 CheatShootCommand::~CheatShootCommand() {}
 
 void CheatShootCommand::execute(Game& game){
-    // game.toggle_shoot_cheat(id_worm);
+    game.toggle_shoot_cheat(id_worm);
 }

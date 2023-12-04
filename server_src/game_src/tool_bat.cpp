@@ -9,7 +9,7 @@
 
 Bat::Bat() : Tool(BASEBALL_BAT, INF_AMMO, INF_AMMO, true), damage(BAT_DAMAGE) {}
 
-void Bat::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
+bool Bat::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         float lower_angle = angle - 45 * DEGTORAD;
         std::unordered_set<b2Body*> bodies;
         for (int i = 0 ; i < 10 ; i++){
@@ -32,6 +32,7 @@ void Bat::use(b2Body* worm, int direction, float angle, int time , int power , f
                 }
             }
         }
+        return true;
 }
 
 Bat::~Bat() {}

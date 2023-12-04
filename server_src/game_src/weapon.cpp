@@ -36,7 +36,6 @@
 
     void Weapon::shoot(b2Vec2 direction , int potency_percentage, b2Body* projectile){
         if (ammo > 0) {ammo--;}
-        printf("ammo left: %d\n", ammo);
         float impulse_x = direction.x * PROJECTILE_POTENCY *potency_percentage * 0.01;
         float impulse_y = direction.y * PROJECTILE_POTENCY* potency_percentage * 0.01;
         projectile->ApplyLinearImpulseToCenter(b2Vec2(impulse_x , impulse_y), true);

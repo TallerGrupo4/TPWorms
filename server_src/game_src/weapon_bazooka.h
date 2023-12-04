@@ -11,7 +11,7 @@ class Bazooka : public Weapon {
     public:
     Bazooka();
 
-    void use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles) override;
+    bool use(b2Body* worm, int direction, float angle , int time,  int power , float x , float y, ProjectileManager& projectiles) override;
 
     ~Bazooka();
 

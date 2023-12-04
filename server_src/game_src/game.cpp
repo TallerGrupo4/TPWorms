@@ -144,17 +144,19 @@ void Game::game_post_cleanup(){
     }
 }
 
+
 void Game::step(int it) {
     float time_simulate = (float) it / FPS;
     world.Step(time_simulate, 8, 3);
 
-    worm_comprobations();
+    
     projectile_manager.update_during_game(it , width , height);
+    worm_comprobations();
 
     if (turn_time > 0){
         turn_time -= it;
         if (teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD){
-            manage_turn();
+            turn_time = 0;
         }
     } else {
         if (!turn_cleaning ){
@@ -198,7 +200,7 @@ void Game::turn_clean_up(){
                 worm->set_state(STILL);
             }
             worm->store_tool();
-            if (worm->body->GetLinearVelocity() != b2Vec2_zero || worm->body->GetAngularVelocity() != 0){
+            if (worm->get_state() != DEAD && worm->body->GetLinearVelocity() != b2Vec2_zero || worm->body->GetAngularVelocity() != 0){
                 cleaning_time = 1 * FPS;
                 return;
             }
@@ -272,27 +274,35 @@ void Game::spawn_provision_box(){
 }
 
 void Game::toggle_shoot_cheat(char id){
-    shoot_cheat = !shoot_cheat;
-    if (shoot_cheat){
-        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
-            worm->has_used_tool = false;
+    if (!turn_cleaning){
+        shoot_cheat = !shoot_cheat;
+        if (shoot_cheat){
+            if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+                worm->has_used_tool = false;
+            }
         }
     }
 }
 
 void Game::cheat_turn_time(){
-    turn_time = 10 * FPS;
+    if (!turn_cleaning){
+        turn_time += 10 * FPS;
+    }
 }
 
 void Game::cheat_ammo(char id){
-    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
-        worm->cheat_ammo();
+    if (!turn_cleaning){
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+          worm->cheat_ammo();
+        }
     }
 }
 
 void Game::cheat_life(char id){
-    if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
-        worm->add_health(100);
+    if (!turn_cleaning){
+        if (std::shared_ptr<Worm> worm = get_worm_if_can_act(id)){
+            worm->add_health(100);
+        }
     }
 }
 

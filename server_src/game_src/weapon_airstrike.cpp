@@ -49,7 +49,7 @@ std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, 
 }
 
 
-void Airstrike::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
+bool Airstrike::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         if (ammo > 0) {ammo--;}
         float roof_height = get_roof_height(worm);
 
@@ -65,6 +65,7 @@ void Airstrike::use(b2Body* worm, int direction, float angle, int time , int pow
             possible_ys.erase(possible_ys.begin() + random);
             projectiles.add_projectile(shoot_airstrike_projectile(worm, pos_x + x, roof_height + pos_y));
         }
+        return true;
 }
 
 Airstrike::~Airstrike() {}

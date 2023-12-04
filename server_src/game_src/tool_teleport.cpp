@@ -19,18 +19,15 @@ bool Teleporter::validate_teleport(float x , float y, b2World* world){
     return true;
 }
 
-void Teleporter::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
-        printf("Teleporting\n");
-        printf("x: %f, y: %f\n", x, y);
+bool Teleporter::use(b2Body* worm, int direction, float angle, int time , int power , float x , float y, ProjectileManager& projectiles){
         if (!validate_teleport(x, y +PLAT_HEIGHT+0.2, worm->GetWorld() ) && !validate_teleport(x, y - PLAT_HEIGHT - 0.2, worm->GetWorld())){
-            return;
+            return false;
         }
-        printf("Teleporting for real\n");
         worm->SetTransform(b2Vec2(x, y), 0);
         worm->SetAwake(true);
         worm->SetLinearVelocity(b2Vec2(0, 0));
         worm->SetAngularVelocity(0);
-        printf("x: %f, y: %f\n", x, y);
+        return true;
 }
 
 Teleporter::~Teleporter() {}
