@@ -18,14 +18,15 @@ void ProjectileManager::correct_angle_projectile(std::shared_ptr<Projectile> pro
     projectile->set_angle(angle);
 }
 
-void ProjectileManager::update_during_game(const int& it, const int& width, const int& height) {
+void ProjectileManager::update_during_game(const int& it, const int& width, const int& height,
+                                           const int& water_level) {
     for (auto& projectile: projectiles) {
         if (projectile->get_state() == ALIVE) {
             apply_wind(*projectile);
             correct_angle_projectile(projectile);
             projectile->decresease_timer(it);
         }
-        check_out_of_map_projectile(*projectile, width, height);
+        check_out_of_map_projectile(*projectile, width, height, water_level);
         if ((projectile->get_timer() <= 0 && projectile->get_explosion_type() == EXPLOSIVE_TIMER) ||
             projectile->get_state() == EXPLODED) {
             projectile->explode(projectiles);
@@ -33,11 +34,13 @@ void ProjectileManager::update_during_game(const int& it, const int& width, cons
     }
 }
 
-void ProjectileManager::check_out_of_map_projectile(Projectile& p, int width, int height) {
+void ProjectileManager::check_out_of_map_projectile(Projectile& p, const int& width,
+                                                    const int& height, const int& water_level) {
     float p_x = p.get_body()->GetPosition().x;
     float p_y = p.get_body()->GetPosition().y;
 
-    if (p_x < -width / 2 || p_x > width / 2 || p_y < -height / 2 || p_y > height / 2) {
+    if (p_x < -width / 2 || p_x > width / 2 || p_y < -height / 2 || p_y > height / 2 ||
+        p_y <= water_level) {
         p.set_state(EXPLODED);
     }
 }

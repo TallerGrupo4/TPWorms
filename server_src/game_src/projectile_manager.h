@@ -30,9 +30,11 @@ public:
 
     float get_wind_force();
 
-    void update_during_game(const int& it, const int& width, const int& height);
+    void update_during_game(const int& it, const int& width, const int& height,
+                            const int& water_level);
 
-    void check_out_of_map_projectile(Projectile& p, int width, int height);
+    void check_out_of_map_projectile(Projectile& p, const int& width, const int& height,
+                                     const int& water_level);
 
     void update_post_game(b2World& world);
 

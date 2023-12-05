@@ -181,7 +181,7 @@ void Game::step(int it) {
     world.Step(time_simulate, 8, 3);
 
 
-    projectile_manager.update_during_game(it, width, height);
+    projectile_manager.update_during_game(it, width, height, water_level);
     worm_comprobations();
 
     if (turn_time > 0) {
