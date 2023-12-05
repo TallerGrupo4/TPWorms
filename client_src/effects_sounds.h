@@ -8,8 +8,13 @@
 
 #include "client_constants.h"
 
+// Class that holds all the sounds of the match
 class EffectsSounds {
 public:
+    /**
+     * @brief Construct a new Effects Sounds object
+     * @param mixer Music mixer of the match
+     */
     explicit EffectsSounds(SDL2pp::Mixer& mixer);
     void play_pickup_box_sound();
     void play_match_winner_sound();

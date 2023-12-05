@@ -3,6 +3,7 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
+// Class that holds the crosshair and the color of the worm
 class ArmyColorDependentWidgets {
 private:
     SDL2pp::Surface& crosshair;

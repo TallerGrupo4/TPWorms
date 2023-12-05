@@ -13,39 +13,162 @@
 #include "client_constants.h"
 #include "surfaces.h"
 
+// Class that represents the animations of a worm
 class WormAnimations {
 public:
+    /**
+     * @brief Construct a new Worm Animations object
+     * @param renderer Renderer of the match
+     * @param surfaces Surfaces of the match
+     * @param worm_state Initial state of the worm
+     * @param worm_angle Initial angle of the worm
+     * @param weapon Initial weapon of the worm
+     * @param weapon_ammo Initial ammo of the weapon of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param aiming_angle Initial angle of the aiming of the worm
+     */
     WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state,
                    int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left,
                    int aiming_angle);
+    /**
+     * @brief Renders the worm with the animation
+     * @param state State of the worm
+     * @param angle Angle of the worm
+     * @param weapon Weapon of the worm
+     * @param weapon_ammo Ammo of the weapon of the worm
+     * @param renderer Renderer of the match
+     * @param dst Destination rectangle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param left_offset Offset of the worm in the left side
+     * @param right_offset Offset of the worm in the right side
+     * @param above_offset Offset of the worm in the top side
+     * @param bellow_offset Offset of the worm in the bottom side
+     */
     void render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer,
                 const SDL2pp::Rect dst, const bool facing_left, int left_offset = 0,
                 int right_offset = 0, int above_offset = 0, int bellow_offset = 0);
+    /**
+     * @brief Updates the worm from a snapshot received from the server
+     * @param state State of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param weapon Weapon of the worm
+     * @param weapon_ammo Ammo of the weapon of the worm
+     * @param aiming_angle Angle of the aiming of the worm
+     */
     void update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon, int weapon_ammo,
                               int aiming_angle);
+    /**
+     * @brief Updates the worm from the ticks of the match
+     * @param state State of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     */
     void update_from_iter(int state, int angle, bool facing_left);
+    /**
+     * @brief Updates the changing weapons animations of the worm
+     * @param new_weapon New weapon of the worm
+     * @param new_weapon_ammo New ammo of the weapon of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     */
     void update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle,
                                  const bool facing_left);
 
 private:
+    /**
+     * @brief Updates the animations of the worm
+     * @param up_an Up animation of the worm
+     * @param down_an Down animation of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     */
     void update_animations(Animation& up_an, Animation& down_an, int angle, bool facing_left);
+    /**
+     * @brief Updates the animations of the worm when it is aiming
+     * @param an Animation of the worm
+     * @param up_an Up animation of the worm
+     * @param down_an Down animation of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param aiming_angle Angle of the aiming of the worm
+     * @param weapon Weapon of the worm
+     */
     void update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an,
                                   AnimationScroll& down_an, int angle, bool facing_left,
                                   int aiming_angle, TOOLS weapon);
+    /**
+     * @brief Resets the old animations of the worm that depends on the old angle and old
+     * facing_left
+     * @param an Animation of the worm
+     * @param up_an Up animation of the worm
+     * @param down_an Down animation of the worm
+     */
     void reset_old_specific_an(Animation& an, Animation& up_an, Animation& down_an);
+    /**
+     * @brief Resets the old animations of the worm
+     */
     void reset_old_an();
+    /**
+     * @brief Check if the worm state is an action state
+     * @param state State of the worm
+     * @return True if the worm state is an action state, false otherwise
+     */
     bool is_action_state(int state);
+    /**
+     * @brief Check if the worm weapon is a grenade type
+     * @param weapon Weapon of the worm
+     * @return True if the worm weapon is a grenade type, false otherwise
+     */
     bool is_weapon_grenade_type(TOOLS weapon);
+    /**
+     * @brief Renders the worm with the animation when it is still
+     * @param weapon Weapon of the worm
+     * @param weapon_ammo Ammo of the weapon of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param renderer Renderer of the match
+     * @param dst Destination rectangle of the worm
+     * @param flip Flip of the worm (SDL_FLIP_NONE or SDL_FLIP_HORIZONTAL)
+     * @param left_offset Offset of the worm in the left side
+     * @param right_offset Offset of the worm in the right side
+     * @param above_offset Offset of the worm in the top side
+     * @param bellow_offset Offset of the worm in the bottom side
+     */
     void render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo, const int angle,
                                        const bool facing_left, SDL2pp::Renderer& renderer,
                                        const SDL2pp::Rect dst, SDL_RendererFlip flip,
                                        int left_offset, int right_offset, int above_offset,
                                        int bellow_offset);
+    /**
+     * @brief Renders the worm with the animation that depends on the angle
+     * @param an Animation of the worm
+     * @param up_an Up animation of the worm
+     * @param down_an Down animation of the worm
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     * @param renderer Renderer of the match
+     * @param dst Destination rectangle of the worm
+     * @param flip Flip of the worm (SDL_FLIP_NONE or SDL_FLIP_HORIZONTAL)
+     * @param left_offset Offset of the worm in the left side
+     * @param right_offset Offset of the worm in the right side
+     * @param above_offset Offset of the worm in the top side
+     * @param bellow_offset Offset of the worm in the bottom side
+     */
     void render_angle_dependent_an(Animation& an, Animation& up_an, Animation& down_an,
                                    const int angle, const bool facing_left,
                                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
                                    SDL_RendererFlip flip, int left_offset, int right_offset,
                                    int above_offset, int bellow_offset);
+    /**
+     * @brief Push back in the lingering animations list the changing weapons animation that depends
+     * on the angle
+     * @param middle_an Animation of the worm when is in flat surface
+     * @param down_an Animation of the worm when is in a slope
+     * @param up_an Animation of the worm when is in a slope
+     * @param angle Angle of the worm
+     * @param facing_left True if the worm is facing left, false otherwise
+     */
     void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle,
                               const bool facing_left);
     void push_drop_weapon_an(int angle, const bool facing_left);

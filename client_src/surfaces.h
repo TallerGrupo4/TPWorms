@@ -6,6 +6,7 @@
 #include "client_constants.h"
 
 using SDL2pp::Surface;
+// Class that holds all the surfaces of the match
 class MatchSurfaces {
 public:
     /*BACKGROUND*/

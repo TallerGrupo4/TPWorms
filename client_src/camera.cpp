@@ -14,7 +14,7 @@ void Camera::update(Target target) {
     this->hud.update_target(target);
 }
 
-void Camera::update_hud() { this->hud.update_from_iter(); }
+void Camera::update_hud() { this->hud.update_marker_an(); }
 
 void Camera::update_marker(int x, int y) { this->hud.update_marker(x, y); }
 

@@ -1,12 +1,5 @@
 #include "match_renderer.h"
 
-#include <algorithm>
-#include <memory>
-
-#include "../common_src/clock.h"
-
-#include "Animation.h"
-
 using SDL2pp::Renderer;
 
 MatchRenderer::MatchRenderer(Client& client, const Snapshot& map_received):

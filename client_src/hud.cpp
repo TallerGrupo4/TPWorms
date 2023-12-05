@@ -1,7 +1,5 @@
 #include "hud.h"
 
-#include <string>
-
 Hud::Hud():
         target(),
         marker_an(nullptr),
@@ -463,7 +461,7 @@ void Hud::update_armies_health(const std::map<char, int>& armies_health) {
     }
 }
 
-void Hud::update_from_iter() {
+void Hud::update_marker_an() {
     if (marker_following_mouse or marker_set) {
         this->marker_an->update_once();
     }

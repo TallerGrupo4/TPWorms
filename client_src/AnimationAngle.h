@@ -3,6 +3,7 @@
 #ifndef __ANIMATIONANGLE_H__
 #define __ANIMATIONANGLE_H__
 
+// Class that represents a angle animation (Worm aiming animations)
 class AnimationAngle: public Animation {
 public:
     void update_with_angle(int angle) override;

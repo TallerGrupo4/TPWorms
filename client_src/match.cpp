@@ -1,8 +1,5 @@
 #include "match.h"
 
-#include <memory>
-#include <utility>
-
 Match::Match() {}
 
 Match::Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer,

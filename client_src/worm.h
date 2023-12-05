@@ -1,7 +1,6 @@
 #ifndef WORM_H
 #define WORM_H
 
-#include <map>
 #include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
@@ -18,16 +17,53 @@
 #include "worm_animations.h"
 #include "worm_widgets.h"
 
+
+// Class that represents a worm in the match
 class Worm {
 public:
+    /**
+     * @brief Construct a new Worm object
+     * @param worm_snpsht Snapshot of the worm received from the server
+     * @param worm_width Width of the worm
+     * @param worm_height Height of the worm
+     * @param effects_an Effects animations
+     * @param effects_sound Effects sounds
+     * @param widgets Widgets that depend on the color of the army
+     * @param surfaces Surfaces of the match
+     * @param renderer Renderer of the match
+     */
     Worm(const WormSnapshot& worm_snpsht, int worm_width, int worm_height,
          std::shared_ptr<EffectsAnimations>& effects_an,
          std::shared_ptr<EffectsSounds>& effects_sound, ArmyColorDependentWidgets widgets,
          MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    /**
+     * @brief Destroy the Worm object
+     */
     ~Worm();
+    /**
+     * @brief Updates the worm from a snapshot received from the server
+     * @param renderer Renderer of the match
+     * @param worm_snpsht Snapshot of the worm received from the server
+     */
     void update_from_snapshot(SDL2pp::Renderer& renderer, WormSnapshot& worm_snpsht);
+    /**
+     * @brief Updates the worm from the ticks of the match
+     * @param iter Iterations needed to update all the ticks
+     */
     void update_from_iter(int iter);
+    /**
+     * @brief Renders the worm
+     * @param renderer Renderer of the match
+     * @param camera_offset_x Offset of the camera in the x axis
+     * @param camera_offset_y Offset of the camera in the y axis
+     */
     void render(SDL2pp::Renderer& renderer, int camera_offset_x, int camera_offset_y);
+    /**
+     * @brief Renders the texts and widgets of the worm
+     * @param renderer Renderer of the match
+     * @param camera_offset_x Offset of the camera in the x axis
+     * @param camera_offset_y Offset of the camera in the y axis
+     */
     void render_texts_and_widgets(SDL2pp::Renderer& renderer, int camera_offset_x,
                                   int camera_offset_y);
     void moveRigth();
@@ -48,6 +84,9 @@ public:
     char get_army_id();
 
 private:
+    /**
+     * @brief Handles the state of the worm when it is moving
+     */
     void handleShootedState(SDL2pp::Renderer& renderer, TOOLS old_weapon);
 
     std::shared_ptr<EffectsAnimations> effects_an;

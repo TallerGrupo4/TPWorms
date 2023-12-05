@@ -1,7 +1,5 @@
 #include "beam.h"
 
-#include <iostream>
-
 Beam::Beam(PlatformSnapshot pltfrm, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer,
            int map_width, int map_height):
         beam_image(assign_texture(pltfrm, surfaces, renderer)) {

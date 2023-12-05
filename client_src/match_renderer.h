@@ -1,13 +1,9 @@
 #ifndef MATCH_RENDERER_H
 #define MATCH_RENDERER_H
 
-#include <cstdlib>
-#include <ctime>
 #include <exception>
 #include <iostream>
-#include <map>
-#include <thread>
-#include <vector>
+#include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -21,6 +17,7 @@
 #include "surfaces.h"
 #include "worm.h"
 
+// Class that renders a WORMS match
 class MatchRenderer {
 private:
     Client& client;
@@ -40,10 +37,17 @@ private:
     void render(SDL2pp::Renderer& renderer, Match& match);
 
 public:
+    /**
+     * @brief Construct a new Match Renderer object
+     * @param client Client
+     * @param map_received Snapshot of the match received from the server
+     */
     explicit MatchRenderer(Client& client, const Snapshot& map_received);
 
+    // Starts the match renderer
     void start();
 
+    // Function that executes the logic of the match renderer (public to be used by the class Clock)
     void execute_and_update(int iter);
 };
 #endif  // MATCH_RENDERER_H

@@ -3,6 +3,7 @@
 #ifndef __ANIMATIONSCROLL_H__
 #define __ANIMATIONSCROLL_H__
 
+// Class that represents a scroll animation (Projectile animations)
 class AnimationScroll: public Animation {
 public:
     void update_with_angle(int angle) override;
