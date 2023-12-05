@@ -22,8 +22,9 @@ void ProtocolServer::send_command(const Command& command) {
         throw LibError(errno, "Socket was closed");
     }
     char code[1] = {command.get_code()};
-    if (socket.sendall(code, 1, &was_closed) < 0) {
-        // throw
+    socket.sendall(code, 1, &was_closed);
+    if (was_closed) {
+        throw LibError(errno, "Socket was closed");
     }
     switch (code[0]) {
         case CASE_JOIN: {
