@@ -1,548 +1,374 @@
 #include "worm_animations.h"
 
-WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state, int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left, int aiming_angle) :                                /*WORM PREVIOUS INFO*/
-                                old_state(worm_state),
-                                old_angle(worm_angle),
-                                old_weapon(weapon),
-                                old_weapon_ammo(weapon_ammo),
-                                old_facing_left(facing_left),
-                                old_aiming_angle(aiming_angle),
-                                /*WORM MOVEMENTS*/
-                                still_0_an(renderer, surfaces.still_0_worm, SECS_FOR_STILL_SPRITES),
-                                still_0_up_an(renderer, surfaces.still_0_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_0_down_an(renderer, surfaces.still_0_down_worm, SECS_FOR_STILL_SPRITES),
-                                //still_1_an(renderer, surfaces.still_1_worm, SECS_FOR_STILL_1_SPRITES),
-                                walking_an(renderer, surfaces.walking_worm, SECS_FOR_WALKING_SPRITES),
-                                walking_up_an(renderer, surfaces.walking_up_worm, SECS_FOR_WALKING_SPRITES),
-                                walking_down_an(renderer, surfaces.walking_down_worm, SECS_FOR_WALKING_SPRITES),
-                                backflip_an(renderer, surfaces.backflip_worm, SECS_FOR_BACKFLIP_SPRITES),
-                                jump_an(renderer, surfaces.jump_worm, SECS_FOR_JUMP_SPRITES),
-                                jump_up_an(renderer, surfaces.jump_up_worm, SECS_FOR_JUMP_SPRITES),
-                                jump_down_an(renderer, surfaces.jump_down_worm, SECS_FOR_JUMP_SPRITES),
-                                fall_an(renderer, surfaces.fall_worm, SECS_FOR_FALL_SPRITES),
-                                slide_an(renderer, surfaces.slide_worm, SECS_FOR_SLIDE_SPRITES),
-                                slide_up_an(renderer, surfaces.slide_up_worm, SECS_FOR_SLIDE_SPRITES),
-                                slide_down_an(renderer, surfaces.slide_down_worm, SECS_FOR_SLIDE_SPRITES),
-                                dead_an(renderer, surfaces.dead_worm, SECS_FOR_DEAD_SPRITES, false, true),
-                                winner_an(renderer, surfaces.winner_worm, SECS_FOR_WIN_SPRITES),
-                                /*WORM STILL STANCE WEAPONS*/
-                                still_baz_an(renderer, surfaces.still_baz_worm, SECS_FOR_STILL_SPRITES),
-                                still_baz_up_an(renderer, surfaces.still_baz_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_baz_down_an(renderer, surfaces.still_baz_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_mortar_an(renderer, surfaces.still_mortar_worm, SECS_FOR_STILL_SPRITES),
-                                still_mortar_up_an(renderer, surfaces.still_mortar_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_mortar_down_an(renderer, surfaces.still_mortar_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_air_an(renderer, surfaces.still_air_worm, SECS_FOR_STILL_SPRITES),
-                                still_air_up_an(renderer, surfaces.still_air_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_air_down_an(renderer, surfaces.still_air_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_tel_an(renderer, surfaces.still_tel_worm, SECS_FOR_STILL_SPRITES),
-                                still_tel_up_an(renderer, surfaces.still_tel_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_tel_down_an(renderer, surfaces.still_tel_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_thr_an(renderer, surfaces.still_thr_worm, SECS_FOR_STILL_SPRITES),
-                                still_thr_up_an(renderer, surfaces.still_thr_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_thr_down_an(renderer, surfaces.still_thr_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_grn_an(renderer, surfaces.still_grn_worm, SECS_FOR_STILL_SPRITES),
-                                still_grn_up_an(renderer, surfaces.still_grn_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_grn_down_an(renderer, surfaces.still_grn_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_cls_an(renderer, surfaces.still_cls_worm, SECS_FOR_STILL_SPRITES),
-                                still_cls_up_an(renderer, surfaces.still_cls_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_cls_down_an(renderer, surfaces.still_cls_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_ban_an(renderer, surfaces.still_ban_worm, SECS_FOR_STILL_SPRITES),
-                                still_ban_up_an(renderer, surfaces.still_ban_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_ban_down_an(renderer, surfaces.still_ban_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_hgr_an(renderer, surfaces.still_hgr_worm, SECS_FOR_STILL_SPRITES),
-                                still_hgr_up_an(renderer, surfaces.still_hgr_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_hgr_down_an(renderer, surfaces.still_hgr_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_dyn_an(renderer, surfaces.still_dyn_worm, SECS_FOR_STILL_SPRITES),
-                                still_dyn_up_an(renderer, surfaces.still_dyn_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_dyn_down_an(renderer, surfaces.still_dyn_down_worm, SECS_FOR_STILL_SPRITES),
-                                still_bsb_an(renderer, surfaces.still_bsb_worm, SECS_FOR_STILL_SPRITES),
-                                still_bsb_up_an(renderer, surfaces.still_bsb_up_worm, SECS_FOR_STILL_SPRITES),
-                                still_bsb_down_an(renderer, surfaces.still_bsb_down_worm, SECS_FOR_STILL_SPRITES),
-                                /*WORM CHANGING WEAPONS*/
-                                get_baz_an(renderer, surfaces.get_baz_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_baz_up_an(renderer, surfaces.get_baz_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_baz_down_an(renderer, surfaces.get_baz_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_baz_an(renderer, surfaces.drop_baz_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_baz_up_an(renderer, surfaces.drop_baz_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_baz_down_an(renderer, surfaces.drop_baz_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_mortar_an(renderer, surfaces.get_mortar_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_mortar_up_an(renderer, surfaces.get_mortar_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_mortar_down_an(renderer, surfaces.get_mortar_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_mortar_an(renderer, surfaces.drop_mortar_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_mortar_up_an(renderer, surfaces.drop_mortar_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_mortar_down_an(renderer, surfaces.drop_mortar_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_air_an(renderer, surfaces.get_air_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_air_up_an(renderer, surfaces.get_air_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_air_down_an(renderer, surfaces.get_air_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_air_an(renderer, surfaces.drop_air_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_air_up_an(renderer, surfaces.drop_air_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_air_down_an(renderer, surfaces.drop_air_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_tel_an(renderer, surfaces.get_tel_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_tel_up_an(renderer, surfaces.get_tel_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_tel_down_an(renderer, surfaces.get_tel_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_tel_an(renderer, surfaces.drop_tel_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_tel_up_an(renderer, surfaces.drop_tel_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_tel_down_an(renderer, surfaces.drop_tel_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_thr_an(renderer, surfaces.get_thr_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_thr_up_an(renderer, surfaces.get_thr_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_thr_down_an(renderer, surfaces.get_thr_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_thr_an(renderer, surfaces.drop_thr_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_thr_up_an(renderer, surfaces.drop_thr_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_thr_down_an(renderer, surfaces.drop_thr_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_grn_an(renderer, surfaces.get_grn_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_grn_up_an(renderer, surfaces.get_grn_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_grn_down_an(renderer, surfaces.get_grn_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_grn_an(renderer, surfaces.drop_grn_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_grn_up_an(renderer, surfaces.drop_grn_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_grn_down_an(renderer, surfaces.drop_grn_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_cls_an(renderer, surfaces.get_cls_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_cls_up_an(renderer, surfaces.get_cls_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_cls_down_an(renderer, surfaces.get_cls_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_cls_an(renderer, surfaces.drop_cls_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_cls_up_an(renderer, surfaces.drop_cls_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_cls_down_an(renderer, surfaces.drop_cls_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_ban_an(renderer, surfaces.get_ban_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_ban_up_an(renderer, surfaces.get_ban_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_ban_down_an(renderer, surfaces.get_ban_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_ban_an(renderer, surfaces.drop_ban_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_ban_up_an(renderer, surfaces.drop_ban_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_ban_down_an(renderer, surfaces.drop_ban_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_hgr_an(renderer, surfaces.get_hgr_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_hgr_up_an(renderer, surfaces.get_hgr_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_hgr_down_an(renderer, surfaces.get_hgr_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_hgr_an(renderer, surfaces.drop_hgr_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_hgr_up_an(renderer, surfaces.drop_hgr_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_hgr_down_an(renderer, surfaces.drop_hgr_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_dyn_an(renderer, surfaces.get_dyn_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_dyn_up_an(renderer, surfaces.get_dyn_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_dyn_down_an(renderer, surfaces.get_dyn_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_dyn_an(renderer, surfaces.drop_dyn_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_dyn_up_an(renderer, surfaces.drop_dyn_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_dyn_down_an(renderer, surfaces.drop_dyn_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_bsb_an(renderer, surfaces.get_bsb_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_bsb_up_an(renderer, surfaces.get_bsb_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                get_bsb_down_an(renderer, surfaces.get_bsb_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_bsb_an(renderer, surfaces.drop_bsb_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_bsb_up_an(renderer, surfaces.drop_bsb_up_worm, SECS_FOR_STILL_SPRITES, true),
-                                drop_bsb_down_an(renderer, surfaces.drop_bsb_down_worm, SECS_FOR_STILL_SPRITES, true),
-                                /*WORM AIMING WEAPONS*/
-                                aim_baz_an(renderer, surfaces.aim_baz_worm, SECS_FOR_STILL_SPRITES),
-                                aim_baz_up_an(renderer, surfaces.aim_baz_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_baz_down_an(renderer, surfaces.aim_baz_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_mortar_an(renderer, surfaces.aim_mortar_worm, SECS_FOR_STILL_SPRITES),
-                                aim_mortar_up_an(renderer, surfaces.aim_mortar_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_mortar_down_an(renderer, surfaces.aim_mortar_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_thr_an(renderer, surfaces.aim_thr_worm, SECS_FOR_STILL_SPRITES),
-                                aim_thr_up_an(renderer, surfaces.aim_thr_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_thr_down_an(renderer, surfaces.aim_thr_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_grn_an(renderer, surfaces.aim_grn_worm, SECS_FOR_STILL_SPRITES),
-                                aim_grn_up_an(renderer, surfaces.aim_grn_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_grn_down_an(renderer, surfaces.aim_grn_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_cls_an(renderer, surfaces.aim_cls_worm, SECS_FOR_STILL_SPRITES),
-                                aim_cls_up_an(renderer, surfaces.aim_cls_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_cls_down_an(renderer, surfaces.aim_cls_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_ban_an(renderer, surfaces.aim_ban_worm, SECS_FOR_STILL_SPRITES),
-                                aim_ban_up_an(renderer, surfaces.aim_ban_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_ban_down_an(renderer, surfaces.aim_ban_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_hgr_an(renderer, surfaces.aim_hgr_worm, SECS_FOR_STILL_SPRITES),
-                                aim_hgr_up_an(renderer, surfaces.aim_hgr_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_hgr_down_an(renderer, surfaces.aim_hgr_down_worm, SECS_FOR_STILL_SPRITES),
-                                aim_bsb_an(renderer, surfaces.aim_bsb_worm, SECS_FOR_STILL_SPRITES),
-                                aim_bsb_up_an(renderer, surfaces.aim_bsb_up_worm, SECS_FOR_STILL_SPRITES),
-                                aim_bsb_down_an(renderer, surfaces.aim_bsb_down_worm, SECS_FOR_STILL_SPRITES) {
+WormAnimations::WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state,
+                               int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left,
+                               int aiming_angle):
+        /*WORM PREVIOUS INFO*/
+        old_state(worm_state),
+        old_angle(worm_angle),
+        old_weapon(weapon),
+        old_weapon_ammo(weapon_ammo),
+        old_facing_left(facing_left),
+        old_aiming_angle(aiming_angle),
+        /*WORM MOVEMENTS*/
+        still_0_an(renderer, surfaces.still_0_worm, MILISECS_FOR_STILL_SPRITES),
+        still_0_up_an(renderer, surfaces.still_0_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_0_down_an(renderer, surfaces.still_0_down_worm, MILISECS_FOR_STILL_SPRITES),
+        // still_1_an(renderer, surfaces.still_1_worm, MILISECS_FOR_STILL_1_SPRITES),
+        walking_an(renderer, surfaces.walking_worm, MILISECS_FOR_WALKING_SPRITES),
+        walking_up_an(renderer, surfaces.walking_up_worm, MILISECS_FOR_WALKING_SPRITES),
+        walking_down_an(renderer, surfaces.walking_down_worm, MILISECS_FOR_WALKING_SPRITES),
+        backflip_an(renderer, surfaces.backflip_worm, MILISECS_FOR_BACKFLIP_SPRITES),
+        jump_an(renderer, surfaces.jump_worm, MILISECS_FOR_JUMP_SPRITES),
+        jump_up_an(renderer, surfaces.jump_up_worm, MILISECS_FOR_JUMP_SPRITES),
+        jump_down_an(renderer, surfaces.jump_down_worm, MILISECS_FOR_JUMP_SPRITES),
+        fall_an(renderer, surfaces.fall_worm, MILISECS_FOR_FALL_SPRITES),
+        slide_an(renderer, surfaces.slide_worm, MILISECS_FOR_SLIDE_SPRITES),
+        slide_up_an(renderer, surfaces.slide_up_worm, MILISECS_FOR_SLIDE_SPRITES),
+        slide_down_an(renderer, surfaces.slide_down_worm, MILISECS_FOR_SLIDE_SPRITES),
+        dead_an(renderer, surfaces.dead_worm, MILISECS_FOR_DEAD_SPRITES, false, true),
+        winner_an(renderer, surfaces.winner_worm, MILISECS_FOR_WIN_SPRITES),
+        /*WORM STILL STANCE WEAPONS*/
+        still_baz_an(renderer, surfaces.still_baz_worm, MILISECS_FOR_STILL_SPRITES),
+        still_baz_up_an(renderer, surfaces.still_baz_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_baz_down_an(renderer, surfaces.still_baz_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_mortar_an(renderer, surfaces.still_mortar_worm, MILISECS_FOR_STILL_SPRITES),
+        still_mortar_up_an(renderer, surfaces.still_mortar_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_mortar_down_an(renderer, surfaces.still_mortar_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_air_an(renderer, surfaces.still_air_worm, MILISECS_FOR_STILL_SPRITES),
+        still_air_up_an(renderer, surfaces.still_air_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_air_down_an(renderer, surfaces.still_air_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_tel_an(renderer, surfaces.still_tel_worm, MILISECS_FOR_STILL_SPRITES),
+        still_tel_up_an(renderer, surfaces.still_tel_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_tel_down_an(renderer, surfaces.still_tel_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_thr_an(renderer, surfaces.still_thr_worm, MILISECS_FOR_STILL_SPRITES),
+        still_thr_up_an(renderer, surfaces.still_thr_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_thr_down_an(renderer, surfaces.still_thr_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_grn_an(renderer, surfaces.still_grn_worm, MILISECS_FOR_STILL_SPRITES),
+        still_grn_up_an(renderer, surfaces.still_grn_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_grn_down_an(renderer, surfaces.still_grn_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_cls_an(renderer, surfaces.still_cls_worm, MILISECS_FOR_STILL_SPRITES),
+        still_cls_up_an(renderer, surfaces.still_cls_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_cls_down_an(renderer, surfaces.still_cls_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_ban_an(renderer, surfaces.still_ban_worm, MILISECS_FOR_STILL_SPRITES),
+        still_ban_up_an(renderer, surfaces.still_ban_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_ban_down_an(renderer, surfaces.still_ban_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_hgr_an(renderer, surfaces.still_hgr_worm, MILISECS_FOR_STILL_SPRITES),
+        still_hgr_up_an(renderer, surfaces.still_hgr_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_hgr_down_an(renderer, surfaces.still_hgr_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_dyn_an(renderer, surfaces.still_dyn_worm, MILISECS_FOR_STILL_SPRITES),
+        still_dyn_up_an(renderer, surfaces.still_dyn_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_dyn_down_an(renderer, surfaces.still_dyn_down_worm, MILISECS_FOR_STILL_SPRITES),
+        still_bsb_an(renderer, surfaces.still_bsb_worm, MILISECS_FOR_STILL_SPRITES),
+        still_bsb_up_an(renderer, surfaces.still_bsb_up_worm, MILISECS_FOR_STILL_SPRITES),
+        still_bsb_down_an(renderer, surfaces.still_bsb_down_worm, MILISECS_FOR_STILL_SPRITES),
+        /*WORM CHANGING WEAPONS*/
+        get_baz_an(renderer, surfaces.get_baz_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_baz_up_an(renderer, surfaces.get_baz_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_baz_down_an(renderer, surfaces.get_baz_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_baz_an(renderer, surfaces.drop_baz_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_baz_up_an(renderer, surfaces.drop_baz_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_baz_down_an(renderer, surfaces.drop_baz_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_mortar_an(renderer, surfaces.get_mortar_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_mortar_up_an(renderer, surfaces.get_mortar_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_mortar_down_an(renderer, surfaces.get_mortar_down_worm, MILISECS_FOR_STILL_SPRITES,
+                           true),
+        drop_mortar_an(renderer, surfaces.drop_mortar_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_mortar_up_an(renderer, surfaces.drop_mortar_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_mortar_down_an(renderer, surfaces.drop_mortar_down_worm, MILISECS_FOR_STILL_SPRITES,
+                            true),
+        get_air_an(renderer, surfaces.get_air_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_air_up_an(renderer, surfaces.get_air_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_air_down_an(renderer, surfaces.get_air_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_air_an(renderer, surfaces.drop_air_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_air_up_an(renderer, surfaces.drop_air_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_air_down_an(renderer, surfaces.drop_air_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_tel_an(renderer, surfaces.get_tel_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_tel_up_an(renderer, surfaces.get_tel_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_tel_down_an(renderer, surfaces.get_tel_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_tel_an(renderer, surfaces.drop_tel_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_tel_up_an(renderer, surfaces.drop_tel_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_tel_down_an(renderer, surfaces.drop_tel_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_thr_an(renderer, surfaces.get_thr_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_thr_up_an(renderer, surfaces.get_thr_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_thr_down_an(renderer, surfaces.get_thr_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_thr_an(renderer, surfaces.drop_thr_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_thr_up_an(renderer, surfaces.drop_thr_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_thr_down_an(renderer, surfaces.drop_thr_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_grn_an(renderer, surfaces.get_grn_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_grn_up_an(renderer, surfaces.get_grn_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_grn_down_an(renderer, surfaces.get_grn_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_grn_an(renderer, surfaces.drop_grn_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_grn_up_an(renderer, surfaces.drop_grn_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_grn_down_an(renderer, surfaces.drop_grn_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_cls_an(renderer, surfaces.get_cls_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_cls_up_an(renderer, surfaces.get_cls_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_cls_down_an(renderer, surfaces.get_cls_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_cls_an(renderer, surfaces.drop_cls_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_cls_up_an(renderer, surfaces.drop_cls_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_cls_down_an(renderer, surfaces.drop_cls_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_ban_an(renderer, surfaces.get_ban_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_ban_up_an(renderer, surfaces.get_ban_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_ban_down_an(renderer, surfaces.get_ban_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_ban_an(renderer, surfaces.drop_ban_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_ban_up_an(renderer, surfaces.drop_ban_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_ban_down_an(renderer, surfaces.drop_ban_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_hgr_an(renderer, surfaces.get_hgr_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_hgr_up_an(renderer, surfaces.get_hgr_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_hgr_down_an(renderer, surfaces.get_hgr_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_hgr_an(renderer, surfaces.drop_hgr_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_hgr_up_an(renderer, surfaces.drop_hgr_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_hgr_down_an(renderer, surfaces.drop_hgr_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_dyn_an(renderer, surfaces.get_dyn_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_dyn_up_an(renderer, surfaces.get_dyn_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_dyn_down_an(renderer, surfaces.get_dyn_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_dyn_an(renderer, surfaces.drop_dyn_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_dyn_up_an(renderer, surfaces.drop_dyn_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_dyn_down_an(renderer, surfaces.drop_dyn_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_bsb_an(renderer, surfaces.get_bsb_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_bsb_up_an(renderer, surfaces.get_bsb_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        get_bsb_down_an(renderer, surfaces.get_bsb_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_bsb_an(renderer, surfaces.drop_bsb_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_bsb_up_an(renderer, surfaces.drop_bsb_up_worm, MILISECS_FOR_STILL_SPRITES, true),
+        drop_bsb_down_an(renderer, surfaces.drop_bsb_down_worm, MILISECS_FOR_STILL_SPRITES, true),
+        /*WORM AIMING WEAPONS*/
+        aim_baz_an(renderer, surfaces.aim_baz_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_baz_up_an(renderer, surfaces.aim_baz_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_baz_down_an(renderer, surfaces.aim_baz_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_mortar_an(renderer, surfaces.aim_mortar_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_mortar_up_an(renderer, surfaces.aim_mortar_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_mortar_down_an(renderer, surfaces.aim_mortar_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_thr_an(renderer, surfaces.aim_thr_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_thr_up_an(renderer, surfaces.aim_thr_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_thr_down_an(renderer, surfaces.aim_thr_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_grn_an(renderer, surfaces.aim_grn_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_grn_up_an(renderer, surfaces.aim_grn_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_grn_down_an(renderer, surfaces.aim_grn_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_cls_an(renderer, surfaces.aim_cls_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_cls_up_an(renderer, surfaces.aim_cls_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_cls_down_an(renderer, surfaces.aim_cls_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_ban_an(renderer, surfaces.aim_ban_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_ban_up_an(renderer, surfaces.aim_ban_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_ban_down_an(renderer, surfaces.aim_ban_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_hgr_an(renderer, surfaces.aim_hgr_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_hgr_up_an(renderer, surfaces.aim_hgr_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_hgr_down_an(renderer, surfaces.aim_hgr_down_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_bsb_an(renderer, surfaces.aim_bsb_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_bsb_up_an(renderer, surfaces.aim_bsb_up_worm, MILISECS_FOR_STILL_SPRITES),
+        aim_bsb_down_an(renderer, surfaces.aim_bsb_down_worm, MILISECS_FOR_STILL_SPRITES) {}
 
-}
-    
 void WormAnimations::render_angle_dependent_an(Animation& an, Animation& up_an, Animation& down_an,
                                                const int angle, const bool facing_left,
                                                SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                                               SDL_RendererFlip flip,
-                                               int left_offset,
-                                               int right_offset,
-                                               int above_offset,
+                                               SDL_RendererFlip flip, int left_offset,
+                                               int right_offset, int above_offset,
                                                int bellow_offset) {
-    if(angle > 0) {
+    if (angle > 0) {
         if (!facing_left) {
-            up_an.render(renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
+            up_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                         bellow_offset);
         } else {
-            down_an.render(renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
+            down_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                           bellow_offset);
         }
     } else if (angle < 0) {
         if (!facing_left) {
-            down_an.render(renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
+            down_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                           bellow_offset);
         } else {
-            up_an.render(renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
+            up_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                         bellow_offset);
         }
     } else {
-        an.render(renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
+        an.render(renderer, dst, flip, left_offset, right_offset, above_offset, bellow_offset);
     }
 }
 
-void WormAnimations::render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo,
-                    const int angle, const bool facing_left,
-                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                    SDL_RendererFlip flip,
-                    int left_offset,
-                    int right_offset,
-                    int above_offset,
-                    int bellow_offset) {
-    if(weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
-        render_angle_dependent_an(still_thr_an, still_thr_up_an, still_thr_down_an,
-                angle, facing_left,
-                renderer, dst,
-                flip,
-                left_offset,
-                right_offset,
-                above_offset,
-                bellow_offset);
+void WormAnimations::render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo, const int angle,
+                                                   const bool facing_left,
+                                                   SDL2pp::Renderer& renderer,
+                                                   const SDL2pp::Rect dst, SDL_RendererFlip flip,
+                                                   int left_offset, int right_offset,
+                                                   int above_offset, int bellow_offset) {
+    if (weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
+        render_angle_dependent_an(still_thr_an, still_thr_up_an, still_thr_down_an, angle,
+                                  facing_left, renderer, dst, flip, left_offset, right_offset,
+                                  above_offset, bellow_offset);
         return;
     }
     switch (weapon) {
-    case BAZOOKA:
-        render_angle_dependent_an(still_baz_an, still_baz_up_an, still_baz_down_an,
-                angle, facing_left,
-                renderer, dst,
-                flip,
-                left_offset,
-                right_offset,
-                above_offset,
-                bellow_offset);
-        break;
-    case MORTAR:
-        render_angle_dependent_an(still_mortar_an, still_mortar_up_an, still_mortar_down_an,
-                    angle, facing_left,
-                    renderer, dst,
-                    flip,
-                    left_offset,
-                    right_offset,
-                    above_offset,
-                    bellow_offset);
-        break;
-    case GREEN_GRENADE:
-        render_angle_dependent_an(still_grn_an, still_grn_up_an, still_grn_down_an,
-                        angle, facing_left,
-                        renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        break;
-    case HOLY_GRENADE:
-        render_angle_dependent_an(still_hgr_an, still_hgr_up_an, still_hgr_down_an,
-                            angle, facing_left,
-                            renderer, dst,
-                            flip,
-                            left_offset,
-                            right_offset,
-                            above_offset,
-                            bellow_offset);
-        break;
-    case DYNAMITE:
-        render_angle_dependent_an(still_dyn_an, still_dyn_up_an, still_dyn_down_an,
-                                angle, facing_left,
-                                renderer, dst,
-                                flip,
-                                left_offset,
-                                right_offset,
-                                above_offset,
-                                bellow_offset);
-        break;
-    case BASEBALL_BAT:
-        render_angle_dependent_an(still_bsb_an, still_bsb_up_an, still_bsb_down_an,
-                                    angle, facing_left,
-                                    renderer, dst,
-                                    flip,
-                                    left_offset,
-                                    right_offset,
-                                    above_offset,
-                                    bellow_offset);
-        break;
-    case RED_GRENADE:
-        render_angle_dependent_an(still_cls_an, still_cls_up_an, still_cls_down_an,
-                                        angle, facing_left,
-                                        renderer, dst,
-                                        flip,
-                                        left_offset,
-                                        right_offset,
-                                        above_offset,
-                                        bellow_offset);
-        break;
-    case BANANA:
-        render_angle_dependent_an(still_ban_an, still_ban_up_an, still_ban_down_an,
-                                            angle, facing_left,
-                                            renderer, dst,
-                                            flip,
-                                            left_offset,
-                                            right_offset,
-                                            above_offset,
-                                            bellow_offset);
-        break;
-    case AIRSTRIKE:
-        render_angle_dependent_an(still_air_an, still_air_up_an, still_air_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-        break;
-    case TELEPORTATION:
-        render_angle_dependent_an(still_tel_an, still_tel_up_an, still_tel_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-        break;
-    case NO_TOOL:
-        render_angle_dependent_an(still_0_an, still_0_up_an, still_0_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-        break;
+        case BAZOOKA:
+            render_angle_dependent_an(still_baz_an, still_baz_up_an, still_baz_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case MORTAR:
+            render_angle_dependent_an(still_mortar_an, still_mortar_up_an, still_mortar_down_an,
+                                      angle, facing_left, renderer, dst, flip, left_offset,
+                                      right_offset, above_offset, bellow_offset);
+            break;
+        case GREEN_GRENADE:
+            render_angle_dependent_an(still_grn_an, still_grn_up_an, still_grn_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case HOLY_GRENADE:
+            render_angle_dependent_an(still_hgr_an, still_hgr_up_an, still_hgr_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case DYNAMITE:
+            render_angle_dependent_an(still_dyn_an, still_dyn_up_an, still_dyn_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case BASEBALL_BAT:
+            render_angle_dependent_an(still_bsb_an, still_bsb_up_an, still_bsb_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case RED_GRENADE:
+            render_angle_dependent_an(still_cls_an, still_cls_up_an, still_cls_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case BANANA:
+            render_angle_dependent_an(still_ban_an, still_ban_up_an, still_ban_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case AIRSTRIKE:
+            render_angle_dependent_an(still_air_an, still_air_up_an, still_air_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case TELEPORTATION:
+            render_angle_dependent_an(still_tel_an, still_tel_up_an, still_tel_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
+        case NO_TOOL:
+            render_angle_dependent_an(still_0_an, still_0_up_an, still_0_down_an, angle,
+                                      facing_left, renderer, dst, flip, left_offset, right_offset,
+                                      above_offset, bellow_offset);
+            break;
     }
 }
 
-void WormAnimations::render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                    const bool facing_left,
-                    int left_offset,
-                    int right_offset,
-                    int above_offset,
-                    int bellow_offset) {       
+void WormAnimations::render(int state, int angle, TOOLS weapon, int weapon_ammo,
+                            SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+                            const bool facing_left, int left_offset, int right_offset,
+                            int above_offset, int bellow_offset) {
     SDL_RendererFlip flip = facing_left ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    if(!lingering_animations.empty()) {
-        lingering_animations.front().get().render(renderer, dst,
-                                            flip,
-                                            left_offset,
-                                            right_offset,
-                                            above_offset,
-                                            bellow_offset);
+    if (!lingering_animations.empty()) {
+        lingering_animations.front().get().render(renderer, dst, flip, left_offset, right_offset,
+                                                  above_offset, bellow_offset);
         return;
     }
-    
+
     switch (state) {
-    case MOVING:
-        walking_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        break;
-    case DEAD:
-        dead_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset-5,
-                        above_offset-12,
-                        bellow_offset+10);
-        break;
-    case WINNER:
-        winner_an.render(renderer, dst,
-                        flip,
-                        left_offset-7,
-                        right_offset,
-                        above_offset-12,
-                        bellow_offset);
-        break;
-    case STILL:
-        render_worm_still_with_weapon(weapon, weapon_ammo,
-                        angle, facing_left,
-                        renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        break;
-    case CLIMBING:
-        if(angle > 0) {
-            if (!facing_left) {
-                walking_up_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-            } else {
-                walking_down_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
+        case MOVING:
+            walking_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                              bellow_offset);
+            break;
+        case DEAD:
+            dead_an.render(renderer, dst, flip, left_offset, right_offset - 5, above_offset - 12,
+                           bellow_offset + 10);
+            break;
+        case WINNER:
+            winner_an.render(renderer, dst, flip, left_offset - 7, right_offset, above_offset - 12,
+                             bellow_offset);
+            break;
+        case STILL:
+            render_worm_still_with_weapon(weapon, weapon_ammo, angle, facing_left, renderer, dst,
+                                          flip, left_offset, right_offset, above_offset,
+                                          bellow_offset);
+            break;
+        case CLIMBING:
+            if (angle > 0) {
+                if (!facing_left) {
+                    walking_up_an.render(renderer, dst, flip, left_offset, right_offset,
+                                         above_offset, bellow_offset);
+                } else {
+                    walking_down_an.render(renderer, dst, flip, left_offset, right_offset,
+                                           above_offset, bellow_offset);
+                }
+            } else if (angle < 0) {
+                if (!facing_left) {
+                    walking_down_an.render(renderer, dst, flip, left_offset, right_offset,
+                                           above_offset, bellow_offset);
+                } else {
+                    walking_up_an.render(renderer, dst, flip, left_offset, right_offset,
+                                         above_offset, bellow_offset);
+                }
             }
-        } else if (angle < 0) {
-            if (!facing_left) {
-                walking_down_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-            } else {
-                walking_up_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
+            break;
+        case JUMPING:
+            render_angle_dependent_an(jump_an, jump_up_an, jump_down_an, angle, facing_left,
+                                      renderer, dst, flip, left_offset, right_offset, above_offset,
+                                      bellow_offset);
+            break;
+        case BACKFLIPPING:
+            backflip_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                               bellow_offset);
+            break;
+        case FALLING:
+            fall_an.render(renderer, dst, flip, left_offset, right_offset, above_offset,
+                           bellow_offset);
+            break;
+        case SLIDING:
+            render_angle_dependent_an(slide_an, slide_up_an, slide_down_an, angle, facing_left,
+                                      renderer, dst, flip, left_offset, right_offset, above_offset,
+                                      bellow_offset);
+            break;
+        case AIMING:
+            switch (weapon) {
+                case BAZOOKA:
+                    render_angle_dependent_an(aim_baz_an, aim_baz_up_an, aim_baz_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case MORTAR:
+                    render_angle_dependent_an(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an,
+                                              angle, facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case GREEN_GRENADE:
+                    render_angle_dependent_an(aim_grn_an, aim_grn_up_an, aim_grn_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case HOLY_GRENADE:
+                    render_angle_dependent_an(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case BASEBALL_BAT:
+                    render_angle_dependent_an(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case RED_GRENADE:
+                    render_angle_dependent_an(aim_cls_an, aim_cls_up_an, aim_cls_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                case BANANA:
+                    render_angle_dependent_an(aim_ban_an, aim_ban_up_an, aim_ban_down_an, angle,
+                                              facing_left, renderer, dst, flip, left_offset,
+                                              right_offset, above_offset, bellow_offset);
+                    break;
+                default:
+                    break;
             }
-        }
-        break;
-    case JUMPING:
-        render_angle_dependent_an(jump_an, jump_up_an, jump_down_an,
-                                            angle, facing_left,
-                                            renderer, dst,
-                                            flip,
-                                            left_offset,
-                                            right_offset,
-                                            above_offset,
-                                            bellow_offset);
-        break;
-    case BACKFLIPPING:
-        backflip_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        break;
-    case FALLING:
-        fall_an.render(renderer, dst,
-                        flip,
-                        left_offset,
-                        right_offset,
-                        above_offset,
-                        bellow_offset);
-        break;
-    case SLIDING:
-        render_angle_dependent_an(slide_an, slide_up_an, slide_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-        break;
-    case AIMING:
-        switch (weapon) {
-        case BAZOOKA:
-            render_angle_dependent_an(aim_baz_an, aim_baz_up_an, aim_baz_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-            break;
-        case MORTAR:
-            render_angle_dependent_an(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an,
-                                                angle, facing_left,
-                                                renderer, dst,
-                                                flip,
-                                                left_offset,
-                                                right_offset,
-                                                above_offset,
-                                                bellow_offset);
-            break;
-        case GREEN_GRENADE:
-            render_angle_dependent_an(aim_grn_an, aim_grn_up_an, aim_grn_down_an,
-                                                    angle, facing_left,
-                                                    renderer, dst,
-                                                    flip,
-                                                    left_offset,
-                                                    right_offset,
-                                                    above_offset,
-                                                    bellow_offset);
-            break;
-        case HOLY_GRENADE:
-            render_angle_dependent_an(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an,
-                                                    angle, facing_left,
-                                                    renderer, dst,
-                                                    flip,
-                                                    left_offset,
-                                                    right_offset,
-                                                    above_offset,
-                                                    bellow_offset);
-            break;
-        case BASEBALL_BAT:
-            render_angle_dependent_an(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an,
-                                                    angle, facing_left,
-                                                    renderer, dst,
-                                                    flip,
-                                                    left_offset,
-                                                    right_offset,
-                                                    above_offset,
-                                                    bellow_offset);
-            break;
-        case RED_GRENADE:
-            render_angle_dependent_an(aim_cls_an, aim_cls_up_an, aim_cls_down_an,
-                                                    angle, facing_left,
-                                                    renderer, dst,
-                                                    flip,
-                                                    left_offset,
-                                                    right_offset,
-                                                    above_offset,
-                                                    bellow_offset);
-            break;
-        case BANANA:
-            render_angle_dependent_an(aim_ban_an, aim_ban_up_an, aim_ban_down_an,
-                                                    angle, facing_left,
-                                                    renderer, dst,
-                                                    flip,
-                                                    left_offset,
-                                                    right_offset,
-                                                    above_offset,
-                                                    bellow_offset);
             break;
         default:
             break;
-        }
-        break;
-    default:
-        break;
     }
 }
 
 void WormAnimations::reset_old_specific_an(Animation& an, Animation& up_an, Animation& down_an) {
-    if(old_angle > 0) {
+    if (old_angle > 0) {
         if (!old_facing_left) {
             up_an.reset();
         } else {
@@ -561,184 +387,38 @@ void WormAnimations::reset_old_specific_an(Animation& an, Animation& up_an, Anim
 
 void WormAnimations::reset_old_an() {
     switch (old_state) {
-    case MOVING:
-        walking_an.reset();
-        break;
-    case CLIMBING:
-        if(old_angle > 0) {
-            if (!old_facing_left) {
-                walking_up_an.reset();
-            } else {
-                walking_down_an.reset();
+        case MOVING:
+            walking_an.reset();
+            break;
+        case CLIMBING:
+            if (old_angle > 0) {
+                if (!old_facing_left) {
+                    walking_up_an.reset();
+                } else {
+                    walking_down_an.reset();
+                }
+            } else if (old_angle < 0) {
+                if (!old_facing_left) {
+                    walking_down_an.reset();
+                } else {
+                    walking_up_an.reset();
+                }
             }
-        } else if (old_angle < 0) {
-            if (!old_facing_left) {
-                walking_down_an.reset();
-            } else {
-                walking_up_an.reset();
-            }
-        }
-        break;
-    case JUMPING:
-        reset_old_specific_an(jump_an, jump_up_an, jump_down_an);
-        // if(old_angle > 0) {
-        //     if (!old_facing_left) {
-        //         jump_up_an.reset();
-        //     } else {
-        //         jump_down_an.reset();
-        //     }
-        // } else if (old_angle < 0) {
-        //     if (!old_facing_left) {
-        //         jump_down_an.reset();
-        //     } else {
-        //         jump_up_an.reset();
-        //     }
-        // } else {
-        //     jump_an.reset();
-        // }
-        break;
-    case BACKFLIPPING:
-        backflip_an.reset();
-        break;
-    // case AIMING:
-    //     switch (old_weapon) {
-    //         case BAZOOKA:
-    //             reset_old_specific_an(aim_baz_an, aim_baz_up_an, aim_baz_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_baz_up_an.reset();
-    //             //     } else {
-    //             //         aim_baz_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_baz_down_an.reset();
-    //             //     } else {
-    //             //         aim_baz_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_baz_an.reset();
-    //             // }
-    //             break;
-    //         case MORTAR:
-    //             reset_old_specific_an(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_mortar_up_an.reset();
-    //             //     } else {
-    //             //         aim_mortar_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_mortar_down_an.reset();
-    //             //     } else {
-    //             //         aim_mortar_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_mortar_an.reset();
-    //             // }
-    //             break;
-    //         case GREEN_GRENADE:
-    //             reset_old_specific_an(aim_grn_an, aim_grn_up_an, aim_grn_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_grn_up_an.reset();
-    //             //     } else {
-    //             //         aim_grn_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_grn_down_an.reset();
-    //             //     } else {
-    //             //         aim_grn_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_grn_an.reset();
-    //             // }
-    //             break;
-    //         case RED_GRENADE:
-    //             reset_old_specific_an(aim_cls_an, aim_cls_up_an, aim_cls_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_cls_up_an.reset();
-    //             //     } else {
-    //             //         aim_cls_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_cls_down_an.reset();
-    //             //     } else {
-    //             //         aim_cls_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_cls_an.reset();
-    //             // }
-    //             break;
-    //         case BANANA:
-    //             reset_old_specific_an(aim_ban_an, aim_ban_up_an, aim_ban_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_ban_up_an.reset();
-    //             //     } else {
-    //             //         aim_ban_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_ban_down_an.reset();
-    //             //     } else {
-    //             //         aim_ban_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_ban_an.reset();
-    //             // }
-    //             break;
-    //         case HOLY_GRENADE:
-    //             reset_old_specific_an(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_hgr_up_an.reset();
-    //             //     } else {
-    //             //         aim_hgr_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_hgr_down_an.reset();
-    //             //     } else {
-    //             //         aim_hgr_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_hgr_an.reset();
-    //             // }
-    //             break;
-    //         case BASEBALL_BAT:
-    //             reset_old_specific_an(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an);
-    //             // if(old_angle > 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_bsb_up_an.reset();
-    //             //     } else {
-    //             //         aim_bsb_down_an.reset();
-    //             //     }
-    //             // } else if (old_angle < 0) {
-    //             //     if (!old_facing_left) {
-    //             //         aim_bsb_down_an.reset();
-    //             //     } else {
-    //             //         aim_bsb_up_an.reset();
-    //             //     }
-    //             // } else {
-    //             //     aim_bsb_an.reset();
-    //             // }
-    //             break;
-    //         default:
-    //             break;
-    //     }
-    //     break;
-    default:
-        break;
+            break;
+        case JUMPING:
+            reset_old_specific_an(jump_an, jump_up_an, jump_down_an);
+            break;
+        case BACKFLIPPING:
+            backflip_an.reset();
+            break;
+        default:
+            break;
     }
 }
 
-void WormAnimations::update_animations(Animation& up_an, Animation& down_an, int angle, bool facing_left) {
-    if(angle > 0) {
+void WormAnimations::update_animations(Animation& up_an, Animation& down_an, int angle,
+                                       bool facing_left) {
+    if (angle > 0) {
         if (!facing_left) {
             up_an.update_once();
         } else {
@@ -753,8 +433,10 @@ void WormAnimations::update_animations(Animation& up_an, Animation& down_an, int
     }
 }
 
-void WormAnimations::update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an, AnimationScroll& down_an, int angle, bool facing_left, int aiming_angle, TOOLS weapon) {
-    if(angle > 0) {
+void WormAnimations::update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an,
+                                              AnimationScroll& down_an, int angle, bool facing_left,
+                                              int aiming_angle, TOOLS weapon) {
+    if (angle > 0) {
         if (!facing_left) {
             up_an.update_with_angle(aiming_angle);
         } else {
@@ -771,229 +453,81 @@ void WormAnimations::update_aiming_animations(AnimationScroll& an, AnimationScro
     }
 }
 
-void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon, int weapon_ammo, int aiming_angle) {
-    if(state != old_state) {
+void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon,
+                                          int weapon_ammo, int aiming_angle) {
+    if (state != old_state) {
         reset_old_an();
     }
-    if((is_action_state(state)) and (!lingering_animations.empty())) {
-        for (auto& an : lingering_animations) {
+    if ((is_action_state(state)) && (!lingering_animations.empty())) {
+        for (auto& an: lingering_animations) {
             an.get().reset();
         }
         lingering_animations.clear();
     }
     switch (state) {
-    case MOVING:
-        walking_an.update_once();
-        break;
-    
-    case CLIMBING:
-        update_animations(walking_up_an, walking_down_an, angle, facing_left);
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         walking_up_an.update_once();
-        //     } else {
-        //         walking_down_an.update_once();
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         walking_down_an.update_once();
-        //     } else {
-        //         walking_up_an.update_once();
-        //     }
-        // }
-        break;
-    case JUMPING:
-        if(angle == 0) {
-            jump_an.update_once();
-        } else {
-            update_animations(jump_up_an, jump_down_an, angle, facing_left);
-        }
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         jump_up_an.update_once();
-        //     } else {
-        //         jump_down_an.update_once();
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         jump_down_an.update_once();
-        //     } else {
-        //         jump_up_an.update_once();
-        //     }
-        // } else {
-            // jump_an.update_once();
-        // }
-        break;
-    case BACKFLIPPING:
-        backflip_an.update_once();
-        break;
-    case FALLING:
-        walking_an.update_once();
-        break;
-    case SLIDING:
-        if(angle == 0) {
-            slide_an.update_once();
-        } else {
-            update_animations(slide_up_an, slide_down_an, angle, facing_left);
-        }
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         slide_up_an.update_once();
-        //     } else {
-        //         slide_down_an.update_once();
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         slide_down_an.update_once();
-        //     } else {
-        //         slide_up_an.update_once();
-        //     }
-        // } else {
-        //     slide_an.update_once();
-        // }
-        break;
-    case AIMING:
-        // std::cout << "ENTRE al AIMING del update from snapshot, new_aiming_angle: " << new_aiming_angle << " old_aiming_angle: " << old_aiming_angle << std::endl;
-        switch (weapon) {
-        case BAZOOKA:
-            update_aiming_animations(aim_baz_an, aim_baz_up_an, aim_baz_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_baz_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_baz_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_baz_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_baz_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_baz_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case MOVING:
+            walking_an.update_once();
             break;
-        case MORTAR:
-            update_aiming_animations(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_mortar_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_mortar_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_mortar_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_mortar_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_mortar_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+
+        case CLIMBING:
+            update_animations(walking_up_an, walking_down_an, angle, facing_left);
             break;
-        case GREEN_GRENADE:
-            update_aiming_animations(aim_grn_an, aim_grn_up_an, aim_grn_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_grn_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_grn_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_grn_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_grn_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_grn_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case JUMPING:
+            if (angle == 0) {
+                jump_an.update_once();
+            } else {
+                update_animations(jump_up_an, jump_down_an, angle, facing_left);
+            }
             break;
-        case RED_GRENADE:
-            update_aiming_animations(aim_cls_an, aim_cls_up_an, aim_cls_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_cls_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_cls_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_cls_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_cls_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_cls_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case BACKFLIPPING:
+            backflip_an.update_once();
             break;
-        case BANANA:
-            update_aiming_animations(aim_ban_an, aim_ban_up_an, aim_ban_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_ban_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_ban_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_ban_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_ban_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_ban_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case FALLING:
+            walking_an.update_once();
             break;
-        case HOLY_GRENADE:
-            update_aiming_animations(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_hgr_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_hgr_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_hgr_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_hgr_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_hgr_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case SLIDING:
+            if (angle == 0) {
+                slide_an.update_once();
+            } else {
+                update_animations(slide_up_an, slide_down_an, angle, facing_left);
+            }
             break;
-        case BASEBALL_BAT:
-            update_aiming_animations(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an, angle, facing_left, aiming_angle, weapon);
-            // if(angle > 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_bsb_up_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_bsb_down_an, new_aiming_angle);
-            //     }
-            // } else if (angle < 0) {
-            //     if (!facing_left) {
-            //         check_aiming_angle(aim_bsb_down_an, new_aiming_angle);
-            //     } else {
-            //         check_aiming_angle(aim_bsb_up_an, new_aiming_angle);
-            //     }
-            // } else {
-            //     check_aiming_angle(aim_bsb_an, new_aiming_angle);
-            // }
-            // old_weapon = weapon;
+        case AIMING:
+            switch (weapon) {
+                case BAZOOKA:
+                    update_aiming_animations(aim_baz_an, aim_baz_up_an, aim_baz_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                case MORTAR:
+                    update_aiming_animations(aim_mortar_an, aim_mortar_up_an, aim_mortar_down_an,
+                                             angle, facing_left, aiming_angle, weapon);
+                    break;
+                case GREEN_GRENADE:
+                    update_aiming_animations(aim_grn_an, aim_grn_up_an, aim_grn_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                case RED_GRENADE:
+                    update_aiming_animations(aim_cls_an, aim_cls_up_an, aim_cls_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                case BANANA:
+                    update_aiming_animations(aim_ban_an, aim_ban_up_an, aim_ban_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                case HOLY_GRENADE:
+                    update_aiming_animations(aim_hgr_an, aim_hgr_up_an, aim_hgr_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                case BASEBALL_BAT:
+                    update_aiming_animations(aim_bsb_an, aim_bsb_up_an, aim_bsb_down_an, angle,
+                                             facing_left, aiming_angle, weapon);
+                    break;
+                default:
+                    break;
+            }
             break;
         default:
             break;
-        }
-        break;
-    default:
-        break;
     }
     old_state = state;
     old_angle = angle;
@@ -1004,8 +538,8 @@ void WormAnimations::update_from_snapshot(int state, int angle, bool facing_left
 }
 
 void WormAnimations::update_from_iter(int state, int angle, bool facing_left) {
-    if((!is_action_state(state)) and (!lingering_animations.empty())) {
-        if(!(lingering_animations.front().get().update_once())) {
+    if ((!is_action_state(state)) && (!lingering_animations.empty())) {
+        if (!(lingering_animations.front().get().update_once())) {
             lingering_animations.front().get().reset();
             lingering_animations.pop_front();
         }
@@ -1013,41 +547,27 @@ void WormAnimations::update_from_iter(int state, int angle, bool facing_left) {
     }
 
     switch (state) {
-    case STILL:
-        if(angle == 0) {
-            still_0_an.update_once();
-        } else {
-            update_animations(still_0_up_an, still_0_down_an, angle, facing_left);
-        }
-        // if(angle > 0) {
-        //     if (!facing_left) {
-        //         still_0_up_an.update_once();
-        //     } else {
-        //         still_0_down_an.update_once();
-        //     }
-        // } else if (angle < 0) {
-        //     if (!facing_left) {
-        //         still_0_down_an.update_once();
-        //     } else {
-        //         still_0_up_an.update_once();
-        //     }
-        // } else {
-        //     still_0_an.update_once();
-        // }
-        break;
-    case DEAD:
-        dead_an.update_once();
-        break;
-    case WINNER:
-        winner_an.update_once();
-        break;
-    default:
-        break;
+        case STILL:
+            if (angle == 0) {
+                still_0_an.update_once();
+            } else {
+                update_animations(still_0_up_an, still_0_down_an, angle, facing_left);
+            }
+            break;
+        case DEAD:
+            dead_an.update_once();
+            break;
+        case WINNER:
+            winner_an.update_once();
+            break;
+        default:
+            break;
     }
 }
 
-void WormAnimations::push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle, const bool facing_left) {
-    if(angle > 0) {
+void WormAnimations::push_back_with_angle(Animation& middle_an, Animation& down_an,
+                                          Animation& up_an, int angle, const bool facing_left) {
+    if (angle > 0) {
         if (!facing_left) {
             lingering_animations.push_back(up_an);
         } else {
@@ -1065,7 +585,7 @@ void WormAnimations::push_back_with_angle(Animation& middle_an, Animation& down_
 }
 
 void WormAnimations::push_drop_weapon_an(int angle, const bool facing_left) {
-    if(old_weapon_ammo == 0 and is_weapon_grenade_type(old_weapon)) {
+    if (old_weapon_ammo == 0 and is_weapon_grenade_type(old_weapon)) {
         push_back_with_angle(drop_thr_an, drop_thr_down_an, drop_thr_up_an, angle, facing_left);
         return;
     }
@@ -1074,7 +594,8 @@ void WormAnimations::push_drop_weapon_an(int angle, const bool facing_left) {
             push_back_with_angle(drop_baz_an, drop_baz_down_an, drop_baz_up_an, angle, facing_left);
             break;
         case MORTAR:
-            push_back_with_angle(drop_mortar_an, drop_mortar_down_an, drop_mortar_up_an, angle, facing_left);
+            push_back_with_angle(drop_mortar_an, drop_mortar_down_an, drop_mortar_up_an, angle,
+                                 facing_left);
             break;
         case GREEN_GRENADE:
             push_back_with_angle(drop_grn_an, drop_grn_down_an, drop_grn_up_an, angle, facing_left);
@@ -1105,8 +626,9 @@ void WormAnimations::push_drop_weapon_an(int angle, const bool facing_left) {
     }
 }
 
-void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left) {
-    if(weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
+void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle,
+                                            const bool facing_left) {
+    if (weapon_ammo == 0 and is_weapon_grenade_type(weapon)) {
         push_back_with_angle(get_thr_an, get_thr_down_an, get_thr_up_an, angle, facing_left);
         return;
     }
@@ -1115,7 +637,8 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int a
             push_back_with_angle(get_baz_an, get_baz_down_an, get_baz_up_an, angle, facing_left);
             break;
         case MORTAR:
-            push_back_with_angle(get_mortar_an, get_mortar_down_an, get_mortar_up_an, angle, facing_left);
+            push_back_with_angle(get_mortar_an, get_mortar_down_an, get_mortar_up_an, angle,
+                                 facing_left);
             break;
         case GREEN_GRENADE:
             push_back_with_angle(get_grn_an, get_grn_down_an, get_grn_up_an, angle, facing_left);
@@ -1146,28 +669,18 @@ void WormAnimations::push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int a
     }
 }
 
-void WormAnimations::update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle, const bool facing_left) {
+void WormAnimations::update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle,
+                                             const bool facing_left) {
     push_drop_weapon_an(angle, facing_left);
     push_pick_up_weapon_an(new_weapon, new_weapon_ammo, angle, facing_left);
 }
 
 bool WormAnimations::is_action_state(int state) {
-    bool is_moving_state = (state == MOVING);
-    bool is_climbing_state = (state == CLIMBING);
-    bool is_jumping_state = (state == JUMPING);
-    bool is_sliding_state = (state == SLIDING);
-    bool is_backflipping_state = (state == BACKFLIPPING);
-    bool is_falling_state = (state == FALLING);
-    bool is_aiming_state = (state == AIMING);
-    bool is_shooting_state = (state == SHOOTED);
-    return (is_moving_state or is_climbing_state or is_jumping_state or is_sliding_state or is_backflipping_state or is_falling_state or is_aiming_state or is_shooting_state);
+    return (state == MOVING or state == CLIMBING or state == JUMPING or state == SLIDING or
+            state == BACKFLIPPING or state == FALLING or state == AIMING or state == SHOOTED);
 }
 
 bool WormAnimations::is_weapon_grenade_type(TOOLS weapon) {
-    bool is_green_grenade = (weapon == TOOLS::GREEN_GRENADE);
-    bool is_red_grenade = (weapon == TOOLS::RED_GRENADE);
-    bool is_banana = (weapon == TOOLS::BANANA);
-    bool is_holy_grenade = (weapon == TOOLS::HOLY_GRENADE);
-    bool is_dynamite = (weapon == TOOLS::DYNAMITE);
-    return (is_green_grenade or is_red_grenade or is_banana or is_holy_grenade or is_dynamite);
+    return (weapon == TOOLS::GREEN_GRENADE or weapon == TOOLS::RED_GRENADE or
+            weapon == TOOLS::BANANA or weapon == TOOLS::HOLY_GRENADE or weapon == TOOLS::DYNAMITE);
 }

@@ -20,17 +20,16 @@ class Area;
 
 class Animation {
 public:
-    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration, bool one_loop = false, bool loop_reversed = false, bool is_orientation_horizontal = false);
+    Animation(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, uint loop_duration_miliseconds,
+              bool one_loop = false, bool loop_reversed = false,
+              bool is_orientation_horizontal = false);
     ~Animation();
     bool update_once();
-    virtual void update_once_up() {return;}
-    virtual void update_once_down() {return;}
-    virtual void update_with_angle(int angle) {return;}
-    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest,
-                SDL_RendererFlip& flipType,
-                int left_offset = 0,
-                int right_offset = 0,
-                int above_offset = 0,
+    virtual void update_once_up() { return; }
+    virtual void update_once_down() { return; }
+    virtual void update_with_angle(int angle) { return; }
+    void render(SDL2pp::Renderer& renderer, const SDL2pp::Rect dest, SDL_RendererFlip& flipType,
+                int left_offset = 0, int right_offset = 0, int above_offset = 0,
                 int bellow_offset = 0);
     virtual void reset();
     int get_frame_size();
@@ -58,4 +57,3 @@ protected:
 };
 
 #endif  //__ANIMATION_H__
-

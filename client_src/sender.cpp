@@ -8,7 +8,6 @@
 
 
 ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_lobby,
-                        //    std::shared_ptr<Queue<Action>> _queue_match,
                            std::shared_ptr<Queue<std::shared_ptr<Action>>> _queue_match,
                            std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
@@ -23,7 +22,6 @@ ClientSender::ClientSender(Socket& skt, std::shared_ptr<Queue<Command>> _queue_l
 void ClientSender::run() {
     try {
         while (protocol.is_connected() && !is_dead) {
-            // std::shared_ptr<Action> action = queue_match->pop();
             std::shared_ptr<Action> action = queue_match->pop();
             protocol.send_action(action);
         }
@@ -31,7 +29,6 @@ void ClientSender::run() {
         std::cout << "ClientSender has finished because LibError: " << e.what() << std::endl;
     } catch (const ClosedQueue& e) {
         // It is an expected error, it means that the queue has been closed.
-        // std::cout << "ClientSender has finished because ClosedQueue: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "ClientSender has finished because of an unknown error" << std::endl;
     }

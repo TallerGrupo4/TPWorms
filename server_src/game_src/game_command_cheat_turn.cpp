@@ -4,6 +4,4 @@ CheatTurnCommand::CheatTurnCommand(char id): GameCommand(id) {}
 
 CheatTurnCommand::~CheatTurnCommand() {}
 
-void CheatTurnCommand::execute(Game& game){
-    game.cheat_turn_time();
-}
+void CheatTurnCommand::execute(Game& game) { game.cheat_turn_time(); }

@@ -1,4 +1,5 @@
 #include <box2d/box2d.h>
+
 #include "entity.h"
 
 
@@ -8,6 +9,6 @@ class ProvisionBoxCallback: public b2QueryCallback {
 
     bool ReportFixture(b2Fixture* fixture) override;
 
-    public:
+public:
     ~ProvisionBoxCallback();
 };

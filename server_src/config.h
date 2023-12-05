@@ -1,9 +1,12 @@
 #ifndef CONFIG_SINGLETON_H
 #define CONFIG_SINGLETON_H
 
-#include <yaml-cpp/yaml.h>
 #include <filesystem>
 #include <iostream>
+#include <string>
+
+#include <yaml-cpp/yaml.h>
+
 #include "../common_src/constants.h"
 
 class ConfigSingleton {
@@ -12,257 +15,131 @@ public:
         static ConfigSingleton instance(filePath);
         return instance;
     }
-    int get_extra_health() const {
-        return extra_health;
-    }
+    int get_extra_health() const { return extra_health; }
 
-    int get_max_players() const {
-        return max_players;
-    }
+    int get_max_players() const { return max_players; }
 
-    int get_start_life() const {
-        return start_life;
-    }
+    int get_start_life() const { return start_life; }
 
-    int get_null_state() const {
-        return null_state;
-    }
+    int get_null_state() const { return null_state; }
 
-    int get_initial_worms_turn() const {
-        return initial_worms_turn;
-    }
+    int get_initial_worms_turn() const { return initial_worms_turn; }
 
-    int get_turn_time() const {
-        return turn_time;
-    }
+    int get_turn_time() const { return turn_time; }
 
-    float get_wind_min(){
-        return wind_min;
-    }
+    float get_wind_min() { return wind_min; }
 
-    float get_wind_max(){
-        return wind_max;
-    }
+    float get_wind_max() { return wind_max; }
 
-    float get_worm_speed() const {
-        return worm_speed;
-    }
+    float get_worm_speed() const { return worm_speed; }
 
-    float get_worm_jump_speed() const {
-        return worm_jump_speed;
-    }
+    float get_worm_jump_speed() const { return worm_jump_speed; }
 
-    float get_worm_jump_hor_speed() const {
-        return worm_jump_hor_speed;
-    }
+    float get_worm_jump_hor_speed() const { return worm_jump_hor_speed; }
 
-    float get_worm_backflip_speed() const {
-        return worm_backflip_speed;
-    }
+    float get_worm_backflip_speed() const { return worm_backflip_speed; }
 
-    float get_worm_backflip_hor_speed() const {
-        return worm_backflip_hor_speed;
-    }
+    float get_worm_backflip_hor_speed() const { return worm_backflip_hor_speed; }
 
-    float get_explosion_power() const {
-        return explosion_power;
-    }
-    
-    float get_explosion_fragment_power() const {
-        return explosion_fragment_power;
-    }
+    float get_explosion_power() const { return explosion_power; }
 
-    float get_projectile_potency() const {
-        return projectile_potency;
-    }
+    float get_explosion_fragment_power() const { return explosion_fragment_power; }
 
-    int get_bazooka_damage() const {
-        return bazooka_damage;
-    }
+    float get_projectile_potency() const { return projectile_potency; }
 
-    int get_bazooka_radius() const {
-        return bazooka_radius;
-    }
+    int get_bazooka_damage() const { return bazooka_damage; }
 
-    float get_bazooka_misile_restitution() const {
-        return bazooka_misile_restitution;
-    }
+    int get_bazooka_radius() const { return bazooka_radius; }
 
-    float get_bazooka_misile_density() const {
-        return bazooka_misile_density;
-    }
+    float get_bazooka_misile_restitution() const { return bazooka_misile_restitution; }
 
-    int get_mortar_damage() const {
-        return mortar_damage;
-    }
+    float get_bazooka_misile_density() const { return bazooka_misile_density; }
 
-    int get_mortar_radius() const {
-        return mortar_radius;
-    }
-    
-    int get_mortar_fragments() const {
-        return mortar_fragments;
-    }
+    int get_mortar_damage() const { return mortar_damage; }
 
-    float get_mortar_misile_restitution() const {
-        return mortar_misile_restitution;
-    }
+    int get_mortar_radius() const { return mortar_radius; }
 
-    float get_mortar_misile_density() const {
-        return mortar_misile_density;
-    }
+    int get_mortar_fragments() const { return mortar_fragments; }
 
-    float get_mortar_max_ammo() const {
-        return mortar_max_ammo;
-    }
+    float get_mortar_misile_restitution() const { return mortar_misile_restitution; }
 
-    int get_green_grenade_damage() const {
-        return green_grenade_damage;
-    }
+    float get_mortar_misile_density() const { return mortar_misile_density; }
 
-    int get_green_grenade_radius() const {
-        return green_grenade_radius;
-    }
+    float get_mortar_max_ammo() const { return mortar_max_ammo; }
 
-    float get_green_grenade_restitution() const {
-        return green_grenade_restitution;
-    }
+    int get_green_grenade_damage() const { return green_grenade_damage; }
 
-    float get_green_grenade_density() const {
-        return green_grenade_density;
-    }
+    int get_green_grenade_radius() const { return green_grenade_radius; }
 
-    int get_red_grenade_damage() const {
-        return red_grenade_damage;
-    }
+    float get_green_grenade_restitution() const { return green_grenade_restitution; }
 
-    int get_red_grenade_radius() const {
-        return red_grenade_radius;
-    }
+    float get_green_grenade_density() const { return green_grenade_density; }
 
-    int get_red_grenade_fragments() const {
-        return red_grenade_fragments;
-    }
+    int get_red_grenade_damage() const { return red_grenade_damage; }
 
-    int get_red_grenade_max_ammo() const {
-        return red_grenade_max_ammo;
-    }
+    int get_red_grenade_radius() const { return red_grenade_radius; }
 
-    float get_red_grenade_restitution() const {
-        return red_grenade_restitution;
-    }
+    int get_red_grenade_fragments() const { return red_grenade_fragments; }
 
-    float get_red_grenade_density() const {
-        return red_grenade_density;
-    }
+    int get_red_grenade_max_ammo() const { return red_grenade_max_ammo; }
 
-    int get_banana_damage() const {
-        return banana_damage;
-    }
+    float get_red_grenade_restitution() const { return red_grenade_restitution; }
 
-    int get_banana_radius() const {
-        return banana_radius;
-    }
+    float get_red_grenade_density() const { return red_grenade_density; }
 
-    float get_banana_restitution() const {
-        return banana_restitution;
-    }
+    int get_banana_damage() const { return banana_damage; }
 
-    float get_banana_density() const {
-        return banana_density;
-    }
+    int get_banana_radius() const { return banana_radius; }
 
-    int get_banana_max_ammo() const {
-        return banana_max_ammo;
-    }
+    float get_banana_restitution() const { return banana_restitution; }
 
-    int get_holy_grenade_damage() const {
-        return holy_grenade_damage;
-    }
+    float get_banana_density() const { return banana_density; }
 
-    int get_holy_grenade_radius() const {
-        return holy_grenade_radius;
-    }
+    int get_banana_max_ammo() const { return banana_max_ammo; }
 
-    float get_holy_grenade_restitution() const {
-        return holy_grenade_restitution;
-    }
+    int get_holy_grenade_damage() const { return holy_grenade_damage; }
 
-    float get_holy_grenade_density() const {
-        return holy_grenade_density;
-    }
+    int get_holy_grenade_radius() const { return holy_grenade_radius; }
 
-    int get_holy_grenade_max_ammo() const {
-        return holy_grenade_max_ammo;
-    }
+    float get_holy_grenade_restitution() const { return holy_grenade_restitution; }
 
-    int get_dynamite_damage() const {
-        return dynamite_damage;
-    }
+    float get_holy_grenade_density() const { return holy_grenade_density; }
 
-    int get_dynamite_radius() const {
-        return dynamite_radius;
-    }
+    int get_holy_grenade_max_ammo() const { return holy_grenade_max_ammo; }
 
-    int get_dynamite_restitution() const {
-        return dynamite_restitution;
-    }
+    int get_dynamite_damage() const { return dynamite_damage; }
 
-    int get_dynamite_density() const {
-        return dynamite_density;
-    }
+    int get_dynamite_radius() const { return dynamite_radius; }
 
-    int get_dynamite_max_ammo() const {
-        return dynamite_max_ammo;
-    }
+    int get_dynamite_restitution() const { return dynamite_restitution; }
 
-    int get_baseball_bat_damage() const {
-        return baseball_bat_damage;
-    }
+    int get_dynamite_density() const { return dynamite_density; }
 
-    int get_baseball_bat_power() const {
-        return baseball_bat_power;
-    }
+    int get_dynamite_max_ammo() const { return dynamite_max_ammo; }
 
-    int get_airstrike_damage() const {
-        return airstrike_damage;
-    }
+    int get_baseball_bat_damage() const { return baseball_bat_damage; }
 
-    int get_airstrike_radius() const {
-        return airstrike_radius;
-    }
+    int get_baseball_bat_power() const { return baseball_bat_power; }
 
-    int get_airstrike_max_ammo() const{
-        return airstrike_max_ammo;
-    }
+    int get_airstrike_damage() const { return airstrike_damage; }
 
-    int get_fragment_damage() const {
-        return fragment_damage;
-    }
+    int get_airstrike_radius() const { return airstrike_radius; }
 
-    int get_fragment_radius() const {
-        return fragment_radius;
-    }
+    int get_airstrike_max_ammo() const { return airstrike_max_ammo; }
 
-    int get_health_box_life() const {
-        return health_box_life;
-    }
+    int get_fragment_damage() const { return fragment_damage; }
 
-    int get_trap_box_damage() const {
-        return trap_box_damage;
-    }
+    int get_fragment_radius() const { return fragment_radius; }
 
-    float get_trap_box_power() const {
-        return trap_box_power;
-    }
+    int get_health_box_life() const { return health_box_life; }
 
-    float get_trap_box_radius() const {
-        return trap_box_radius;
-    }
+    int get_trap_box_damage() const { return trap_box_damage; }
 
-    int get_ammo_box_ammo() const {
-        return ammo_box_ammo;
-    }
+    float get_trap_box_power() const { return trap_box_power; }
+
+    float get_trap_box_radius() const { return trap_box_radius; }
+
+    int get_ammo_box_ammo() const { return ammo_box_ammo; }
 
     ~ConfigSingleton() {}
 
@@ -270,11 +147,10 @@ public:
     void operator=(ConfigSingleton const&) = delete;
 
 
-
 private:
     std::string file_path;
 
-    ConfigSingleton(const std::string& filePath) : file_path(filePath) {
+    explicit ConfigSingleton(const std::string& filePath): file_path(filePath) {
         readConfigFromFile();
     }
 
@@ -283,7 +159,10 @@ private:
             throw std::runtime_error("Config file path is not set");
         }
         if (!std::filesystem::exists(file_path)) {
-        throw std::runtime_error("Config file does not exist: " + file_path + ". Please create it properly and pass the absolute path to it. E.g. /etc/worms/config.yaml. See the README for more information.");
+            throw std::runtime_error(
+                    "Config file does not exist: " + file_path +
+                    ". Please create it properly and pass the absolute path to it. E.g. "
+                    "/etc/worms/config.yaml. See the README for more information.");
         }
         try {
             std::cout << _YELLOW << "Reading config file..." << _RESET << std::endl;
@@ -295,7 +174,7 @@ private:
             null_state = config["null_state"].as<int>();
             initial_worms_turn = config["initial_worms_turn"].as<int>();
             turn_time = config["turn_time"].as<int>();
-            turn_time = turn_time *  30; // 30 is the fps of the game
+            turn_time = turn_time * 30;  // 30 is the fps of the game
             wind_min = config["wind_min"].as<float>();
             wind_max = config["wind_max"].as<float>();
             // Physics
@@ -370,16 +249,15 @@ private:
             std::cout << _MAGENTA << "Config file read successfully" << _RESET << std::endl;
         } catch (const YAML::Exception& e) {
             // Handle YAML parsing errors (e.g. the file could not be found)
-            // Maybe throw an exception and catch it in the main?
             std::cerr << "Error reading YAML file: " << e.what() << std::endl;
             std::cerr << "In column " << e.mark.column << " and line " << e.mark.line << std::endl;
-            // Print additional information about the error, if available
-        } catch(...) {
-            std::cerr << "Something went wrong and an unknown exception was caught in the ConfigSingleton"
+        } catch (...) {
+            std::cerr << "Something went wrong and an unknown exception was caught in the "
+                         "ConfigSingleton"
                       << std::endl;
         }
     }
-// Game
+    // Game
     int max_players;
     int start_life;
     int extra_health;
@@ -394,20 +272,20 @@ private:
     float worm_backflip_speed;
     float worm_backflip_hor_speed;
 
-// Explosions
+    // Explosions
 
     float explosion_power;
     float explosion_fragment_power;
     float projectile_potency;
 
-// Weapons
-// Bazooka
+    // Weapons
+    // Bazooka
     int bazooka_damage;
     int bazooka_radius;
     float bazooka_misile_restitution;
     float bazooka_misile_density;
 
-// Mortar
+    // Mortar
     int mortar_damage;
     int mortar_radius;
     int mortar_fragments;
@@ -415,13 +293,13 @@ private:
     float mortar_misile_density;
     int mortar_max_ammo;
 
-// Green Grenade
+    // Green Grenade
     int green_grenade_damage;
     int green_grenade_radius;
     float green_grenade_restitution;
     float green_grenade_density;
 
-// Red Grenade
+    // Red Grenade
     int red_grenade_damage;
     int red_grenade_radius;
     int red_grenade_fragments;
@@ -429,41 +307,41 @@ private:
     float red_grenade_restitution;
     float red_grenade_density;
 
-// Banana
+    // Banana
     int banana_damage;
     int banana_radius = 0;
     float banana_restitution = 0;
     float banana_density = 0;
     int banana_max_ammo = 0;
 
-// Holy Grenade
+    // Holy Grenade
     int holy_grenade_damage;
     int holy_grenade_radius;
     float holy_grenade_restitution;
     float holy_grenade_density;
     int holy_grenade_max_ammo;
 
-// Dynamite
+    // Dynamite
     int dynamite_damage;
     int dynamite_radius;
     int dynamite_max_ammo;
     int dynamite_restitution;
     int dynamite_density;
 
-// Baseball bat
+    // Baseball bat
     int baseball_bat_damage;
     int baseball_bat_power;
 
-// Airstrike
+    // Airstrike
     int airstrike_damage;
     int airstrike_radius;
     int airstrike_max_ammo;
 
-// Fragments
+    // Fragments
     int fragment_damage;
     int fragment_radius;
 
-// Provision Box
+    // Provision Box
     int health_box_life;
 
     int trap_box_damage;
@@ -471,9 +349,6 @@ private:
     float trap_box_radius;
 
     int ammo_box_ammo;
-
-    // Reference them in the code as for example ConfigSingleton::getInstance().plat_small
-
 };
 
 #endif  // CONFIG_SINGLETON_H

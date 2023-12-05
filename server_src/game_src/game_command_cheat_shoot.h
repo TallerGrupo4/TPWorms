@@ -4,11 +4,10 @@
 #define CHEAT_SHOOT_COMMAND_H
 
 class CheatShootCommand: public GameCommand {
-    public:
-    CheatShootCommand(char id);
+public:
+    explicit CheatShootCommand(char id);
     ~CheatShootCommand();
     void execute(Game& game) override;
-
 };
 
 #endif  // CHEAT_SHOOT_COMMAND_H

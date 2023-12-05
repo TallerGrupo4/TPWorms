@@ -1,12 +1,14 @@
 #include "gamebuilder.h"
 
-float GameBuilder::calculate_plat_frict(float angle){
+#include <memory>
+
+float GameBuilder::calculate_plat_frict(float angle) {
     float friction = 0;
-    if (abs(angle) > 45 && abs(angle) != 90){
+    if (abs(angle) > 45 && abs(angle) != 90) {
         return friction;
     } else {
         friction = (abs(angle) * 0.02f) + PLAT_FRICTION;
-        while (friction > 1){
+        while (friction > 1) {
             friction -= 1;
         }
         return friction;
@@ -33,22 +35,21 @@ void GameBuilder::create_platform(float x, float y, float width, float height, f
 GameBuilder::GameBuilder(b2World& world): world(world) {}
 GameBuilder::~GameBuilder() {}
 
-void GameBuilder::create_map(Snapshot& map_snap) {
-    for (PlatformSnapshot platform : map_snap.platforms) {
+void GameBuilder::create_map(const Snapshot& map_snap) {
+    for (PlatformSnapshot platform: map_snap.platforms) {
         create_platform_type(platform.pos_x, platform.pos_y, platform.type);
     }
-    create_walls(b2Vec2_zero , map_snap.map_dimensions.width , map_snap.map_dimensions.height);
-
+    create_walls(b2Vec2_zero, map_snap.map_dimensions.width, map_snap.map_dimensions.height);
 }
 
-void GameBuilder::create_wall(b2Vec2 coords , float width, float angle){
+void GameBuilder::create_wall(b2Vec2 coords, float width, float angle) {
     b2BodyDef wall;
     wall.type = b2_staticBody;
     wall.position.Set(coords.x, coords.y);
     wall.angle = angle;
     b2Body* wall_body = world.CreateBody(&wall);
     b2PolygonShape wall_shape;
-    wall_shape.SetAsBox(width/2, 0.1);
+    wall_shape.SetAsBox(width / 2, 0.1);
     b2FixtureDef wall_fixture;
     wall_fixture.shape = &wall_shape;
 
@@ -59,19 +60,19 @@ void GameBuilder::create_wall(b2Vec2 coords , float width, float angle){
     beams.push_back(beam);
 }
 
-void GameBuilder::create_walls(b2Vec2 center_world,  float width , float height_world){
-    create_wall(b2Vec2(center_world.x - width/2 , center_world.y) , height_world , 90);
-    create_wall(b2Vec2(center_world.x + width/2 , center_world.y) , height_world, 90);
-    create_wall(b2Vec2(center_world.x , center_world.y - height_world/2) , width, 0);
-    create_wall(b2Vec2(center_world.x , center_world.y + height_world/2) , width, 0);
+void GameBuilder::create_walls(b2Vec2 center_world, float width, float height_world) {
+    create_wall(b2Vec2(center_world.x - width / 2, center_world.y), height_world, 90);
+    create_wall(b2Vec2(center_world.x + width / 2, center_world.y), height_world, 90);
+    create_wall(b2Vec2(center_world.x, center_world.y - height_world / 2), width, 0);
+    create_wall(b2Vec2(center_world.x, center_world.y + height_world / 2), width, 0);
 }
 
 void GameBuilder::create_small_platform(float x, float y, float angle) {
-    create_platform(x, y, PLAT_SMALL, PLAT_HEIGHT , angle);
+    create_platform(x, y, PLAT_SMALL, PLAT_HEIGHT, angle);
 }
 
 void GameBuilder::create_big_platform(float x, float y, float angle) {
-    create_platform(x, y, PLAT_BIG, PLAT_HEIGHT , angle);
+    create_platform(x, y, PLAT_BIG, PLAT_HEIGHT, angle);
 }
 
 b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
@@ -91,7 +92,7 @@ b2Body* GameBuilder::create_worm(float x, float y) {  // TODO: Create Class Worm
     return worm;
 }
 
-b2Body* GameBuilder::create_provision_box_body(float x , float y){
+b2Body* GameBuilder::create_provision_box_body(float x, float y) {
     b2BodyDef box_def;
     box_def.type = b2_dynamicBody;
     box_def.position.Set(x, y);
@@ -108,8 +109,8 @@ b2Body* GameBuilder::create_provision_box_body(float x , float y){
 }
 
 
-void GameBuilder::create_platform_type(float x , float y, BeamType type){
-    switch (type){
+void GameBuilder::create_platform_type(float x, float y, BeamType type) {
+    switch (type) {
         case LargeVertical:
             create_big_platform(x, y, 90);
             break;
@@ -164,33 +165,34 @@ void GameBuilder::create_platform_type(float x , float y, BeamType type){
         case ShortVerticalFlipped:
             create_small_platform(x, y, -90);
             break;
-    }  
+    }
 }
 
-b2Body* GameBuilder::create_projectile_body(float angle , float x , float y, float restitution, float density){
-        b2BodyDef projectile_def;
-        projectile_def.type = b2_dynamicBody;
-        projectile_def.bullet = true;
-        projectile_def.position.Set(x, y);
-        projectile_def.angle = angle;
-        b2Body* projectile = world.CreateBody(&projectile_def);
+b2Body* GameBuilder::create_projectile_body(float angle, float x, float y, float restitution,
+                                            float density) {
+    b2BodyDef projectile_def;
+    projectile_def.type = b2_dynamicBody;
+    projectile_def.bullet = true;
+    projectile_def.position.Set(x, y);
+    projectile_def.angle = angle;
+    b2Body* projectile = world.CreateBody(&projectile_def);
 
-        b2CircleShape projectile_shape;
-        projectile_shape.m_radius = 0.2;
+    b2CircleShape projectile_shape;
+    projectile_shape.m_radius = 0.2;
 
-        b2FixtureDef projectile_fixture;
-        projectile_fixture.shape = &projectile_shape;
-        projectile_fixture.density = density;
-        projectile_fixture.restitution = restitution;
-        projectile->CreateFixture(&projectile_fixture);
-        return projectile;
+    b2FixtureDef projectile_fixture;
+    projectile_fixture.shape = &projectile_shape;
+    projectile_fixture.density = density;
+    projectile_fixture.restitution = restitution;
+    projectile->CreateFixture(&projectile_fixture);
+    return projectile;
 }
 
-b2Body* GameBuilder::create_fragment_body(b2Body* father_body , float angle){
+b2Body* GameBuilder::create_fragment_body(b2Body* father_body, float angle) {
     b2Vec2 pos = father_body->GetPosition();
 
-    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
-    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius +0.3f;
+    float xOffset = cos(angle) * father_body->GetFixtureList()->GetShape()->m_radius + 0.3f;
+    float yOffset = sin(angle) * father_body->GetFixtureList()->GetShape()->m_radius + 0.3f;
 
     b2BodyDef fragment_def;
     fragment_def.type = b2_dynamicBody;

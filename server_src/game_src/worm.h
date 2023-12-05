@@ -1,17 +1,21 @@
 #ifndef WORM_H
 #define WORM_H
 
-#include <vector>
+#include <memory>
 #include <unordered_map>
+#include <utility>
+#include <vector>
+
 #include <box2d/box2d.h>
 
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
-#include "game_constants.h"
-#include "tool.h"
-#include "projectile_manager.h"
 #include "../config.h"
+
 #include "entity.h"
+#include "game_constants.h"
+#include "projectile_manager.h"
+#include "tool.h"
 
 #define WORM_SPEED ConfigSingleton::getInstance().get_worm_speed()
 #define WORM_JUMP_SPEED ConfigSingleton::getInstance().get_worm_jump_speed()
@@ -24,25 +28,21 @@
 #define TURN_TIME ConfigSingleton::getInstance().get_turn_time()
 
 
-
-
-//INCLUDES DE ARMAS
-#include "weapon_bazooka.h"
-#include "weapon_mortar.h"
-#include "weapon_green_grenade.h"
-#include "weapon_red_grenade.h"
-#include "weapon_banana.h"
-#include "weapon_holy_grenade.h"
-#include "weapon_dynamite.h"
+// INCLUDES DE ARMAS
 #include "tool_bat.h"
-#include "weapon_airstrike.h"
 #include "tool_teleport.h"
+#include "weapon_airstrike.h"
+#include "weapon_banana.h"
+#include "weapon_bazooka.h"
+#include "weapon_dynamite.h"
+#include "weapon_green_grenade.h"
+#include "weapon_holy_grenade.h"
+#include "weapon_mortar.h"
+#include "weapon_red_grenade.h"
 
 
 class WormNotFound: public std::exception {
-    const char* what() const noexcept override {
-        return "The worm body is a null pointer";
-    }
+    const char* what() const noexcept override { return "The worm body is a null pointer"; }
 };
 
 
@@ -63,18 +63,16 @@ class Worm: public Entity {
     bool has_used_tool;
 
 
-
-
 public:
     Worm(b2Body* body, char id, char team_id);
-    
+
     int get_id();
 
     int get_angle();
 
     void move(int dir);
 
-    void jump (int dir);
+    void jump(int dir);
 
     bool use_tool(int power, float x, float y, int tool, ProjectileManager& projectiles);
 
@@ -93,7 +91,7 @@ public:
     void add_contact();
 
     void remove_contact();
-    
+
     void set_used_tool(bool value);
 
     WormSnapshot get_snapshot();
@@ -114,7 +112,7 @@ public:
 
     void apply_damage(int damage);
 
-    void add_ammo(int ammo , TOOLS tool);
+    void add_ammo(int ammo, TOOLS tool);
 
     void cheat_ammo();
 

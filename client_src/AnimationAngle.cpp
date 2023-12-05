@@ -1,12 +1,14 @@
 #include "AnimationAngle.h"
 
-AnimationAngle::AnimationAngle(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal) : Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
+AnimationAngle::AnimationAngle(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface,
+                               bool is_orientation_horizontal):
+        Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
     currentFrame = 8;
 }
 
 void AnimationAngle::update_with_angle(int angle) {
-    int last_frame = this->numFrames-1;
-    if(angle < 180 and angle > 174.375f) {
+    int last_frame = this->numFrames - 1;
+    if (angle < 180 and angle > 174.375f) {
         this->currentFrame = last_frame - 7;
     } else if (angle < 174.375f and angle > 163.125f) {
         this->currentFrame = last_frame - 6;
@@ -22,7 +24,7 @@ void AnimationAngle::update_with_angle(int angle) {
         this->currentFrame = last_frame - 1;
     } else if (angle < 106.875f and angle > 95.625f) {
         this->currentFrame = last_frame;
-    } else if(angle < 95.625f and angle > 84.375f) {
+    } else if (angle < 95.625f and angle > 84.375f) {
         this->currentFrame = 0;
     } else if (angle < 84.375f and angle > 73.125f) {
         this->currentFrame = 1;

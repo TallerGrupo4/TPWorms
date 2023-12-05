@@ -5,8 +5,9 @@
 
 class ExitCommand: public GameCommand {
     char army_id;
+
 public:
-    ExitCommand(char army_id);
+    explicit ExitCommand(char army_id);
     ~ExitCommand();
     void execute(Game& game) override;
 };

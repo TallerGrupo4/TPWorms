@@ -59,36 +59,31 @@ This will generate the executable file which you'll be able to execute it from a
 
 
 -----------------
-NOTE: If you want to run the make install without installing the executable file, you can run:
-```
-make -j4
-```
-This will generate the executables files inside the build folder, but you will only be able to execute them from there.
+NOTE: If you run make install, this command will create the executable file inside the build folder, but it will also copy it to /usr/local/bin, so you will be able to execute it from anywhere you want. And it will also copy files in /var/worms and /etc/worms.
+WARNING/NOTE 2: Running only make and trying to execute the executable file will not work, you need to run make install first because the maps are being fetched from /var/worms and that is not customizable.
 
-NOTE 2: If you run make install, this command will create the executable file inside the build folder, but it will also copy it to /usr/local/bin, so you will be able to execute it from anywhere you want. And it will also copy files in /var/worms and /etc/worms.
 -----------------
-
 
 To run it, you need to run:
 ```
-server <port>
+worms_server <port>
 ```
 and
 ```
-client <host> <port>
+worms <host> <port>
 ```
 where <port> is the port you want to use and <host> is the host you want to connect to. If you want to connect to the server in your own computer, you can use localhost as the host. For example:
 ```
-server 8080
+worms_server 8080
 ```
 and
 ```
-client 127.0.0.1 8080
+worms 127.0.0.1 8080
 ```
 In those examples you will be using the port 8080 and connecting to the server in your own computer using the default configuration.
 If you want to run your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file. For example:
 ```
-server 8080 /home/user/config.yaml
+worms_server 8080 /home/user/config.yaml
 ```
 Make sure that the config.yaml file is in the same format as the one in the external/config folder of the project.
 
@@ -136,6 +131,7 @@ GTEST_COLOR=1 ctest --tests-dir build --output-on-failure -j 12
 ```
 -----------------
 NOTE: Remember that to run the tests you will need to be in the build folder.
+
 -----------------
 
 For running the project normally once again you will need to run the cmake script for removing the cache and re-generate it without the testing flag:
@@ -153,7 +149,20 @@ The configuration file is located in the external/config folder of the project a
 There you can change the game settings such as the worm's health, max players, etc.
 If you want to run the server with your own configuration, you can create a config.yaml file wherever you want and run the server with the absolute path to the file as explained before. Anyways, here is an example of a custom config.yaml file located in the a arbitrary folder:
 ```
-server 8080 /home/user/Desktop/config.yaml
+worms_server 8080 /home/user/Desktop/config.yaml
 ```
 Remember that the config.yaml file needs to be in the same format as the one in the external/config folder of the project.
 (Replace /home/user/Desktop/config.yaml with the absolute path to your config.yaml file)
+
+Also, if you want to change the default external/config/config.yaml file in order to try different configurations, you will be able to do it but, because this file is set as a default configuration file, you will need to recompile the project in order to see the changes Once you made the changes, you can run:
+```
+sudo make install -j4
+```
+and then run the server with the default configuration file but with your new changes.
+
+### Maps
+If you want to add or modify maps, you will need to do it in the external/maps folder of the project and recomplie it. Once you made the changes, you can run:
+```
+sudo make install -j4
+```
+and then run the server with the default configuration file but with your new changes for the maps.

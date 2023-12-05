@@ -1,11 +1,9 @@
 #include <cstring>
-// #include <queue>
 #include <deque>
 #include <iomanip>
 #include <iostream>
 #include <map>
 
-// Move this to tests folder
 
 #ifdef TESTING
 #ifndef DUMMY_SOCKET_H
@@ -35,7 +33,7 @@ public:
 
     int recvall(void* data, unsigned int sz, bool* was_closed) {
         if (my_queue.empty() && my_queue.size() < sz) {
-            // Handle the case when the queue is empty or the size is smaller than sz 
+            // Handle the case when the queue is empty or the size is smaller than sz
             // Set was_closed or any other appropriate error handling
             return -1;
         }
@@ -47,12 +45,6 @@ public:
         // char copy = my_queue.front();
         // Retrieve the stored data
         char* copy = static_cast<char*>(my_queue.front());
-
-        if (copy == nullptr) {
-            // Handle the case when the copy is null (if it's ever possible)
-            // Set was_closed or any other appropriate error handling
-            // return -1;
-        }
 
         // Copy the data back to the provided buffer
         memcpy(data, copy, sz);

@@ -1,23 +1,25 @@
 #ifndef MATCH_H
 #define MATCH_H
 
-#include <map>
-#include <list>
 #include <chrono>
+#include <list>
+#include <map>
+#include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/snapshot.h"
-#include "worm.h"
-#include "projectile.h"
-#include "provision_box.h"
-#include "camera.h"
-#include "constantes_cliente.h"
+
 #include "actions.h"
 #include "background.h"
-#include "surfaces.h"
+#include "camera.h"
+#include "client_constants.h"
 #include "effects_animations.h"
 #include "effects_sounds.h"
+#include "projectile.h"
+#include "provision_box.h"
+#include "surfaces.h"
+#include "worm.h"
 
 class Match {
 private:
@@ -35,7 +37,8 @@ private:
     uint timer_for_weapon;
     bool already_shot_charged_weapon;
 
-    void update_camera_for_less_priority_targets(int camera_offset_x, int camera_offset_y, bool center_camera);
+    void update_camera_for_less_priority_targets(int camera_offset_x, int camera_offset_y,
+                                                 bool center_camera);
     bool get_next_target(Target& new_target);
     bool turn_worm_facing_left();
     char get_turn_worm_id();
@@ -50,14 +53,15 @@ private:
     bool is_turn_worm_aiming_weapon();
 
 public:
-    explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer, SDL2pp::Mixer& mixer);
-    explicit Match();
-    void update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer);
+    explicit Match(Snapshot snpsht, MatchSurfaces& surfaces, SDL2pp::Renderer& renderer,
+                   SDL2pp::Mixer& mixer);
+    Match();
+    void update_from_snapshot(Snapshot& snpsht, MatchSurfaces& surfaces,
+                              SDL2pp::Renderer& renderer);
     void update_from_iter(int iter);
-    void update_camera(int camera_offset_x = 0, int camera_offset_y = 0,
-                       bool center_camera = false, bool player_activated = false,
-                       bool need_to_be_player_activated = false, SDL2pp::Window* window = nullptr,
-                       int pos_x_to_warp_mouse = 0,
+    void update_camera(int camera_offset_x = 0, int camera_offset_y = 0, bool center_camera = false,
+                       bool player_activated = false, bool need_to_be_player_activated = false,
+                       SDL2pp::Window* window = nullptr, int pos_x_to_warp_mouse = 0,
                        int pos_y_to_warp_mouse = 0);
     void render(SDL2pp::Renderer& renderer);
     int get_turn_worm_x();

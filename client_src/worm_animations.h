@@ -1,53 +1,53 @@
 #ifndef WORM_ANIMATIONS_H
 #define WORM_ANIMATIONS_H
 
-#include <memory>
 #include <list>
+#include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
 #include "../common_src/constants.h"
-#include "constantes_cliente.h"
-#include "surfaces.h"
+
 #include "Animation.h"
 #include "AnimationScroll.h"
+#include "client_constants.h"
+#include "surfaces.h"
 
 class WormAnimations {
 public:
-    WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state, int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left, int aiming_angle);
-    void render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                       const bool facing_left,
-                       int left_offset = 0,
-                       int right_offset = 0,
-                       int above_offset = 0,
-                       int bellow_offset = 0);
-    void update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon, int weapon_ammo, int aiming_angle);
+    WormAnimations(SDL2pp::Renderer& renderer, MatchSurfaces& surfaces, int worm_state,
+                   int worm_angle, TOOLS weapon, int weapon_ammo, bool facing_left,
+                   int aiming_angle);
+    void render(int state, int angle, TOOLS weapon, int weapon_ammo, SDL2pp::Renderer& renderer,
+                const SDL2pp::Rect dst, const bool facing_left, int left_offset = 0,
+                int right_offset = 0, int above_offset = 0, int bellow_offset = 0);
+    void update_from_snapshot(int state, int angle, bool facing_left, TOOLS weapon, int weapon_ammo,
+                              int aiming_angle);
     void update_from_iter(int state, int angle, bool facing_left);
-    void update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle, const bool facing_left);
+    void update_changing_weapons(TOOLS new_weapon, int new_weapon_ammo, int angle,
+                                 const bool facing_left);
+
 private:
     void update_animations(Animation& up_an, Animation& down_an, int angle, bool facing_left);
-    void update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an, AnimationScroll& down_an, int angle, bool facing_left, int aiming_angle, TOOLS weapon);
+    void update_aiming_animations(AnimationScroll& an, AnimationScroll& up_an,
+                                  AnimationScroll& down_an, int angle, bool facing_left,
+                                  int aiming_angle, TOOLS weapon);
     void reset_old_specific_an(Animation& an, Animation& up_an, Animation& down_an);
-    void reset_old_an();  
+    void reset_old_an();
     bool is_action_state(int state);
     bool is_weapon_grenade_type(TOOLS weapon);
-    void render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo,
-                    const int angle, const bool facing_left,
-                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                    SDL_RendererFlip flip,
-                    int left_offset,
-                    int right_offset,
-                    int above_offset,
-                    int bellow_offset);
+    void render_worm_still_with_weapon(TOOLS weapon, int weapon_ammo, const int angle,
+                                       const bool facing_left, SDL2pp::Renderer& renderer,
+                                       const SDL2pp::Rect dst, SDL_RendererFlip flip,
+                                       int left_offset, int right_offset, int above_offset,
+                                       int bellow_offset);
     void render_angle_dependent_an(Animation& an, Animation& up_an, Animation& down_an,
-                    const int angle, const bool facing_left,
-                    SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
-                    SDL_RendererFlip flip,
-                    int left_offset,
-                    int right_offset,
-                    int above_offset,
-                    int bellow_offset);
-    void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle, const bool facing_left);
+                                   const int angle, const bool facing_left,
+                                   SDL2pp::Renderer& renderer, const SDL2pp::Rect dst,
+                                   SDL_RendererFlip flip, int left_offset, int right_offset,
+                                   int above_offset, int bellow_offset);
+    void push_back_with_angle(Animation& middle_an, Animation& down_an, Animation& up_an, int angle,
+                              const bool facing_left);
     void push_drop_weapon_an(int angle, const bool facing_left);
     void push_pick_up_weapon_an(TOOLS weapon, int weapon_ammo, int angle, const bool facing_left);
 
@@ -63,7 +63,7 @@ private:
     Animation still_0_an;
     Animation still_0_up_an;
     Animation still_0_down_an;
-    //Animation still_1_an;
+    // Animation still_1_an;
     Animation walking_an;
     Animation walking_up_an;
     Animation walking_down_an;
@@ -174,7 +174,7 @@ private:
     Animation drop_dyn_down_an;
     Animation get_bsb_an;
     Animation get_bsb_up_an;
-    Animation get_bsb_down_an;  
+    Animation get_bsb_down_an;
     Animation drop_bsb_an;
     Animation drop_bsb_up_an;
     Animation drop_bsb_down_an;
