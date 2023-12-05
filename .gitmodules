@@ -1,6 +1,3 @@
-[submodule "client_src/libSDL2pp"]
-	path = client_src/libSDL2pp
-	url = https://github.com/libSDL2pp/libSDL2pp
 [submodule "server_src/box2d"]
 	path = server_src/box2d
 	url = https://github.com/erincatto/box2d
