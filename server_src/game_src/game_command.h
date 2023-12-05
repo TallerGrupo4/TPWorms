@@ -7,7 +7,6 @@
 
 class GameCommand {
 protected:
-    // Make this private and add a getter
     char id_worm = -1;
     int direction;
 

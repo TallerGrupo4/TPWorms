@@ -6,6 +6,7 @@
 bool MyFilter::ShouldCollide(b2Fixture* fixtureA, b2Fixture* fixtureB) {
     b2Body* bodyA = fixtureA->GetBody();
     b2Body* bodyB = fixtureB->GetBody();
+    // This filter disables collision between two worms, two projectiles, and projectiles with boxes
 
     Entity* eA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
     Entity* eB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);

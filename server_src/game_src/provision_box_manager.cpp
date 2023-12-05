@@ -6,6 +6,7 @@ BoxManager::BoxManager(): box_id(0) {}
 
 
 std::shared_ptr<ProvisionBox> BoxManager::get_random_box_type(b2Body* body) {
+    // This function returns a random box type
     int random = rand() % 3;
     switch (random) {
         case AMMO_BOX:
@@ -33,6 +34,8 @@ void BoxManager::add_box(b2Body* body) {
 }
 
 bool BoxManager::position_is_free(b2Vec2 position, b2World& world) {
+    // This function checks if a position is free to spawn a provision box
+    // Using box2D QueryAABB
     b2AABB aabb;
     aabb.lowerBound = b2Vec2(position.x - 2, position.y - 2);
     aabb.upperBound = b2Vec2(position.x + 2, position.y + 2);

@@ -10,6 +10,10 @@
 MyListener::MyListener(): b2ContactListener() {}
 
 void MyListener::handle_begin_contact(b2Body* bodyA, b2Body* bodyB) {
+    // This function handles the begin contact between two bodies
+    // and executes the corresponding action depending on the body type
+    // We need to cast the body's user data to an Entity* to get the type
+    // Each entity in the game has a type that is defined constant.h that shares with the client
     Entity* eA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
     Entity* eB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
 
@@ -33,6 +37,7 @@ void MyListener::handle_begin_contact(b2Body* bodyA, b2Body* bodyB) {
 }
 
 void MyListener::handle_end_contact(b2Body* bodyA, b2Body* bodyB) {
+    // same logic as handle_begin_contact
     Entity* eA = reinterpret_cast<Entity*>(bodyA->GetUserData().pointer);
     Entity* eB = reinterpret_cast<Entity*>(bodyB->GetUserData().pointer);
 
@@ -60,6 +65,8 @@ void MyListener::execute_box_contact(b2Body* bodyA, b2Body* bodyB) {
 }
 
 void MyListener::execute_contact_jump(b2Body* bodyA, b2Body* bodyB) {
+    // This functions check if the worm is jumping or falling and applies damage if it falls too
+    // much It also smoothes the landing of the worm if it was jumping or backflipping
     Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
     wA->add_contact();
     if (wA->get_state() == JUMPING || wA->get_state() == FALLING ||
@@ -97,6 +104,8 @@ void MyListener::BeginContact(b2Contact* contact) {
 }
 
 void MyListener::change_last_y(b2Body* bodyA, b2Body* bodyB) {
+    // This function changes the last_y of the worm to the current y so it can then calculate fall
+    // damage
     Worm* wA = reinterpret_cast<Worm*>(bodyA->GetUserData().pointer);
     wA->remove_contact();
     wA->set_last_y(bodyA->GetPosition().y);

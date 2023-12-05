@@ -27,6 +27,7 @@ ProvisionBoxSnapshot ProvisionBox::get_snapshot() {
 
 
 void ProvisionBox::apply_effect(Worm* worm) {
+    // This function applies the effect of the box to the worm that picked it
     TOOLS tool = (TOOLS)(rand() % 10);
     switch (box_type) {
         case HEALTH_BOX: {

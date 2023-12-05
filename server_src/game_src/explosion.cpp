@@ -22,6 +22,8 @@ Explosion::Explosion(int type, int fragments, int fragment_damage, int radius, i
         explosion_power(explosion_power) {}
 
 void Explosion::sort_by_distance(std::list<b2Body*>& bodies, b2Body* body) {
+    // This funcion sorts the bodies by distance to the center of the explosion so later we can
+    // detect if the explosion was stopped in that direction by a static_body
     bodies.sort([body](b2Body* a, b2Body* b) {
         float distance_a = ((a->GetPosition()) - body->GetPosition()).Length();
         float distance_b = ((b->GetPosition()) - body->GetPosition()).Length();
@@ -30,6 +32,8 @@ void Explosion::sort_by_distance(std::list<b2Body*>& bodies, b2Body* body) {
 }
 
 void Explosion::apply_explosion(b2Body* body) {
+    // This functions throws a raycast in 32 directions and applies damage and impulse to the
+    // bodies that are hit by the raycast only if it wasn't stopped by a static_body
     std::unordered_set<b2Body*> bodies;
     b2World* world = body->GetWorld();
     for (int i = 0; i < 32; i++) {

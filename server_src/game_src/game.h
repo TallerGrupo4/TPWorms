@@ -52,6 +52,11 @@ class Game {
 
     void turn_clean_up();
 
+    void spawn_provision_box();
+
+    std::shared_ptr<Worm> get_worm_if_can_act(int id);
+
+
     std::vector<WormSnapshot> assign_worms_to_teams(const Map& map,
                                                     std::vector<b2Vec2>& current_spawn_points,
                                                     std::map<char, std::vector<char>>& match_teams,
@@ -72,15 +77,11 @@ public:
 
     void player_use_tool(int id, int potency, float pos_x, float pos_y, int timer);
 
-    std::shared_ptr<Worm> get_worm_if_can_act(int id);
-
     void player_aim(int id, int increment, int direction);
 
     void player_change_tool(int id, int direction);
 
     void remove_army(char army_id);
-
-    void print_current_state();
 
     void game_post_cleanup();
 
@@ -91,8 +92,6 @@ public:
     Snapshot get_game_snapshot();
 
     Snapshot get_end_game_snapshot();
-
-    void spawn_provision_box();
 
     void toggle_shoot_cheat(char id);
 

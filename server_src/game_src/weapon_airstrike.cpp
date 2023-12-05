@@ -15,6 +15,8 @@ Airstrike::Airstrike():
 
 
 float Airstrike::get_roof_height(b2Body* body) {
+    // This function returns the height of the roof
+    // Assuming that the roof is the highest static body
     b2Vec2 direction = b2Vec2(0, 1);
 
     b2RayCastStrike callback;
@@ -32,6 +34,7 @@ float Airstrike::get_roof_height(b2Body* body) {
 }
 
 std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, float x, float y) {
+    // This function creates a projectile for the airstrike and also shoots it
     b2Vec2 pos = b2Vec2(x, y);
 
     b2BodyDef bodyDef;
@@ -56,6 +59,7 @@ std::shared_ptr<Projectile> Airstrike::shoot_airstrike_projectile(b2Body* worm, 
 
 bool Airstrike::use(b2Body* worm, int direction, float angle, int time, int power, float x, float y,
                     ProjectileManager& projectiles) {
+    // This function gets the height of the roof and shoots the 6 projectiles of the airstrike
     if (ammo > 0) {
         ammo--;
     }

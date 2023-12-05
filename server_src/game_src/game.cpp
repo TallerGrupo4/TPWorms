@@ -10,8 +10,6 @@
 
 #include "game_constants.h"
 
-// #include "weapons.h"
-
 #define EXTRA_HEALTH ConfigSingleton::getInstance().get_extra_health()
 
 Game::Game():
@@ -38,6 +36,7 @@ Game::Game():
 
 Snapshot Game::start_and_send(const Map& map, int number_of_players,
                               std::map<char, std::vector<char>>& match_teams) {
+    // First it reads the mapa from the chosen map
     Snapshot snapshot = map.get_snapshot();
     builder.create_map(snapshot);
     water_level = map.water_level;
@@ -45,10 +44,14 @@ Snapshot Game::start_and_send(const Map& map, int number_of_players,
     height = map.height;
     width = map.width;
 
+    // then it assigns the worms to the teams it received, saving that information in match_teams
+    // so it can then send it to the client.
     std::vector<b2Vec2> current_spawn_points = map.spawn_points;
     std::vector<WormSnapshot> worm_snaps =
             assign_worms_to_teams(map, current_spawn_points, match_teams, number_of_players);
 
+    // Finally it prepares the game for the first turn and send the snapshot with the map to the
+    // clients
     current_turn_player_id = teams[0].get_next_player_id();
     projectile_manager.randomize_wind();
     snapshot.set_wind_force(projectile_manager.get_wind_force());
@@ -57,6 +60,8 @@ Snapshot Game::start_and_send(const Map& map, int number_of_players,
 }
 
 std::vector<WormSnapshot> Game::assign_worms_to_teams(
+        // This method distributes the worm in an equal way to all the teams, and if there are more
+        // worms than teams, it add more life to the teams with less worms.
         const Map& map, std::vector<b2Vec2>& current_spawn_points,
         std::map<char, std::vector<char>>& match_teams, int number_of_players) {
     std::vector<WormSnapshot> wormsSnapshots;
@@ -90,6 +95,7 @@ std::vector<WormSnapshot> Game::assign_worms_to_teams(
 
 
 void Game::add_player(int current_id, int team_id, std::vector<b2Vec2>& spawn_points) {
+    // This method simply adds the worm to the team and randomizes it's spawn
     int rand = std::rand() % spawn_points.size();
     b2Vec2 spawn_point = spawn_points[rand];
     b2Body* player = builder.create_worm(spawn_point.x, spawn_point.y);
@@ -178,14 +184,18 @@ void Game::game_post_cleanup() {
 
 void Game::step(int it) {
     float time_simulate = (float)it / FPS;
+    // Step the physics simulation
     world.Step(time_simulate, 8, 3);
 
-
+    // Update the projectiles and worms during the game
     projectile_manager.update_during_game(it, width, height, water_level);
     worm_comprobations();
 
+    // Here it checks if the turn has ended, if it has ended it will start cleaning.
+    // When it finishes cleaning the current turn, it will start the next turn
     if (turn_time > 0) {
         turn_time -= it;
+        // Here we check if the current worm has died, if it has, we start cleaning
         if (teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD) {
             turn_time = 0;
             turn_cleaning = true;
@@ -205,6 +215,8 @@ void Game::step(int it) {
 }
 
 bool Game::check_end_game() {
+    // This method checks if the game has ended, if it has, it will set the winner_team_id
+    // This is used so the client can know if the game has ended and render properly
     bool no_worms_left = true;
     int alive_teams = 0;
     for (auto& team: teams) {
@@ -245,10 +257,6 @@ void Game::turn_clean_up() {
 }
 
 void Game::manage_turn() {
-    // Perform any necessary actions at the end of the turn
-    // For example, switch to the next player's turn, reset the timer, etc.
-
-    // Check if the turn time is over
     if (teams.size() == 1) {
         try {
             current_turn_player_id = teams[0].get_next_player_id();
@@ -278,7 +286,7 @@ void Game::manage_turn() {
         }
         worm_is_dead = teams[team_turn].get_worm(current_turn_player_id)->get_state() == DEAD;
     } while (worm_is_dead);
-    // Reset the turn timer for the next player
+    // Resets the information of the current turn + adds a new provision box
     turn_time = TURN_TIME;
     shoot_cheat = false;
     projectile_manager.reset_id();
