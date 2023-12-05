@@ -26,7 +26,12 @@ void ClientReceiver::run() {
         // It is an expected error, it means that the socket has been closed.
     } catch (const ClosedQueue& e) {
         // It is an expected error, it means that the queue has been closed.
-    } catch (...) {
+    } catch (const LostConnection &e) {
+        // It is an expected error, it means that the connection has been lost.
+    } catch (const std::exception& e) {
+        std::cerr << "ClientReceiver has finished because of an error: " << e.what() << std::endl;
+    }
+    catch (...) {
         std::cerr << "ClientReceiver has finished because of an unknown error" << std::endl;
     }
 }
