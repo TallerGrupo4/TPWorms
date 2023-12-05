@@ -14,11 +14,15 @@
 
 MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
     uint map_id = 1;
-
-    for (auto& route: routes) {
-        MapReader reader(route);
-        Map map = reader.read_map();
-        maps[map.name] = map;
+    try {
+        for (auto& route: routes) {
+            MapReader reader(route);
+            Map map = reader.read_map();
+            maps[map.name] = map;
+        }
+    } catch (...) {
+        std::cerr << "Error reading map with id: " << map_id << std::endl;
+        throw;
     }
 }
 
