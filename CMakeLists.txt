@@ -29,22 +29,22 @@ add_subdirectory(server_src)
 add_subdirectory(client_src)
 add_subdirectory(common_src)
 
-add_executable(server server_main.cpp)
-add_executable(client client_main.cpp)
+add_executable(worms_server server_main.cpp)
+add_executable(worms client_main.cpp)
 
-target_link_libraries(server common_lib server_lib)
-target_link_libraries(client common_lib client_lib SDL2pp)
+target_link_libraries(worms_server common_lib server_lib)
+target_link_libraries(worms common_lib client_lib SDL2pp)
 
-target_include_directories(client PRIVATE client_src/QT)
-target_include_directories(client PRIVATE client_src)
-target_include_directories(client PRIVATE common_src)
+target_include_directories(worms PRIVATE client_src/QT)
+target_include_directories(worms PRIVATE client_src)
+target_include_directories(worms PRIVATE common_src)
 
-set_target_properties(client PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
+set_target_properties(worms PROPERTIES POSITION_INDEPENDENT_CODE TRUE)
 set(CMAKE_CXX_FLAGS "-Wall -Werror -fPIC -std=c++17")
 
 
 
-install(TARGETS server client
+install(TARGETS worms_server worms
         RUNTIME DESTINATION /usr/bin
 )
 
