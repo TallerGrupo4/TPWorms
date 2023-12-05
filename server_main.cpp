@@ -1,7 +1,8 @@
 #include <box2d/box2d.h>
 
-#include "server_src/server.h"
 #include "server_src/config.h"
+#include "server_src/server.h"
+
 #include "map_routes.h"
 
 int main(int argc, char* argv[]) {
@@ -9,7 +10,8 @@ int main(int argc, char* argv[]) {
     int ret = 1;
     try {
         if (argc < 2 || argc > 3) {
-            std::cerr << "Bad program call. Expected " << argv[0] << " with 1 or 2 argument/s" << std::endl;
+            std::cerr << "Bad program call. Expected " << argv[0] << " with 1 or 2 argument/s"
+                      << std::endl;
             std::cerr << "E.g.: ./server 8080 " << std::endl;
             std::cerr << "E.g.: ./server 8080 /etc/worms/config.yaml" << std::endl;
             return ret;

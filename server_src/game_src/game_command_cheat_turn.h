@@ -4,11 +4,10 @@
 #define CHEAT_TURN_COMMAND_H
 
 class CheatTurnCommand: public GameCommand {
-    public:
-    CheatTurnCommand(char id);
+public:
+    explicit CheatTurnCommand(char id);
     ~CheatTurnCommand();
     void execute(Game& game) override;
-
 };
 
 #endif  // CHEAT_TURN_COMMAND_H

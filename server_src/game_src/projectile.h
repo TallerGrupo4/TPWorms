@@ -2,13 +2,15 @@
 #define PROJECTILE_H
 
 #include <box2d/box2d.h>
-#include "explosion.h"
-#include "memory"
-#include "unordered_set"
-#include "game_constants.h"
+
 #include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
+
 #include "entity.h"
+#include "explosion.h"
+#include "game_constants.h"
+#include "memory"
+#include "unordered_set"
 
 
 class Projectile: public Entity {
@@ -24,43 +26,44 @@ class Projectile: public Entity {
     char id;
     bool affected_by_wind;
 
-    public: 
-        Projectile(b2Body* body, int damage, int radius, ProjectileTypes type, ExplosionType explosion_type, int timer, int fragments, float angle, bool affected_by_wind );
+public:
+    Projectile(b2Body* body, int damage, int radius, ProjectileTypes type,
+               ExplosionType explosion_type, int timer, int fragments, float angle,
+               bool affected_by_wind);
 
-        ~Projectile();
+    ~Projectile();
 
-        int get_state();
+    int get_state();
 
-        void set_state(char state);
+    void set_state(char state);
 
-        void decresease_timer(int tick);
+    void decresease_timer(int tick);
 
-        void explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
+    void explode(std::unordered_set<std::shared_ptr<Projectile>>& projectiles);
 
-        int get_direction();
+    int get_direction();
 
-        float get_angle();
+    float get_angle();
 
-        ExplosionType get_explosion_type();
+    ExplosionType get_explosion_type();
 
-        void set_angle(float angle);
+    void set_angle(float angle);
 
-        int get_timer();
+    int get_timer();
 
-        int get_fragments();
+    int get_fragments();
 
-        ProjectileTypes get_projectile_type();
+    ProjectileTypes get_projectile_type();
 
-        int get_fragment_damage();
+    int get_fragment_damage();
 
-        bool is_affected_by_wind();
+    bool is_affected_by_wind();
 
-        void set_id(char id);
+    void set_id(char id);
 
-        char get_id();
+    char get_id();
 
-        ProjectileSnapshot get_snapshot();
-
+    ProjectileSnapshot get_snapshot();
 };
 
-#endif // PROJECTILE_H
+#endif  // PROJECTILE_H

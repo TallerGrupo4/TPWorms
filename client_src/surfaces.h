@@ -3,11 +3,12 @@
 
 #include <SDL2pp/SDL2pp.hh>
 
-#include "constantes_cliente.h"
+#include "client_constants.h"
 
-using namespace SDL2pp;
+using SDL2pp::Surface;
+// Class that holds all the surfaces of the match
 class MatchSurfaces {
-public:    
+public:
     /*BACKGROUND*/
     Surface background1;
     /*WATER*/
@@ -27,7 +28,7 @@ public:
     Surface still_0_worm;
     Surface still_0_up_worm;
     Surface still_0_down_worm;
-    //Surface still_1_worm;
+    // Surface still_1_worm;
     Surface walking_worm;
     Surface walking_up_worm;
     Surface walking_down_worm;
@@ -138,7 +139,7 @@ public:
     Surface drop_dyn_down_worm;
     Surface get_bsb_worm;
     Surface get_bsb_up_worm;
-    Surface get_bsb_down_worm;  
+    Surface get_bsb_down_worm;
     Surface drop_bsb_worm;
     Surface drop_bsb_up_worm;
     Surface drop_bsb_down_worm;
@@ -230,7 +231,7 @@ public:
     Surface short_beam_m_45;
     Surface short_beam_m_65;
     Surface short_beam_vertical_flipped;
-    
-    explicit MatchSurfaces();
+
+    MatchSurfaces();
 };
 #endif  // MATCH_TEXTURES_H

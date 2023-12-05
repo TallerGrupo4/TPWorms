@@ -4,10 +4,10 @@
 #include <atomic>
 #include <memory>
 
-#include "../common_src/constants.h"
 #include "../common_src/command.h"
-#include "../common_src/snapshot.h"
+#include "../common_src/constants.h"
 #include "../common_src/queue.h"
+#include "../common_src/snapshot.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
 
@@ -24,8 +24,7 @@ private:
     std::atomic<bool>& is_dead;
 
 public:
-    explicit ClientReceiver(Socket& skt,
-                            std::shared_ptr<Queue<Snapshot>> _queue_match,
+    explicit ClientReceiver(Socket& skt, std::shared_ptr<Queue<Snapshot>> _queue_match,
                             std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead);
 
     void run() override;

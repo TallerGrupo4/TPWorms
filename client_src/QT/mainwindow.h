@@ -1,15 +1,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <qt5/QtWidgets/QMainWindow>
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QThread>
+#include <string>
+#include <vector>
 
+#include <qt5/QtWidgets/QMainWindow>
+
+#include "../../common_src/custom_errors.h"
 #include "../client.h"
+
 #include "lobby_constants.h"
 #include "worker.h"
-#include "../../common_src/custom_errors.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -43,7 +47,8 @@ private:
     void startMatch();
     void refreshPlayersInPreMatch();
     void refreshMatchesList();
-    void handle_pre_match(std::vector<std::string> map_names, uint8_t number_of_players, bool creator);
+    void handle_pre_match(std::vector<std::string> map_names, uint8_t number_of_players,
+                          bool creator);
     void updateMap(const Snapshot& map);
 };
 #endif  // MAINWINDOW_H

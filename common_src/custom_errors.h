@@ -58,11 +58,4 @@ public:
     virtual const char* what() const noexcept { return "Lost connection with the server"; }
 };
 
-// class NonStopExecption: public std::exception{
-// public:
-//     NonStopExecption() {}
-//     ~NonStopExecption() {}
-//     virtual const char* what() const noexcept { return "Non stop exception"; }
-// };
-
 #endif

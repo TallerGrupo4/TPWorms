@@ -1,14 +1,14 @@
 #ifndef LOBBY_RENDERER_H
 #define LOBBY_RENDERER_H
 
-#include <exception>
-#include <iostream>
 #include <QApplication>
 #include <QMetaType>
+#include <exception>
+#include <iostream>
+
+#include "../client.h"
 
 #include "mainwindow.h"
-#include "../client.h"
-#include "../constantes_cliente.h"
 
 class LobbyRenderer {
 private:

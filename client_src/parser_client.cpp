@@ -1,11 +1,12 @@
 #include "parser_client.h"
 
+#include <cmath>
 #include <iostream>
 #include <sstream>
 #include <string>
 
 
-float ParserClient::apply_pix_per_meter_and_multiplier(float& value) {
+float ParserClient::apply_pix_per_meter_and_multiplier(const float& value) {
     return std::round(value * PIX_PER_METER / MULTIPLIER);
 }
 
@@ -30,7 +31,7 @@ bool ParserClient::get_degree_of_beam_type(BeamType type, int& degree) {
         case LargeMinus45:
             degree = 45;
             return true;
-        case LargeMinus65: 
+        case LargeMinus65:
             degree = 65;
             return true;
         case LargeVerticalFlipped:
@@ -64,12 +65,16 @@ bool ParserClient::get_degree_of_beam_type(BeamType type, int& degree) {
     }
 }
 
-int ParserClient::calculate_beam_width(int degree, float beam_actual_height, float beam_actual_width) {
-    return round(beam_actual_height*sin(degree*M_PI/180)+beam_actual_width*cos(degree*M_PI/180));
+int ParserClient::calculate_beam_width(int degree, float beam_actual_height,
+                                       float beam_actual_width) {
+    return round(beam_actual_height * sin(degree * M_PI / 180) +
+                 beam_actual_width * cos(degree * M_PI / 180));
 }
 
-int ParserClient::calculate_beam_height(int degree, float beam_actual_height, float beam_actual_width) {
-    return round(beam_actual_height*cos(degree*M_PI/180)+beam_actual_width*sin(degree*M_PI/180));
+int ParserClient::calculate_beam_height(int degree, float beam_actual_height,
+                                        float beam_actual_width) {
+    return round(beam_actual_height * cos(degree * M_PI / 180) +
+                 beam_actual_width * sin(degree * M_PI / 180));
 }
 
 void ParserClient::parse_platform_mesures(float& x, float& y, float& width, float& height) {
@@ -79,7 +84,8 @@ void ParserClient::parse_platform_mesures(float& x, float& y, float& width, floa
     height = apply_pix_per_meter_and_multiplier(height);
 }
 
-void ParserClient::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height, int& water_level) {
+void ParserClient::parse_map_dimensions(float& width, float& height, float& worm_width,
+                                        float& worm_height, int& water_level) {
     width = apply_pix_per_meter_and_multiplier(width);
     height = apply_pix_per_meter_and_multiplier(height);
     worm_width = apply_pix_per_meter_and_multiplier(worm_width);

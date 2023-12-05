@@ -1,20 +1,21 @@
-#include "../../common_src/constants.h"
-#include "worm.h"
 #include <box2d/box2d.h>
+
+#include "../../common_src/constants.h"
 #include "../../common_src/snapshot.h"
+
+#include "worm.h"
 
 
 #ifndef PROVISION_BOX_H
 #define PROVISION_BOX_H
 
 class ProvisionBox: public Entity {
-    protected:
+protected:
     BoxType box_type;
     char id;
     BoxState state;
 
-    public:
-
+public:
     ProvisionBox(b2Body* body, BoxType type, char id);
 
     ~ProvisionBox();
@@ -28,7 +29,6 @@ class ProvisionBox: public Entity {
     ProvisionBoxSnapshot get_snapshot();
 
     void apply_effect(Worm* worm);
-
 };
 
-#endif // PROVISION_BOX_H
+#endif  // PROVISION_BOX_H

@@ -6,8 +6,7 @@
 #include "../common_src/liberror.h"
 
 
-ClientReceiver::ClientReceiver(Socket& skt,
-                               std::shared_ptr<Queue<Snapshot>> _queue_match,
+ClientReceiver::ClientReceiver(Socket& skt, std::shared_ptr<Queue<Snapshot>> _queue_match,
                                std::atomic<bool>& _in_match, std::atomic<bool>& _is_dead):
         socket(skt),
         queue_match(_queue_match),
@@ -25,12 +24,14 @@ void ClientReceiver::run() {
         }
     } catch (const LibError& e) {
         // It is an expected error, it means that the socket has been closed.
-        // std::cout << "ClientReceiver has finished because LibError: " << e.what() << std::endl;
     } catch (const ClosedQueue& e) {
         // It is an expected error, it means that the queue has been closed.
-        // std::cout << "ClientReceiver has finished because ClosedQueue: " << e.what() <<
-        // std::endl;
-    } catch (...) {
+    } catch (const LostConnection &e) {
+        // It is an expected error, it means that the connection has been lost.
+    } catch (const std::exception& e) {
+        std::cerr << "ClientReceiver has finished because of an error: " << e.what() << std::endl;
+    }
+    catch (...) {
         std::cerr << "ClientReceiver has finished because of an unknown error" << std::endl;
     }
 }

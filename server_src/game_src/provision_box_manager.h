@@ -1,5 +1,11 @@
-#include "provisionBox.h"
+#include <list>
+#include <memory>
+#include <vector>
+
 #include <box2d/box2d.h>
+
+#include "provisionBox.h"
+
 
 #ifndef BOX_MANAGER_H
 #define BOX_MANAGER_H
@@ -9,8 +15,7 @@ private:
     std::list<std::shared_ptr<ProvisionBox>> boxes;
     int box_id;
 
-    public:
-
+public:
     BoxManager();
 
     std::shared_ptr<ProvisionBox> get_random_box_type(b2Body* body);
@@ -25,10 +30,8 @@ private:
 
     std::vector<ProvisionBoxSnapshot> get_boxes_snapshot();
 
-    
 
     ~BoxManager();
-
 };
 
-#endif //BOX_MANAGER_H
+#endif  // BOX_MANAGER_H
