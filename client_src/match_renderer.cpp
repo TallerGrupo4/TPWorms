@@ -77,7 +77,6 @@ bool MatchRenderer::handleEvents(Match& match) {
                         break;
                     }
                     case SDLK_SPACE: {
-                        std::cout << "Entre al space pressed\n";
                         if (match.handle_space_button_pressed(
                                     action, (keyEvent.repeat == 0) ? true : false)) {
                             client.send_action(action);

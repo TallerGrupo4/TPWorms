@@ -335,8 +335,6 @@ void Hud::render(SDL2pp::Renderer& renderer) {
                     flip);
         } else if (marker_set) {
             SDL_RendererFlip flip = SDL_FLIP_NONE;
-            std::cout << "marker_x: " << marker_x << std::endl;
-            std::cout << "marker_y: " << marker_y << std::endl;
             marker_an->render(
                     renderer,
                     SDL2pp::Rect(marker_x - this->target.x_offset - marker_an->get_frame_size() / 2,
