@@ -1,4 +1,4 @@
-name: map3_building_platforms_tilted
+name: map3_building_platforms
 
 platforms:
 - type: Short25
@@ -10,135 +10,96 @@ platforms:
 - type: ShortMinus25
   x: -7
   y: -9.5
-- type: Short25
-  x: 2
-  y: -4.5
-- type: ShortHorizontal
+- type: ShortVertical
+  x: 0
+  y: -9
+- type: ShortVertical
+  x: -8
+  y: -9
+- type: LargeHorizontal
   x: 1
   y: -5
-- type: ShortMinus25
-  x: -2
-  y: -4.5
-- type: Short25
-  x: 11
-  y: -9.5
-- type: ShortHorizontal
-  x: 9
-  y: -10
-- type: ShortMinus25
-  x: 7
-  y: -9.5
-- type: Short25
-  x: 12
-  y: -14.5
-- type: ShortHorizontal
-  x: 10
-  y: -15
-- type: ShortMinus25
-  x: 8
-  y: -14.5
-- type: Short25
-  x: 11
-  y: -4.5
-- type: ShortHorizontal
+- type: ShortVertical
+  x: -4
+  y: -4
+- type: ShortVertical
+  x: 4
+  y: -4
+- type: LargeHorizontal
   x: 9
   y: -5
-- type: ShortMinus25
-  x: 7
-  y: -4.5
-- type: Short25
-  x: 13
-  y: -9.5
-- type: ShortHorizontal
-  x: 11
-  y: -10
-- type: ShortMinus25
-  x: 9
-  y: -9.5
-- type: Short25
-  x: 11
-  y: -4.5
-- type: ShortHorizontal
-  x: 9
-  y: -5
-- type: ShortMinus25
-  x: 7
-  y: -4.5
-- type: Short25
-  x: 13
-  y: -9.5
-- type: ShortHorizontal
-  x: 11
-  y: -10
-- type: ShortMinus25
-  x: 9
-  y: -9.5
-- type: Short25
-  x: 12
-  y: -14.5
-- type: ShortHorizontal
-  x: 10
-  y: -15
-- type: ShortMinus25
-  x: 8
-  y: -14.5
-- type: Short25
+- type: ShortVertical
   x: 15
-  y: -2.5
-- type: ShortHorizontal
+  y: -4
+- type: LargeHorizontal
+  x: 11
+  y: -10
+- type: ShortVertical
+  x: 15
+  y: -9
+- type: LargeHorizontal
+  x: 10
+  y: -15
+- type: ShortVertical
+  x: 14
+  y: -14
+- type: ShortVertical
+  x: 7
+  y: -14
+- type: LargeHorizontal
   x: 13
   y: -3
-- type: ShortMinus25
-  x: 11
-  y: -2.5
-- type: Short25
-  x: -8
-  y: -9.5
-- type: ShortHorizontal
-  x: -10
+- type: ShortVertical
+  x: 17
+  y: -2
+- type: LargeHorizontal
+  x: -11
   y: -10
-- type: ShortMinus25
-  x: -12
-  y: -9.5
-- type: Short25
-  x: -12
-  y: -13.5
-- type: ShortHorizontal
+- type: ShortVertical
+  x: -15
+  y: -9
+- type: ShortVertical
+  x: -7
+  y: -9
+- type: LargeHorizontal
   x: -14
   y: -14
-- type: ShortMinus25
-  x: -16
-  y: -13.5
-- type: Short25
-  x: 2
-  y: 0.5
-- type: ShortHorizontal
+- type: ShortVertical
+  x: -18
+  y: -13
+- type: ShortVertical
+  x: -10
+  y: -13
+- type: LargeHorizontal
   x: 0
   y: 0
-- type: ShortMinus25
-  x: -2
-  y: 0.5
-- type: Short25
-  x: -18
-  y: -19.5
-- type: ShortHorizontal
+- type: ShortVertical
+  x: 4
+  y: 1
+- type: ShortVertical
+  x: -4
+  y: 1
+- type: LargeHorizontal
   x: -20
   y: -20
-- type: ShortMinus25
-  x: -22
-  y: -19.5
+- type: ShortVertical
+  x: -24
+  y: -19
+- type: ShortVertical
+  x: -16
+  y: -19
 
 spawn_points:
-- x: -3
+- x: -4
   y: -9
 - x: 3
   y: -4
 - x: 9
   y: -4
-- x: 11
+- x: 12
   y: -9
 - x: 10
-  y: -13
+  y: -14
 - x: 13
   y: -2
 - x: 10
