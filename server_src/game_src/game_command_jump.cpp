@@ -8,4 +8,3 @@ JumpCommand::JumpCommand(char id, int direction): GameCommand(id, direction) {}
 JumpCommand::~JumpCommand() {}
 
 void JumpCommand::execute(Game& game) { game.jump_player(id_worm, direction); }
-

@@ -3,19 +3,18 @@
 #ifndef AIM_COMMAND_H
 #define AIM_COMMAND_H
 
-class AimCommand : public GameCommand {
+class AimCommand: public GameCommand {
     char look_direction_x;
     char look_direction_y;
 
-    public:
+public:
     AimCommand(char look_direction_x, char look_direction_y, char worm_id);
-    ~AimCommand() {};
+    ~AimCommand() {}
     void execute(Game& game) override;
 
     char get_look_direction_x();
 
     char get_look_direction_y();
-
 };
 
 

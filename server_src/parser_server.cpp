@@ -1,15 +1,16 @@
+#include "parser_server.h"
+
 #include <cmath>
 #include <sstream>
 #include <string>
-#include "parser_server.h"
+
 #include "../common_src/constants.h"
 
 
-float ParserServer::apply_multiplier(float& x) {
-    return std::round(x * MULTIPLIER);
-}
+float ParserServer::apply_multiplier(const float& x) { return std::round(x * MULTIPLIER); }
 
-void ParserServer::parse_map_dimensions(float& width, float& height, float& worm_width, float& worm_height, int& water_level) {
+void ParserServer::parse_map_dimensions(float& width, float& height, float& worm_width,
+                                        float& worm_height, int& water_level) {
     width = apply_multiplier(width);
     height = apply_multiplier(height);
     worm_width = apply_multiplier(worm_width);
@@ -48,4 +49,3 @@ void ParserServer::parse_position_form_shoot(float& x, float& y) {
     x = std::round((x * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
     y = std::round((-y * MULTIPLIER) / PIX_PER_METER) / MULTIPLIER;
 }
-

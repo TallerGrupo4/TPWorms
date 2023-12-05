@@ -6,9 +6,10 @@ class TeleportRaycastCallback: public b2RayCastCallback {
     friend class Teleporter;
     bool hit = false;
 
-    float ReportFixture(b2Fixture* fixture , const b2Vec2& point , const b2Vec2& normal , float fraction);
+    float ReportFixture(b2Fixture* fixture, const b2Vec2& point, const b2Vec2& normal,
+                        float fraction);
 
     ~TeleportRaycastCallback();
 };
 
-#endif //TELEPORT_RAYCAST_CALLBACK_H
+#endif  // TELEPORT_RAYCAST_CALLBACK_H

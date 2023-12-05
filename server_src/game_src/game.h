@@ -1,18 +1,22 @@
+#include <map>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
+
 #include <box2d/box2d.h>
+
 #include "../../common_src/snapshot.h"
 #include "../map.h"
-#include "gamebuilder.h"
-#include "worm.h"
-#include "listeners.h"
+
 #include "filter.h"
-#include "team.h"
+#include "gamebuilder.h"
+#include "listeners.h"
 #include "projectile_manager.h"
 #include "provision_box_manager.h"
+#include "team.h"
+#include "worm.h"
 #include "worm_comprobator.h"
-
 
 
 #ifndef GAME_H
@@ -48,21 +52,25 @@ class Game {
 
     void turn_clean_up();
 
-    std::vector<WormSnapshot> assign_worms_to_teams(Map& map, std::vector<b2Vec2>& current_spawn_points, std::map<char, std::vector<char>>& match_teams, int number_of_players);
+    std::vector<WormSnapshot> assign_worms_to_teams(const Map& map,
+                                                    std::vector<b2Vec2>& current_spawn_points,
+                                                    std::map<char, std::vector<char>>& match_teams,
+                                                    int number_of_players);
 
 
 public:
     Game();
 
-    Snapshot start_and_send(Map& map, int number_of_players, std::map<char, std::vector<char>>& match_teams);
+    Snapshot start_and_send(const Map& map, int number_of_players,
+                            std::map<char, std::vector<char>>& match_teams);
 
-    void add_player(int current_id, int team_id , std::vector<b2Vec2>& spawn_points);
+    void add_player(int current_id, int team_id, std::vector<b2Vec2>& spawn_points);
 
     void move_player(int id, int direction);
 
-    void jump_player(int id , int direction);
+    void jump_player(int id, int direction);
 
-    void player_use_tool(int id, int potency, float pos_x , float pos_y, int timer);
+    void player_use_tool(int id, int potency, float pos_x, float pos_y, int timer);
 
     std::shared_ptr<Worm> get_worm_if_can_act(int id);
 

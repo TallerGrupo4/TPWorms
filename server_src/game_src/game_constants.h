@@ -4,11 +4,11 @@
 // Invalid values
 #define INVALID -1
 
-//Movement constants 
+// Movement constants
 #define IZQ -1
 #define DER 1
 
-//constants for thresholds
+// constants for thresholds
 #define VEL_THRESHOLD 0.3f
 #define ANG_VEL_THRESHOLD 0.5f
 #define LAST_ANG_THRESHOLD 30
@@ -19,14 +19,14 @@
 #define MIN_AIMING_ANGLE -90
 
 
-enum ExplosionType{
+enum ExplosionType {
     EXPLOSIVE,
     EXPLOSIVE_TIMER,
     EXPLOSIVE_FRAGMENTS,
     EXPLOSIVE_FRAGMENTS_TIMER,
 };
 
-enum BodyType{
+enum BodyType {
     WORM,
     PROJECITLE,
     BEAM,
@@ -34,8 +34,7 @@ enum BodyType{
 };
 
 
-
-//BUILDER CONSTANTS
+// BUILDER CONSTANTS
 #define OFFSET 1.5f
 
 
@@ -52,4 +51,4 @@ enum BodyType{
 #define WORM_FRICTION 1.0f
 
 
-#endif // GAME_CONSTANTS_H
+#endif  // GAME_CONSTANTS_H

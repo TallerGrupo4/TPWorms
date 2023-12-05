@@ -35,21 +35,21 @@
 #define QUEUE_MAX_SIZE 10000
 
 
-//Common worm States
+// Common worm States
 enum WormStates : char {
     StillState,
     MovingState,
     JumpingState,
     BackflippingState,
-    FallingState, 
-    ClimbingState, 
-    SlidingState, 
+    FallingState,
+    ClimbingState,
+    SlidingState,
     AimingState,
-    DamagedState, 
+    DamagedState,
     DeadState
 };
 
-enum BoxState: char{
+enum BoxState : char {
     UNPICKED,
     PICKED,
 };
@@ -74,7 +74,7 @@ enum TOOLS : uint8_t {
     NO_TOOL,
 };
 
-enum ProjectileTypes: uint8_t {
+enum ProjectileTypes : uint8_t {
     BazookaProj,
     MortarProj,
     GreenGrenadeProj,
@@ -86,14 +86,10 @@ enum ProjectileTypes: uint8_t {
     FragmentProj
 };
 
-enum BoxType: uint8_t {
-    HEALTH_BOX,
-    AMMO_BOX,
-    TRAP_BOX
-};
+enum BoxType : uint8_t { HEALTH_BOX, AMMO_BOX, TRAP_BOX };
 
 enum BeamType : char {
-    LargeVertical, // 0
+    LargeVertical,  // 0
     Large65,
     Large45,
     Large25,
@@ -101,7 +97,7 @@ enum BeamType : char {
     LargeMinus25,
     LargeMinus45,
     LargeMinus65,
-    LargeVerticalFlipped, // 8
+    LargeVerticalFlipped,  // 8
     ShortVertical,
     Short65,
     Short45,
@@ -110,7 +106,7 @@ enum BeamType : char {
     ShortMinus25,
     ShortMinus45,
     ShortMinus65,
-    ShortVerticalFlipped, // 17
+    ShortVerticalFlipped,  // 17
 };
 
 enum Cheats : char {
@@ -148,14 +144,14 @@ enum Cheats : char {
 #define CHEAT 0x08
 
 
-
 // Codes for protocol
-#define MULTIPLIER 1000.0f // to convert from float to int for protocol taking into account 3 decimal places
+#define MULTIPLIER \
+    1000.0f  // to convert from float to int for protocol taking into account 3 decimal places
 #define MAP 0x01
 #define WORMS 0x02
 
 
-//Consts for render
+// Consts for render
 #define PIX_PER_METER 6.0f
 
 #define INF_AMMO -1
@@ -168,16 +164,16 @@ enum Cheats : char {
 #define PI 3.14159265358979323846f
 
 
-//the following are UBUNTU/LINUX, and MacOS ONLY terminal color codes.
-#define _RESET   "\033[0m"
-#define _BLACK   "\033[30m"      /* Black */
-#define _RED     "\033[31m"      /* Red */
-#define _GREEN   "\033[32m"      /* Green */
-#define _YELLOW  "\033[33m"      /* Yellow */
-#define _BLUE    "\033[34m"      /* Blue */
-#define _MAGENTA "\033[35m"      /* Magenta */
-#define _CYAN    "\033[36m"      /* Cyan */
-#define _WHITE   "\033[37m"      /* White */
+// the following are UBUNTU/LINUX, and MacOS ONLY terminal color codes.
+#define _RESET "\033[0m"
+#define _BLACK "\033[30m"   /* Black */
+#define _RED "\033[31m"     /* Red */
+#define _GREEN "\033[32m"   /* Green */
+#define _YELLOW "\033[33m"  /* Yellow */
+#define _BLUE "\033[34m"    /* Blue */
+#define _MAGENTA "\033[35m" /* Magenta */
+#define _CYAN "\033[36m"    /* Cyan */
+#define _WHITE "\033[37m"   /* White */
 
 
 #endif  // _CONSTANTS_H_

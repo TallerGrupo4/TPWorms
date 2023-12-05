@@ -5,14 +5,14 @@ repos:
       - id: clang-format
         files: ^(.*[.]cpp|.*[.]h)$
         args: ["--style=file", "-i"]
-        exclude: '^(server_src/box2d-main/|build/|external/)'
+        exclude: '^(server_src/box2d-main/|build/|external/|client_src/libSDL2pp-0.16.2/|client_src/libSDL2pp/|common_src/yaml-cpp-master/)'
 
   - repo: https://github.com/cpplint/cpplint
     rev: 1.6.0
     hooks:
       - id: cpplint
         files: ^(.*[.]cpp|.*[.]h)$
-        exclude: '^(server_src/box2d-main/|build/|external/)'
+        exclude: '^(server_src/box2d-main/|build/|external/|client_src/libSDL2pp-0.16.2/|client_src/libSDL2pp/|common_src/yaml-cpp-master/)'
 
   - repo: https://github.com/pocc/pre-commit-hooks
     rev: 9a9bbc00895bbdb7670231c2565d4f1309c42905  # SHA of v1.3.5
@@ -20,4 +20,4 @@ repos:
       - id: cppcheck
         files: ^(.*[.]cpp|.*[.]h)$
         args: ["--inline-suppr", "--enable=all", "--suppress=missingIncludeSystem", "--suppress=missingInclude", "--suppress=unusedFunction", "--suppress=unmatchedSuppression", "--language=c++", "--std=c++17", "--error-exitcode=1"]
-        exclude: '^(server_src/box2d-main/|build/|external/|client_src/libSDL2pp-0.16.2)'
+        exclude: '^(server_src/box2d-main/|build/|external/|client_src/libSDL2pp-0.16.2/|client_src/libSDL2pp/|common_src/yaml-cpp-master/)'

@@ -9,8 +9,8 @@ class UseToolCommand: public GameCommand {
     float pos_y;
     int timer;
 
-    public:
-    UseToolCommand(int id, int potency, float pos_x , float pos_y, int timer);
+public:
+    UseToolCommand(int id, int potency, float pos_x, float pos_y, int timer);
     ~UseToolCommand();
     void execute(Game& game) override;
 

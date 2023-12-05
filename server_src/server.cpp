@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <iostream>
+#include <string>
 #include <utility>
 
 #include <sys/socket.h>
@@ -9,7 +10,8 @@
 #include "../common_src/liberror.h"
 
 
-Server::Server(const char* port, std::vector<std::string> routes): socket(port), monitor_matches(routes) {}
+Server::Server(const char* port, const std::vector<std::string>& routes):
+        socket(port), monitor_matches(routes) {}
 
 void Server::run() {
     while (true) {

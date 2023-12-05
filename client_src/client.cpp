@@ -16,10 +16,10 @@ Client::Client(const char* hostname, const char* servername):
         queue_receiver_match(std::make_shared<Queue<Snapshot>>(QUEUE_MAX_SIZE)),
         client_sender(std::make_unique<ClientSender>(socket, queue_sender_lobby, queue_sender_match,
                                                      in_match, is_dead)),
-        client_receiver(std::make_unique<ClientReceiver>(socket,
-                                                         queue_receiver_match, in_match, is_dead)),
-        parser(), protocol(socket, parser) {
-    }
+        client_receiver(
+                std::make_unique<ClientReceiver>(socket, queue_receiver_match, in_match, is_dead)),
+        parser(),
+        protocol(socket, parser) {}
 
 void Client::start() {
     client_sender->start();
@@ -62,7 +62,7 @@ bool Client::recv_snapshot(Snapshot& snapshot) {
     return queue_receiver_match->try_pop(snapshot);
 }
 
-void Client::send_lobby_command(Command command) {
+void Client::send_lobby_command(const Command& command) {
     if (!protocol.is_connected()) {
         throw LostConnection();
     }

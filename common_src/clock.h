@@ -1,7 +1,7 @@
-#include <functional>
 #include <chrono>
-#include <thread>
+#include <functional>
 #include <iostream>
+#include <thread>
 
 #include "yamlReader.h"
 
@@ -9,25 +9,28 @@
 #define CLOCK_H
 
 class Clock {
-    int rate; // e.g. 16 milisec
+    int rate;  // e.g. 16 milisec
     std::function<void(int)> func;
-    bool& keep_ticking; 
-    public:
-    // Framerate is for example 60 fps, so frame duration is 1/60 seconds , we convert them to miliseconds
-    Clock(std::function<void(int)> func, float frameDuration, bool& keep_ticking): func(func), keep_ticking(keep_ticking){
-        rate = std::round (frameDuration * 1000);
+    bool& keep_ticking;
+
+public:
+    // Framerate is for example 60 fps, so frame duration is 1/60 seconds , we convert them to
+    // miliseconds
+    Clock(std::function<void(int)> func, float frameDuration, bool& keep_ticking):
+            func(func), keep_ticking(keep_ticking) {
+        rate = std::round(frameDuration * 1000);
     }
-    
+
     ~Clock() {}
 
     void tick() {
         int iter = 1;
-        auto t1 = std::chrono::high_resolution_clock::now(); // 17:25:02
-        while (keep_ticking){
+        auto t1 = std::chrono::high_resolution_clock::now();  // 17:25:02
+        while (keep_ticking) {
             func(iter);
             iter = 0;
-            auto t2 = std::chrono::high_resolution_clock::now(); // 17:25:03
-            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();;
+            auto t2 = std::chrono::high_resolution_clock::now();  // 17:25:03
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
             int rest = rate - diff;
             if (rest < 0) {
                 int behind = (-1) * rest;
@@ -42,9 +45,7 @@ class Clock {
         }
     }
 
-    void stop_ticking(){
-        keep_ticking = false;
-    }
+    void stop_ticking() { keep_ticking = false; }
 };
 
-#endif // CLOCK_H
+#endif  // CLOCK_H

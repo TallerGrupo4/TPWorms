@@ -1,10 +1,14 @@
 #include "monitor_matches.h"
+
+#include <algorithm>
 #include <cstdint>
+
 #include <sys/types.h>
 
 #include "../common_src/constants.h"
 #include "../common_src/custom_errors.h"
 #include "../common_src/liberror.h"
+
 #include "map_reader.h"
 
 
@@ -18,8 +22,9 @@ MonitorMatches::MonitorMatches(std::vector<std::string> routes) {
     }
 }
 
-std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id) {
+std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_match(
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id, uint8_t& number_of_players,
+        std::vector<std::string>& map_names, uint8_t& army_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) != matches.end())
         throw MatchAlreadyExists();
@@ -28,26 +33,23 @@ std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::create_matc
     matches[match_id] = std::make_unique<Match>();
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
-    for (auto& map: maps) {
-        map_names.push_back(map.second.name);
-    }
-
+    std::transform(maps.begin(), maps.end(), std::back_inserter(map_names),
+                   [](const auto& map) { return map.second.name; });
     kill_dead_matches();
 
     return matches[match_id]->get_queue();
 }
 
-std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(std::shared_ptr<Queue<Snapshot>> queue,
-                                                      uint match_id, uint8_t& number_of_players, std::vector<std::string>& map_names, uint8_t& army_id) {
+std::shared_ptr<Queue<std::shared_ptr<GameCommand>>> MonitorMatches::join_match(
+        std::shared_ptr<Queue<Snapshot>> queue, uint match_id, uint8_t& number_of_players,
+        std::vector<std::string>& map_names, uint8_t& army_id) {
     std::unique_lock<std::mutex> lock(m);
     if (matches.find(match_id) == matches.end())
         throw MatchNotFound();
     army_id = matches[match_id]->add_player(queue);
     number_of_players = matches[match_id]->get_number_of_players();
-    for (auto& map: maps) {
-        // map_names.push_back(std::to_string(map.first));
-        map_names.push_back(map.second.name);
-    }
+    std::transform(maps.begin(), maps.end(), std::back_inserter(map_names),
+                   [](const auto& map) { return map.second.name; });
     return matches[match_id]->get_queue();
 }
 
@@ -95,7 +97,8 @@ void MonitorMatches::kill_dead_matches() {
         if (match.second->has_ended()) {
             match.second->join();
             matches_to_delete.push_back(match.first);
-            std::cout << _BLUE << "Match with id: " << _RESET <<  match.first << _BLUE << " has ended" << _RESET << std::endl;
+            std::cout << _BLUE << "Match with id: " << _RESET << match.first << _BLUE
+                      << " has ended" << _RESET << std::endl;
         }
     }
     for (auto& match_id: matches_to_delete) {

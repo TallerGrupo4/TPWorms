@@ -28,7 +28,7 @@ private:
     uint match_id = 0;
     bool is_creator = false;
     uint8_t my_army_id = 0;
-    bool interpretate_command_in_lobby(Command& command);
+    bool interpretate_command_in_lobby(const Command& command);
     void interpretate_command_in_match(GameCommand& game_command);
     void handle_lobby();
     void handle_starting_match();

@@ -1,8 +1,8 @@
 #ifndef EFFECTS_SOUNDS_H
 #define EFFECTS_SOUNDS_H
 
-#include <memory>
 #include <list>
+#include <memory>
 
 #include <SDL2pp/SDL2pp.hh>
 
@@ -28,6 +28,7 @@ public:
     void play_worm_impact_sound();
     void play_worm_death_sound();
     void stop_dynamite_fuse_sound();
+
 private:
     SDL2pp::Mixer& mixer;
     /*PICKUP BOX*/

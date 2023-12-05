@@ -4,8 +4,8 @@
 #include <atomic>
 #include <memory>
 
-#include "../common_src/constants.h"
 #include "../common_src/command.h"
+#include "../common_src/constants.h"
 #include "../common_src/queue.h"
 #include "../common_src/socket.h"
 #include "../common_src/thread.h"
@@ -35,4 +35,4 @@ public:
 
     ~ClientSender();
 };
-#endif // CLIENT_SENDER_H
+#endif  // CLIENT_SENDER_H

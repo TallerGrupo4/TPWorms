@@ -60,21 +60,29 @@ struct Target {
 
 /*COLORS*/
 
-#define RED {255, 0, 0}
+#define RED \
+    { 255, 0, 0 }
 
-#define BLUE {71, 83, 255}
+#define BLUE \
+    { 71, 83, 255 }
 
-#define DARK_BLUE {27, 28, 59}
+#define DARK_BLUE \
+    { 27, 28, 59 }
 
-#define YELLOW {255, 187, 15}
+#define YELLOW \
+    { 255, 187, 15 }
 
-#define GREEN {36, 159, 63}
+#define GREEN \
+    { 36, 159, 63 }
 
-#define ORANGE {255, 102, 25}
+#define ORANGE \
+    { 255, 102, 25 }
 
-#define BLACK {0, 0, 0}
+#define BLACK \
+    { 0, 0, 0 }
 
-#define WHITE {255, 255, 255}
+#define WHITE \
+    { 255, 255, 255 }
 
 /*BACKGROUNDS*/
 
@@ -90,7 +98,7 @@ struct Target {
 
 /*CROSSHAIR/MARKER*/
 
-#define CROSSHAIR_DISTANCE_FROM_WORM_CENTER PIX_PER_METER*RESOLUTION_MULTIPLIER*1.8f
+#define CROSSHAIR_DISTANCE_FROM_WORM_CENTER PIX_PER_METER* RESOLUTION_MULTIPLIER * 1.8f
 
 #define MILISECS_FOR_CROSSHAIR_SPRITES 1000
 
@@ -177,8 +185,6 @@ struct Target {
 #define MILISECS_FOR_WIN_SPRITES 200
 
 #define WORM_WIN_SPRITES_PATH WORMS_SPRITES_PATH "/wwinner.png"
-
-
 
 
 /* DEFAULT WORM STILL WITH WEAPONS*/

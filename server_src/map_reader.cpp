@@ -1,8 +1,11 @@
 #include "map_reader.h"
 
-MapReader::MapReader(std::string route): Reader(route) {}
+#include <string>
+#include <vector>
 
-Map  MapReader::read_map () {
+MapReader::MapReader(const std::string& route): Reader(route) {}
+
+Map MapReader::read_map() {
     std::vector<PlatformSnapshot> platforms_snap = read_platforms();
     std::vector<b2Vec2> spawn_points = read_spawn_points();
 
@@ -16,14 +19,14 @@ Map  MapReader::read_map () {
     return Map(width, height, amount_of_worms, platforms_snap, spawn_points, water_level, name);
 }
 
-std::vector<PlatformSnapshot>  MapReader::read_platforms(){
+std::vector<PlatformSnapshot> MapReader::read_platforms() {
     std::vector<PlatformSnapshot> platforms_snap;
     YAML::Node platforms = node["platforms"];
     for (YAML::const_iterator it = platforms.begin(); it != platforms.end(); ++it) {
 
         // Has type , x , y
         YAML::Node platform = *it;
-        BeamType type =platform["type"].as<BeamType>();
+        BeamType type = platform["type"].as<BeamType>();
         float x = platform["x"].as<float>();
         float y = platform["y"].as<float>();
         platforms_snap.push_back(PlatformSnapshot(type, x, y));
@@ -31,7 +34,7 @@ std::vector<PlatformSnapshot>  MapReader::read_platforms(){
     return platforms_snap;
 }
 
-std::vector<b2Vec2>  MapReader::read_spawn_points(){
+std::vector<b2Vec2> MapReader::read_spawn_points() {
     std::vector<b2Vec2> spawn_points;
     YAML::Node spawn_points_node = node["spawn_points"];
     for (YAML::const_iterator it = spawn_points_node.begin(); it != spawn_points_node.end(); ++it) {
@@ -42,4 +45,3 @@ std::vector<b2Vec2>  MapReader::read_spawn_points(){
     }
     return spawn_points;
 }
-

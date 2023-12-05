@@ -2,7 +2,9 @@
 
 #include <cstdint>
 #include <iostream>
+#include <map>
 #include <memory>
+#include <string>
 #include <vector>
 
 #include <arpa/inet.h>
@@ -10,7 +12,8 @@
 
 #include "../common_src/liberror.h"
 
-ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser): socket(socket), parser(parser) {}
+ProtocolServer::ProtocolServer(Socket& socket, ParserServer& parser):
+        socket(socket), parser(parser) {}
 
 // ------------------------------ PUBLIC METHODS ------------------------------
 
@@ -87,7 +90,7 @@ const Command ProtocolServer::recv_command() {
             return Command(code[0], match_id, map_name);
         }
         case CASE_NUMBER_OF_PLAYERS: {
-            return Command(code[0], DEFAULT);;
+            return Command(code[0], DEFAULT);
         }
         default:
             // Handle error
@@ -98,7 +101,10 @@ const Command ProtocolServer::recv_command() {
 }
 
 int ProtocolServer::send_snapshot(Snapshot& snapshot) {
-    if (send_map_dimensions(snapshot.map_dimensions.width, snapshot.map_dimensions.height, snapshot.map_dimensions.worm_width, snapshot.map_dimensions.worm_height, snapshot.map_dimensions.amount_of_worms, snapshot.map_dimensions.water_level) < 0) {
+    if (send_map_dimensions(snapshot.map_dimensions.width, snapshot.map_dimensions.height,
+                            snapshot.map_dimensions.worm_width, snapshot.map_dimensions.worm_height,
+                            snapshot.map_dimensions.amount_of_worms,
+                            snapshot.map_dimensions.water_level) < 0) {
         return SOCKET_FAILED;
     }
     if (send_platforms(snapshot.platforms) < 0) {
@@ -107,7 +113,8 @@ int ProtocolServer::send_snapshot(Snapshot& snapshot) {
 
     send_army(snapshot.my_army);
 
-    if (send_time_and_worm_turn(snapshot.turn_time_and_worm_turn.turn_time, snapshot.turn_time_and_worm_turn.worm_turn) < 0) {
+    if (send_time_and_worm_turn(snapshot.turn_time_and_worm_turn.turn_time,
+                                snapshot.turn_time_and_worm_turn.worm_turn) < 0) {
         return SOCKET_FAILED;
     }
     if (send_worms(snapshot.worms) < 0) {
@@ -158,7 +165,8 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_game_command() {
             return recv_cheat(worm_id[0]);
         }
         default:
-            // Dummy GameCommand, it does nothing (or maybe it says that the client has disconnected?).
+            // Dummy GameCommand, it does nothing (or maybe it says that the client has
+            // disconnected?).
             return std::make_shared<GameCommand>();
     }
 }
@@ -218,7 +226,8 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_shoot(uint8_t& worm_id) {
     float pos_x_float = static_cast<float>(pos_x[0]);
     float pos_y_float = static_cast<float>(pos_y[0]);
     parser.parse_position_form_shoot(pos_x_float, pos_y_float);
-    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float, timer[0] * FPS);
+    return std::make_shared<UseToolCommand>(worm_id, potency[0], pos_x_float, pos_y_float,
+                                            timer[0] * FPS);
 }
 
 std::shared_ptr<GameCommand> ProtocolServer::recv_change_tool(uint8_t& worm_id) {
@@ -255,7 +264,9 @@ std::shared_ptr<GameCommand> ProtocolServer::recv_cheat(uint8_t& worm_id) {
     return std::make_shared<GameCommand>();
 }
 
-int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width, float& _worm_height, int& _amount_of_worms, int& _water_level) {
+int ProtocolServer::send_map_dimensions(float& _width, float& _height, float& _worm_width,
+                                        float& _worm_height, int& _amount_of_worms,
+                                        int& _water_level) {
     parser.parse_map_dimensions(_width, _height, _worm_width, _worm_height, _water_level);
     int width[1] = {static_cast<int>(_width)};
     int height[1] = {static_cast<int>(_height)};
@@ -283,8 +294,9 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
     if (socket.sendall(num_of_plats, 2, &was_closed) < 0) {
         return SOCKET_FAILED;
     }
-    for (auto& platform : platforms) {
-        parser.parse_platform_mesures(platform.pos_x, platform.pos_y, platform.width, platform.height);
+    for (auto& platform: platforms) {
+        parser.parse_platform_mesures(platform.pos_x, platform.pos_y, platform.width,
+                                      platform.height);
         BeamType type[1] = {platform.type};
         if (socket.sendall(type, 1, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -299,7 +311,7 @@ int ProtocolServer::send_platforms(std::vector<PlatformSnapshot>& platforms) {
         if (socket.sendall(pos_y, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
         }
-        int width[1] = {static_cast<int>(platform.width )};
+        int width[1] = {static_cast<int>(platform.width)};
         width[0] = htonl(width[0]);
         if (socket.sendall(width, 4, &was_closed) < 0) {
             return SOCKET_FAILED;
@@ -318,7 +330,7 @@ void ProtocolServer::send_army(std::map<char, std::vector<char>>& army) {
     if (socket.sendall(num_of_teams, 1, &was_closed) < 0) {
         // throw
     }
-    for (auto& team : army) {
+    for (auto& team: army) {
         // Only one loop because there is only one army
         char army_id[1] = {team.first};
         if (socket.sendall(army_id, 1, &was_closed) < 0) {
@@ -328,7 +340,7 @@ void ProtocolServer::send_army(std::map<char, std::vector<char>>& army) {
         if (socket.sendall(num_of_worms, 1, &was_closed) < 0) {
             // throw
         }
-        for (auto& worm_id : team.second) {
+        for (auto& worm_id: team.second) {
             char id[1] = {worm_id};
             if (socket.sendall(id, 1, &was_closed) < 0) {
                 // throw
@@ -356,7 +368,7 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
     if (socket.sendall(num_of_worms, 2, &was_closed) < 0) {
         return SOCKET_FAILED;
     }
-    for (auto& worm : worms) {
+    for (auto& worm: worms) {
         parser.parse_worm_mesures(worm.pos_x, worm.pos_y);
         char id[1] = {worm.id};
         if (socket.sendall(id, 1, &was_closed) < 0) {
@@ -422,8 +434,9 @@ int ProtocolServer::send_worms(std::vector<WormSnapshot>& worms) {
 void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectiles) {
     uint8_t num_of_projectiles[1] = {static_cast<uint8_t>(projectiles.size())};
     socket.sendall(num_of_projectiles, 1, &was_closed);
-    for (auto& projectile : projectiles) {
-        parser.parse_projectile_mesures(projectile.pos_x, projectile.pos_y, projectile.angle, projectile.radius);
+    for (auto& projectile: projectiles) {
+        parser.parse_projectile_mesures(projectile.pos_x, projectile.pos_y, projectile.angle,
+                                        projectile.radius);
         int pos_x[1] = {static_cast<int>(projectile.pos_x)};
         pos_x[0] = htonl(pos_x[0]);
         socket.sendall(pos_x, 4, &was_closed);
@@ -449,7 +462,6 @@ void ProtocolServer::send_projectiles(std::vector<ProjectileSnapshot>& projectil
         int radius[1] = {static_cast<int>(projectile.radius)};
         radius[0] = htonl(radius[0]);
         socket.sendall(radius, 4, &was_closed);
-
     }
 }
 
@@ -461,8 +473,9 @@ void ProtocolServer::send_end_game(bool end_game) {
 void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& provision_boxes) {
     uint8_t num_of_provision_boxes[1] = {static_cast<uint8_t>(provision_boxes.size())};
     socket.sendall(num_of_provision_boxes, 1, &was_closed);
-    for (auto& provision_box : provision_boxes) {
-        parser.parse_provision_box_mesures(provision_box.pos_x, provision_box.pos_y, provision_box.height, provision_box.width);
+    for (auto& provision_box: provision_boxes) {
+        parser.parse_provision_box_mesures(provision_box.pos_x, provision_box.pos_y,
+                                           provision_box.height, provision_box.width);
         BoxType type[1] = {provision_box.type};
         socket.sendall(type, 1, &was_closed);
         int pos_x[1] = {static_cast<int>(provision_box.pos_x)};
@@ -489,7 +502,7 @@ void ProtocolServer::send_provision_boxes(std::vector<ProvisionBoxSnapshot>& pro
 void ProtocolServer::send_armies_health(std::map<char, int>& armies_health) {
     uint8_t num_of_armies[1] = {static_cast<uint8_t>(armies_health.size())};
     socket.sendall(num_of_armies, 1, &was_closed);
-    for (auto& army : armies_health) {
+    for (auto& army: armies_health) {
         char army_id[1] = {army.first};
         socket.sendall(army_id, 1, &was_closed);
         int health[1] = {army.second};
@@ -544,9 +557,7 @@ const uint ProtocolServer::recv_match_id() {
     return match_id[0];
 }
 
-const Command ProtocolServer::recv_list(const char* code) {
-    return Command(code[0], DEFAULT);
-}
+const Command ProtocolServer::recv_list(const char* code) { return Command(code[0], DEFAULT); }
 
 void ProtocolServer::send_match_id(const uint _match_id) {
     uint match_id[1] = {_match_id};
@@ -557,7 +568,7 @@ void ProtocolServer::send_match_id(const uint _match_id) {
 void ProtocolServer::send_map_names(const std::vector<std::string>& map_names) {
     uint16_t num_of_maps[1] = {htons(static_cast<uint16_t>(map_names.size()))};
     socket.sendall(num_of_maps, 2, &was_closed);
-    for (auto& map_name : map_names) {
+    for (auto& map_name: map_names) {
         uint16_t map_name_size[1] = {htons(static_cast<uint16_t>(map_name.size()))};
         socket.sendall(map_name_size, 2, &was_closed);
         socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
@@ -572,7 +583,7 @@ void ProtocolServer::send_number_of_players(const uint8_t number_of_players) {
 void ProtocolServer::send_list(const std::map<uint, std::string>& matches_availables) {
     uint8_t num_of_matches[1] = {static_cast<uint8_t>(matches_availables.size())};
     socket.sendall(num_of_matches, 1, &was_closed);
-    for (auto& match : matches_availables) {
+    for (auto& match: matches_availables) {
         uint match_id[1] = {match.first};
         match_id[0] = htonl(match_id[0]);
         if (socket.sendall(match_id, 4, &was_closed) < 0) {
@@ -587,10 +598,3 @@ void ProtocolServer::send_list(const std::map<uint, std::string>& matches_availa
         }
     }
 }
-
-void ProtocolServer::send_map_name(const std::string map_name) {
-    uint16_t map_name_size[1] = {htons(static_cast<uint16_t>(map_name.size()))};
-    socket.sendall(map_name_size, 2, &was_closed);
-    socket.sendall(map_name.c_str(), map_name.size(), &was_closed);
-}
-

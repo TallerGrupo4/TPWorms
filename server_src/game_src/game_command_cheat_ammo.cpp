@@ -4,6 +4,4 @@ CheatAmmoCommand::CheatAmmoCommand(char id): GameCommand(id) {}
 
 CheatAmmoCommand::~CheatAmmoCommand() {}
 
-void CheatAmmoCommand::execute(Game& game){
-    game.cheat_ammo(id_worm);
-}
+void CheatAmmoCommand::execute(Game& game) { game.cheat_ammo(id_worm); }

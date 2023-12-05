@@ -4,6 +4,4 @@ CheatLifeCommand::CheatLifeCommand(char id): GameCommand(id) {}
 
 CheatLifeCommand::~CheatLifeCommand() {}
 
-void CheatLifeCommand::execute(Game& game){
-    game.cheat_life(id_worm);
-}
+void CheatLifeCommand::execute(Game& game) { game.cheat_life(id_worm); }

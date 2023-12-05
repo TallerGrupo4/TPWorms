@@ -1,9 +1,15 @@
 #include <cstdint>
+#include <map>
 #include <memory>
+#include <string>
+#include <vector>
+
 #include <math.h>
-#include "../common_src/constants.h"
+
 #include "../common_src/command.h"
+#include "../common_src/constants.h"
 #include "../common_src/snapshot.h"
+
 #include "actions.h"
 
 #ifdef TESTING
@@ -23,10 +29,9 @@ private:
     Socket& socket;
     bool was_closed = false;
     ParserClient& parser;
-    
+
     void recv_match_id(uint* match_id);
     void recv_number_of_players(uint8_t* number_of_players);
-    std::string recv_map_name();
     std::vector<std::string> recv_map_names();
     uint8_t recv_number_of_players();
     std::map<uint, std::string> recv_list();
@@ -41,8 +46,7 @@ private:
     void recv_armies_health(Snapshot& snapshot);
     void recv_wind_force(Snapshot& snapshot);
     void send_match_id(const uint match_id);
-    void send_map_name(const std::string map_name);
-
+    void send_map_name(const std::string& map_name);
 
 
 public:
@@ -55,8 +59,8 @@ public:
     // Match
     Snapshot recv_snapshot();
     void send_action(std::shared_ptr<Action> action);
-    bool is_connected() { return !was_closed;}
-    
+    bool is_connected() { return !was_closed; }
+
     bool operator==(const ProtocolClient& other) const { return this->socket == other.socket; }
     bool operator!=(const ProtocolClient& other) const { return !(*this == other); }
 };

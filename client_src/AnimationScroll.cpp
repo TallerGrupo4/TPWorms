@@ -1,6 +1,8 @@
 #include "AnimationScroll.h"
 
-AnimationScroll::AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface, bool is_orientation_horizontal): Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
+AnimationScroll::AnimationScroll(SDL2pp::Renderer& renderer, SDL2pp::Surface& surface,
+                                 bool is_orientation_horizontal):
+        Animation(renderer, surface, 0, false, false, is_orientation_horizontal) {
     currentFrame = 15;
 }
 
@@ -19,7 +21,7 @@ void AnimationScroll::update_with_angle(int angle) {
         this->currentFrame = 5;
     } else if (angle > -57 and angle < -51) {
         this->currentFrame = 6;
-    } else if(angle > -51 and angle < -45) {
+    } else if (angle > -51 and angle < -45) {
         this->currentFrame = 7;
     } else if (angle > -45 and angle < -39) {
         this->currentFrame = 8;

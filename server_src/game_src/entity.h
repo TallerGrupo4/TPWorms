@@ -1,17 +1,18 @@
 #include <box2d/box2d.h>
+
 #include "game_constants.h"
 
 #ifndef ENTITY_H
 #define ENTITY_H
 
 class Entity {
-    protected:
+protected:
     BodyType type;
     b2Body* body;
 
-    Entity (b2Body* body, BodyType type);
+    Entity(b2Body* body, BodyType type);
 
-    public:
+public:
     b2Body* get_body();
 
     BodyType get_type();
@@ -19,4 +20,4 @@ class Entity {
     ~Entity();
 };
 
-#endif //ENTITY_H
+#endif  // ENTITY_H

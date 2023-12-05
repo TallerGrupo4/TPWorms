@@ -4,15 +4,15 @@
 #include <atomic>
 #include <memory>
 
-#include "../common_src/constants.h"
 #include "../common_src/command.h"
-#include "../common_src/snapshot.h"
+#include "../common_src/constants.h"
 #include "../common_src/queue.h"
+#include "../common_src/snapshot.h"
 #include "../common_src/socket.h"
-#include "protocol_client.h"
 
 #include "actions.h"
 #include "parser_client.h"
+#include "protocol_client.h"
 #include "receiver.h"
 #include "sender.h"
 
@@ -44,7 +44,7 @@ public:
 
     Snapshot recv_map();
 
-    void send_lobby_command(Command command);
+    void send_lobby_command(const Command& command);
 
     void send_action(std::shared_ptr<Action>);
 
